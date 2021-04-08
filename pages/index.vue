@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div>
-      <span>{{ icon }}</span>
+      <span ref="icon">{{ icon }}</span>
       <h1 class="title">
         {{ message }}
       </h1>
@@ -12,6 +12,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import * as THREE from 'three'
+import {TimelineMax, Power1} from 'gsap'
 
 @Component
 export default class Home extends Vue {
@@ -19,7 +20,22 @@ export default class Home extends Vue {
   public icon: string = '🚧'
 
   mounted() {
+    this.triggerIconAnimation()
+  }
 
+  public triggerIconAnimation(): void {
+    const timeline = new TimelineMax({
+      repeat: -1
+    });
+    timeline.to(this.$refs.icon as HTMLElement, {
+      duration: 3,
+      y: '+=20',
+      ease: Power1.easeInOut
+    }).to(this.$refs.icon as HTMLElement, {
+      duration: 3,
+      y: '-=20',
+      ease: Power1.easeInOut
+    })
   }
 }
 </script>
@@ -53,5 +69,6 @@ export default class Home extends Vue {
 }
 span {
   font-size: 80px;
+  display: block;
 }
 </style>
