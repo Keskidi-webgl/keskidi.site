@@ -10,9 +10,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import * as THREE from 'three'
-import {TimelineMax, Power1} from 'gsap'
+import {Component, Vue} from 'vue-property-decorator'
+import gsap from 'gsap'
 
 @Component
 export default class Home extends Vue {
@@ -24,18 +23,21 @@ export default class Home extends Vue {
   }
 
   public triggerIconAnimation(): void {
-    const timeline = new TimelineMax({
+    // Only GSAP 3 is compatible : https://greensock.com/cheatsheet/
+    const timeline = gsap.timeline({
       repeat: -1
-    });
-    timeline.to(this.$refs.icon as HTMLElement, {
-      duration: 3,
-      y: -25,
-      ease: Power1.easeInOut
-    }).to(this.$refs.icon as HTMLElement, {
-      duration: 3,
-      y: 0,
-      ease: Power1.easeInOut
     })
+
+    timeline.to(this.$refs.icon as HTMLElement, {
+      duration: 2,
+      y: -25,
+      ease: "sine.out"
+    }).to(this.$refs.icon as HTMLElement, {
+      duration: 2,
+      y: 0,
+      ease: "sine.in"
+    })
+
   }
 }
 </script>
