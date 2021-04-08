@@ -1497,6 +1497,11 @@
   "resolved" "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.7.tgz"
   "version" "1.0.7"
 
+"@types/three@^0.127.0":
+  "integrity" "sha512-4Q33L6PzzxCXm0VdUv4x1/4VBnwWgCS7Ui6WpRh88GVIUUYsg5qU2GVzva14hDJbtfyNBxey7UcdInR4RkKPeQ=="
+  "resolved" "https://registry.npmjs.org/@types/three/-/three-0.127.0.tgz"
+  "version" "0.127.0"
+
 "@types/uglify-js@*":
   "integrity" "sha512-EGkrJD5Uy+Pg0NUR8uA4bJ5WMfljyad0G+784vLCNUkD+QwOJXUbBYExXfVGf7YtyzdQp3L/XMYcliB987kL5Q=="
   "resolved" "https://registry.yarnpkg.com/@types/uglify-js/-/uglify-js-3.13.0.tgz"
@@ -7667,6 +7672,11 @@
     "loader-runner" "^4.1.0"
     "loader-utils" "^2.0.0"
     "neo-async" "^2.6.2"
+
+"three@^0.127.0":
+  "integrity" "sha512-wtgrn+mhYUbobxT7QN3GPdu3SRpSBQvwY6uOzLChWS7QE//f7paDU/+wlzbg+ngeIvBBqjBHSRuywTh8A99Jng=="
+  "resolved" "https://registry.npmjs.org/three/-/three-0.127.0.tgz"
+  "version" "0.127.0"
 
 "through@^2.3.6":
   "integrity" "sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU="

@@ -3,7 +3,7 @@
     <div>
       <span>{{ icon }}</span>
       <h1 class="title">
-        { {message }}
+        {{ message }}
       </h1>
     </div>
   </div>
@@ -11,11 +11,16 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import * as THREE from 'three'
 
 @Component
 export default class Home extends Vue {
   public message: string = 'Work in progress'
   public icon: string = '🚧'
+
+  mounted() {
+
+  }
 }
 </script>
 
