@@ -29,11 +29,11 @@ export default class Home extends Vue {
     });
     timeline.to(this.$refs.icon as HTMLElement, {
       duration: 3,
-      y: '+=20',
+      y: '-25',
       ease: Power1.easeInOut
     }).to(this.$refs.icon as HTMLElement, {
       duration: 3,
-      y: '-=20',
+      y: '0',
       ease: Power1.easeInOut
     })
   }
