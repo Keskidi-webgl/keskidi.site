@@ -47,5 +47,9 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     analyze: false, // remove automatic rebuild client when --> npm run dev is running
+  },
+
+  axios: {
+    baseURL: 'http://localhost:3000/api'
   }
 }
