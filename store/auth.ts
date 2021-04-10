@@ -1,6 +1,7 @@
 import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {LoginAuthCredential, RegisterAuthCredential} from "~/core/types";
+import {AuthTokenPayloads, LoginAuthCredential, RegisterAuthCredential, User} from "~/core/types";
 import AuthManager from "~/core/managers/AuthManager";
+import jwtDecode from "jwt-decode";
 
 // Doc : https://blog.logrocket.com/how-to-set-up-and-code-nuxt-js-apps-fully-in-typescript/
 // Doc : https://github.com/championswimmer/vuex-module-decorators#accessing-modules-with-nuxtjs
@@ -49,7 +50,18 @@ export default class AuthModule extends VuexModule {
     return !!this._token
   }
 
-  get token(): string|null {
+  get token(): string | null {
     return this._token
+  }
+
+  get user(): User | null {
+    let user: User | null = null
+
+    if (this.isAuth) {
+      const payloads: AuthTokenPayloads = jwtDecode(this._token!)
+      user = {id: parseInt(payloads.sub)}
+    }
+
+    return user
   }
 }
