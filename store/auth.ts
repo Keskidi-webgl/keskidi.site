@@ -35,7 +35,7 @@ export default class AuthModule extends VuexModule {
       const authToken = await AuthManager.register(credentials)
       this.setToken(authToken)
     } catch (error) {
-      this.setToken(null)
+      console.log(error)
     }
   }
 
