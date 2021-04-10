@@ -12,17 +12,11 @@ import AuthManager from "~/core/managers/AuthManager";
   stateFactory: true,
 })
 export default class AuthModule extends VuexModule {
-  private _token: string|null = null
-  private _isAuth: boolean = false
+  private _token: string|null = AuthManager.getAuthToken()
 
   @Mutation
   setToken(token: string|null) {
     this._token = token
-  }
-
-  @Mutation
-  setIsAuth(isAuth: boolean) {
-    this._isAuth = isAuth
   }
 
   @Action({rawError: true})
@@ -30,10 +24,8 @@ export default class AuthModule extends VuexModule {
     try {
       const authToken = await AuthManager.login(credentials)
       this.setToken(authToken)
-      this.setIsAuth(true)
     } catch (error) {
       this.setToken(null)
-      this.setIsAuth(false)
     }
   }
 
@@ -42,23 +34,19 @@ export default class AuthModule extends VuexModule {
     try {
       const authToken = await AuthManager.register(credentials)
       this.setToken(authToken)
-      this.setIsAuth(true)
     } catch (error) {
       this.setToken(null)
-      this.setIsAuth(false)
     }
   }
 
   @Action
   logout() {
-    console.log('logout')
     AuthManager.logout()
     this.setToken(null)
-    this.setIsAuth(false)
   }
 
   get isAuth(): boolean {
-    return this._isAuth
+    return !!this._token
   }
 
   get token(): string|null {
