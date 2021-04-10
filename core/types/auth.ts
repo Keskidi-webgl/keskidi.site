@@ -1,7 +1,7 @@
 export type LoginAuthCredential = {
-  mail: string
+  email: string
 }
 
 export type RegisterAuthCredential = {
-  mail: string
+  email: string
 }
