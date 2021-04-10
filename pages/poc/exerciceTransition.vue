@@ -5,7 +5,6 @@
       <h1 class="title">
         {{ message }}
       </h1>
-      <nuxt-link to="/poc/exerciceTransition">OOO</nuxt-link>
     </div>
   </div>
 </template>
@@ -18,22 +17,12 @@ import ApiManager from "~/core/managers/ApiManager";
 
 @Component
 export default class Home extends Vue {
-  public message: string = 'Work in progress'
+  public message: string = 'exo transition'
   public icon: string = '🚧'
-  public authModule!: AuthModule | null;
-
-  public created() {
-    // We can retrieve store moduel like that :
-    this.authModule = getModule(AuthModule, this.$store)
-  }
 
   public mounted() {
+    console.log('exercice transition')
     this.triggerIconAnimation()
-    this.initApiManager()
-  }
-
-  public initApiManager() {
-    ApiManager.setAxios(this.$axios)
   }
 
   public triggerIconAnimation(): void {
