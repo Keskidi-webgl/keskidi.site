@@ -10,16 +10,29 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator'
+import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import gsap from 'gsap'
+import AuthModule from "~/store/auth";
+import ApiManager from "~/core/managers/ApiManager";
 
 @Component
 export default class Home extends Vue {
   public message: string = 'Work in progress'
   public icon: string = '🚧'
+  public authModule!: AuthModule | null;
 
-  mounted() {
+  public created() {
+    // We can retrieve store moduel like that :
+    this.authModule = getModule(AuthModule, this.$store)
+  }
+
+  public mounted() {
     this.triggerIconAnimation()
+    this.initApiManager()
+  }
+
+  public initApiManager() {
+    ApiManager.setAxios(this.$axios)
   }
 
   public triggerIconAnimation(): void {
