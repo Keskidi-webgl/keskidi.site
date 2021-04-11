@@ -1,4 +1,4 @@
-import {Clock, Group, Object3D, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {Clock, Group, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer} from "three";
 import {CanvasDimension} from "~/core/types";
 import * as THREE from "three";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
@@ -6,6 +6,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 import modelsLoader from "~/core/managers/AssetsManager";
 import CameraManager from "~/core/managers/CameraManager";
+import EventEmitter from "events"
 
 export default class App {
 
@@ -19,6 +20,10 @@ export default class App {
   private controls: OrbitControls;
   private home:Group;
   private stats: Stats;
+  private raycaster: Raycaster;
+  private currentIntersect:any;
+  private mouse:any;
+  private objArray:any;
 
   constructor(canvasElement: HTMLCanvasElement) {
     this.canvasElement = canvasElement
@@ -28,9 +33,6 @@ export default class App {
     this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild( this.stats.dom );
 
-    console.log("ekip")
-
-
     this.init()
     this.initModels()
 
@@ -39,6 +41,26 @@ export default class App {
 
   public bindEvents(){
     window.addEventListener('resize',this.resize.bind(this))
+
+    window.addEventListener('mousemove',(evt)=>{
+      this.mouse.x = evt.clientX / this.canvasDimension.width * 2 - 1
+      this.mouse.y = - (evt.clientY / this.canvasDimension.height) * 2 + 1
+    })
+
+    window.addEventListener('click', (el) => {
+
+        if(this.currentIntersect.object.name === "Magazin") {
+            console.log('magazine ')
+            console.log(this.currentIntersect)
+          CameraManager.goInside(this.camera,this.currentIntersect.object.parent)
+
+          let exerciceEvent = new Event('toExercice');
+          window.dispatchEvent(exerciceEvent)
+        }
+
+
+    })
+
   }
 
   /**
@@ -65,7 +87,7 @@ export default class App {
       1,
       1000
     )
-    this.camera.position.set(70, 50, 0)
+    this.camera.position.set(70, 50, 10)
     this.camera.updateMatrixWorld();
 
 
@@ -78,6 +100,8 @@ export default class App {
   }
 
   public init(){
+    this.raycaster = new THREE.Raycaster()
+    this.mouse = new THREE.Vector2()
     this.initScene()
     this.initCamera()
     this.initLights()
@@ -111,8 +135,6 @@ export default class App {
        this.home = result.scene
     });
 
-
-
     Promise.all([p3]).then(() => {
 
       this.home.scale.set(0.25, 0.25, 0.25)
@@ -137,7 +159,7 @@ export default class App {
       this.scene.add(this.home);
 
       // todo --> make this dynamic
-      // this.objArray = [this.home]
+      this.objArray = [this.home]
 
       //continue the process
       this.initRenderer()
@@ -166,6 +188,25 @@ export default class App {
   private tick()
   {
     this.stats.begin()
+
+
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+
+    const intersects = this.raycaster.intersectObjects(this.objArray,true)
+
+    if(intersects.length) {
+
+      this.currentIntersect = intersects[0]
+    }
+    else {
+      if(this.currentIntersect) {
+        console.log('mouse leave')
+      }
+
+      this.currentIntersect = null
+    }
+
+
 
     this.controls.update()
     this.renderer.render(this.scene, this.camera)

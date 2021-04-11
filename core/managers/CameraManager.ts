@@ -21,6 +21,24 @@ class CameraManager{
     } );
   }
 
+  // TODO --> define method parameters etc + create json file w/ correct positions
+  goInside(camera:any,target:any){
+    console.log("go inside ")
+
+    gsap.to( camera.position, {
+      duration: 1,
+      x: target.position.x  ,
+      y: target.position.y + 30 ,
+      onUpdate: () => {
+        // camera.updateProjectionMatrix();
+        camera.zoom = 1.5
+        camera.lookAt( target.position );
+      }
+    });
+
+
+  }
+
   goBack(camera:any,target:any){
     console.log("back to ")
     gsap.to( camera.position, {

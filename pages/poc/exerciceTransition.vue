@@ -17,6 +17,10 @@ export default class ExerciceTransition extends Vue {
   mounted(): void {
     this.app = new App(this.$refs.canvas as HTMLCanvasElement)
     console.log('app mounted')
+
+    window.addEventListener('toExercice',()=>{
+      console.log("SAUCE GOOOOOOD")
+    })
   }
 }
 </script>
