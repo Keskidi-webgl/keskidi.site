@@ -17,7 +17,7 @@ export default class App {
   private camera: PerspectiveCamera;
   private renderer: WebGLRenderer;
   private controls: OrbitControls;
-  private home: Object3D;
+  private home:Group;
   private stats: Stats;
 
   constructor(canvasElement: HTMLCanvasElement) {
@@ -88,7 +88,7 @@ export default class App {
 
 
     const spotLight = new THREE.SpotLight( 0xffffff );
-    spotLight.position.set( 100, 100, 100 );
+    spotLight.position.set( 100, 100, 70 );
 
     spotLight.castShadow = true;
 
@@ -107,39 +107,30 @@ export default class App {
 
   initModels(){
 
-    let p3 = modelsLoader('/models/V0.gltf').then(result => {  // @ts-ignore
+    let p3 = modelsLoader('/models/V0.gltf').then((result:any) => {
        this.home = result.scene
-      console.log(this.home)
     });
 
 
 
     Promise.all([p3]).then(() => {
 
-
-
-
-      // this.home.scale(0,0,0)
       this.home.scale.set(0.25, 0.25, 0.25)
       this.home.position.set(0,0,0);
       this.home.name = 'maison'
       console.log(this.home)
-      // this.home.traverse( (child)=>{
-      //   if (child.isMesh){
-      //     var wireframeGeomtry = new THREE.WireframeGeometry(child.geometry);
-      //     var wireframeMaterial = new THREE.LineBasicMaterial({
-      //       color: 0xffffff
-      //     });
-      //     var wireframe = new THREE.LineSegments(wireframeGeomtry, wireframeMaterial);
-      //
-      //     // add to child so we get same orientation
-      //     child.add(wireframe);
-      //     // to parent of child. Using attach keeps our orietation
-      //     child.parent.attach(wireframe);
-      //     // remove child (we don't want child)
-      //     child.parent.remove(child);
-      //   }
-      // })
+
+      this.home.traverse( (child:any)=>{
+
+        if (child.name  === "Magazin"){
+          console.log(child)
+          child.material.color.set(0x00FF00);
+        }
+
+
+      })
+
+
 
       //add model to the scene
 
