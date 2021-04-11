@@ -1,51 +1,34 @@
 <template>
-  <div class="container">
-    <div>
-      <span ref="icon">{{ icon }}</span>
-      <h1 class="title">
-        {{ message }}
-      </h1>
-    </div>
+  <div class="app-container">
+    <canvas class="canvas" ref="canvas"></canvas>
   </div>
+
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import gsap from 'gsap'
-import AuthModule from "~/store/auth";
-import ApiManager from "~/core/managers/ApiManager";
+import App from "~/core/app";
 
 @Component
-export default class Home extends Vue {
-  public message: string = 'exo transition'
-  public icon: string = '🚧'
+export default class ExerciceTransition extends Vue {
+  public app: App
 
-  public mounted() {
-    console.log('exercice transition')
-    this.triggerIconAnimation()
-  }
-
-  public triggerIconAnimation(): void {
-    // Only GSAP 3 is compatible : https://greensock.com/cheatsheet/
-    const timeline = gsap.timeline({
-      repeat: -1
-    })
-
-    timeline.to(this.$refs.icon as HTMLElement, {
-      duration: 2,
-      y: -25,
-      ease: "sine.out"
-    }).to(this.$refs.icon as HTMLElement, {
-      duration: 2,
-      y: 0,
-      ease: "sine.in"
-    })
-
+  mounted(): void {
+    this.app = new App(this.$refs.canvas as HTMLCanvasElement)
+    console.log('app mounted')
   }
 }
 </script>
 
 <style>
+.canvas
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+}
 .container {
   margin: 0 auto;
   min-height: 100vh;
