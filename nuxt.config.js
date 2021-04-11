@@ -50,7 +50,7 @@ export default {
   },
 
   axios: {
-    baseURL: 'http://api.keskidi.site'
+    baseURL: 'https://api.keskidi.site'
   },
 
   router: {
