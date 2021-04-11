@@ -9,13 +9,11 @@ class AuthManager {
    * Intent login request to the API
    */
   public async login(credential: LoginAuthCredential): Promise<string> {
-    console.log('async')
     const payloads: AxiosRequestConfig = {
       url: '/login',
       method: 'POST',
       data: credential
     }
-    console.log(payloads)
     const {data} = await ApiManager.request(payloads)
     this.storeAuthToken(data.token)
 

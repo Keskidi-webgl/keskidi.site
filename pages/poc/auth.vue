@@ -2,6 +2,7 @@
   <div>
     <pre>isAuth: {{authModule.isAuth}}</pre>
     <pre>token: {{authModule.token}}</pre>
+    <pre>user: {{authModule.user}}</pre>
 
     <input v-model="dataForm.emailLogin" type="text" name="" id="">
     <button :disabled="authModule.isAuth" @click="login">Login</button>
