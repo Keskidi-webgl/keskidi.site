@@ -1,5 +1,8 @@
 <template>
   <div class="app-container">
+    <div v-if="this.exo._exostatus">
+      <exercicecomponent/>
+    </div>
     <canvas class="canvas" ref="canvas"></canvas>
 
   </div>
@@ -12,7 +15,12 @@ import gsap from 'gsap'
 import App from "~/core/app";
 import Exercice from "~/store/exercice";
 
-@Component
+import exercicecomponent from '@/components/exercice.vue'
+@Component({
+  components: {
+    exercicecomponent
+  }
+})
 export default class ExerciceTransition extends Vue {
   public app: App
   public exo!: Exercice;
