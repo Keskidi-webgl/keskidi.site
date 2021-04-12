@@ -49,6 +49,7 @@ export default class App {
 
     window.addEventListener('click', (el) => {
 
+      // send state in user data (is clicked....)
         if(this.currentIntersect.object.name === "Magazin") {
             console.log('magazine ')
             console.log(this.currentIntersect)

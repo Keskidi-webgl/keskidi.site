@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <canvas class="canvas" ref="canvas"></canvas>
+
   </div>
 
 </template>
@@ -9,17 +10,26 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import gsap from 'gsap'
 import App from "~/core/app";
+import Exercice from "~/store/exercice";
 
 @Component
 export default class ExerciceTransition extends Vue {
   public app: App
+  public exo!: Exercice;
+
+  created() {
+    this.exo = getModule(Exercice, this.$store);
+    // Do stuff with module
+    this.exo.setStatus(false)
+  }
 
   mounted(): void {
     this.app = new App(this.$refs.canvas as HTMLCanvasElement)
     console.log('app mounted')
 
     window.addEventListener('toExercice',()=>{
-      console.log("SAUCE GOOOOOOD")
+      console.log("event to Exercice")
+      this.exo.setStatus(true)
     })
   }
 }
