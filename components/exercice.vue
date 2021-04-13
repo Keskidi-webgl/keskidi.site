@@ -1,5 +1,7 @@
 <template>
-  <h1>exercice component</h1>
+ <div>
+  <h1>exo vue</h1>
+ </div>
 </template>
 
 <script lang="ts">

@@ -55,8 +55,8 @@ export default class App {
             console.log(this.currentIntersect)
           CameraManager.goInside(this.camera,this.currentIntersect.object.parent)
 
-          let exerciceEvent = new Event('toExercice');
-          window.dispatchEvent(exerciceEvent)
+          // let exerciceEvent = new Event('toExercice');
+          // window.dispatchEvent(exerciceEvent)
         }
 
 

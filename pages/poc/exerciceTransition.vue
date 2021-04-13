@@ -1,27 +1,32 @@
 <template>
   <div class="app-container">
-    <div v-if="this.exo._exostatus">
-      <exercicecomponent/>
-    </div>
+
+    <transition @enter="exerciceEnter">
+      <div class="exo" v-if="this.exo._exostatus">
+          <exercicecomponent/>
+      </div>
+    </transition>
+
     <canvas class="canvas" ref="canvas"></canvas>
 
   </div>
-
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from 'nuxt-property-decorator'
+import {Component, getModule, Vue, mixins} from 'nuxt-property-decorator'
 import gsap from 'gsap'
 import App from "~/core/app";
 import Exercice from "~/store/exercice";
-
+import transitions from "~/mixins/transitions";
 import exercicecomponent from '@/components/exercice.vue'
+
+
 @Component({
   components: {
-    exercicecomponent
+    exercicecomponent,
   }
 })
-export default class ExerciceTransition extends Vue {
+export default class ExerciceTransition extends mixins(transitions) {
   public app: App
   public exo!: Exercice;
 
@@ -35,15 +40,25 @@ export default class ExerciceTransition extends Vue {
     this.app = new App(this.$refs.canvas as HTMLCanvasElement)
     console.log('app mounted')
 
-    window.addEventListener('toExercice',()=>{
+    window.addEventListener('exerciceInsideTransition',()=>{
       console.log("event to Exercice")
       this.exo.setStatus(true)
     })
+
+
   }
 }
 </script>
 
 <style>
+.exo{
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 4;
+  background: white;
+  transform: translateY(100%);
+}
 .canvas
 {
   position: fixed;

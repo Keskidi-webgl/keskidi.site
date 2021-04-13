@@ -33,6 +33,10 @@ class CameraManager{
         // camera.updateProjectionMatrix();
         camera.zoom = 1.5
         camera.lookAt( target.position );
+      },
+      onComplete:() =>{
+        let goInside = new Event('exerciceInsideTransition');
+        window.dispatchEvent(goInside)
       }
     });
 
