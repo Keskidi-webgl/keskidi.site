@@ -10,7 +10,7 @@ import {Component, getModule, Vue} from "nuxt-property-decorator";
 import ApiManager from "~/core/managers/ApiManager";
 import GlobalModule from "~/store/global";
 import {SceneManager} from "~/core/managers";
-import {Color, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
 import Helpers from "~/core/utils/helpers";
 
 @Component({})
@@ -19,9 +19,6 @@ export default class DefaultLayout extends Vue {
 
   mounted() {
     this.initApp()
-    SceneManager.GLOBAL_SCENE
-      ?.enableStats()
-      .start()
   }
 
   /**
@@ -35,17 +32,25 @@ export default class DefaultLayout extends Vue {
 
       // Init global SceneManager
       SceneManager.GLOBAL_SCENE = this._createGlobalSceneManager()
+      SceneManager.GLOBAL_SCENE
+        ?.enableStats()
+        .registerPresetCameraPositions({name: 'home', coord: new Vector3(2, 3, 6)})
+        .start()
+
       this.globalModule.setIsAppInit(true)
     }
   }
 
+  /**
+   * Create global scene
+   */
   private _createGlobalSceneManager(): SceneManager {
     const canvas: HTMLCanvasElement = this.$refs.canvasGlobalScene as HTMLCanvasElement
     canvas.width = Helpers.getWindowSizes().width
     canvas.height = Helpers.getWindowSizes().height
 
     const camera = new PerspectiveCamera(75, canvas.width / canvas.height, 1, 1000)
-    camera.position.set(70, 50, 10)
+    camera.position.set(4, 4, 4)
     camera.updateMatrixWorld();
 
     const scene = new Scene()

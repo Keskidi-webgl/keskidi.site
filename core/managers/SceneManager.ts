@@ -225,16 +225,6 @@ export default class SceneManager {
     return this
   }
 
-  /**
-   * Disable stats
-   */
-  public disableStats()
-  {
-    this._isStatsActive = false
-
-    return this
-  }
-
   // - PRIVATE
   /**
    * Init elements after property binding into constructor
@@ -265,7 +255,7 @@ export default class SceneManager {
    * Init renderer
    */
   private _initRenderer() {
-    this._renderer.setPixelRatio(Helpers.getWindowRatio())
+    this._renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), 2))
     this._renderer.setSize(this._canvas.width, this._canvas.height)
   }
 
