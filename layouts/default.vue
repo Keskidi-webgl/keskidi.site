@@ -11,7 +11,16 @@ import {Component, getModule, Vue} from "nuxt-property-decorator";
 import ApiManager from "~/core/managers/ApiManager";
 import GlobalModule from "~/store/global";
 import {SceneManager} from "~/core/managers";
-import {Color, PerspectiveCamera, Scene, SpotLight, SpotLightHelper, Vector3, WebGLRenderer} from "three";
+import {
+  Color,
+  PerspectiveCamera,
+  Scene,
+  HemisphereLight,
+  HemisphereLightHelper,
+  Vector3,
+  WebGLRenderer,
+  PlaneGeometry, MeshPhongMaterial, Mesh
+} from "three";
 import Helpers from "~/core/utils/helpers";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
@@ -43,27 +52,12 @@ export default class DefaultLayout extends Vue {
           SceneManager.GLOBAL_SCENE?.scene.add(gltf.scene)
           SceneManager.GLOBAL_SCENE?.start()
 
-          console.log(SceneManager.GLOBAL_SCENE?.scene.getObjectByName("chambre",true))
-           SceneManager.GLOBAL_SCENE?.camera.lookAt(SceneManager.GLOBAL_SCENE?.scene.getObjectByName("chambre",true))
+          let roomObj = SceneManager.GLOBAL_SCENE?.scene.getObjectByName("chambre")
 
+          SceneManager?.GLOBAL_SCENE?.camera.position.set(0,70,300)
 
-
-          const spotLight = new SpotLight( 0xffffff );
-          spotLight.position.set( 300, 300, 270 );
-
-          spotLight.castShadow = true;
-
-          spotLight.shadow.mapSize.width = 1024;
-          spotLight.shadow.mapSize.height = 1024;
-
-          spotLight.shadow.camera.near = 500;
-          spotLight.shadow.camera.far = 4000;
-          spotLight.shadow.camera.fov = 30;
-
-          SceneManager.GLOBAL_SCENE?.scene.add( spotLight );
-
-          const spotLightHelper = new SpotLightHelper( spotLight );
-          SceneManager.GLOBAL_SCENE?.scene.add( spotLightHelper );
+          this._initLights()
+          this._createFloor()
 
 
           this.globalModule.setIsAppInit(true)
@@ -73,6 +67,31 @@ export default class DefaultLayout extends Vue {
     }
   }
 
+  private _initLights(){
+    const hemiLight = new HemisphereLight( 0xdff9fb, 0x080820, 1 );
+    hemiLight.position.set(0,200,-50)
+    const helper = new HemisphereLightHelper( hemiLight, 5 );
+    SceneManager.GLOBAL_SCENE?.scene.add( helper );
+    SceneManager.GLOBAL_SCENE?.scene.add( hemiLight );
+  }
+
+  /**
+   * Create floor scene
+   */
+  private _createFloor(){
+    // Floor
+    var floorGeometry = new PlaneGeometry(5000, 5000, 1, 1);
+    var floorMaterial = new MeshPhongMaterial({
+      color: 0xeeeeee, // This color is manually dialed in to match the background color
+      shininess: 0
+    });
+
+    var floor = new Mesh(floorGeometry, floorMaterial);
+    floor.rotation.x = -0.5 * Math.PI;
+    floor.receiveShadow = true;
+    floor.position.y = -100;
+    SceneManager.GLOBAL_SCENE?.scene.add(floor);
+  }
   /**
    * Create global scene
    */
@@ -86,7 +105,7 @@ export default class DefaultLayout extends Vue {
     camera.updateMatrixWorld();
 
     const scene = new Scene()
-    scene.background = new Color('green')
+    // scene.background = new Color('green')
 
     const renderer = new WebGLRenderer({
       canvas: canvas,
