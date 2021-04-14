@@ -12,6 +12,12 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 export default class SceneManager {
+
+  /**
+   * Static accessor to global scene
+   */
+  public static GLOBAL_SCENE: SceneManager|null
+
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
   private _camera: Camera
@@ -43,6 +49,7 @@ export default class SceneManager {
   private _isOrbitControlActivated: boolean
   private _isPlaying: boolean
   private _isRayCasting: boolean
+  private _isStatsActive: boolean
 
   // - CONSTRUCTOR
   constructor(options: SceneManagerOptions) {
@@ -51,11 +58,12 @@ export default class SceneManager {
     this._canvas = options.canvas
     this._clock = options.clock || new Clock()
     this._mousePositions = new Vector2()
-    this._renderer = options.render
+    this._renderer = options.renderer
     this._scene = options.scene
     this._rayCaster = new Raycaster()
     this._isPlaying = false
     this._isRayCasting = false
+    this._isStatsActive = false
     this._controls = null
     this._deltaTime = 0
     this._previousTime = 0
@@ -113,6 +121,7 @@ export default class SceneManager {
    * Start animations of the scene
    */
   public start() {
+    this._isPlaying = true
     this._onStartCallback(this)
     this._tick()
   }
@@ -165,6 +174,8 @@ export default class SceneManager {
     if (this._controls) {
       this._controls.enabled = true
     }
+
+    return this
   }
 
   /**
@@ -174,6 +185,8 @@ export default class SceneManager {
     if (this._controls) {
       this._controls.enabled = false
     }
+
+    return this
   }
 
   /**
@@ -182,6 +195,8 @@ export default class SceneManager {
   public enableRayCasting()
   {
     this._isRayCasting = true
+
+    return this
   }
 
   /**
@@ -190,6 +205,8 @@ export default class SceneManager {
   public disableRayCasting()
   {
     this._isRayCasting = false
+
+    return this
   }
 
   /**
@@ -202,11 +219,20 @@ export default class SceneManager {
       this._stats.showPanel(0)
       document.body.appendChild(this._stats.dom)
     }
+
+    this._isStatsActive = true
+
+    return this
   }
 
+  /**
+   * Disable stats
+   */
   public disableStats()
   {
+    this._isStatsActive = false
 
+    return this
   }
 
   // - PRIVATE
@@ -267,7 +293,11 @@ export default class SceneManager {
    */
   private _tick() {
     if (!this._isPlaying) return
+
+    if (this._isStatsActive && this._stats) this._stats.begin()
     this._render()
+    if (this._isStatsActive && this._stats) this._stats.end()
+
     this._requestId = requestAnimationFrame(this._tick.bind(this))
   }
 
@@ -275,7 +305,7 @@ export default class SceneManager {
    * Logic to render the scene (for each frame)
    */
   private _render() {
-    this.renderer.render(this._scene, this.camera)
+    this._onRenderCallback(this)
 
     if (this._controls) {
       this._controls.update()
@@ -290,6 +320,7 @@ export default class SceneManager {
     const elapsedTime = this._clock.getElapsedTime()
     this._deltaTime = elapsedTime - this._previousTime
     this._previousTime = elapsedTime
+    this._renderer.render(this._scene, this._camera)
   }
 
   // - GETTERS

@@ -1,16 +1,16 @@
-import {Camera, Clock, Intersection, Scene, Vector2, Vector3, WebGLRenderer} from "three";
+import {Camera, Clock, Intersection, PerspectiveCamera, Scene, Vector2, Vector3, WebGLRenderer} from "three";
 import SceneManager from "~/core/managers/SceneManager";
 
 /**
  * Option to create SceneManager
  */
 export type SceneManagerOptions = {
-  camera: Camera
+  camera: PerspectiveCamera
   canvas: HTMLCanvasElement
   clock?: Clock
-  render: WebGLRenderer
+  renderer: WebGLRenderer
   scene: Scene
-  bindEvents: DefaultSceneManagerCallback
+  bindEvents?: DefaultSceneManagerCallback
 
   onStart?: DefaultSceneManagerCallback
   onPause?: DefaultSceneManagerCallback
