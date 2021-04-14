@@ -19,7 +19,7 @@ import {
   HemisphereLightHelper,
   Vector3,
   WebGLRenderer,
-  PlaneGeometry, MeshPhongMaterial, Mesh
+  PlaneGeometry, MeshPhongMaterial, Mesh, AnimationMixer
 } from "three";
 import Helpers from "~/core/utils/helpers";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
@@ -27,6 +27,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 @Component({})
 export default class DefaultLayout extends Vue {
   public globalModule = getModule(GlobalModule, this.$store)
+  public mixer:AnimationMixer
 
   mounted() {
     this.initApp()
@@ -48,6 +49,16 @@ export default class DefaultLayout extends Vue {
         .registerPresetCameraPositions({name: 'home', coord: new Vector3(2, 3, 6)})
         new GLTFLoader().load('/models/chambre.gltf',(gltf)=>{
           gltf.scene.name = "chambre"
+
+          this.mixer = new AnimationMixer(gltf.scene)
+
+          gltf.animations.forEach( ( clip ) => {
+
+            this.mixer.clipAction( clip ).play();
+            // this.mixer.clipAction( clip ).stop()
+
+          } );
+
           console.log(gltf)
           SceneManager.GLOBAL_SCENE?.scene.add(gltf.scene)
           SceneManager.GLOBAL_SCENE?.start()
@@ -119,7 +130,10 @@ export default class DefaultLayout extends Vue {
       scene: scene,
       renderer: renderer,
       activateOrbitControl: true,
-      onRender: (context) => {
+      onRender: (ctx) => {
+        // console.log(ctx._deltaTime)
+        this.mixer.update(ctx._deltaTime)
+
       },
     })
   }
