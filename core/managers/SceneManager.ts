@@ -310,6 +310,7 @@ export default class SceneManager {
 
     if (this._controls) {
       this._controls.update()
+      // console.log(this._controls,'controls')
     }
 
     if (this._isRayCasting) {

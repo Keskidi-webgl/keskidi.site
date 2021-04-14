@@ -1,6 +1,7 @@
 <template>
   <div>
     <Nuxt/>
+    <img src="~/static/img.png" alt="">
     <canvas ref="canvasGlobalScene"></canvas>
   </div>
 </template>
@@ -10,8 +11,9 @@ import {Component, getModule, Vue} from "nuxt-property-decorator";
 import ApiManager from "~/core/managers/ApiManager";
 import GlobalModule from "~/store/global";
 import {SceneManager} from "~/core/managers";
-import {Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
+import {Color, PerspectiveCamera, Scene, SpotLight, Vector3, WebGLRenderer} from "three";
 import Helpers from "~/core/utils/helpers";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 @Component({})
 export default class DefaultLayout extends Vue {
@@ -24,7 +26,7 @@ export default class DefaultLayout extends Vue {
   /**
    * Init app for the first connection
    */
-  public initApp() {
+   public async initApp() {
     if (!this.globalModule.isAppInit) {
       console.log('initApp from default')
       // Init ApiManager
@@ -35,9 +37,39 @@ export default class DefaultLayout extends Vue {
       SceneManager.GLOBAL_SCENE
         ?.enableStats()
         .registerPresetCameraPositions({name: 'home', coord: new Vector3(2, 3, 6)})
-        .start()
+        new GLTFLoader().load('/models/chambre.gltf',(gltf)=>{
+          gltf.scene.name = "chambre"
+          console.log(gltf)
+          SceneManager.GLOBAL_SCENE?.scene.add(gltf.scene)
+          SceneManager.GLOBAL_SCENE?.start()
 
-      this.globalModule.setIsAppInit(true)
+          console.log(SceneManager.GLOBAL_SCENE?.scene.getObjectByName("chambre",true))
+           SceneManager.GLOBAL_SCENE?.camera.lookAt(SceneManager.GLOBAL_SCENE?.scene.getObjectByName("chambre",true))
+
+
+
+          const spotLight = new SpotLight( 0xffffff );
+          spotLight.position.set( 300, 300, 270 );
+
+          spotLight.castShadow = true;
+
+          spotLight.shadow.mapSize.width = 1024;
+          spotLight.shadow.mapSize.height = 1024;
+
+          spotLight.shadow.camera.near = 500;
+          spotLight.shadow.camera.far = 4000;
+          spotLight.shadow.camera.fov = 30;
+
+          SceneManager.GLOBAL_SCENE?.scene.add( spotLight );
+
+          const spotLightHelper = new THREE.SpotLightHelper( spotLight );
+          SceneManager.GLOBAL_SCENE?.scene.add( spotLightHelper );
+
+
+          this.globalModule.setIsAppInit(true)
+        }
+      );
+
     }
   }
 
@@ -54,7 +86,7 @@ export default class DefaultLayout extends Vue {
     camera.updateMatrixWorld();
 
     const scene = new Scene()
-    scene.background = new Color('black')
+    scene.background = new Color('green')
 
     const renderer = new WebGLRenderer({
       canvas: canvas,
@@ -69,7 +101,7 @@ export default class DefaultLayout extends Vue {
       renderer: renderer,
       activateOrbitControl: true,
       onRender: (context) => {
-      }
+      },
     })
   }
 }
