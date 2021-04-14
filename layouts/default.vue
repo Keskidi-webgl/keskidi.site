@@ -11,7 +11,7 @@ import {Component, getModule, Vue} from "nuxt-property-decorator";
 import ApiManager from "~/core/managers/ApiManager";
 import GlobalModule from "~/store/global";
 import {SceneManager} from "~/core/managers";
-import {Color, PerspectiveCamera, Scene, SpotLight, Vector3, WebGLRenderer} from "three";
+import {Color, PerspectiveCamera, Scene, SpotLight, SpotLightHelper, Vector3, WebGLRenderer} from "three";
 import Helpers from "~/core/utils/helpers";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
@@ -62,7 +62,7 @@ export default class DefaultLayout extends Vue {
 
           SceneManager.GLOBAL_SCENE?.scene.add( spotLight );
 
-          const spotLightHelper = new THREE.SpotLightHelper( spotLight );
+          const spotLightHelper = new SpotLightHelper( spotLight );
           SceneManager.GLOBAL_SCENE?.scene.add( spotLightHelper );
 
 
