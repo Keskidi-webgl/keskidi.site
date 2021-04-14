@@ -4,7 +4,8 @@ import {
   DefaultSceneManagerCallback,
   MouseMoveCanvasCallback,
   RayCasterIntersectCallBack,
-  SceneManagerOptions
+  SceneManagerOptions,
+  WindowResizeCallback
 } from "~/core/types";
 import Helpers from "~/core/utils/helpers";
 import gsap from 'gsap'
@@ -14,7 +15,7 @@ import Stats from "three/examples/jsm/libs/stats.module";
 export default class SceneManager {
 
   /**
-   * Static accessor to global scene
+   * Static accessors for scenes instances
    */
   public static GLOBAL_SCENE: SceneManager|null
 
@@ -29,6 +30,7 @@ export default class SceneManager {
   private _scene: Scene
   private _rayCaster: Raycaster
   private _stats: Stats | null
+  private _defaultRatio: number
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -43,6 +45,7 @@ export default class SceneManager {
   private _onRenderCallback: DefaultSceneManagerCallback
   private _onRayCasterIntersectCallback: RayCasterIntersectCallBack
   private _onMouseMoveCanvasCallback: MouseMoveCanvasCallback
+  private _onWindowResizeCallback: WindowResizeCallback
   private _bindExternEvents: DefaultSceneManagerCallback
 
   // -- Configuration
@@ -68,6 +71,7 @@ export default class SceneManager {
     this._deltaTime = 0
     this._previousTime = 0
     this._stats = null
+    this._defaultRatio = options.defaultRation || 1
 
     this._onStartCallback = options.onStart || function () {
     }
@@ -85,6 +89,9 @@ export default class SceneManager {
     }
     this._onMouseMoveCanvasCallback = options.onMouseMoveCanvas || function () {
     }
+    this._onWindowResizeCallback = options.onWindowResize || function () {
+    }
+
     this._isOrbitControlActivated = options.activateOrbitControl
 
     this._init()
@@ -249,13 +256,17 @@ export default class SceneManager {
       this._mousePositions.y = -(event.clientY / this._canvas.height) * 2 + 1
       this._onMouseMoveCanvasCallback(this, event)
     })
+
+    window.addEventListener('resize', event => {
+      this._onWindowResizeCallback(this, event)
+    })
   }
 
   /**
    * Init renderer
    */
   private _initRenderer() {
-    this._renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), 2))
+    this._renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), this._defaultRatio))
     this._renderer.setSize(this._canvas.width, this._canvas.height)
   }
 
