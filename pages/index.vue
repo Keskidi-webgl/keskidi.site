@@ -1,17 +1,10 @@
 <template>
   <div class="container">
-    <div>
-      <span ref="icon">{{ icon }}</span>
-      <h1 class="title">
-        {{ message }}
-      </h1>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import gsap from 'gsap'
 import AuthModule from "~/store/auth";
 import ApiManager from "~/core/managers/ApiManager";
 
@@ -22,35 +15,16 @@ export default class Home extends Vue {
   public authModule!: AuthModule | null;
 
   public created() {
-    // We can retrieve store moduel like that :
+    // We can retrieve store module like that :
     this.authModule = getModule(AuthModule, this.$store)
   }
 
   public mounted() {
-    this.triggerIconAnimation()
     this.initApiManager()
   }
 
   public initApiManager() {
     ApiManager.setAxios(this.$axios)
-  }
-
-  public triggerIconAnimation(): void {
-    // Only GSAP 3 is compatible : https://greensock.com/cheatsheet/
-    const timeline = gsap.timeline({
-      repeat: -1
-    })
-
-    timeline.to(this.$refs.icon as HTMLElement, {
-      duration: 2,
-      y: -25,
-      ease: "sine.out"
-    }).to(this.$refs.icon as HTMLElement, {
-      duration: 2,
-      y: 0,
-      ease: "sine.in"
-    })
-
   }
 }
 </script>

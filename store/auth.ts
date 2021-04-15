@@ -1,7 +1,7 @@
 import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
 import {AuthTokenPayloads, LoginAuthCredential, RegisterAuthCredential, User} from "~/core/types";
-import AuthManager from "~/core/managers/AuthManager";
 import jwtDecode from "jwt-decode";
+import {AuthManager} from "~/core/managers";
 
 // Doc : https://blog.logrocket.com/how-to-set-up-and-code-nuxt-js-apps-fully-in-typescript/
 // Doc : https://github.com/championswimmer/vuex-module-decorators#accessing-modules-with-nuxtjs

@@ -1,6 +1,6 @@
-import ApiManager from "~/core/managers/ApiManager";
 import {LoginAuthCredential, RegisterAuthCredential} from "~/core/types";
 import {AxiosRequestConfig} from "axios";
+import {ApiManager} from "~/core/managers";
 
 class AuthManager {
   public static AUTH_TOKEN_KEY_STORAGE = 'authToken'
