@@ -24,6 +24,7 @@ export default class DefaultLayout extends Vue {
     await this.initApp()
   }
 
+
   /**
    * Init app for the first connection
    */
