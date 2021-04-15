@@ -47,9 +47,10 @@ export default class DefaultLayout extends Vue {
       SceneManager.GLOBAL_SCENE
         ?.enableStats()
         .registerPresetCameraPositions({name: 'home', coord: new Vector3(2, 3, 6)})
-        new GLTFLoader().load('/models/chambre.gltf',(gltf)=>{
+        new GLTFLoader().load('https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale.gltf',(gltf)=>{
           gltf.scene.name = "chambre"
 
+          gltf.scene.scale.set(0.5,0.5,0.5)
           this.mixer = new AnimationMixer(gltf.scene)
 
           gltf.animations.forEach( ( clip ) => {
@@ -80,7 +81,7 @@ export default class DefaultLayout extends Vue {
 
   private _initLights(){
     const hemiLight = new HemisphereLight( 0xdff9fb, 0x080820, 1 );
-    hemiLight.position.set(0,200,-50)
+    hemiLight.position.set(100,500,700)
     const helper = new HemisphereLightHelper( hemiLight, 5 );
     SceneManager.GLOBAL_SCENE?.scene.add( helper );
     SceneManager.GLOBAL_SCENE?.scene.add( hemiLight );
@@ -111,7 +112,7 @@ export default class DefaultLayout extends Vue {
     canvas.width = Helpers.getWindowSizes().width
     canvas.height = Helpers.getWindowSizes().height
 
-    const camera = new PerspectiveCamera(75, canvas.width / canvas.height, 1, 1000)
+    const camera = new PerspectiveCamera(75, canvas.width / canvas.height, 1, 5000)
     camera.position.set(4, 4, 4)
     camera.updateMatrixWorld();
 
