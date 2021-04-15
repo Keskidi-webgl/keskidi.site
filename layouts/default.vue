@@ -1,8 +1,8 @@
 <template>
   <div>
     <Nuxt/>
-    <img src="~/static/img.png" alt="">
     <canvas ref="canvasGlobalScene"></canvas>
+    <button style="z-index: 2; position: absolute; top: 0;" @click="initApp">Init app</button>
   </div>
 </template>
 
@@ -10,19 +10,21 @@
 import {Component, getModule, Vue} from "nuxt-property-decorator";
 import ApiManager from "~/core/managers/ApiManager";
 import GlobalModule from "~/store/global";
-import {SceneManager} from "~/core/managers";
+import {AssetsManager, SceneManager} from "~/core/managers";
 import {
-  Color,
-  PerspectiveCamera,
-  Scene,
+  AnimationMixer,
   HemisphereLight,
   HemisphereLightHelper,
+  Mesh,
+  MeshPhongMaterial,
+  PerspectiveCamera,
+  PlaneGeometry,
+  Scene,
   Vector3,
-  WebGLRenderer,
-  PlaneGeometry, MeshPhongMaterial, Mesh, AnimationMixer
+  WebGLRenderer
 } from "three";
 import Helpers from "~/core/utils/helpers";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import {GLTF_ASSET} from "~/core/enums";
 
 @Component({})
 export default class DefaultLayout extends Vue {
@@ -30,7 +32,7 @@ export default class DefaultLayout extends Vue {
   public mixer!:AnimationMixer
 
   mounted() {
-    this.initApp()
+    //this.initApp()
   }
 
   /**
@@ -42,39 +44,45 @@ export default class DefaultLayout extends Vue {
       // Init ApiManager
       ApiManager.setAxios(this.$axios)
 
+      // Load assets
+      await AssetsManager
+        .registerGltf(GLTF_ASSET.GLOBAL_SCENE, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale.gltf')
+        .registerImage('image-1', 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/group37.png')
+        .registerImage('image-2', 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/group38.png')
+        .onProgress((done, total) => {
+          console.log(done / total * 100, '%')
+        }).load()
+
       // Init global SceneManager
       SceneManager.GLOBAL_SCENE = this._createGlobalSceneManager()
       SceneManager.GLOBAL_SCENE
         ?.enableStats()
         .registerPresetCameraPositions({name: 'home', coord: new Vector3(2, 3, 6)})
-        new GLTFLoader().load('https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale.gltf',(gltf)=>{
-          gltf.scene.name = "chambre"
 
-          gltf.scene.scale.set(0.5,0.5,0.5)
-          this.mixer = new AnimationMixer(gltf.scene)
+      const globalScene = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
 
-          gltf.animations.forEach( ( clip ) => {
+      globalScene.scene.scale.set(0.5, 0.5, 0.5)
+      this.mixer = new AnimationMixer(globalScene.scene)
 
-            this.mixer.clipAction( clip ).play();
-            // this.mixer.clipAction( clip ).stop()
+      globalScene.scene.animations.forEach((clip) => {
 
-          } );
+        this.mixer.clipAction(clip).play();
+        // this.mixer.clipAction( clip ).stop()
 
-          console.log(gltf)
-          SceneManager.GLOBAL_SCENE?.scene.add(gltf.scene)
-          SceneManager.GLOBAL_SCENE?.start()
+      });
 
-          let roomObj = SceneManager.GLOBAL_SCENE?.scene.getObjectByName("chambre")
+      SceneManager.GLOBAL_SCENE?.scene.add(globalScene.scene)
+      SceneManager.GLOBAL_SCENE?.start()
 
-          SceneManager?.GLOBAL_SCENE?.camera.position.set(0,70,300)
+      let roomObj = SceneManager.GLOBAL_SCENE?.scene.getObjectByName(GLTF_ASSET.GLOBAL_SCENE)
 
-          this._initLights()
-          this._createFloor()
+      SceneManager?.GLOBAL_SCENE?.camera.position.set(0, 70, 300)
+
+      this._initLights()
+      this._createFloor()
 
 
-          this.globalModule.setIsAppInit(true)
-        }
-      );
+      this.globalModule.setIsAppInit(true)
 
     }
   }
