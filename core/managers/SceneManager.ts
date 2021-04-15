@@ -345,4 +345,8 @@ export default class SceneManager {
   get mousePositions(): Vector2 {
     return this._mousePositions
   }
+
+  get deltaTime(): number{
+    return this._deltaTime
+  }
 }

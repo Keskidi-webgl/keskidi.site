@@ -27,7 +27,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 @Component({})
 export default class DefaultLayout extends Vue {
   public globalModule = getModule(GlobalModule, this.$store)
-  public mixer:AnimationMixer
+  public mixer!:AnimationMixer
 
   mounted() {
     this.initApp()
@@ -132,7 +132,7 @@ export default class DefaultLayout extends Vue {
       activateOrbitControl: true,
       onRender: (ctx) => {
         // console.log(ctx._deltaTime)
-        this.mixer.update(ctx._deltaTime)
+        this.mixer.update(ctx.deltaTime)
 
       },
     })
