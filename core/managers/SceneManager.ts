@@ -1,4 +1,4 @@
-import {Camera, Clock, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer} from "three";
+import {AnimationMixer, Camera, Clock, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer} from "three";
 import {
   CameraPosition,
   DefaultSceneManagerCallback,
@@ -17,7 +17,7 @@ export default class SceneManager {
   /**
    * Static accessors for scenes instances
    */
-  public static GLOBAL_SCENE: SceneManager|null
+  public static GLOBAL_SCENE: SceneManager
 
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
