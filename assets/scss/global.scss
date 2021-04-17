@@ -1,8 +1,20 @@
 @import "variables";
 @import "reset";
 @import "typography";
+@import "components/interactive-points";
 
 body {
   font-family: $main_font;
   min-height: 100vh;
+}
+
+.link-container {
+  position: absolute;
+  bottom: 50%;
+  z-index: 90;
+}
+
+.page-container {
+  height: 100vh;
+  position: relative;
 }

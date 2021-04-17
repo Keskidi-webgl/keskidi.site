@@ -2,13 +2,10 @@ import {NuxtAxiosInstance} from "@nuxtjs/axios";
 import {ApiManager, AssetsManager, SceneManager} from "~/core/managers";
 import {GLTF_ASSET} from "~/core/enums";
 import {
-  AnimationMixer,
+  AnimationMixer, AxesHelper, Box3,
   HemisphereLight,
   HemisphereLightHelper,
-  Mesh,
-  MeshPhongMaterial,
   PerspectiveCamera,
-  PlaneGeometry,
   Scene,
   Vector3,
   WebGLRenderer
@@ -44,23 +41,31 @@ class AppInitializer {
    */
   public createGlobalScene(canvas: HTMLCanvasElement) {
     SceneManager.GLOBAL_SCENE = this._createSceneManagerInstance(canvas)
+
     // Add GLTF global scene
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
-    globalSceneGltf.scene.scale.set(0.5, 0.5, 0.5)
-    SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
-    SceneManager.GLOBAL_SCENE.camera.position.set(0, 70, 300)
+    const box3 = new Box3().setFromObject(globalSceneGltf.scene);
+    const vector = new Vector3();
+    box3.getCenter(vector);
+    globalSceneGltf.scene.position.set(-vector.x, -vector.y, -vector.z);
 
-    // Add floor
-    const floorGeometry = new PlaneGeometry(5000, 5000, 1, 1);
-    const floorMaterial = new MeshPhongMaterial({
-      color: 0xeeeeee,
-      shininess: 0
-    });
-    const floor = new Mesh(floorGeometry, floorMaterial);
-    floor.rotation.x = -0.5 * Math.PI;
-    floor.receiveShadow = true;
-    floor.position.y = -100;
-    SceneManager.GLOBAL_SCENE.scene.add(floor);
+    SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
+    SceneManager.GLOBAL_SCENE.camera.lookAt(globalSceneGltf.scene.position)
+
+    // Register preset positions
+    const homeCoords = SceneManager.GLOBAL_SCENE.scene.position.multiply(new Vector3(100, 100, 100))
+    const loungeCoords = SceneManager.GLOBAL_SCENE.scene.getObjectByName('salon')!.position
+    const bedroomCoords = SceneManager.GLOBAL_SCENE.scene.getObjectByName('chambre')!.position
+    const mezzanineCoords = SceneManager.GLOBAL_SCENE.scene.getObjectByName('mezzanine')!.position
+
+    SceneManager.GLOBAL_SCENE.registerPresetCameraPositions({name: 'home', coord: homeCoords})
+    SceneManager.GLOBAL_SCENE.registerPresetCameraPositions({name: 'lounge', coord: loungeCoords})
+    SceneManager.GLOBAL_SCENE.registerPresetCameraPositions({name: 'bedroom', coord: bedroomCoords})
+    SceneManager.GLOBAL_SCENE.registerPresetCameraPositions({name: 'mezzanine', coord: bedroomCoords})
+
+    // Add exes helpers
+    const axesHelper = new AxesHelper(100)
+    SceneManager.GLOBAL_SCENE.scene.add( axesHelper )
 
     // Add lights
     const hemiLight = new HemisphereLight(0xdff9fb, 0x080820, 1);
@@ -68,13 +73,6 @@ class AppInitializer {
     const helper = new HemisphereLightHelper(hemiLight, 5);
     SceneManager.GLOBAL_SCENE.scene.add(helper);
     SceneManager.GLOBAL_SCENE.scene.add(hemiLight);
-
-    // Create animation mixer and play animations
-    const mixer = new AnimationMixer(globalSceneGltf.scene)
-    console.log(globalSceneGltf.scene)
-    globalSceneGltf.scene.animations.forEach((clip) => {
-      mixer.clipAction(clip).play();
-    });
 
     // Start
     SceneManager.GLOBAL_SCENE.start()
@@ -87,9 +85,7 @@ class AppInitializer {
     canvas.width = Helpers.getWindowSizes().width
     canvas.height = Helpers.getWindowSizes().height
 
-    const camera = new PerspectiveCamera(75, canvas.width / canvas.height, 1, 5000)
-    camera.position.set(4, 4, 4)
-    camera.updateMatrixWorld();
+    const camera = new PerspectiveCamera(50, canvas.width / canvas.height, 1, 5000)
 
     const scene = new Scene()
 
@@ -106,7 +102,6 @@ class AppInitializer {
       renderer: renderer,
       activateOrbitControl: true,
     }).enableStats()
-      .registerPresetCameraPositions({name: 'home', coord: new Vector3(2, 3, 6)})
   }
 }
 

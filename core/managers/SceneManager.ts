@@ -148,8 +148,8 @@ export default class SceneManager {
   public goToPresetPosition(
     name: string,
     duration: number,
-    successCallBack: DefaultSceneManagerCallback,
-    errorCallBack: DefaultSceneManagerCallback
+    successCallBack: DefaultSceneManagerCallback = function () {},
+    errorCallBack: DefaultSceneManagerCallback = function () {}
   ) {
     const cameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
     if (!cameraPosition) {
@@ -317,6 +317,10 @@ export default class SceneManager {
       this._rayCaster.setFromCamera(this._mousePositions, this._camera)
       const intersects = this._rayCaster.intersectObjects(this._scene.children)
       this._onRayCasterIntersectCallback(this, intersects)
+    }
+
+    if (this.camera instanceof PerspectiveCamera) {
+      this.camera.updateProjectionMatrix()
     }
 
     const elapsedTime = this._clock.getElapsedTime()

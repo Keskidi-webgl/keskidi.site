@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Nuxt/>
-    <canvas ref="canvasGlobalScene"></canvas>
+    <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
+    <Nuxt v-if="this.globalModule.isAppInit"/>
   </div>
 </template>
 
@@ -9,13 +9,15 @@
 import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalModule from "~/store/global";
 import AppInitializer from "~/core/utils/AppInitializer";
+import {SceneManager} from "~/core/managers";
 
 @Component({})
 export default class DefaultLayout extends Vue {
   public globalModule = getModule(GlobalModule, this.$store)
 
-  public mounted() {
-    this.initApp()
+  public async mounted() {
+    await this.initApp()
+    console.log(SceneManager.GLOBAL_SCENE.scene)
   }
 
   /**
@@ -45,5 +47,6 @@ canvas
   bottom: 0;
   width: 100%;
   height: 100%;
+  z-index: 3;
 }
 </style>
