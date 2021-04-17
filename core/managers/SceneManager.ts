@@ -357,4 +357,12 @@ export default class SceneManager {
   get deltaTime(): number{
     return this._deltaTime
   }
+
+  get width():number{
+    return this._canvas.width
+  }
+
+  get height():number{
+    return this._canvas.height
+  }
 }
