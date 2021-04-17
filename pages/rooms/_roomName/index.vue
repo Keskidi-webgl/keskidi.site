@@ -10,6 +10,7 @@ import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
 import SceneModule from "~/store/scene";
+import {URL_ROOM_IDENTIFIER} from "~/core/enums";
 
 @Component({})
 export default class RoomPage extends Vue {
@@ -24,8 +25,8 @@ export default class RoomPage extends Vue {
   }
 
   mounted() {
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.$route.params.roomName, 1, () => {
-      this.sceneModule.setActiveRoom(this.$route.params.roomName)
+    SceneManager.GLOBAL_SCENE.goToPresetPosition((<URL_ROOM_IDENTIFIER>this.$route.params.roomName), 1, () => {
+      this.sceneModule.setActiveRoom((<URL_ROOM_IDENTIFIER>this.$route.params.roomName))
     })
   }
 
