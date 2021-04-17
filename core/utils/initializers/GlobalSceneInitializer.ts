@@ -4,12 +4,15 @@ import {Box3, HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, 
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
+import {GUI} from "dat.gui";
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
 export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement }, void> {
+
+  public points!:{position:Vector3,element:HTMLElement}[]
 
   init() {
     SceneManager.GLOBAL_SCENE = this._createInstance()
@@ -37,13 +40,41 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // Create renderer
     const renderer = this._createRender()
 
+
+    const gui = this._createGui()
+
     return new SceneManager({
       canvas: this._data.canvas,
       camera: camera,
       scene: scene,
       renderer: renderer,
       activateOrbitControl: true,
+      gui: gui,
+      onRender: (ctx)=>{
+
+        for(const point of this.points) {
+          const screenPosition = point.position.clone()
+          screenPosition.project(SceneManager.GLOBAL_SCENE.camera)
+
+          const translateX = screenPosition.x * this._data.canvas.width * 0.5
+          const translateY = - screenPosition.y * this._data.canvas.height * 0.5
+
+          point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
+
+        }
+        // let screenPos = this.chambrePos?.clone()
+        // screenPos!.x = Math.round((0.5 + screenPos!.x / 2) * (this._data.canvas.width / window.devicePixelRatio));
+        // points.style.left = `${screenPos!.x}px`
+      }
     }).enableStats()
+
+  }
+
+  /**
+   * Create gui
+   */
+  private _createGui(){
+    return new GUI()
   }
 
   /**
@@ -81,8 +112,27 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     const vector = new Vector3();
     box3.getCenter(vector);
     globalSceneGltf.scene.position.set(-vector.x, -vector.y, -vector.z);
+    let chambrePos = globalSceneGltf.scene.getObjectByName('chambre')?.position
+    console.log(chambrePos)
+    this.points = [{
+      position: new Vector3(chambrePos?.x,chambrePos?.y,chambrePos?.z),
+      element: document.querySelector('.point-0') as HTMLElement
+    }]
+    console.log(this.points)
+    // console.log(globalSceneGltf.scene)
+    // this.chambrePos = globalSceneGltf.scene.getObjectByName('chambre')?.position
+    // console.log(this.chambrePos)
+    // this.chambrePos?.project(SceneManager.GLOBAL_SCENE.camera)
+
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
+
+    let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
+
+    sceneFolder.add(SceneManager.GLOBAL_SCENE.guiOptions,'posX',-500,500,0.01).onChange((val)=>{
+      SceneManager.GLOBAL_SCENE.scene.position.x = val
+    })
+
   }
 
   /**

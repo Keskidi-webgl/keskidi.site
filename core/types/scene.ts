@@ -1,6 +1,7 @@
 import {Clock, Intersection, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
 import SceneManager from "~/core/managers/SceneManager";
 import {URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {GUI} from "dat.gui";
 
 /**
  * Option to create SceneManager
@@ -12,6 +13,7 @@ export type SceneManagerOptions = {
   renderer: WebGLRenderer
   scene: Scene
   bindEvents?: DefaultSceneManagerCallback
+  gui?:GUI
   defaultRation?: number
 
   onStart?: DefaultSceneManagerCallback
