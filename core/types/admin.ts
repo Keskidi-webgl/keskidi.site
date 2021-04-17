@@ -1,3 +1,6 @@
+/**
+ * Model type for Media
+ */
 export type Media = {
   id: number
   description: string
@@ -8,7 +11,10 @@ export type Media = {
   url: string
 }
 
-export type DataFormCreate = {
+/**
+ * Data type for upload file media form
+ */
+export type DataFormUpload = {
   file: File|null
   title: string
   description: string

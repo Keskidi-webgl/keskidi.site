@@ -1,4 +1,4 @@
-import {Camera, Clock, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer} from "three";
+import {AnimationMixer, Camera, Clock, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer} from "three";
 import {
   CameraPosition,
   DefaultSceneManagerCallback,
@@ -12,12 +12,16 @@ import gsap from 'gsap'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 
+/**
+ * @description
+ * This manager is responsible for creating a scene 3D and a context to interact with it
+ */
 export default class SceneManager {
 
   /**
    * Static accessors for scenes instances
    */
-  public static GLOBAL_SCENE: SceneManager|null
+  public static GLOBAL_SCENE: SceneManager
 
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
@@ -148,8 +152,8 @@ export default class SceneManager {
   public goToPresetPosition(
     name: string,
     duration: number,
-    successCallBack: DefaultSceneManagerCallback,
-    errorCallBack: DefaultSceneManagerCallback
+    successCallBack: DefaultSceneManagerCallback = function () {},
+    errorCallBack: DefaultSceneManagerCallback = function () {}
   ) {
     const cameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
     if (!cameraPosition) {
@@ -159,13 +163,13 @@ export default class SceneManager {
 
     gsap.to(this.camera.position, {
       duration,
-      x: cameraPosition.coord.x,
-      y: cameraPosition.coord.y,
-      z: cameraPosition.coord.z,
+      x: cameraPosition.coords.x,
+      y: cameraPosition.coords.y,
+      z: cameraPosition.coords.z,
       onUpdate: () => {
         if (this._camera instanceof PerspectiveCamera) {
           this._camera.updateProjectionMatrix()
-          this.camera.lookAt(cameraPosition.coord)
+          this.camera.lookAt(cameraPosition.coords)
         }
       },
       onComplete: () => {
@@ -317,6 +321,10 @@ export default class SceneManager {
       this._rayCaster.setFromCamera(this._mousePositions, this._camera)
       const intersects = this._rayCaster.intersectObjects(this._scene.children)
       this._onRayCasterIntersectCallback(this, intersects)
+    }
+
+    if (this.camera instanceof PerspectiveCamera) {
+      this.camera.updateProjectionMatrix()
     }
 
     const elapsedTime = this._clock.getElapsedTime()

@@ -2,6 +2,14 @@ import {LoginAuthCredential, RegisterAuthCredential} from "~/core/types";
 import {AxiosRequestConfig} from "axios";
 import {ApiManager} from "~/core/managers";
 
+/**
+ * @description
+ * This manager is responsible for handle login logic
+ *
+ * @example
+ * // Login a user
+ * await AuthManager.login({ email: toto@mail.com })
+ */
 class AuthManager {
   public static AUTH_TOKEN_KEY_STORAGE = 'authToken'
 
