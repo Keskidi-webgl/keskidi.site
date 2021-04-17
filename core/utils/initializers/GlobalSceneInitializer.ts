@@ -4,6 +4,7 @@ import {Box3, HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, 
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
+import {GUI} from "dat.gui";
 
 /**
  * @description
@@ -37,13 +38,24 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // Create renderer
     const renderer = this._createRender()
 
+    const gui = this._createGui()
+
     return new SceneManager({
       canvas: this._data.canvas,
       camera: camera,
       scene: scene,
       renderer: renderer,
       activateOrbitControl: true,
+      gui: gui
     }).enableStats()
+
+  }
+
+  /**
+   * Create gui
+   */
+  private _createGui(){
+    return new GUI()
   }
 
   /**
@@ -83,6 +95,13 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     globalSceneGltf.scene.position.set(-vector.x, -vector.y, -vector.z);
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
+
+    let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
+
+    sceneFolder.add(SceneManager.GLOBAL_SCENE.guiOptions,'posX',-500,500,0.01).onChange((val)=>{
+      SceneManager.GLOBAL_SCENE.scene.position.x = val
+    })
+
   }
 
   /**

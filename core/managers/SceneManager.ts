@@ -11,6 +11,7 @@ import Helpers from "~/core/utils/helpers";
 import gsap from 'gsap'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
+import {GUI} from "dat.gui";
 
 /**
  * @description
@@ -22,6 +23,7 @@ export default class SceneManager {
    * Static accessors for scenes instances
    */
   public static GLOBAL_SCENE: SceneManager
+  public guiOptions:object
 
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
@@ -32,6 +34,7 @@ export default class SceneManager {
   private _clock: Clock
   private _mousePositions: Vector2
   private _scene: Scene
+  private _gui: GUI | null
   private _rayCaster: Raycaster
   private _stats: Stats | null
   private _defaultRatio: number
@@ -74,8 +77,16 @@ export default class SceneManager {
     this._controls = null
     this._deltaTime = 0
     this._previousTime = 0
+    this._gui = options.gui || null
     this._stats = null
     this._defaultRatio = options.defaultRation || 1
+    this.guiOptions = {
+      posX:0,
+      posY:0,
+      posZ:0,
+      rotate:0,
+      color:0xFFFFFF
+    }
 
     this._onStartCallback = options.onStart || function () {
     }
@@ -152,8 +163,10 @@ export default class SceneManager {
   public goToPresetPosition(
     name: string,
     duration: number,
-    successCallBack: DefaultSceneManagerCallback = function () {},
-    errorCallBack: DefaultSceneManagerCallback = function () {}
+    successCallBack: DefaultSceneManagerCallback = function () {
+    },
+    errorCallBack: DefaultSceneManagerCallback = function () {
+    }
   ) {
     const cameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
     if (!cameraPosition) {
@@ -203,8 +216,7 @@ export default class SceneManager {
   /**
    * Enable rayCasting detection
    */
-  public enableRayCasting()
-  {
+  public enableRayCasting() {
     this._isRayCasting = true
 
     return this
@@ -213,8 +225,7 @@ export default class SceneManager {
   /**
    * Disable RayCasting detection
    */
-  public disableRayCasting()
-  {
+  public disableRayCasting() {
     this._isRayCasting = false
 
     return this
@@ -223,8 +234,7 @@ export default class SceneManager {
   /**
    * Enable Stats panel
    */
-  public enableStats()
-  {
+  public enableStats() {
     if (!this._stats) {
       this._stats = Stats()
       this._stats.showPanel(0)
@@ -342,6 +352,10 @@ export default class SceneManager {
     return this._clock
   }
 
+  get gui(): GUI {
+    return this._gui as any
+  }
+
   get renderer(): WebGLRenderer {
     return this._renderer
   }
@@ -354,15 +368,15 @@ export default class SceneManager {
     return this._mousePositions
   }
 
-  get deltaTime(): number{
+  get deltaTime(): number {
     return this._deltaTime
   }
 
-  get width():number{
+  get width(): number {
     return this._canvas.width
   }
 
-  get height():number{
+  get height(): number {
     return this._canvas.height
   }
 }
