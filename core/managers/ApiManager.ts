@@ -2,6 +2,14 @@ import {NuxtAxiosInstance} from "@nuxtjs/axios";
 import {AxiosRequestConfig} from "axios";
 import {ApiSuccessResponse} from "~/core/types";
 
+/**
+ * @description
+ * This manager is a gateway to retrieve data from API
+ *
+ * @example
+ * // Retrieve all medias from API
+ * await ApiManager.request({ url: '/medias', method: 'GET' })
+ */
 class ApiManager {
   private $axios: NuxtAxiosInstance|null = null;
 

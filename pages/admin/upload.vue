@@ -10,11 +10,11 @@
           <form @submit.prevent="onSubmit">
             <div class="form-group">
               <label for="title">Titre</label>
-              <input v-model="dataFormCreate.title" type="text" class="form-control" id="title" placeholder="Titre">
+              <input v-model="dataFormUpload.title" type="text" class="form-control" id="title" placeholder="Titre">
             </div>
             <div class="form-group">
               <label for="description">Description</label>
-              <textarea v-model="dataFormCreate.description" class="form-control" id="description" rows="3" placeholder="Description"></textarea>
+              <textarea v-model="dataFormUpload.description" class="form-control" id="description" rows="3" placeholder="Description"></textarea>
             </div>
             <div class="form-group">
               <label for="media">Media</label>
@@ -61,13 +61,13 @@
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
 import {ApiManager} from "~/core/managers";
-import {DataFormCreate, Media} from "~/core/types";
+import {DataFormUpload, Media} from "~/core/types";
 
 @Component({})
 export default class UploadPanel extends Vue {
   public onProgress: boolean = false
   public mediaData: Array<Media> = []
-  public dataFormCreate: DataFormCreate = {
+  public dataFormUpload: DataFormUpload = {
     file: null,
     title: '',
     description: ''
@@ -85,15 +85,15 @@ export default class UploadPanel extends Vue {
   }
 
   onFileUpload(event: any) {
-    this.dataFormCreate.file = event.target.files[0]
+    this.dataFormUpload.file = event.target.files[0]
   }
 
   async onSubmit(event: any) {
-    if (this.dataFormCreate.file) {
+    if (this.dataFormUpload.file) {
       const formData = new FormData()
-      formData.append('media', this.dataFormCreate.file, this.dataFormCreate.file.name)
-      formData.append('title', this.dataFormCreate.title)
-      formData.append('description', this.dataFormCreate.description)
+      formData.append('media', this.dataFormUpload.file, this.dataFormUpload.file.name)
+      formData.append('title', this.dataFormUpload.title)
+      formData.append('description', this.dataFormUpload.description)
 
       try {
         const {data} = await ApiManager.request({

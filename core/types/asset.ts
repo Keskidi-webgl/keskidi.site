@@ -1,4 +1,4 @@
-import {AssetType} from "~/core/enums";
+import {ASSET_TYPE} from "~/core/enums";
 import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 /**
@@ -7,7 +7,7 @@ import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 export type AssetSource = {
   name: string
   url: string
-  type: AssetType
+  type: ASSET_TYPE
 }
 
 /**

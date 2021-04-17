@@ -1,24 +1,19 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName">
-    <h1>Page chambre : {{ $route.params.roomName }}</h1>
-    <div style="position: absolute; top: 0; z-index: 3" class="button-container">
-      <nuxt-link to="/rooms/bedroom">Aller à chambre</nuxt-link>
-      <nuxt-link to="/rooms/lounge">Aller au salon</nuxt-link>
-      <nuxt-link to="/rooms/mezzanine">Aller à la mezzanine</nuxt-link>
-      <nuxt-link to="/">Retour à la home</nuxt-link>
-    </div>
+
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'nuxt-property-decorator'
+import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
-import {URL_ROOM_NAME} from "~/core/enums";
+import SceneModule from "~/store/scene";
 
 @Component({})
 export default class RoomPage extends Vue {
+  public sceneModule = getModule(SceneModule, this.$store)
 
   /**
    * Validate route params
@@ -28,19 +23,10 @@ export default class RoomPage extends Vue {
     return RouteValidator.validateRoomPageParam(params.roomName)
   }
 
-  beforeCreate() {
-    if (this.$route.params.roomName === URL_ROOM_NAME.LOUNGE) {
-      SceneManager.GLOBAL_SCENE.goToPresetPosition('lounge', 3)
-    }
-
-    if (this.$route.params.roomName === URL_ROOM_NAME.BEDROOM) {
-      SceneManager.GLOBAL_SCENE.goToPresetPosition('bedroom', 3)
-    }
-
-    if (this.$route.params.roomName === URL_ROOM_NAME.MEZZANINE) {
-      SceneManager.GLOBAL_SCENE.goToPresetPosition('mezzanine', 3)
-    }
-
+  mounted() {
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.$route.params.roomName, 1, () => {
+      this.sceneModule.setActiveRoom(this.$route.params.roomName)
+    })
   }
 
 }

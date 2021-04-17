@@ -10,30 +10,40 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'nuxt-property-decorator'
-import {SceneInteractor} from "~/core/defs";
-import {URL_ROOM_NAME} from "~/core/enums";
+import {Component, getModule, Vue} from 'nuxt-property-decorator'
+import SceneConfig from "~/core/config/scene.config";
+import {URL_ROOM_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
+import SceneModule from "~/store/scene";
 
 @Component
-export default class HomePage extends Vue implements SceneInteractor {
-
+export default class HomePage extends Vue {
+  public sceneModule = getModule(SceneModule, this.$store)
   /**
    * Data for point of interactive points
    */
   public dataInteractivePoints = {
     auth: {url: '/auth'},
-    lounge: {url: `rooms/${URL_ROOM_NAME.LOUNGE}`},
-    mezzanine: {url: `rooms/${URL_ROOM_NAME.MEZZANINE}`},
-    bedroom: {url: `rooms/${URL_ROOM_NAME.BEDROOM}`},
+    lounge: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.LOUNGE)?.fullUrl},
+    mezzanine: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.MEZZANINE)?.fullUrl},
+    bedroom: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.BEDROOM)?.fullUrl},
   }
 
-  beforeCreate() {
-    SceneManager.GLOBAL_SCENE.goToPresetPosition('home', 3)
+  mounted() {
+    this.sceneModule.clearActiveRoom()
+    SceneManager.GLOBAL_SCENE.goToPresetPosition('home', 2)
   }
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+.link-container {
+  background-color: white;
+  position: absolute;
+  z-index: 20;
+  top: 40%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}
 </style>

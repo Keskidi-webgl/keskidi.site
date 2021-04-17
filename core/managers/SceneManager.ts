@@ -12,6 +12,10 @@ import gsap from 'gsap'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 
+/**
+ * @description
+ * This manager is responsible for creating a scene 3D and a context to interact with it
+ */
 export default class SceneManager {
 
   /**
@@ -159,13 +163,13 @@ export default class SceneManager {
 
     gsap.to(this.camera.position, {
       duration,
-      x: cameraPosition.coord.x,
-      y: cameraPosition.coord.y,
-      z: cameraPosition.coord.z,
+      x: cameraPosition.coords.x,
+      y: cameraPosition.coords.y,
+      z: cameraPosition.coords.z,
       onUpdate: () => {
         if (this._camera instanceof PerspectiveCamera) {
           this._camera.updateProjectionMatrix()
-          this.camera.lookAt(cameraPosition.coord)
+          this.camera.lookAt(cameraPosition.coords)
         }
       },
       onComplete: () => {

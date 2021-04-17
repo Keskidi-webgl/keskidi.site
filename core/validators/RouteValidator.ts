@@ -1,34 +1,23 @@
-import UrlConfig from "~/core/config/url.config";
+import SceneConfig from "~/core/config/scene.config";
 
+/**
+ * @description
+ * The validator check if params of the scene url are valid
+ */
 export default class RouteValidator {
   /**
    * Check if roomName exist
    */
   public static validateRoomPageParam(roomName: string) {
-    const availableUrlRoomName = this.getAvailableUrlRoomName()
-
-    return availableUrlRoomName.includes(roomName)
+    return SceneConfig.getAllUrlRoomIdentifiers().includes(roomName)
   }
 
   /**
    * Check if roomName exist and objectName belong to roomName
    */
   public static validateObjectPageParam(roomName: string, objectName: string) {
-    const room = UrlConfig.rooms.find(room => room.urlIdentifier === roomName)
+    const roomConfig = SceneConfig.getRoomConfig(roomName)
 
-    return room && (<Array<string>>room.objects).includes(objectName)
-  }
-
-  /**
-   * Return all available url room name (bedroom, lounge et mezzanine)
-   */
-  public static getAvailableUrlRoomName() {
-    const urlRoomName: Array<string> = []
-
-    UrlConfig.rooms.forEach(room => {
-      urlRoomName.push(room.urlIdentifier)
-    })
-
-    return urlRoomName
+    return roomConfig && (<Array<string>>roomConfig.objects).includes(objectName)
   }
 }

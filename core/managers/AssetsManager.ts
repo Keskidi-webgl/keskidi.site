@@ -1,7 +1,21 @@
 import {AssetSource, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types";
-import {AssetType} from "~/core/enums";
+import {ASSET_TYPE} from "~/core/enums";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 
+/**
+ * @description
+ * This manager is responsible for download all assets need by the application and provide in any component
+ *
+ * @example
+ * // Register an gltf asset
+ * AssetsManager.registerGltf('name of the gltf asset', 'url of the asset')
+ *
+ * // Load all assets after register
+ * AssetsManager.load()
+ *
+ * // Retrieve a gltf asset
+ * AssetsManager.getGltf('name of the gltf asset')
+ */
 class AssetsManager {
   // - PROPERTIES
   private _assetSource: Array<AssetSource>
@@ -55,7 +69,7 @@ class AssetsManager {
    * Register new gltf asset source
    */
   public registerGltf(name: string, url: string) {
-    this._registerSource({name, url, type: AssetType.GLTF})
+    this._registerSource({name, url, type: ASSET_TYPE.GLTF})
 
     return this
   }
@@ -64,7 +78,7 @@ class AssetsManager {
    * Register new video asset source
    */
   public registerVideo(name: string, url: string) {
-    this._registerSource({name, url, type: AssetType.VIDEO})
+    this._registerSource({name, url, type: ASSET_TYPE.VIDEO})
 
     return this
   }
@@ -73,7 +87,7 @@ class AssetsManager {
    * Register new image asset source
    */
   public registerImage(name: string, url: string) {
-    this._registerSource({name, url, type: AssetType.IMAGE})
+    this._registerSource({name, url, type: ASSET_TYPE.IMAGE})
 
     return this
   }
@@ -121,13 +135,13 @@ class AssetsManager {
   private async _loadAssetFromSource(source: AssetSource) {
     try {
       switch (source.type) {
-        case AssetType.GLTF:
+        case ASSET_TYPE.GLTF:
           await this._loadGltfAsset(source)
           break;
-        case AssetType.IMAGE:
+        case ASSET_TYPE.IMAGE:
           await this._loadImageAsset(source)
           break;
-        case AssetType.VIDEO:
+        case ASSET_TYPE.VIDEO:
           await this._loadVideoAsset(source)
           break;
       }
