@@ -1,6 +1,7 @@
 import {PresetCameraPositionConfig} from "~/core/types";
 import {URL_ROOM_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
+import {Vector3} from "three";
 
 class CameraConfig {
   public presetPositions: Array<PresetCameraPositionConfig> = [
@@ -25,7 +26,7 @@ class CameraConfig {
     {
       name: 'home',
       coords() {
-        return SceneManager.GLOBAL_SCENE.scene.position
+        return new Vector3(1000, 1000, 1000)
       }
     }
   ]
