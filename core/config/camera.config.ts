@@ -2,16 +2,21 @@ import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamP
 import {
   BedroomCamPositionConfig,
   HomeCamPositionConfig,
-  LoungeCamPositionConfig,
+  LoungeCamPositionConfig, LoungePosterCamPositionConfig, MagazineCamPositionConfig,
   MezzanineCamPositionConfig
 } from "~/core/config/presetCamPositionConfig";
 
 class CameraConfig {
   public presetPositions: Array<CamPositionConfigElement> = [
+    // Global
     HomeCamPositionConfig,
     LoungeCamPositionConfig,
     MezzanineCamPositionConfig,
-    BedroomCamPositionConfig
+    BedroomCamPositionConfig,
+
+    // Lounge
+    MagazineCamPositionConfig,
+    LoungePosterCamPositionConfig
   ]
 }
 
