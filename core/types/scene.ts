@@ -1,7 +1,6 @@
 import {Clock, Intersection, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
 import SceneManager from "~/core/managers/SceneManager";
-import {URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
-import {GUI} from "dat.gui";
+import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
 
 /**
  * Option to create SceneManager
@@ -13,7 +12,6 @@ export type SceneManagerOptions = {
   renderer: WebGLRenderer
   scene: Scene
   bindEvents?: DefaultSceneManagerCallback
-  gui?:GUI
   defaultRation?: number
 
   onStart?: DefaultSceneManagerCallback
@@ -48,13 +46,6 @@ export type MouseMoveCanvasCallback = (context: SceneManager, event: MouseEvent)
  */
 export type WindowResizeCallback = (context: SceneManager, event: UIEvent) => void
 
-/**
- * Preset camera positions
- */
-export type CameraPosition = {
-  name: string
-  coords: Vector3
-}
 
 /**
  * Canvas dimension
@@ -64,18 +55,7 @@ export type CanvasDimension = {
   height: number
 }
 
-/**
- * Room config element for scene.config.ts file
- */
-export type RoomConfigElement = {
-  urlIdentifier: URL_ROOM_IDENTIFIER
-  fullUrl: string,
-  nextSceneUrl: string,
-  previousUrl: string,
-  objects: Array<URL_OBJECT_IDENTIFIER>
-}
-
-export type PresetCameraPositionConfig = {
+export type PresetCameraPosition = {
   name: string
-  coords: () => Vector3
+  coords: () => {cameraPos: Vector3, lookAtPosition: Vector3}
 }

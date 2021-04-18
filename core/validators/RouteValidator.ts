@@ -9,7 +9,17 @@ export default class RouteValidator {
    * Check if roomName exist
    */
   public static validateRoomPageParam(roomName: string) {
-    return SceneConfig.getAllUrlRoomIdentifiers().includes(roomName)
+    const isValid = SceneConfig.getAllUrlRoomIdentifiers().includes(roomName)
+
+    if (!isValid) {
+      console.warn(`
+      The route for room "${roomName}" is not valid.
+      Be sure that config file exist for this room route -> (core/config/roomConfig/)
+      and registered -> (core/config/scene.config.ts)
+      `)
+    }
+
+    return isValid
   }
 
   /**
@@ -17,7 +27,8 @@ export default class RouteValidator {
    */
   public static validateObjectPageParam(roomName: string, objectName: string) {
     const roomConfig = SceneConfig.getRoomConfig(roomName)
+    const objectConfig = SceneConfig.getObjectFromRoomConfig(roomName, objectName)
 
-    return roomConfig && (<Array<string>>roomConfig.objects).includes(objectName)
+    return roomConfig && objectConfig
   }
 }
