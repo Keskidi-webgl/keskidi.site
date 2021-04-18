@@ -4,10 +4,10 @@ import {BedroomConfig, LoungeConfig, MezzanineConfig} from "~/core/config/roomCo
 import InteractPointConfigElement from "~/core/config/interactPointsConfig/InteractPointConfigElement";
 import {
   BedroomInteractPointConfig,
-  LoungeInteractPointConfig,
+  LoungeInteractPointConfig, LoungePosterInteractPointConfig, MagazineInteractPointConfig,
   MezzanineInteractPointConfig,
-  NeonInteractPointConfig,
-  TelevisionInteractPointConfig
+  NeonInteractPointConfig, PaperInteractPointConfig, SkateInteractPointConfig,
+  TelevisionInteractPointConfig, TshirtInteractPointConfig, VinylInteractPointConfig
 } from "~/core/config/interactPointsConfig";
 
 class SceneConfig {
@@ -18,11 +18,24 @@ class SceneConfig {
   ]
 
   public interactionPoints: Array<InteractPointConfigElement> = [
+    // Global
     MezzanineInteractPointConfig,
     LoungeInteractPointConfig,
     BedroomInteractPointConfig,
+
+    // Mezzanine
     NeonInteractPointConfig,
-    TelevisionInteractPointConfig
+    TelevisionInteractPointConfig,
+
+    // Lounge
+    LoungePosterInteractPointConfig,
+    VinylInteractPointConfig,
+    MagazineInteractPointConfig,
+
+    // Bedroom
+    TshirtInteractPointConfig,
+    SkateInteractPointConfig,
+    PaperInteractPointConfig
   ]
 
   /**

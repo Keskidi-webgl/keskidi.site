@@ -7,13 +7,13 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'nuxt-property-decorator'
-import {InteractionPointConfigElement} from "~/core/types";
+import InteractPointConfigElement from "~/core/config/interactPointsConfig/InteractPointConfigElement";
 
 
 @Component
 export default class InteractionPoints extends Vue {
 
-  @Prop({type: Object, required: true}) readonly data!: InteractionPointConfigElement
+  @Prop({type: Object, required: true}) readonly data!: InteractPointConfigElement
 
   public mounted() {
   }

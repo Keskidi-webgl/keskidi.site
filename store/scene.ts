@@ -28,7 +28,9 @@ export default class SceneModule extends VuexModule {
   @Mutation
   public addInteractivePoint(name: INTERACT_POINT_NAME) {
     const point = SceneConfig.getInteractionPoint(name)
+    console.log(point)
     if (point) {
+      console.log('log new interaction point added : ', point.name)
       this._activeInteractionPoints.push(point)
     }
 

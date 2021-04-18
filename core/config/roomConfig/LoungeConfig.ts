@@ -8,9 +8,9 @@ class LoungeConfig extends RoomConfigElement {
   protected _nextSceneUrl = `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`
 
   protected _objects = [
-    {urlId: URL_OBJECT_IDENTIFIER.NEON, interactPointName: INTERACT_POINT_NAME.NEON},
-    {urlId: URL_OBJECT_IDENTIFIER.TELEVISION, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-    {urlId: URL_OBJECT_IDENTIFIER.POSTER, interactPointName: INTERACT_POINT_NAME.MEZZA_POSTER},
+    {urlId: URL_OBJECT_IDENTIFIER.LOUNGE_POSTER, interactPointName: INTERACT_POINT_NAME.LOUNGE_POSTER},
+    {urlId: URL_OBJECT_IDENTIFIER.VINYL, interactPointName: INTERACT_POINT_NAME.VINYL},
+    {urlId: URL_OBJECT_IDENTIFIER.MAGAZINE, interactPointName: INTERACT_POINT_NAME.MAGAZINE},
   ]
 
   protected _previousSceneUrl = `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`

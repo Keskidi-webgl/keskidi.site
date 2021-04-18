@@ -10,7 +10,6 @@ class MezzanineConfig extends RoomConfigElement {
   protected _objects = [
     {urlId: URL_OBJECT_IDENTIFIER.NEON, interactPointName: INTERACT_POINT_NAME.NEON},
     {urlId: URL_OBJECT_IDENTIFIER.TELEVISION, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-    {urlId: URL_OBJECT_IDENTIFIER.POSTER, interactPointName: INTERACT_POINT_NAME.MEZZA_POSTER},
   ]
 
   protected _previousSceneUrl = `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`

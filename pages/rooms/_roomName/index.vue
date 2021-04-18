@@ -10,8 +10,7 @@ import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
 import SceneModule from "~/store/scene";
-import {INTERACT_POINT_NAME, URL_ROOM_IDENTIFIER} from "~/core/enums";
-import SceneConfig from "~/core/config/scene.config";
+import {URL_ROOM_IDENTIFIER} from "~/core/enums";
 
 @Component({})
 export default class RoomPage extends Vue {

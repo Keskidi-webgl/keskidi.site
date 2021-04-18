@@ -37,7 +37,7 @@ export default class SceneNavigationPanel extends Vue {
 <style lang="scss">
 .scene-navigation-panel {
   position: fixed;
-  bottom: 20%;
+  bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
