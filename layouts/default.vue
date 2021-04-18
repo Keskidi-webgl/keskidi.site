@@ -14,7 +14,9 @@ import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
 import SceneModule from "~/store/scene";
 
 @Component({
-  components: {SceneNavigationPanel}
+  components: {
+    SceneNavigationPanel
+  }
 })
 export default class DefaultLayout extends Vue {
   public globalModule = getModule(GlobalModule, this.$store)
@@ -24,6 +26,7 @@ export default class DefaultLayout extends Vue {
     await this.initApp()
   }
 
+
   /**
    * Init app for the first connection
    */
@@ -32,7 +35,8 @@ export default class DefaultLayout extends Vue {
 
       await new AppInitializer({
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
-        axios: this.$axios
+        axios: this.$axios,
+        sceneModule: this.sceneModule
       }).init()
 
       this.globalModule.setIsAppInit(true)

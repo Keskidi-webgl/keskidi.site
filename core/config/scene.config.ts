@@ -1,41 +1,41 @@
-import {URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
-import {RoomConfigElement} from "~/core/types";
+import {INTERACT_POINT_NAME} from "~/core/enums";
+import RoomConfigElement from "~/core/config/roomConfig/RoomConfigElement";
+import {BedroomConfig, LoungeConfig, MezzanineConfig} from "~/core/config/roomConfig";
+import InteractPointConfigElement from "~/core/config/interactPointsConfig/InteractPointConfigElement";
+import {
+  BedroomInteractPointConfig,
+  LoungeInteractPointConfig, LoungePosterInteractPointConfig, MagazineInteractPointConfig,
+  MezzanineInteractPointConfig,
+  NeonInteractPointConfig, PaperInteractPointConfig, SkateInteractPointConfig,
+  TelevisionInteractPointConfig, TshirtInteractPointConfig, VinylInteractPointConfig
+} from "~/core/config/interactPointsConfig";
 
 class SceneConfig {
   public rooms: Array<RoomConfigElement> = [
-    {
-      urlIdentifier: URL_ROOM_IDENTIFIER.MEZZANINE,
-      fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
-      nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
-      previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
-      objects: [
-        URL_OBJECT_IDENTIFIER.NEON,
-        URL_OBJECT_IDENTIFIER.TELEVISION,
-        URL_OBJECT_IDENTIFIER.POSTER
-      ]
-    },
-    {
-      urlIdentifier: URL_ROOM_IDENTIFIER.LOUNGE,
-      fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
-      nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
-      previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
-      objects: [
-        URL_OBJECT_IDENTIFIER.VINYL,
-        URL_OBJECT_IDENTIFIER.POSTER,
-        URL_OBJECT_IDENTIFIER.MAGAZINE
-      ]
-    },
-    {
-      urlIdentifier: URL_ROOM_IDENTIFIER.BEDROOM,
-      fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
-      nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
-      previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
-      objects: [
-        URL_OBJECT_IDENTIFIER.T_SHIRT,
-        URL_OBJECT_IDENTIFIER.AGENDA,
-        URL_OBJECT_IDENTIFIER.POSTER
-      ]
-    }
+    BedroomConfig,
+    MezzanineConfig,
+    LoungeConfig
+  ]
+
+  public interactionPoints: Array<InteractPointConfigElement> = [
+    // Global
+    MezzanineInteractPointConfig,
+    LoungeInteractPointConfig,
+    BedroomInteractPointConfig,
+
+    // Mezzanine
+    NeonInteractPointConfig,
+    TelevisionInteractPointConfig,
+
+    // Lounge
+    LoungePosterInteractPointConfig,
+    VinylInteractPointConfig,
+    MagazineInteractPointConfig,
+
+    // Bedroom
+    TshirtInteractPointConfig,
+    SkateInteractPointConfig,
+    PaperInteractPointConfig
   ]
 
   /**
@@ -56,6 +56,23 @@ class SceneConfig {
     })
 
     return identifiers
+  }
+
+  /**
+   * Return object info for a given room identifier and object identifier
+   */
+  getObjectFromRoomConfig(roomIdentifier: string, objectIdentifier: string) {
+    let object = null
+    const room = this.getRoomConfig(roomIdentifier)
+    if (room) {
+      object = room.objects.find(object => object.urlId === objectIdentifier)
+    }
+
+    return object
+  }
+
+  getInteractionPoint(name: INTERACT_POINT_NAME) {
+    return this.interactionPoints.find(interactPoint => interactPoint.name === name)
   }
 }
 
