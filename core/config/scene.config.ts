@@ -1,7 +1,10 @@
-import {URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
-import {RoomConfigElement} from "~/core/types";
+import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {InteractionPointConfigElement, RoomConfigElement} from "~/core/types";
+import {SceneManager} from "~/core/managers";
+import {Vector3} from "three";
 
 class SceneConfig {
+  // Room configuration
   public rooms: Array<RoomConfigElement> = [
     {
       urlIdentifier: URL_ROOM_IDENTIFIER.MEZZANINE,
@@ -9,9 +12,9 @@ class SceneConfig {
       nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
       previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
       objects: [
-        URL_OBJECT_IDENTIFIER.NEON,
-        URL_OBJECT_IDENTIFIER.TELEVISION,
-        URL_OBJECT_IDENTIFIER.POSTER
+        {urlId: URL_OBJECT_IDENTIFIER.NEON, interactPointName: INTERACT_POINT_NAME.TELEVISION},
+        {urlId: URL_OBJECT_IDENTIFIER.TELEVISION, interactPointName: INTERACT_POINT_NAME.TELEVISION},
+        {urlId: URL_OBJECT_IDENTIFIER.POSTER, interactPointName: INTERACT_POINT_NAME.TELEVISION},
       ]
     },
     {
@@ -19,10 +22,13 @@ class SceneConfig {
       fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
       nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
       previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
+
       objects: [
-        URL_OBJECT_IDENTIFIER.VINYL,
-        URL_OBJECT_IDENTIFIER.POSTER,
-        URL_OBJECT_IDENTIFIER.MAGAZINE
+        /*
+        {urlId: URL_OBJECT_IDENTIFIER.VINYL, interactPointName: INTERACT_POINT_NAME.TELEVISION},
+        {urlId: URL_OBJECT_IDENTIFIER.POSTER, interactPointName: INTERACT_POINT_NAME.TELEVISION},
+        {urlId: URL_OBJECT_IDENTIFIER.MAGAZINE, interactPointName: INTERACT_POINT_NAME.TELEVISION},
+         */
       ]
     },
     {
@@ -31,10 +37,62 @@ class SceneConfig {
       nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
       previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
       objects: [
-        URL_OBJECT_IDENTIFIER.T_SHIRT,
-        URL_OBJECT_IDENTIFIER.AGENDA,
-        URL_OBJECT_IDENTIFIER.POSTER
+        /*
+        {urlId: URL_OBJECT_IDENTIFIER.T_SHIRT, interactPointName: INTERACT_POINT_NAME.TELEVISION},
+        {urlId: URL_OBJECT_IDENTIFIER.AGENDA, interactPointName: INTERACT_POINT_NAME.TELEVISION},
+        {urlId: URL_OBJECT_IDENTIFIER.POSTER, interactPointName: INTERACT_POINT_NAME.TELEVISION},
+         */
       ]
+    }
+  ]
+
+  public interactionPoints: Array<InteractionPointConfigElement> = [
+    /* Bedroom */
+    {
+      name: INTERACT_POINT_NAME.BEDROOM,
+      canvasCoords() {
+        return SceneManager.GLOBAL_SCENE.scene.getObjectByName('chambre')!.position
+      },
+      isCompleted() { return false },
+      transformX: 0,
+      transformY: 0,
+      url: this.getRoomConfig(URL_ROOM_IDENTIFIER.BEDROOM)!.fullUrl
+    },
+    /* Mezzanine */
+    {
+      name: INTERACT_POINT_NAME.MEZZANINE,
+      canvasCoords() {
+        return SceneManager.GLOBAL_SCENE.scene.getObjectByName('mezzanine')!.position
+      },
+      isCompleted() { return false },
+      transformX: 0,
+      transformY: 0,
+      url: this.getRoomConfig(URL_ROOM_IDENTIFIER.MEZZANINE)!.fullUrl
+    },
+    /* Lounge */
+    {
+      name: INTERACT_POINT_NAME.LOUNGE,
+      canvasCoords() {
+        return SceneManager.GLOBAL_SCENE.scene.getObjectByName('salon')!.position
+      },
+      isCompleted() { return false },
+      transformX: 0,
+      transformY: 0,
+      url: this.getRoomConfig(URL_ROOM_IDENTIFIER.LOUNGE)!.fullUrl
+    },
+    /* Television of mezzanine*/
+    {
+      name: INTERACT_POINT_NAME.TELEVISION,
+      canvasCoords() {
+        const position = new Vector3()
+        SceneManager.GLOBAL_SCENE.scene.getObjectByName('tv')!.getWorldPosition(position)
+
+        return position
+      },
+      isCompleted() { return Math.random() < 0.5 },
+      transformX: 0,
+      transformY: 0,
+      url: this.getRoomConfig(URL_ROOM_IDENTIFIER.LOUNGE)!.fullUrl + '/' + URL_OBJECT_IDENTIFIER.TELEVISION
     }
   ]
 
@@ -56,6 +114,23 @@ class SceneConfig {
     })
 
     return identifiers
+  }
+
+  /**
+   * Return object info for a given room identifier and object identifier
+   */
+  getObjectFromRoomConfig(roomIdentifier: string, objectIdentifier: string) {
+    let object = null
+    const room = this.getRoomConfig(roomIdentifier)
+    if (room) {
+      object = room.objects.find(object => object.urlId === objectIdentifier)
+    }
+
+    return object
+  }
+
+  getInteractionPoint(name: INTERACT_POINT_NAME) {
+    return this.interactionPoints.find(interactPoint => interactPoint.name === name)
   }
 }
 

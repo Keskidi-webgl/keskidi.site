@@ -17,7 +17,8 @@ export default class RouteValidator {
    */
   public static validateObjectPageParam(roomName: string, objectName: string) {
     const roomConfig = SceneConfig.getRoomConfig(roomName)
+    const objectConfig = SceneConfig.getObjectFromRoomConfig(roomName, objectName)
 
-    return roomConfig && (<Array<string>>roomConfig.objects).includes(objectName)
+    return roomConfig && objectConfig
   }
 }

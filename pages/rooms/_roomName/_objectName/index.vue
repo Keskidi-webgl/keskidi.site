@@ -8,6 +8,7 @@
 import {Component, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
+import SceneConfig from '~/core/config/scene.config'
 
 @Component
 export default class ObjectPage extends Vue {

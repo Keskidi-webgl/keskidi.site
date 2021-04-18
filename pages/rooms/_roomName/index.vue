@@ -1,6 +1,6 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName">
-
+    <InteractionPoints :data="point" v-for="(point, index) in sceneModule.activeInteractionPoints" v-bind:key="index"/>
   </div>
 </template>
 
@@ -10,7 +10,8 @@ import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
 import SceneModule from "~/store/scene";
-import {URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {INTERACT_POINT_NAME, URL_ROOM_IDENTIFIER} from "~/core/enums";
+import SceneConfig from "~/core/config/scene.config";
 
 @Component({})
 export default class RoomPage extends Vue {
@@ -25,8 +26,26 @@ export default class RoomPage extends Vue {
   }
 
   mounted() {
-    SceneManager.GLOBAL_SCENE.goToPresetPosition((<URL_ROOM_IDENTIFIER>this.$route.params.roomName), 1, () => {
-      this.sceneModule.setActiveRoom((<URL_ROOM_IDENTIFIER>this.$route.params.roomName))
+    const roomIdentifier = <URL_ROOM_IDENTIFIER>this.$route.params.roomName
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomIdentifier, 1, () => {
+      this.sceneModule.setActiveRoom(roomIdentifier)
+      this.addInteractionPoints()
+    })
+  }
+
+  beforeDestroy() {
+    this.removeInteractionPoints()
+  }
+
+  addInteractionPoints() {
+    this.sceneModule.activeRoom?.objects.forEach((object) => {
+      this.sceneModule.addInteractivePoint(object.interactPointName)
+    })
+  }
+
+  removeInteractionPoints() {
+    this.sceneModule.activeRoom?.objects.forEach((object) => {
+      this.sceneModule.removeInteractivePoint(object.interactPointName)
     })
   }
 

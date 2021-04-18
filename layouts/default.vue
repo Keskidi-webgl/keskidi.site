@@ -3,7 +3,6 @@
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
     <Nuxt v-if="this.globalModule.isAppInit"/>
     <SceneNavigationPanel v-if="this.sceneModule.activeRoom"/>
-    <interaction-points/>
   </div>
 </template>
 
@@ -13,12 +12,10 @@ import GlobalModule from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
 import SceneModule from "~/store/scene";
-import interactionPoints from "~/components/interactionPoints.vue";
 
 @Component({
   components: {
-    SceneNavigationPanel,
-    interactionPoints
+    SceneNavigationPanel
   }
 })
 export default class DefaultLayout extends Vue {
@@ -38,7 +35,8 @@ export default class DefaultLayout extends Vue {
 
       await new AppInitializer({
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
-        axios: this.$axios
+        axios: this.$axios,
+        sceneModule: this.sceneModule
       }).init()
 
       this.globalModule.setIsAppInit(true)

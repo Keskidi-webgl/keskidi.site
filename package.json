@@ -12,14 +12,14 @@
     "@nuxtjs/axios": "^5.13.1",
     "bootstrap": "^4.6.0",
     "core-js": "^3.9.1",
+    "dat.gui": "^0.7.7",
     "gsap": "^3.6.1",
     "jwt-decode": "^3.1.2",
     "nuxt": "^2.15.3",
     "nuxt-property-decorator": "^2.9.1",
     "three": "^0.127.0",
     "vue-class-component": "^7.2.6",
-    "vue-property-decorator": "^9.1.2",
-    "dat.gui": "^0.7.7"
+    "vue-property-decorator": "^9.1.2"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.3",

@@ -1,18 +1,13 @@
 <template>
   <div class="page-container" data-namespace="home">
-    <div class="link-container">
-      <nuxt-link class="interactive-points" :to="dataInteractivePoints.auth.url">Vers Tom</nuxt-link>
-      <nuxt-link class="interactive-points" :to="dataInteractivePoints.lounge.url">Vers le salon</nuxt-link>
-      <nuxt-link class="interactive-points" :to="dataInteractivePoints.mezzanine.url">Vers la mezzanine</nuxt-link>
-      <nuxt-link class="interactive-points" :to="dataInteractivePoints.bedroom.url">Vers la chambre</nuxt-link>
-    </div>
+    <InteractionPoints :data="point" v-for="(point, index) in sceneModule.activeInteractionPoints" v-bind:key="index"/>
   </div>
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import SceneConfig from "~/core/config/scene.config";
-import {URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {INTERACT_POINT_NAME, URL_ROOM_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import SceneModule from "~/store/scene";
 
@@ -31,7 +26,25 @@ export default class HomePage extends Vue {
 
   mounted() {
     this.sceneModule.clearActiveRoom()
-    SceneManager.GLOBAL_SCENE.goToPresetPosition('home', 2)
+    SceneManager.GLOBAL_SCENE.goToPresetPosition('home', 2, () => {
+      this.addInteractionPoints()
+    })
+  }
+
+  beforeDestroy() {
+    this.removeInteractionPoints()
+  }
+
+  addInteractionPoints() {
+    this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.BEDROOM)
+    this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.LOUNGE)
+    this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.MEZZANINE)
+  }
+
+  removeInteractionPoints() {
+    this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.BEDROOM)
+    this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.LOUNGE)
+    this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.MEZZANINE)
   }
 }
 </script>

@@ -1,13 +1,11 @@
-import {AnimationMixer, Camera, Clock, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer} from "three";
+import {Camera, Clock, PerspectiveCamera, Quaternion, Raycaster, Scene, Vector2, Vector3, WebGLRenderer} from "three";
 import {
-  CameraPosition,
   DefaultSceneManagerCallback,
-  MouseMoveCanvasCallback,
+  MouseMoveCanvasCallback, PresetCameraPosition,
   RayCasterIntersectCallBack,
   SceneManagerOptions,
   WindowResizeCallback
 } from "~/core/types";
-import Helpers from "~/core/utils/helpers";
 import gsap from 'gsap'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
@@ -23,18 +21,17 @@ export default class SceneManager {
    * Static accessors for scenes instances
    */
   public static GLOBAL_SCENE: SceneManager
-  public guiOptions:object
 
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
   private _camera: Camera
   private _controls: OrbitControls | null
-  private _presetCameraPositions: Array<CameraPosition>
+  private _presetCameraPositions: Array<PresetCameraPosition>
   private _renderer: WebGLRenderer
   private _clock: Clock
   private _mousePositions: Vector2
   private _scene: Scene
-  private _gui: GUI | null
+  private _gui: GUI
   private _rayCaster: Raycaster
   private _stats: Stats | null
   private _defaultRatio: number
@@ -77,16 +74,9 @@ export default class SceneManager {
     this._controls = null
     this._deltaTime = 0
     this._previousTime = 0
-    this._gui = options.gui || null
+    this._gui = new GUI()
     this._stats = null
     this._defaultRatio = options.defaultRation || 1
-    this.guiOptions = {
-      posX:0,
-      posY:0,
-      posZ:0,
-      rotate:0,
-      color:0xFFFFFF
-    }
 
     this._onStartCallback = options.onStart || function () {
     }
@@ -151,7 +141,7 @@ export default class SceneManager {
   /**
    * Register preset camera positions
    */
-  public registerPresetCameraPositions(position: CameraPosition): SceneManager {
+  public registerPresetCameraPositions(position: PresetCameraPosition): SceneManager {
     this._presetCameraPositions.push(position)
 
     return this
@@ -168,27 +158,33 @@ export default class SceneManager {
     errorCallBack: DefaultSceneManagerCallback = function () {
     }
   ) {
-    const cameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
-    if (!cameraPosition) {
+    const presetCameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
+    console.log(presetCameraPosition)
+    if (!presetCameraPosition) {
       errorCallBack(this)
       return
     }
 
+    const {cameraPos: newCameraPosition, lookAtPosition} = presetCameraPosition.coords()
+    console.log('newCameraPosition : ', newCameraPosition)
+    console.log('lookAtPosition : ', lookAtPosition)
     gsap.to(this.camera.position, {
       duration,
-      x: cameraPosition.coords.x,
-      y: cameraPosition.coords.y,
-      z: cameraPosition.coords.z,
+      x: newCameraPosition.x,
+      y: newCameraPosition.y,
+      z: newCameraPosition.z,
       onUpdate: () => {
         if (this._camera instanceof PerspectiveCamera) {
           this._camera.updateProjectionMatrix()
-          this.camera.lookAt(cameraPosition.coords)
+          this.camera.lookAt(lookAtPosition)
         }
       },
       onComplete: () => {
         successCallBack(this)
       }
     })
+
+
   }
 
   /**
@@ -280,8 +276,8 @@ export default class SceneManager {
    * Init renderer
    */
   private _initRenderer() {
-    this._renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), this._defaultRatio))
     this._renderer.setSize(this._canvas.width, this._canvas.height)
+    this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, this._defaultRatio))
   }
 
   /**
@@ -324,7 +320,6 @@ export default class SceneManager {
 
     if (this._controls) {
       this._controls.update()
-      // console.log(this._controls,'controls')
     }
 
     if (this._isRayCasting) {
@@ -333,8 +328,8 @@ export default class SceneManager {
       this._onRayCasterIntersectCallback(this, intersects)
     }
 
-    if (this.camera instanceof PerspectiveCamera) {
-      this.camera.updateProjectionMatrix()
+    if (this._camera instanceof PerspectiveCamera) {
+      this._camera.updateProjectionMatrix()
     }
 
     const elapsedTime = this._clock.getElapsedTime()
@@ -353,7 +348,7 @@ export default class SceneManager {
   }
 
   get gui(): GUI {
-    return this._gui as any
+    return this._gui
   }
 
   get renderer(): WebGLRenderer {
@@ -378,5 +373,13 @@ export default class SceneManager {
 
   get height(): number {
     return this._canvas.height
+  }
+
+  get canvas(): HTMLCanvasElement {
+    return this._canvas
+  }
+
+  get defaultRatio() {
+    return this._defaultRatio
   }
 }

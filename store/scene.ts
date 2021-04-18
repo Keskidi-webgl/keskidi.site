@@ -1,6 +1,6 @@
 import {Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {RoomConfigElement} from "~/core/types";
-import {URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {InteractionPointConfigElement, RoomConfigElement} from "~/core/types";
+import {INTERACT_POINT_NAME, URL_ROOM_IDENTIFIER} from "~/core/enums";
 import SceneConfig from "~/core/config/scene.config";
 
 
@@ -11,12 +11,12 @@ import SceneConfig from "~/core/config/scene.config";
 })
 export default class SceneModule extends VuexModule {
   private _activeRoom: RoomConfigElement | null = null
+  private _activeInteractionPoints: Array<InteractionPointConfigElement> = []
 
   @Mutation
   public setActiveRoom(roomIdentifier: URL_ROOM_IDENTIFIER)
   {
     this._activeRoom = SceneConfig.getRoomConfig(roomIdentifier)
-    console.log(this._activeRoom)
   }
 
   @Mutation
@@ -24,7 +24,37 @@ export default class SceneModule extends VuexModule {
     this._activeRoom = null
   }
 
+  @Mutation
+  public addInteractivePoint(name: INTERACT_POINT_NAME) {
+    const point = SceneConfig.getInteractionPoint(name)
+    if (point) {
+      this._activeInteractionPoints.push(point)
+    }
+
+    return this
+  }
+
+  @Mutation
+  public removeInteractivePoint(name: INTERACT_POINT_NAME) {
+    this._activeInteractionPoints = this._activeInteractionPoints.filter(point => point.name !== name)
+
+    return this
+  }
+
+  @Mutation
+  public updatePositionsInteractivePoint(data: {name: INTERACT_POINT_NAME, transformX: number, transformY: number}) {
+    const point = SceneConfig.getInteractionPoint(data.name)
+    if (point) {
+      point.transformX = data.transformX
+      point.transformY = data.transformY
+    }
+  }
+
   get activeRoom() {
     return this._activeRoom
+  }
+
+  get activeInteractionPoints() {
+    return this._activeInteractionPoints
   }
 }
