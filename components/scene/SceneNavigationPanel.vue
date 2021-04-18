@@ -29,7 +29,7 @@ export default class SceneNavigationPanel extends Vue {
   }
 
   public previousSceneLink() {
-    return this.sceneModule.activeRoom?.previousUrl
+    return this.sceneModule.activeRoom?.previousSceneUrl
   }
 }
 </script>

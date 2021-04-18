@@ -55,27 +55,7 @@ export type CanvasDimension = {
   height: number
 }
 
-/**
- * Room config element for scene.config.ts file
- */
-export type RoomConfigElement = {
-  urlIdentifier: URL_ROOM_IDENTIFIER
-  fullUrl: string,
-  nextSceneUrl: string,
-  previousUrl: string,
-  objects: Array<{urlId: URL_OBJECT_IDENTIFIER, interactPointName: INTERACT_POINT_NAME}>
-}
-
 export type PresetCameraPosition = {
   name: string
   coords: () => {cameraPos: Vector3, lookAtPosition: Vector3}
-}
-
-export type InteractionPointConfigElement = {
-  name: INTERACT_POINT_NAME
-  isCompleted: () => boolean
-  canvasCoords: () => Vector3
-  transformX: number
-  transformY: number
-  url: string
 }

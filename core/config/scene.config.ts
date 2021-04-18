@@ -1,99 +1,28 @@
-import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
-import {InteractionPointConfigElement, RoomConfigElement} from "~/core/types";
-import {SceneManager} from "~/core/managers";
-import {Vector3} from "three";
+import {INTERACT_POINT_NAME} from "~/core/enums";
+import RoomConfigElement from "~/core/config/roomConfig/RoomConfigElement";
+import {BedroomConfig, LoungeConfig, MezzanineConfig} from "~/core/config/roomConfig";
+import InteractPointConfigElement from "~/core/config/interactPointsConfig/InteractPointConfigElement";
+import {
+  BedroomInteractPointConfig,
+  LoungeInteractPointConfig,
+  MezzanineInteractPointConfig,
+  NeonInteractPointConfig,
+  TelevisionInteractPointConfig
+} from "~/core/config/interactPointsConfig";
 
 class SceneConfig {
-  // Room configuration
   public rooms: Array<RoomConfigElement> = [
-    {
-      urlIdentifier: URL_ROOM_IDENTIFIER.MEZZANINE,
-      fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
-      nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
-      previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
-      objects: [
-        {urlId: URL_OBJECT_IDENTIFIER.NEON, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-        {urlId: URL_OBJECT_IDENTIFIER.TELEVISION, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-        {urlId: URL_OBJECT_IDENTIFIER.POSTER, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-      ]
-    },
-    {
-      urlIdentifier: URL_ROOM_IDENTIFIER.LOUNGE,
-      fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
-      nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
-      previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
-
-      objects: [
-        /*
-        {urlId: URL_OBJECT_IDENTIFIER.VINYL, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-        {urlId: URL_OBJECT_IDENTIFIER.POSTER, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-        {urlId: URL_OBJECT_IDENTIFIER.MAGAZINE, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-         */
-      ]
-    },
-    {
-      urlIdentifier: URL_ROOM_IDENTIFIER.BEDROOM,
-      fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
-      nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
-      previousUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
-      objects: [
-        /*
-        {urlId: URL_OBJECT_IDENTIFIER.T_SHIRT, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-        {urlId: URL_OBJECT_IDENTIFIER.AGENDA, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-        {urlId: URL_OBJECT_IDENTIFIER.POSTER, interactPointName: INTERACT_POINT_NAME.TELEVISION},
-         */
-      ]
-    }
+    BedroomConfig,
+    MezzanineConfig,
+    LoungeConfig
   ]
 
-  public interactionPoints: Array<InteractionPointConfigElement> = [
-    /* Bedroom */
-    {
-      name: INTERACT_POINT_NAME.BEDROOM,
-      canvasCoords() {
-        return SceneManager.GLOBAL_SCENE.scene.getObjectByName('chambre')!.position
-      },
-      isCompleted() { return false },
-      transformX: 0,
-      transformY: 0,
-      url: this.getRoomConfig(URL_ROOM_IDENTIFIER.BEDROOM)!.fullUrl
-    },
-    /* Mezzanine */
-    {
-      name: INTERACT_POINT_NAME.MEZZANINE,
-      canvasCoords() {
-        return SceneManager.GLOBAL_SCENE.scene.getObjectByName('mezzanine')!.position
-      },
-      isCompleted() { return false },
-      transformX: 0,
-      transformY: 0,
-      url: this.getRoomConfig(URL_ROOM_IDENTIFIER.MEZZANINE)!.fullUrl
-    },
-    /* Lounge */
-    {
-      name: INTERACT_POINT_NAME.LOUNGE,
-      canvasCoords() {
-        return SceneManager.GLOBAL_SCENE.scene.getObjectByName('salon')!.position
-      },
-      isCompleted() { return false },
-      transformX: 0,
-      transformY: 0,
-      url: this.getRoomConfig(URL_ROOM_IDENTIFIER.LOUNGE)!.fullUrl
-    },
-    /* Television of mezzanine*/
-    {
-      name: INTERACT_POINT_NAME.TELEVISION,
-      canvasCoords() {
-        const position = new Vector3()
-        SceneManager.GLOBAL_SCENE.scene.getObjectByName('tv')!.getWorldPosition(position)
-
-        return position
-      },
-      isCompleted() { return Math.random() < 0.5 },
-      transformX: 0,
-      transformY: 0,
-      url: this.getRoomConfig(URL_ROOM_IDENTIFIER.LOUNGE)!.fullUrl + '/' + URL_OBJECT_IDENTIFIER.TELEVISION
-    }
+  public interactionPoints: Array<InteractPointConfigElement> = [
+    MezzanineInteractPointConfig,
+    LoungeInteractPointConfig,
+    BedroomInteractPointConfig,
+    NeonInteractPointConfig,
+    TelevisionInteractPointConfig
   ]
 
   /**
