@@ -1,6 +1,6 @@
 import {Clock, Intersection, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
 import SceneManager from "~/core/managers/SceneManager";
-import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 
 /**
  * Option to create SceneManager
@@ -58,4 +58,21 @@ export type CanvasDimension = {
 export type PresetCameraPosition = {
   name: string
   coords: () => {cameraPos: Vector3, lookAtPosition: Vector3}
+}
+
+export type InteractionPointConfig = {
+  name: INTERACT_POINT_NAME
+  isCompleted: () => boolean
+  canvasCoords: () => Vector3
+  transformX: number
+  transformY: number
+  url: string
+}
+
+export type RoomConfig = {
+  urlIdentifier: string
+  nextSceneUrl: string
+  previousSceneUrl: string
+  fullUrl: string
+  objects: Array<{ urlId: URL_OBJECT_IDENTIFIER, interactPointName: INTERACT_POINT_NAME }>
 }

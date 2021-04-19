@@ -20,14 +20,12 @@ export default class RoomPage extends Vue {
    * Validate route params
    */
   public validate({params}: Context) {
-    console.log('params.roomName : ', params.roomName)
-    console.log(RouteValidator.validateRoomPageParam(params.roomName))
     return RouteValidator.validateRoomPageParam(params.roomName)
   }
 
   mounted() {
     const roomIdentifier = <URL_ROOM_IDENTIFIER>this.$route.params.roomName
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomIdentifier, 1, () => {
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomIdentifier, 2, () => {
       this.sceneModule.setActiveRoom(roomIdentifier)
       this.addInteractionPoints()
     })

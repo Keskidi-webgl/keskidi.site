@@ -1,41 +1,46 @@
 import {INTERACT_POINT_NAME} from "~/core/enums";
-import RoomConfigElement from "~/core/config/roomConfig/RoomConfigElement";
 import {BedroomConfig, LoungeConfig, MezzanineConfig} from "~/core/config/roomConfig";
-import InteractPointConfigElement from "~/core/config/interactPointsConfig/InteractPointConfigElement";
 import {
-  BedroomInteractPointConfig,
-  LoungeInteractPointConfig, LoungePosterInteractPointConfig, MagazineInteractPointConfig,
-  MezzanineInteractPointConfig,
-  NeonInteractPointConfig, PaperInteractPointConfig, SkateInteractPointConfig,
-  TelevisionInteractPointConfig, TshirtInteractPointConfig, VinylInteractPointConfig
+  BedroomInteractPoint,
+  LoungeInteractPoint,
+  LoungePosterInteractPoint,
+  MagazineInteractPoint,
+  MezzanineInteractPoint,
+  NeonInteractPoint,
+  PaperInteractPoint,
+  SkateInteractPoint,
+  TelevisionInteractPoint,
+  TshirtInteractPoint,
+  VinylInteractPoint
 } from "~/core/config/interactPointsConfig";
+import {InteractionPointConfig, RoomConfig} from "~/core/types";
 
 class SceneConfig {
-  public rooms: Array<RoomConfigElement> = [
+  public rooms: Array<RoomConfig> = [
     BedroomConfig,
     MezzanineConfig,
     LoungeConfig
   ]
 
-  public interactionPoints: Array<InteractPointConfigElement> = [
+  public interactionPoints: Array<InteractionPointConfig> = [
     // Global
-    MezzanineInteractPointConfig,
-    LoungeInteractPointConfig,
-    BedroomInteractPointConfig,
+    BedroomInteractPoint,
+    LoungeInteractPoint,
+    MezzanineInteractPoint,
 
     // Mezzanine
-    NeonInteractPointConfig,
-    TelevisionInteractPointConfig,
+    NeonInteractPoint,
+    TelevisionInteractPoint,
 
     // Lounge
-    LoungePosterInteractPointConfig,
-    VinylInteractPointConfig,
-    MagazineInteractPointConfig,
+    LoungePosterInteractPoint,
+    MagazineInteractPoint,
+    VinylInteractPoint,
 
     // Bedroom
-    TshirtInteractPointConfig,
-    SkateInteractPointConfig,
-    PaperInteractPointConfig
+    PaperInteractPoint,
+    SkateInteractPoint,
+    TshirtInteractPoint
   ]
 
   /**

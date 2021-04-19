@@ -1,22 +1,20 @@
-import RoomConfigElement from "~/core/config/roomConfig/RoomConfigElement";
 import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER, URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {RoomConfig} from "~/core/types";
 
-class LoungeConfig extends RoomConfigElement {
+const LoungeConfig: RoomConfig = {
+  urlIdentifier: URL_ROOM_IDENTIFIER.LOUNGE,
 
-  protected _fullUrl = `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`
+  nextSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`,
 
-  protected _nextSceneUrl = `/rooms/${URL_ROOM_IDENTIFIER.BEDROOM}`
+  previousSceneUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
 
-  protected _objects = [
+  fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.LOUNGE}`,
+
+  objects: [
     {urlId: URL_OBJECT_IDENTIFIER.LOUNGE_POSTER, interactPointName: INTERACT_POINT_NAME.LOUNGE_POSTER},
     {urlId: URL_OBJECT_IDENTIFIER.VINYL, interactPointName: INTERACT_POINT_NAME.VINYL},
     {urlId: URL_OBJECT_IDENTIFIER.MAGAZINE, interactPointName: INTERACT_POINT_NAME.MAGAZINE},
   ]
-
-  protected _previousSceneUrl = `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`
-
-  protected _urlIdentifier = URL_ROOM_IDENTIFIER.LOUNGE
-
 }
 
-export default new LoungeConfig()
+export default LoungeConfig
