@@ -9,11 +9,11 @@ const LoungePosterCameraPosition: PresetCameraPosition = {
   coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('tableau_big')!.getWorldPosition(lookAtPosition)
-    lookAtPosition.z = lookAtPosition.z * 2
+    lookAtPosition.z = lookAtPosition.z * 1.15
 
     const cameraPos = lookAtPosition.clone()
-    cameraPos.x = cameraPos.x * 1.05
-    cameraPos.z = cameraPos.z * 0.2
+    cameraPos.x = cameraPos.x * 10
+    cameraPos.z = cameraPos.z * 0.9
 
     return { cameraPos, lookAtPosition }
   }
