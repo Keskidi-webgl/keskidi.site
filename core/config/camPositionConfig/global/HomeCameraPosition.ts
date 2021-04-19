@@ -8,9 +8,9 @@ const  HomeCameraPosition: PresetCameraPosition = {
     const lookAtPosition = SceneManager.GLOBAL_SCENE.scene.position
     const cameraPos = lookAtPosition.clone()
 
-    cameraPos.z = 1000
-    cameraPos.y = 1000
-    cameraPos.x = 1000
+    cameraPos.z = 750
+    cameraPos.y = 800
+    cameraPos.x = -500
 
     return {cameraPos, lookAtPosition}
   }

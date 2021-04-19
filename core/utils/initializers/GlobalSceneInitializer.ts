@@ -1,10 +1,11 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
+  Box3,
   HemisphereLight,
   HemisphereLightHelper,
   PerspectiveCamera,
-  Scene,
+  Scene, Vector3,
   WebGLRenderer
 } from "three";
 import {Initializers} from "~/core/defs";
@@ -81,7 +82,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).enableStats().enableAxesHelpers(1000)
+    })//.enableStats().enableAxesHelpers(1000)
 
   }
 

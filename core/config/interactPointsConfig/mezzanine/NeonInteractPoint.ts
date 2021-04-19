@@ -9,7 +9,7 @@ const NeonInteractPoint: InteractionPointConfig = {
 
   canvasCoords: () => {
     const position = new Vector3()
-    SceneManager.GLOBAL_SCENE.scene.getObjectByName('just_chill')!.getWorldPosition(position)
+    SceneManager.GLOBAL_SCENE.scene.getObjectByName('neon_just_chill')!.getWorldPosition(position)
 
     return position
   },

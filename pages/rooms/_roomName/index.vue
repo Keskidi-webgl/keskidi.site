@@ -25,7 +25,7 @@ export default class RoomPage extends Vue {
 
   mounted() {
     const roomIdentifier = <URL_ROOM_IDENTIFIER>this.$route.params.roomName
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomIdentifier, 1, () => {
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomIdentifier, 2, () => {
       this.sceneModule.setActiveRoom(roomIdentifier)
       this.addInteractionPoints()
     })
