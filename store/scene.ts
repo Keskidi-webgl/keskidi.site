@@ -1,8 +1,7 @@
 import {Module, Mutation, VuexModule} from "vuex-module-decorators";
 import {INTERACT_POINT_NAME, URL_ROOM_IDENTIFIER} from "~/core/enums";
 import SceneConfig from "~/core/config/scene.config";
-import RoomConfigElement from "~/core/config/roomConfig/RoomConfigElement";
-import {InteractionPointConfig} from "~/core/types";
+import {InteractionPointConfig, RoomConfig} from "~/core/types";
 
 
 @Module({
@@ -11,7 +10,7 @@ import {InteractionPointConfig} from "~/core/types";
   stateFactory: true,
 })
 export default class SceneModule extends VuexModule {
-  private _activeRoom: RoomConfigElement | null = null
+  private _activeRoom: RoomConfig | null = null
   private _activeInteractionPoints: Array<InteractionPointConfig> = []
 
   @Mutation

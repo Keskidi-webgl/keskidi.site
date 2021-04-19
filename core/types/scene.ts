@@ -1,6 +1,6 @@
 import {Clock, Intersection, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
 import SceneManager from "~/core/managers/SceneManager";
-import {INTERACT_POINT_NAME} from "~/core/enums";
+import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 
 /**
  * Option to create SceneManager
@@ -67,5 +67,12 @@ export type InteractionPointConfig = {
   transformX: number
   transformY: number
   url: string
+}
 
+export type RoomConfig = {
+  urlIdentifier: string
+  nextSceneUrl: string
+  previousSceneUrl: string
+  fullUrl: string
+  objects: Array<{ urlId: URL_OBJECT_IDENTIFIER, interactPointName: INTERACT_POINT_NAME }>
 }

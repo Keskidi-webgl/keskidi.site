@@ -1,5 +1,4 @@
 import {INTERACT_POINT_NAME} from "~/core/enums";
-import RoomConfigElement from "~/core/config/roomConfig/RoomConfigElement";
 import {BedroomConfig, LoungeConfig, MezzanineConfig} from "~/core/config/roomConfig";
 import {
   BedroomInteractPoint,
@@ -14,10 +13,10 @@ import {
   TshirtInteractPoint,
   VinylInteractPoint
 } from "~/core/config/interactPointsConfig";
-import {InteractionPointConfig} from "~/core/types";
+import {InteractionPointConfig, RoomConfig} from "~/core/types";
 
 class SceneConfig {
-  public rooms: Array<RoomConfigElement> = [
+  public rooms: Array<RoomConfig> = [
     BedroomConfig,
     MezzanineConfig,
     LoungeConfig
