@@ -1,4 +1,4 @@
-import {Vector3} from "three";
+import {Object3D, Vector3} from "three";
 
 export default abstract class CamPositionConfigElement {
   protected abstract _name: string

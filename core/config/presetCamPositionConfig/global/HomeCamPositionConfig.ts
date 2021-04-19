@@ -9,9 +9,9 @@ class HomeCamPositionConfig extends CamPositionConfigElement {
     const lookAtPosition = SceneManager.GLOBAL_SCENE.scene.position
     const cameraPos = lookAtPosition.clone()
 
-    cameraPos.z = (cameraPos.z + 1) * 1000
-    cameraPos.y = (cameraPos.y + 1) * 1000
-    cameraPos.x = (cameraPos.x + 1) * 1000
+    cameraPos.z = 1000
+    cameraPos.y = 1000
+    cameraPos.x = 1000
 
     return {cameraPos, lookAtPosition}
   }

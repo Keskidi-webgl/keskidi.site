@@ -1,6 +1,12 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {Box3, HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
+import {
+  HemisphereLight,
+  HemisphereLightHelper,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer
+} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
@@ -75,7 +81,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).enableStats()
+    }).enableStats().enableAxesHelpers(1000)
 
   }
 
@@ -97,7 +103,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       50,
       this._data.canvas.width / this._data.canvas.height,
       1,
-      5000
+      10000
     )
   }
 
@@ -135,6 +141,12 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     globalSceneGltf.scene.position.set(0, 0, 0)
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
+    SceneManager.GLOBAL_SCENE.scene.traverse( child => {
+
+      // @ts-ignore
+      if ( child.material ) child.material.metalness = 0;
+
+    } );
   }
 
   /**
@@ -142,7 +154,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _addLights(withHelper: boolean = false) {
     const hemisphereLights = new HemisphereLight(0xdff9fb, 0x080820, 1);
-    hemisphereLights.position.set(100, 500, 700)
+    //hemisphereLights.position.set(100, 500, 700)
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
       SceneManager.GLOBAL_SCENE.scene.add(helper);
@@ -156,10 +168,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _registerPresetPositions() {
     CameraConfig.presetPositions.forEach(presetPosition => {
-      SceneManager.GLOBAL_SCENE.registerPresetCameraPositions({
-        name: presetPosition.name,
-        coords: presetPosition.coords
-      })
+      SceneManager.GLOBAL_SCENE.registerPresetCameraPositions(presetPosition)
     })
   }
 }
