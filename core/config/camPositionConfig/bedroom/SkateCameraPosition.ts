@@ -8,7 +8,10 @@ const SkateCameraPosition: PresetCameraPosition = {
   coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('skate')!.getWorldPosition(lookAtPosition)
+    lookAtPosition.z = lookAtPosition.z * 0.8
+
     const cameraPos = lookAtPosition.clone()
+    cameraPos.x = cameraPos.x * 6.5
 
     return { cameraPos, lookAtPosition }
   }

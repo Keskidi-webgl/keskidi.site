@@ -8,7 +8,11 @@ const TshirtCameraPosition: PresetCameraPosition = {
   coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('tshirt')!.getWorldPosition(lookAtPosition)
+    lookAtPosition.z = lookAtPosition.z * 0.8
+
     const cameraPos = lookAtPosition.clone()
+    cameraPos.y = cameraPos.y * 1.6
+    cameraPos.x = cameraPos.x * 1.5
 
     return { cameraPos, lookAtPosition }
   }
