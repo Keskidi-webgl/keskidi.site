@@ -8,9 +8,9 @@ const BedroomCameraPosition: PresetCameraPosition = {
   coords: () => {
     const lookAtPosition = SceneManager.GLOBAL_SCENE.scene.getObjectByName('chambre')!.position
     const cameraPos = lookAtPosition.clone()
-    cameraPos.x = cameraPos.x * 2
-    cameraPos.y = cameraPos.y * 1.6
-    cameraPos.z = cameraPos.z * 1.2
+    cameraPos.x = 250
+    cameraPos.y = 130
+    cameraPos.z = 500
 
     return { cameraPos, lookAtPosition }
   }

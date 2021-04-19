@@ -10,9 +10,10 @@ const LoungeCameraPosition: PresetCameraPosition = {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('salon')!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
-    cameraPos.x = cameraPos.x * 1.7
-    cameraPos.y = cameraPos.y * 1.3
-    cameraPos.z = cameraPos.z * 13
+
+    cameraPos.x = -400
+    cameraPos.y = 130
+    cameraPos.z = 300
 
     return { cameraPos, lookAtPosition }
   }

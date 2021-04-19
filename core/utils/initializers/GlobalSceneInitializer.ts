@@ -1,10 +1,11 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
+  Box3,
   HemisphereLight,
   HemisphereLightHelper,
   PerspectiveCamera,
-  Scene,
+  Scene, Vector3,
   WebGLRenderer
 } from "three";
 import {Initializers} from "~/core/defs";

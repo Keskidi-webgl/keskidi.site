@@ -10,7 +10,7 @@ const  HomeCameraPosition: PresetCameraPosition = {
 
     cameraPos.z = 1000
     cameraPos.y = 1000
-    cameraPos.x = 1000
+    cameraPos.x = -1000
 
     return {cameraPos, lookAtPosition}
   }

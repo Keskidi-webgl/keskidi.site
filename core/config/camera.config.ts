@@ -2,8 +2,14 @@ import {PresetCameraPosition} from "~/core/types";
 import {
   BedroomCameraPosition,
   HomeCameraPosition,
-  LoungeCameraPosition, LoungePosterCameraPosition, MagazineCameraPosition,
-  MezzanineCameraPosition
+  LoungeCameraPosition,
+  LoungePosterCameraPosition,
+  MagazineCameraPosition,
+  MezzanineCameraPosition,
+  NeonCameraPosition, PaperCameraPosition,
+  SkateCameraPosition,
+  TelevisionCameraPosition, TshirtCameraPosition,
+  VinylCameraPosition
 } from "~/core/config/camPositionConfig";
 
 class CameraConfig {
@@ -16,7 +22,17 @@ class CameraConfig {
 
     // Lounge
     LoungePosterCameraPosition,
-    MagazineCameraPosition
+    MagazineCameraPosition,
+    VinylCameraPosition,
+
+    // Mezzanine
+    NeonCameraPosition,
+    TelevisionCameraPosition,
+
+    // Bedroom
+    PaperCameraPosition,
+    SkateCameraPosition,
+    TshirtCameraPosition
   ]
 }
 
