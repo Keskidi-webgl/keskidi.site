@@ -1,4 +1,16 @@
-import {Camera, Clock, PerspectiveCamera, Quaternion, Raycaster, Scene, Vector2, Vector3, WebGLRenderer} from "three";
+import {
+  AxesHelper,
+  Camera,
+  Clock,
+  Euler,
+  PerspectiveCamera,
+  Quaternion,
+  Raycaster,
+  Scene,
+  Vector2,
+  Vector3,
+  WebGLRenderer
+} from "three";
 import {
   DefaultSceneManagerCallback,
   MouseMoveCanvasCallback, PresetCameraPosition,
@@ -159,16 +171,31 @@ export default class SceneManager {
     }
   ) {
     const presetCameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
-    console.log(presetCameraPosition)
+
     if (!presetCameraPosition) {
       errorCallBack(this)
       return
     }
 
     const {cameraPos: newCameraPosition, lookAtPosition} = presetCameraPosition.coords()
-    console.log('newCameraPosition : ', newCameraPosition)
-    console.log('lookAtPosition : ', lookAtPosition)
-    gsap.to(this.camera.position, {
+
+    const originPosition = new Vector3().copy(this._camera.position);
+    const originRotation = new Euler().copy(this._camera.rotation);
+
+    this._camera.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z);
+    this._camera.lookAt(lookAtPosition);
+    const destinationRotation = new Euler().copy(this._camera.rotation)
+
+    this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
+    this._camera.rotation.set(originRotation.x, originRotation.y, originRotation.z);
+
+    const originQuaternion = new Quaternion().copy(this._camera.quaternion);
+    const destinationQuaternion = new Quaternion().setFromEuler(destinationRotation);
+    const updateQuaternion = new Quaternion();
+    const o = {t: 0};
+
+
+    gsap.to(this._camera.position, {
       duration,
       x: newCameraPosition.x,
       y: newCameraPosition.y,
@@ -176,11 +203,20 @@ export default class SceneManager {
       onUpdate: () => {
         if (this._camera instanceof PerspectiveCamera) {
           this._camera.updateProjectionMatrix()
-          this.camera.lookAt(lookAtPosition)
+          //this.camera.lookAt(lookAtPosition)
         }
+
       },
       onComplete: () => {
         successCallBack(this)
+      }
+    });
+    gsap.to(o, {
+      duration,
+      t: 1,
+      onUpdate: () => {
+        updateQuaternion.slerpQuaternions(originQuaternion, destinationQuaternion, o.t)
+        this._camera.quaternion.set(updateQuaternion.x, updateQuaternion.y, updateQuaternion.z, updateQuaternion.w)
       }
     })
 
@@ -238,6 +274,16 @@ export default class SceneManager {
     }
 
     this._isStatsActive = true
+
+    return this
+  }
+
+  /**
+   * Enable axes helper
+   */
+  public enableAxesHelpers(size: number = 10) {
+    const axesHelper = new AxesHelper(size)
+    this._scene.add(axesHelper)
 
     return this
   }

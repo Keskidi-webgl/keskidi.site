@@ -1,22 +1,22 @@
-import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamPositionConfigElement";
+import {PresetCameraPosition} from "~/core/types";
 import {
-  BedroomCamPositionConfig,
-  HomeCamPositionConfig,
-  LoungeCamPositionConfig, LoungePosterCamPositionConfig, MagazineCamPositionConfig,
-  MezzanineCamPositionConfig
-} from "~/core/config/presetCamPositionConfig";
+  BedroomCameraPosition,
+  HomeCameraPosition,
+  LoungeCameraPosition, LoungePosterCameraPosition, MagazineCameraPosition,
+  MezzanineCameraPosition
+} from "~/core/config/camPositionConfig";
 
 class CameraConfig {
-  public presetPositions: Array<CamPositionConfigElement> = [
+  public presetPositions: Array<PresetCameraPosition> = [
     // Global
-    HomeCamPositionConfig,
-    LoungeCamPositionConfig,
-    MezzanineCamPositionConfig,
-    BedroomCamPositionConfig,
+    BedroomCameraPosition,
+    HomeCameraPosition,
+    LoungeCameraPosition,
+    MezzanineCameraPosition,
 
     // Lounge
-    MagazineCamPositionConfig,
-    LoungePosterCamPositionConfig
+    LoungePosterCameraPosition,
+    MagazineCameraPosition
   ]
 }
 

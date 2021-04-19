@@ -20,8 +20,6 @@ export default class RoomPage extends Vue {
    * Validate route params
    */
   public validate({params}: Context) {
-    console.log('params.roomName : ', params.roomName)
-    console.log(RouteValidator.validateRoomPageParam(params.roomName))
     return RouteValidator.validateRoomPageParam(params.roomName)
   }
 
