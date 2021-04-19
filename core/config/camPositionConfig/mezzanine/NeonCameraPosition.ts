@@ -8,7 +8,10 @@ const NeonCameraPosition: PresetCameraPosition = {
   coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('neon_just_chill')!.getWorldPosition(lookAtPosition)
+    lookAtPosition.x = lookAtPosition.x * 0.8
     const cameraPos = lookAtPosition.clone()
+    cameraPos.x = cameraPos.x * 1.3
+    cameraPos.z = cameraPos.z * 0.2
 
     return { cameraPos, lookAtPosition }
   }
