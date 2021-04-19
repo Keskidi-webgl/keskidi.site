@@ -1,13 +1,12 @@
-import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamPositionConfigElement";
-import {SceneManager} from "~/core/managers";
-import {Vector3} from "three";
+import {PresetCameraPosition} from "~/core/types";
 import {URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {Vector3} from "three";
+import {SceneManager} from "~/core/managers";
 
-class MezzanineCamPositionConfig extends CamPositionConfigElement {
+const MezzanineCameraPosition: PresetCameraPosition = {
+  name: URL_ROOM_IDENTIFIER.MEZZANINE,
 
-  protected _name = URL_ROOM_IDENTIFIER.MEZZANINE;
-
-  protected _coords = () => {
+  coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('mezzanine')!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
@@ -17,7 +16,6 @@ class MezzanineCamPositionConfig extends CamPositionConfigElement {
 
     return { cameraPos, lookAtPosition }
   }
-
 }
 
-export default new MezzanineCamPositionConfig()
+export default MezzanineCameraPosition

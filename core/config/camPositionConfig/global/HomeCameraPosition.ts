@@ -1,11 +1,10 @@
-import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamPositionConfigElement";
+import {PresetCameraPosition} from "~/core/types";
 import {SceneManager} from "~/core/managers";
 
-class HomeCamPositionConfig extends CamPositionConfigElement {
+const  HomeCameraPosition: PresetCameraPosition = {
+  name: 'home',
 
-  protected _name = 'home';
-
-  protected _coords = () => {
+  coords: () => {
     const lookAtPosition = SceneManager.GLOBAL_SCENE.scene.position
     const cameraPos = lookAtPosition.clone()
 
@@ -15,7 +14,6 @@ class HomeCamPositionConfig extends CamPositionConfigElement {
 
     return {cameraPos, lookAtPosition}
   }
-
 }
 
-export default new HomeCamPositionConfig()
+export default HomeCameraPosition

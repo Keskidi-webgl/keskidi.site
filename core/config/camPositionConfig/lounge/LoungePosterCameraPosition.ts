@@ -1,13 +1,12 @@
-import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamPositionConfigElement";
-import {SceneManager} from "~/core/managers";
-import {Vector3} from "three";
+import {PresetCameraPosition} from "~/core/types";
 import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {Vector3} from "three";
+import {SceneManager} from "~/core/managers";
 
-class LoungePosterCamPositionConfig extends CamPositionConfigElement {
+const LoungePosterCameraPosition: PresetCameraPosition = {
+  name: URL_OBJECT_IDENTIFIER.LOUNGE_POSTER,
 
-  protected _name = URL_OBJECT_IDENTIFIER.LOUNGE_POSTER;
-
-  protected _coords = () => {
+  coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('tableau_big')!.getWorldPosition(lookAtPosition)
     lookAtPosition.z = lookAtPosition.z * 2
@@ -18,7 +17,6 @@ class LoungePosterCamPositionConfig extends CamPositionConfigElement {
 
     return { cameraPos, lookAtPosition }
   }
-
 }
 
-export default new LoungePosterCamPositionConfig()
+export default LoungePosterCameraPosition

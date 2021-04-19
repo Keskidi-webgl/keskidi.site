@@ -13,7 +13,7 @@ import {
 } from "three";
 import {
   DefaultSceneManagerCallback,
-  MouseMoveCanvasCallback,
+  MouseMoveCanvasCallback, PresetCameraPosition,
   RayCasterIntersectCallBack,
   SceneManagerOptions,
   WindowResizeCallback
@@ -22,7 +22,6 @@ import gsap from 'gsap'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 import {GUI} from "dat.gui";
-import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamPositionConfigElement";
 
 /**
  * @description
@@ -39,7 +38,7 @@ export default class SceneManager {
   private _canvas: HTMLCanvasElement
   private _camera: Camera
   private _controls: OrbitControls | null
-  private _presetCameraPositions: Array<CamPositionConfigElement>
+  private _presetCameraPositions: Array<PresetCameraPosition>
   private _renderer: WebGLRenderer
   private _clock: Clock
   private _mousePositions: Vector2
@@ -154,7 +153,7 @@ export default class SceneManager {
   /**
    * Register preset camera positions
    */
-  public registerPresetCameraPositions(position: CamPositionConfigElement): SceneManager {
+  public registerPresetCameraPositions(position: PresetCameraPosition): SceneManager {
     this._presetCameraPositions.push(position)
 
     return this

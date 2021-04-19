@@ -1,13 +1,11 @@
-import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamPositionConfigElement";
-import {SceneManager} from "~/core/managers";
-import {Vector3} from "three";
+import {PresetCameraPosition} from "~/core/types";
 import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {Vector3} from "three";
+import {SceneManager} from "~/core/managers";
 
-class MagazineCamPositionConfig extends CamPositionConfigElement {
-
-  protected _name = URL_OBJECT_IDENTIFIER.MAGAZINE;
-
-  protected _coords = () => {
+const MagazineCameraPosition: PresetCameraPosition = {
+  name: URL_OBJECT_IDENTIFIER.MAGAZINE,
+  coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('magazine')!.getWorldPosition(lookAtPosition)
     lookAtPosition.z = lookAtPosition.z * 0.7
@@ -18,7 +16,6 @@ class MagazineCamPositionConfig extends CamPositionConfigElement {
 
     return { cameraPos, lookAtPosition }
   }
-
 }
 
-export default new MagazineCamPositionConfig()
+export default MagazineCameraPosition

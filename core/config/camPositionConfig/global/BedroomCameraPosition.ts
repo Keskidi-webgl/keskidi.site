@@ -1,12 +1,11 @@
-import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamPositionConfigElement";
-import {SceneManager} from "~/core/managers";
+import {PresetCameraPosition} from "~/core/types";
 import {URL_ROOM_IDENTIFIER} from "~/core/enums";
+import {SceneManager} from "~/core/managers";
 
-class BedroomCamPositionConfig extends CamPositionConfigElement {
+const BedroomCameraPosition: PresetCameraPosition = {
+  name: URL_ROOM_IDENTIFIER.BEDROOM,
 
-  protected _name = URL_ROOM_IDENTIFIER.BEDROOM;
-
-  protected _coords = () => {
+  coords: () => {
     const lookAtPosition = SceneManager.GLOBAL_SCENE.scene.getObjectByName('chambre')!.position
     const cameraPos = lookAtPosition.clone()
     cameraPos.x = cameraPos.x * 2
@@ -15,7 +14,6 @@ class BedroomCamPositionConfig extends CamPositionConfigElement {
 
     return { cameraPos, lookAtPosition }
   }
-
 }
 
-export default new BedroomCamPositionConfig()
+export default BedroomCameraPosition

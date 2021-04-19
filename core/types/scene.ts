@@ -58,3 +58,4 @@ export type PresetCameraPosition = {
   name: string
   coords: () => {cameraPos: Vector3, lookAtPosition: Vector3}
 }
+

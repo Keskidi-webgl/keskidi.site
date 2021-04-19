@@ -1,13 +1,12 @@
-import CamPositionConfigElement from "~/core/config/presetCamPositionConfig/CamPositionConfigElement";
+import {PresetCameraPosition} from "~/core/types";
 import {SceneManager} from "~/core/managers";
 import {URL_ROOM_IDENTIFIER} from "~/core/enums";
 import {Vector3} from "three";
 
-class LoungeCamPositionConfig extends CamPositionConfigElement {
+const LoungeCameraPosition: PresetCameraPosition = {
+  name: URL_ROOM_IDENTIFIER.LOUNGE,
 
-  protected _name = URL_ROOM_IDENTIFIER.LOUNGE;
-
-  protected _coords = () => {
+  coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('salon')!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
@@ -17,7 +16,6 @@ class LoungeCamPositionConfig extends CamPositionConfigElement {
 
     return { cameraPos, lookAtPosition }
   }
-
 }
 
-export default new LoungeCamPositionConfig()
+export default LoungeCameraPosition
