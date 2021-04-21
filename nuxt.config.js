@@ -38,11 +38,13 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
+    '@nuxtjs/fontawesome'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
+    'bootstrap-vue/nuxt'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -55,6 +57,20 @@ export default {
   },
 
   router: {
-    middleware: ['init-app']
+    middleware: ['init-app'],
+    linkActiveClass: 'isActive'
+
+  },
+
+  fontawesome: {
+    icons: {
+      solid: true,
+      brands: true
+    },
+  },
+
+  bootstrapVue: {
+    bootstrapCSS: false,
+    bootstrapVueCSS: false
   }
 }

@@ -1,6 +1,8 @@
 /**
  * Model type for Media
  */
+import {MEDIA_TYPE} from "~/core/enums";
+
 export type Media = {
   id: number
   description: string
@@ -9,6 +11,7 @@ export type Media = {
   title: string
   uploaded_time: string
   url: string
+  type: MEDIA_TYPE
 }
 
 /**
@@ -18,4 +21,5 @@ export type DataFormUpload = {
   file: File|null
   title: string
   description: string
+  type: string
 }

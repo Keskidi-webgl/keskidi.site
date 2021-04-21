@@ -1,76 +1,137 @@
 <template>
-  <div class="upload-page-container">
-    <header>
-      <h1>Liste de tous les médias</h1>
-    </header>
+  <div class="admin-page admin-page-upload">
 
-    <div class="dashboard">
-      <aside>
-        <div class="form-container">
-          <form @submit.prevent="onSubmit">
-            <div class="form-group">
-              <label for="title">Titre</label>
-              <input v-model="dataFormUpload.title" type="text" class="form-control" id="title" placeholder="Titre">
-            </div>
-            <div class="form-group">
-              <label for="description">Description</label>
-              <textarea v-model="dataFormUpload.description" class="form-control" id="description" rows="3" placeholder="Description"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="media">Media</label>
-              <input @change="onFileUpload" type="file" class="form-control-file" id="media">
-            </div>
-            <button :disabled="onProgress" type="submit" class="btn btn-success">Upload</button>
-          </form>
-        </div>
-      </aside>
+    <!-- Header buttons -->
+    <b-modal
+      id="modal-upload-media"
+      ref="modal"
+      title="Upload un média"
+      @show="resetForm"
+      @hidden="resetForm"
+      @ok="submitForm"
+    >
+      <form ref="form" @@submit.stop.prevent="submitForm">
+        <!-- Title -->
+        <b-form-group
+          label="Titre"
+          label-for="name-input"
+        >
+          <b-form-input
+            id="name-input"
+            v-model="dataFormUpload.title"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <!-- Description -->
+        <b-form-group
+          label="Description"
+          label-for="name-input"
+        >
+          <b-form-textarea
+            id="name-input"
+            v-model="dataFormUpload.description"
+            required
+          ></b-form-textarea>
+        </b-form-group>
+        <b-form-group>
+          <b-form-select v-model="dataFormUpload.type" :options="typeOption"></b-form-select>
+        </b-form-group>
+        <!-- File -->
+        <b-form-file
+          v-model="dataFormUpload.file"
+          placeholder="Aboule le media narvalo"
+          drop-placeholder="Aboule le media narvalo"
+          required
+        ></b-form-file>
+      </form>
+    </b-modal>
 
-      <div class="table-container">
-        <table class="table table-bordered">
-          <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Titre</th>
-            <th scope="col">Description</th>
-            <th scope="col">Date upload</th>
-            <th scope="col">URL</th>
-            <th scope="col">Taille</th>
-            <th scope="col">Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="media in mediaData">
-            <th scope="row">{{ media.id }}</th>
-            <td>{{ media.title }}</td>
-            <td>{{ media.description }}</td>
-            <td>{{ media.uploaded_time }}</td>
-            <td>{{ media.size }} kb</td>
-            <td><a :href="media.url">{{ media.url }}</a></td>
-            <td>
-              <button :disabled="onProgress" @click="deleteMedia(media.id)" class="btn btn-danger">Supprimer</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+    <!-- Header buttons -->
+    <div class="header-panel">
+      <b-button variant="success" v-b-modal.modal-upload-media>Upload un média</b-button>
+
+      <b-form-radio-group
+        id="btn-radios-1"
+        v-model="filters.type.selected"
+        :options="filters.type.options"
+        name="radios-btn-default"
+        buttons
+      ></b-form-radio-group>
+    </div>
+
+    <!-- Table medias -->
+    <div>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Titre</th>
+          <th scope="col">Description</th>
+          <th scope="col">Date upload</th>
+          <th scope="col">Taille</th>
+          <th scope="col">URL</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="media in filteredMediaData()">
+          <th scope="row">{{ media.id }}</th>
+          <td>{{ media.title }}</td>
+          <td>{{ media.description }}</td>
+          <td>{{ media.uploaded_time }}</td>
+          <td>{{ media.size }} kb</td>
+          <td><a :href="media.url">{{ media.url }}</a></td>
+          <td>
+            <button :disabled="onProgress"
+                    @click="deleteMedia(media.id)"
+                    class="btn btn-danger"
+            >
+              <font-awesome-icon :icon="['fas', 'trash']" :style="{ color: 'white' , fontSize: '20px'}"/>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
 
-
 <script lang="ts">
-import {Component, Vue} from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import {ApiManager} from "~/core/managers";
 import {DataFormUpload, Media} from "~/core/types";
+import AdminModule from "~/store/admin";
+import {MEDIA_TYPE} from "~/core/enums";
+import AdminLayout from "~/layouts/admin.vue";
 
 @Component({})
 export default class UploadPanel extends Vue {
+  public adminModule: AdminModule = getModule(AdminModule, this.$store)
   public onProgress: boolean = false
   public mediaData: Array<Media> = []
   public dataFormUpload: DataFormUpload = {
     file: null,
     title: '',
-    description: ''
+    description: '',
+    type: '*'
+  }
+  public typeOption = [
+    {value: MEDIA_TYPE.AUDIO, text: MEDIA_TYPE.AUDIO},
+    {value: MEDIA_TYPE.VIDEO, text: MEDIA_TYPE.VIDEO},
+    {value: MEDIA_TYPE.GLTF, text: MEDIA_TYPE.GLTF},
+    {value: MEDIA_TYPE.IMAGE, text: MEDIA_TYPE.IMAGE},
+  ]
+  public filters = {
+    type: {
+      options: [{value: '*', text: 'Tout'}, ...this.typeOption],
+      selected: '*'
+    }
+  }
+
+  public filteredMediaData() {
+    return this.mediaData.filter(media => {
+      return this.filters.type.selected === '*' || (media.type === this.filters.type.selected)
+    })
   }
 
   layout() {
@@ -78,22 +139,21 @@ export default class UploadPanel extends Vue {
   }
 
   async mounted() {
-    ApiManager.setAxios(this.$axios)
-
+    this.adminModule.setBasicMenu()
     await this._syncMediaData()
     this.onProgress = false
   }
 
-  onFileUpload(event: any) {
-    this.dataFormUpload.file = event.target.files[0]
-  }
-
-  async onSubmit(event: any) {
+  async submitForm(event: any) {
+    if (event) {
+      event.preventDefault()
+    }
     if (this.dataFormUpload.file) {
       const formData = new FormData()
       formData.append('media', this.dataFormUpload.file, this.dataFormUpload.file.name)
       formData.append('title', this.dataFormUpload.title)
       formData.append('description', this.dataFormUpload.description)
+      formData.append('type', this.dataFormUpload.type)
 
       try {
         const {data} = await ApiManager.request({
@@ -104,9 +164,12 @@ export default class UploadPanel extends Vue {
 
         await this._syncMediaData()
         this.onProgress = false
-
+        this.$bvModal.hide('modal-upload-media')
+        AdminLayout.displayToast('Succès', 'Media upload avec succès', 'success', this.$bvToast)
       } catch (e) {
         this.onProgress = false
+        this.$bvModal.hide('modal-upload-media')
+        AdminLayout.displayToast('Echec', 'Media upload avec succès', 'danger', this.$bvToast)
       }
     }
   }
@@ -120,10 +183,20 @@ export default class UploadPanel extends Vue {
 
       await this._syncMediaData()
       this.onProgress = false
-
+      AdminLayout.displayToast('Succès', 'Media supprimé avec succès', 'success', this.$bvToast)
     } catch (e) {
       await this._syncMediaData()
       this.onProgress = false
+      AdminLayout.displayToast('Echec', 'Problème lors de la suppression du média', 'danger', this.$bvToast)
+    }
+  }
+
+  resetForm() {
+    this.dataFormUpload = {
+      file: null,
+      title: '',
+      description: '',
+      type: MEDIA_TYPE.VIDEO
     }
   }
 
@@ -140,66 +213,14 @@ export default class UploadPanel extends Vue {
     })
   }
 
+
 }
 </script>
 
-<style lang="scss">
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/tables";
-@import "~bootstrap/scss/buttons";
-@import "~bootstrap/scss/custom-forms";
-@import "~bootstrap/scss/pagination";
-@import "~bootstrap/scss/forms";
-
-.upload-page-container {
-  display: flex;
-  flex-direction: column;
-  //height: 100vh;
-  background-color: #f2f4f6;
-
-  header {
-    box-sizing: border-box;
-    background-color: white;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-
-    h1 {
-      font-size: 25px;
-    }
-  }
-
-  .dashboard {
-    flex: 1;
-    display: flex;
-    box-sizing: border-box;
-    height: calc(100vh - 60px);
-
-    aside {
-      width: 300px;
-      padding: 20px 10px 0 10px;
-      background-color: #2a2d3e;
-      max-width: 20%;
-      color: white;
-
-      h2 {
-        padding: 10px;
-      }
-    }
-
-    .table-container {
-      padding: 20px;
-      box-sizing: border-box;
-      flex: 1;
-      overflow: scroll;
-
-      table {
-        background: white;
-      }
-    }
+<style scoped lang="scss">
+.admin-page-upload {
+  .header-panel {
+    padding-bottom: 20px;
   }
 }
 </style>
