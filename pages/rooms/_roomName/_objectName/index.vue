@@ -48,6 +48,7 @@ export default class ObjectPage extends Vue {
           new ActivitySceneInitializer({canvas: this.$refs.activity.$refs.activitycanvas as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
           SceneManager.ACTIVITY_SCENE.scene.position.set(0,0,-60)
 
+          // SceneManager.ACTIVITY_SCENE.
         }})
     })
   }

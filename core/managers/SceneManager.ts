@@ -2,7 +2,7 @@ import {
   AxesHelper,
   Camera,
   Clock,
-  Euler,
+  Euler, Intersection, Object3D,
   PerspectiveCamera,
   Quaternion,
   Raycaster,
@@ -48,6 +48,7 @@ export default class SceneManager {
   private _rayCaster: Raycaster
   private _stats: Stats | null
   private _defaultRatio: number
+  private readonly _currentIntersect: null
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -90,6 +91,7 @@ export default class SceneManager {
     this._gui = new GUI()
     this._stats = null
     this._defaultRatio = options.defaultRation || 1
+    this._currentIntersect = null
 
     this._onStartCallback = options.onStart || function () {
     }
@@ -371,7 +373,7 @@ export default class SceneManager {
 
     if (this._isRayCasting) {
       this._rayCaster.setFromCamera(this._mousePositions, this._camera)
-      const intersects = this._rayCaster.intersectObjects(this._scene.children)
+      const intersects = this._rayCaster.intersectObjects(this._scene.children,true)
       this._onRayCasterIntersectCallback(this, intersects)
     }
 
@@ -405,6 +407,11 @@ export default class SceneManager {
   get scene(): Scene {
     return this._scene
   }
+
+  get currentIntersect(): any {
+    return this._currentIntersect
+  }
+
 
   get mousePositions(): Vector2 {
     return this._mousePositions

@@ -54,6 +54,18 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
       renderer: renderer,
       defaultRation: 2,
       activateOrbitControl: false,
+      onRayCasterIntersect: (ctx,intersect)=>{
+        if (intersect.length){
+          // need to get objects name
+          if(intersect[0].object.parent?.name === 'crushObject'){
+              console.log(intersect)
+              // SceneManager.ACTIVITY_SCENE.currentIntersect = intersect[0]
+            }
+        }
+        // if(intersect[0].object.parent?.name === 'crushObject'){
+        //   console.log(intersect)
+        // }
+      },
       onRender: (ctx) => {
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
@@ -83,7 +95,8 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    })//.enableStats().enableAxesHelpers(1000)
+    }).enableRayCasting()
+    .enableStats()
 
   }
 
