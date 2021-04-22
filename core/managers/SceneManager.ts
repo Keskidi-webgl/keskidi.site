@@ -33,6 +33,7 @@ export default class SceneManager {
    * Static accessors for scenes instances
    */
   public static GLOBAL_SCENE: SceneManager
+  public static ACTIVITY_SCENE: SceneManager
 
   // - PROPERTIES
   private _canvas: HTMLCanvasElement

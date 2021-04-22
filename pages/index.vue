@@ -10,6 +10,7 @@ import SceneConfig from "~/core/config/scene.config";
 import {INTERACT_POINT_NAME, URL_ROOM_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import SceneModule from "~/store/scene";
+import {Vector3} from "three";
 
 @Component
 export default class HomePage extends Vue {
@@ -30,7 +31,6 @@ export default class HomePage extends Vue {
       this.addInteractionPoints()
     })
   }
-
   beforeDestroy() {
     this.removeInteractionPoints()
   }

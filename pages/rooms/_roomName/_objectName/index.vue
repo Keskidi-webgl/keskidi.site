@@ -1,19 +1,21 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
     <nuxt-link class="interactive-points" to="{{}}"></nuxt-link>
-    <div class="interactive-btn" >Découvrir le mot</div>
-    <activity></activity>
+    <div ref="btn" class="interactive-btn" >Découvrir le mot</div>
+    <activity ref="activity"></activity>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'nuxt-property-decorator'
+import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import activity from "~/components/activity/activity.vue";
 import gsap from 'gsap'
+import ActivitySceneInitializer from "~/core/utils/initializers/ActivitySceneInitializer";
+import SceneModule from "~/store/scene";
 
 @Component({
   components:{
@@ -21,6 +23,7 @@ import gsap from 'gsap'
   }
 })
 export default class ObjectPage extends Vue {
+  public sceneModule = getModule(SceneModule, this.$store)
 
   /**
    * Validate route params
@@ -33,12 +36,14 @@ export default class ObjectPage extends Vue {
     const objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
     SceneManager.GLOBAL_SCENE.goToPresetPosition(objectIdentifier, 1, () => {
     })
-    let activity = document.querySelector('.interactive-btn')
 
-    activity?.addEventListener('click',()=>{
+    this.$refs.btn.addEventListener('click',()=>{
 
       console.log("okokokok")
-      gsap.to('.activity',{translateY:0,duration:1})
+      gsap.to('.activity',{translateY:0,duration:1,onComplete:()=>{
+          new ActivitySceneInitializer({canvas: this.$refs.activity.$refs.activitycanvas as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+          SceneManager.ACTIVITY_SCENE.scene.position.set(0,0,-60)
+        }})
     })
   }
 }
@@ -56,5 +61,6 @@ export default class ObjectPage extends Vue {
   border-radius: 30px;
   background: red;
   color: white;
+  cursor: pointer;
 }
 </style>

@@ -11,7 +11,10 @@ export enum ASSET_TYPE {
  * Name given to gltf asset in order to retrieve it through AssetManager
  */
 export enum GLTF_ASSET {
-  GLOBAL_SCENE= 'globalScene'
+  GLOBAL_SCENE= 'globalScene',
+  ACTIVITY_OBJECT_MOULA= 'moulaObject',
+  ACTIVITY_OBJECT_NOOB= 'noobObject',
+  ACTIVITY_OBJECT_CRUSH= 'crushObject'
 }
 
 /**

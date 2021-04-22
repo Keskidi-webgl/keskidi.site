@@ -1,18 +1,23 @@
 <template>
   <div class="activity">
     <h2 class="activity-title">S'enjailler</h2>
+    <canvas ref="activitycanvas"></canvas>
   </div>
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import SceneModule from "~/store/scene";
+import {GlobalSceneInitializer} from "~/core/utils/initializers";
+import ActivitySceneInitializer from "~/core/utils/initializers/ActivitySceneInitializer";
+import {SceneManager} from "~/core/managers";
 
 @Component({})
 export default class activity extends Vue {
+  public sceneModule = getModule(SceneModule, this.$store)
 
   public mounted() {
-    console.log("eeeeeeee")
+    console.log("activity")
   }
 
 

@@ -17,3 +17,6 @@ export {default as TelevisionCameraPosition} from './mezzanine/TelevisionCameraP
 export {default as PaperCameraPosition} from './bedroom/PaperCameraPosition'
 export {default as TshirtCameraPosition} from './bedroom/TshirtCameraPosition'
 export {default as SkateCameraPosition} from './bedroom/SkateCameraPosition'
+
+// Activity
+export {default as ActivityCameraPosition} from './activity/ActivityCameraPosition'
