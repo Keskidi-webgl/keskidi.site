@@ -128,6 +128,11 @@ export default class UploadPanel extends Vue {
     }
   }
 
+  async mounted() {
+    this.adminModule.setBasicMenu()
+    await this._syncMediaData()
+  }
+
   public filteredMediaData() {
     return this.mediaData.filter(media => {
       return this.filters.type.selected === '*' || (media.type === this.filters.type.selected)
@@ -136,12 +141,6 @@ export default class UploadPanel extends Vue {
 
   layout() {
     return 'admin'
-  }
-
-  async mounted() {
-    this.adminModule.setBasicMenu()
-    await this._syncMediaData()
-    this.onProgress = false
   }
 
   async submitForm(event: any) {
@@ -165,11 +164,11 @@ export default class UploadPanel extends Vue {
         await this._syncMediaData()
         this.onProgress = false
         this.$bvModal.hide('modal-upload-media')
-        AdminLayout.displayToast('Succès', 'Media upload avec succès', 'success', this.$bvToast)
+        AdminLayout.successToast('Media upload avec succès', this.$bvToast)
       } catch (e) {
         this.onProgress = false
         this.$bvModal.hide('modal-upload-media')
-        AdminLayout.displayToast('Echec', 'Media upload avec succès', 'danger', this.$bvToast)
+        AdminLayout.errorToast('Une erreur s\'est produite pendant l\'upload du media ', this.$bvToast)
       }
     }
   }
@@ -183,11 +182,11 @@ export default class UploadPanel extends Vue {
 
       await this._syncMediaData()
       this.onProgress = false
-      AdminLayout.displayToast('Succès', 'Media supprimé avec succès', 'success', this.$bvToast)
+      AdminLayout.successToast('Media supprimé avec succès', this.$bvToast)
     } catch (e) {
       await this._syncMediaData()
       this.onProgress = false
-      AdminLayout.displayToast('Echec', 'Problème lors de la suppression du média', 'danger', this.$bvToast)
+      AdminLayout.errorToast('Problème lors de la suppression du média', this.$bvToast)
     }
   }
 
@@ -204,6 +203,7 @@ export default class UploadPanel extends Vue {
     this.onProgress = true
     const {data} = await this._getAllMedia()
     this.mediaData = data
+    this.onProgress = false
   }
 
   private _getAllMedia() {
@@ -219,8 +219,5 @@ export default class UploadPanel extends Vue {
 
 <style scoped lang="scss">
 .admin-page-upload {
-  .header-panel {
-    padding-bottom: 20px;
-  }
 }
 </style>

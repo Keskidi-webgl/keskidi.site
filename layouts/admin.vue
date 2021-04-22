@@ -28,6 +28,7 @@
 import {Component, getModule, Vue} from "nuxt-property-decorator";
 import AdminModule from "~/store/admin";
 import {ApiManager} from "~/core/managers";
+import {BvToast} from "bootstrap-vue";
 
 @Component({})
 export default class AdminLayout extends Vue {
@@ -43,7 +44,15 @@ export default class AdminLayout extends Vue {
     ApiManager.setAxios(this.$axios)
   }
 
-  public static displayToast(header, message, variant, toastInstance) {
+  public static successToast(message: string, toastInstance: BvToast) {
+    this._displayToast('Succès', message, 'success', toastInstance)
+  }
+
+  public static errorToast(message: string, toastInstance: BvToast) {
+    this._displayToast('Erreur', message, 'error', toastInstance)
+  }
+
+  private static _displayToast(header: string, message: string, variant: string, toastInstance: BvToast) {
     toastInstance.toast(message, {
       title: header,
       variant,
@@ -136,6 +145,10 @@ export default class AdminLayout extends Vue {
         box-sizing: border-box;
         padding: 10px;
         background-color: white;
+
+        .header-panel {
+          padding-bottom: 20px;
+        }
       }
     }
   }

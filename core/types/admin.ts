@@ -1,8 +1,8 @@
-/**
- * Model type for Media
- */
 import {MEDIA_TYPE} from "~/core/enums";
 
+/**
+ * Model type for Media model
+ */
 export type Media = {
   id: number
   description: string
@@ -15,6 +15,15 @@ export type Media = {
 }
 
 /**
+ * Model type for Word model
+ */
+export type Word = {
+  id: number
+  name: string
+  slug: string
+}
+
+/**
  * Data type for upload file media form
  */
 export type DataFormUpload = {
@@ -22,4 +31,11 @@ export type DataFormUpload = {
   title: string
   description: string
   type: string
+}
+
+/**
+ * Data type for word create form
+ */
+export type DataFormCreateWord = {
+  name: string
 }
