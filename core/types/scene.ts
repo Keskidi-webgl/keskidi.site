@@ -1,4 +1,4 @@
-import {Clock, Intersection, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
+import {Clock, Intersection, OrthographicCamera, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
 import SceneManager from "~/core/managers/SceneManager";
 import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 

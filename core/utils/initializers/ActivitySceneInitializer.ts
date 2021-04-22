@@ -56,9 +56,9 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
       activateOrbitControl: false,
       onRender: (ctx) => {
         // Add interactions points tracking
-        // if (ctx.camera instanceof PerspectiveCamera) {
-        //   ctx.camera.updateProjectionMatrix()
-        // }
+        if (ctx.camera instanceof PerspectiveCamera) {
+          ctx.camera.updateProjectionMatrix()
+        }
         // for (const point of this._data.sceneModule.activeInteractionPoints) {
         //   const screenPosition = point.canvasCoords().clone()
         //   screenPosition.project(SceneManager.ACTIVITY_SCENE.camera)
@@ -77,7 +77,7 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
 
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.aspect = ctx.canvas.width / ctx.canvas.height
-          camera.updateProjectionMatrix()
+          ctx.camera.updateProjectionMatrix()
         }
 
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)

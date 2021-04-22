@@ -36,16 +36,39 @@ export default class ObjectPage extends Vue {
     const objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
     SceneManager.GLOBAL_SCENE.goToPresetPosition(objectIdentifier, 1, () => {
     })
+    this.displayActivity()
+    this.switchActivity()
+  }
 
+  displayActivity(){
     this.$refs.btn.addEventListener('click',()=>{
 
       console.log("okokokok")
       gsap.to('.activity',{translateY:0,duration:1,onComplete:()=>{
           new ActivitySceneInitializer({canvas: this.$refs.activity.$refs.activitycanvas as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
           SceneManager.ACTIVITY_SCENE.scene.position.set(0,0,-60)
+
         }})
     })
   }
+
+  switchActivity(){
+    let activities = document.querySelectorAll('.activity-item')
+    let btns = document.querySelectorAll('.activity-item--btn')
+    let currentSlide = 0
+
+    activities.forEach((item,index)=>{
+      item.addEventListener('click',()=>{
+        item.classList.remove('activity-itemActive')
+        if (index<2){
+          activities[index+1].classList.add('activity-itemActive')
+        }
+        console.log(item,index)
+      })
+    })
+
+  }
+
 }
 </script>
 

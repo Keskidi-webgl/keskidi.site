@@ -1,6 +1,22 @@
 <template>
   <div class="activity">
-    <h2 class="activity-title">S'enjailler</h2>
+    <div class="activity-item activity-1 activity-itemActive">
+      <h2 class="activity-item--title">S'enjailler</h2>
+      <span>Pour vous, quel objet représente ce mot ?</span>
+
+      <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
+    </div>
+
+    <div class="activity-item activity-2">
+      <h1>activity 2</h1>
+      <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
+    </div>
+
+    <div class="activity-item activity-3">
+      <h1>activity 3</h1>
+      <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
+    </div>
+
     <canvas ref="activitycanvas"></canvas>
   </div>
 </template>
@@ -20,7 +36,6 @@ export default class activity extends Vue {
     console.log("activity")
   }
 
-
 }
 </script>
 
@@ -33,8 +48,25 @@ export default class activity extends Vue {
   background: white;
   top: 0;
   transform: translateY(100%);
-  &-title{
-    font-size: 40px;
+  padding: 2.5rem;
+  overflow: hidden;
+  &-item{
+    width: 100%;
+    height: 100%;
+    display: none;
+    &--title{
+      font-size: 6rem;
+    }
+    &--btn{
+      padding: 20px;
+      background: red;
+      z-index: 999;
+    }
   }
+  &-itemActive{
+    display: flex;
+    flex-direction: column;
+  }
+
 }
 </style>
