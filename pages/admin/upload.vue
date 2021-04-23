@@ -210,7 +210,7 @@ export default class UploadPanel extends Vue {
 
   private _getAllMedia() {
     return ApiManager.request({
-      url: '/medias?type=video',
+      url: '/medias',
       method: 'GET'
     })
   }

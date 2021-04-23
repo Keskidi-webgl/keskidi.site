@@ -7,11 +7,17 @@
       <b-modal id="modal-create-expression" ref="modal" title="Créer une expression" @show="" @hidden=""
                @ok="createExpression">
         <form ref="form" @submit.stop.prevent="createExpression">
-          <!-- content -->
+          <!-- Content -->
           <b-form-group label="Contenu" label-for="content-input">
             <b-form-textarea id="content-input" v-model="createExpressionFormData.content" required></b-form-textarea>
           </b-form-group>
 
+          <!-- Title file -->
+          <b-form-group label="Titre de l'audio" label-for="content-input">
+            <b-input id="content-input" v-model="createExpressionFormData.file.title" required></b-input>
+          </b-form-group>
+
+          <!-- File -->
           <b-form-group>
             <b-form-file
               v-model="createExpressionFormData.file.data"
@@ -27,9 +33,9 @@
       <b-modal v-if="word.expressions" id="modal-update-expression" ref="modal" title="Modifier l'expression" @show=""
                @hidden="" @ok="updateExpression">
         <form ref="form" @submit.stop.prevent="updateExpression">
-          <!-- Origin -->
-          <b-form-group label="Contenu" label-for="content-input">
-            <b-form-textarea id="content-input" v-model="word.expressions" required></b-form-textarea>
+          <!-- Content -->
+          <b-form-group v-if="expressionToUpdate" label="Contenu" label-for="content-input">
+            <b-form-textarea id="content-input" v-model="expressionToUpdate.content" required></b-form-textarea>
           </b-form-group>
         </form>
       </b-modal>
@@ -43,13 +49,40 @@
         <!-- Header -->
         <div class="expression-infos-header pb-2">
           <h2>Expressions</h2>
-          <b-button v-if="!word.expressions" variant="success" v-b-modal.modal-create-expression>
+          <b-button v-if="" variant="success" v-b-modal.modal-create-expression>
             <font-awesome-icon :icon="['fas', 'plus']" :style="{ color: 'white' , fontSize: '20px'}"/>
           </b-button>
         </div>
         <!-- Content -->
         <div v-if="word.expressions" class="definition-infos-container">
           <!-- @TODO -->
+          <b-card v-for="expression in word.expressions" no-body>
+            <b-list-group flush>
+              <b-list-group-item >
+                <h5>Expression :</h5>
+                {{ expression.content }}
+              </b-list-group-item>
+              <b-list-group-item >
+                <h5>Audio</h5>
+                <audio
+                  controls
+                  :src="expression.audio.url">
+                  Your browser does not support the
+                  <code>audio</code> element.
+                </audio>
+
+              </b-list-group-item>
+            </b-list-group>
+
+            <b-card-footer>
+              <b-button @click="expressionToUpdate = expression" variant="primary" v-b-modal.modal-update-expression>
+                Modifier
+              </b-button>
+              <b-button @click="deleteExpression(expression)" variant="danger">
+                Supprimer
+              </b-button>
+            </b-card-footer>
+          </b-card>
         </div>
       </div>
     </div>
@@ -59,7 +92,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'nuxt-property-decorator'
-import {DataFormUpload, Media, Word, WordExpression} from "~/core/types"
+import {Word, WordExpression} from "~/core/types"
 import {MEDIA_TYPE} from "~/core/enums";
 import {ApiManager} from "~/core/managers";
 
@@ -69,7 +102,7 @@ export default class ExpressionWordPanel extends Vue {
   public createExpressionFormData = {
     content: '',
     file: {
-      title: '',
+      title: `${this.word.name} audio expression`,
       data: null as File | null,
     }
   }
@@ -77,6 +110,8 @@ export default class ExpressionWordPanel extends Vue {
   public updateExpressionFormData = {
     content: '',
   }
+
+  public expressionToUpdate: WordExpression|null = null
 
   /**
    * Call API to create Definition
@@ -89,7 +124,7 @@ export default class ExpressionWordPanel extends Vue {
     audioData.append('type', MEDIA_TYPE.AUDIO)
 
     const {data: newAudioFile} = await ApiManager.request({
-      url: '/medias',
+      url: '/medias/upload',
       method: 'POST',
       data: audioData
     })
@@ -106,15 +141,30 @@ export default class ExpressionWordPanel extends Vue {
   /**
    * Call API to update Definition
    */
-  async updateExpression(expression: WordExpression) {
-    // @TODO
+  async updateExpression() {
+    await ApiManager.request({
+      url: `/words/${this.word.id}/expressions/${this.expressionToUpdate!.id}`,
+      method: 'PUT',
+      data: {
+        id: this.expressionToUpdate!.id,
+        content: this.expressionToUpdate!.content,
+        audio_id: this.expressionToUpdate!.audio!.id
+      },
+    })
+
+    this.$emit('reloadWordData')
   }
 
   /**
    * Call API to delete Definition
    */
   async deleteExpression(expression: WordExpression) {
-    // @TODO
+    await ApiManager.request({
+      url: `/words/${this.word.id}/expressions/${expression.id}`,
+      method: 'DELETE',
+    })
+
+    this.$emit('reloadWordData')
   }
 }
 </script>

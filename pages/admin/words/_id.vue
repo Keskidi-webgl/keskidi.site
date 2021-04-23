@@ -4,6 +4,7 @@
 
     <!-- Header panel -->
     <div v-if="wordData" class="header-panel">
+      <nuxt-link to="/admin/words">Retourner à la liste de mots</nuxt-link>
       <h1>{{ wordData.name.toUpperCase() }}</h1>
     </div>
 
