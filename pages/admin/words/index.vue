@@ -1,5 +1,7 @@
 <template>
   <div class="admin-page admin-page-words-list">
+    <!-- Overlay -->
+    <b-overlay class="absolute-overlay" opacity="1" :show="onProgress" rounded="sm"></b-overlay>
 
     <!-- Header buttons -->
     <b-modal

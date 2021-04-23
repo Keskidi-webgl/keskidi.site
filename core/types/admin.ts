@@ -18,9 +18,22 @@ export type Media = {
  * Model type for Word model
  */
 export type Word = {
-  id: number
-  name: string
-  slug: string
+  id?: number
+  name?: string
+  slug?: string
+  definition?: WordDefinition
+}
+
+/**
+ * Model type for Word model
+ */
+export type WordDefinition = {
+  id?: number
+  gender?: string
+  definition?: string
+  origin?: string
+  phonetic?: string
+  medias?: Array<Media>
 }
 
 /**

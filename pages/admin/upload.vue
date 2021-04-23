@@ -1,7 +1,9 @@
 <template>
   <div class="admin-page admin-page-upload">
+    <!-- Overlay -->
+    <b-overlay class="absolute-overlay" opacity="1" :show="onProgress" rounded="sm"></b-overlay>
 
-    <!-- Header buttons -->
+    <!-- Modal upload -->
     <b-modal
       id="modal-upload-media"
       ref="modal"
@@ -208,7 +210,7 @@ export default class UploadPanel extends Vue {
 
   private _getAllMedia() {
     return ApiManager.request({
-      url: '/medias',
+      url: '/medias?type=video',
       method: 'GET'
     })
   }

@@ -1,0 +1,44 @@
+<template>
+  <nuxt-link :style="style()" class="point point-0" :to="data.url">
+  </nuxt-link>
+
+</template>
+
+
+<script lang="ts">
+import {Component, Prop, Vue} from 'nuxt-property-decorator'
+import {InteractionPointConfig} from "~/core/types";
+
+
+@Component
+export default class DefinitionWordPanel extends Vue {
+
+  @Prop({type: Object, required: true}) readonly data!: InteractionPointConfig
+
+  public mounted() {
+  }
+
+  public style() {
+    return `
+    transform: translateX(${this.data.transformX}px) translateY(${this.data.transformY}px);
+    background-color: ${this.data.isCompleted() ? 'red' : '#00000077'};
+    `
+  }
+}
+</script>
+
+<style scoped>
+.point
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 9;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #00000077;
+  border: 1px solid #ffffff77;
+  cursor: pointer;
+}
+</style>

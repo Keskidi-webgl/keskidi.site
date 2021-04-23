@@ -141,10 +141,12 @@ export default class AdminLayout extends Vue {
       padding-top: 70px;
 
       .admin-page {
+        position: relative;
         margin: 30px;
         box-sizing: border-box;
         padding: 10px;
         background-color: white;
+        min-height: calc(100% - 60px);
 
         .header-panel {
           padding-bottom: 20px;
@@ -152,5 +154,16 @@ export default class AdminLayout extends Vue {
       }
     }
   }
+}
+
+.absolute-overlay {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 </style>
