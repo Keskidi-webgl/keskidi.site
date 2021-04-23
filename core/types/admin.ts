@@ -22,11 +22,10 @@ export type Word = {
   name?: string
   slug?: string
   definition?: WordDefinition
+  home_scenario?: WordHomeScenario
+  expressions?: Array<WordExpression>
 }
 
-/**
- * Model type for Word model
- */
 export type WordDefinition = {
   id?: number
   gender?: string
@@ -36,11 +35,22 @@ export type WordDefinition = {
   medias?: Array<Media>
 }
 
+export type WordHomeScenario = {
+  id?: number
+  content?: string
+}
+
+export type WordExpression = {
+  id?: number
+  content?: string
+  audio?: Media
+}
+
 /**
  * Data type for upload file media form
  */
 export type DataFormUpload = {
-  file: File|null
+  file: File | null
   title: string
   description: string
   type: string
