@@ -44,7 +44,7 @@ export default class ObjectPage extends Vue {
     this.$refs.btn.addEventListener('click',()=>{
 
       console.log("okokokok")
-      gsap.to('.activity',{translateY:0,duration:1,onComplete:()=>{
+      gsap.to('.activity-container',{translateY:0,duration:1,onComplete:()=>{
           new ActivitySceneInitializer({canvas: this.$refs.activity.$refs.activitycanvas as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
           SceneManager.ACTIVITY_SCENE.scene.position.set(0,0,-60)
 
