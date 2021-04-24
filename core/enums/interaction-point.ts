@@ -3,6 +3,7 @@ export enum INTERACT_POINT_NAME {
   BEDROOM= 'intPointBedroom',
   LOUNGE= 'intPointLounge',
   MEZZANINE= 'intPointMezzanine',
+  TOM='intPointTom',
 
   // Mezzanine
   TELEVISION = 'intPointTv',

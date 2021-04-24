@@ -132,22 +132,26 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
+    const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
     console.log(globalSceneGltf)
-    /*
-    const box3 = new Box3().setFromObject(globalSceneGltf.scene)
-    const vector = new Vector3()
-    box3.getCenter(vector)
-    globalSceneGltf.scene.position.set(-vector.x, -vector.y, -vector.z)
-     */
+    console.log(tomGltf)
+
+    // GLOBAL SCENE
     globalSceneGltf.scene.position.set(0, 0, 0)
+
+    // TOM
+    // TODO Voir avec Camille parce j'ai quand même dû scale / up Tom
+    tomGltf.scene.position.set(0, 30, 500)
+    tomGltf.scene.scale.set(0.6,0.6,0.6)
+    tomGltf.scene.rotateY(-90)
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
     SceneManager.GLOBAL_SCENE.scene.traverse( child => {
-
       // @ts-ignore
       if ( child.material ) child.material.metalness = 0;
-
     } );
+
+    SceneManager.GLOBAL_SCENE.scene.add(tomGltf.scene)
   }
 
   /**
