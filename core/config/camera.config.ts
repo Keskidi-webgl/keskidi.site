@@ -8,7 +8,9 @@ import {
   MezzanineCameraPosition,
   NeonCameraPosition, PaperCameraPosition,
   SkateCameraPosition,
-  TelevisionCameraPosition, TshirtCameraPosition,
+  TelevisionCameraPosition,
+  TomCameraPosition,
+  TshirtCameraPosition,
   VinylCameraPosition
 } from "~/core/config/camPositionConfig";
 
@@ -19,6 +21,7 @@ class CameraConfig {
     HomeCameraPosition,
     LoungeCameraPosition,
     MezzanineCameraPosition,
+    TomCameraPosition,
 
     // Lounge
     LoungePosterCameraPosition,

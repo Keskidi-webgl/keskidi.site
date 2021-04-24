@@ -39,12 +39,14 @@ export default class HomePage extends Vue {
     this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.BEDROOM)
     this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.LOUNGE)
     this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.MEZZANINE)
+    this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.TOM)
   }
 
   removeInteractionPoints() {
     this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.BEDROOM)
     this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.LOUNGE)
     this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.MEZZANINE)
+    this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.TOM)
   }
 }
 </script>

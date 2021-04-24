@@ -10,6 +10,7 @@ import {
   PaperInteractPoint,
   SkateInteractPoint,
   TelevisionInteractPoint,
+  TomInteractPoint,
   TshirtInteractPoint,
   VinylInteractPoint
 } from "~/core/config/interactPointsConfig";
@@ -27,6 +28,7 @@ class SceneConfig {
     BedroomInteractPoint,
     LoungeInteractPoint,
     MezzanineInteractPoint,
+    TomInteractPoint,
 
     // Mezzanine
     NeonInteractPoint,
