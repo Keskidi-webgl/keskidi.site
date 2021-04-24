@@ -2,14 +2,21 @@
 
     <!--    composant activité 1-->
     <div class="activity-item activity-1 activity-itemActive">
-      <h2 class="activity-item--title">S'enjailler</h2>
-      <span>Pour vous, quel objet représente ce mot ?</span>
+      <div class="activity-itemInfos">
+        <span>Pour vous, quel objet représente ce mot ?</span>
+        <canvas ref="activity_1_tom"  class="activity-1-tom"></canvas>
+      </div>
 
-      <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
-      <canvas class="activity-1-objects"></canvas>
-      <canvas class="activity-1-tom"></canvas>
+      <div class="activity-itemPractice">
+        <h2 class="activity-item--title">S'enjailler</h2>
+        <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
+        <canvas ref="activity_1_objects" class="activity-1-objects"></canvas>
 
-      <activity1-result></activity1-result>
+      </div>
+
+
+
+      <activity1-result style="display: none"></activity1-result>
       <!--    composant enfant activité   overlay resultat avec le canvas cuisse de poulet -->
     </div>
 
@@ -18,15 +25,31 @@
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import activity1Result from "~/components/activity/activity-1/activity-1-result.vue";
+import SceneModule from "~/store/scene";
+import Activity_1_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_1_0bjectsInitializer";
+import {SceneManager} from "~/core/managers";
+import Activity_1_TomInitializer from "~/core/utils/initializers/activities/Activity_1_TomInitializer";
 @Component({
   components:{
     activity1Result
   }
 })
 export default class activity1 extends Vue {
+  public sceneModule = getModule(SceneModule, this.$store)
 
   public mounted() {
     console.log("activity1")
+
+    /// object scene
+    new Activity_1_0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0,0,-60)
+
+
+
+    // character scene
+    new Activity_1_TomInitializer({canvas: this.$refs.activity_1_tom as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    SceneManager.ACTIVITY_1_TOM.scene.position.set(10,-5,-10)
+
   }
 
 }
@@ -45,6 +68,24 @@ export default class activity1 extends Vue {
     padding: 2.5rem;
     overflow: hidden;
   }
+  &-itemInfos{
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(107.28deg, #FF6644 29.48%, #FF9D6F 100%);
+    position: relative;
+    .activity-1-tom{
+      position: absolute;
+    }
+  }
+  &-itemPractice{
+    width: 70%;
+    height: 100%;
+    position: relative;
+    .activity-1-objects{
+      position: absolute;
+    }
+
+  }
   &-item{
     width: 100%;
     height: 100%;
@@ -56,11 +97,14 @@ export default class activity1 extends Vue {
       padding: 20px;
       background: red;
       z-index: 999;
+      position: fixed;
+      top: 30px;
+      width: 100px;
     }
   }
   &-itemActive{
     display: flex;
-    flex-direction: column;
+    flex-direction: row!important;
   }
 
 }

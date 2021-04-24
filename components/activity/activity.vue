@@ -4,45 +4,26 @@
 <!-- composant progress-bar    -->
 
     <activity1></activity1>
-<!--    composant activité 1-->
-<!--    <div class="activity-item activity-1 activity-itemActive">-->
-<!--      <h2 class="activity-item&#45;&#45;title">S'enjailler</h2>-->
-<!--      <span>Pour vous, quel objet représente ce mot ?</span>-->
-
-<!--      <button class="activity-item&#45;&#45;btn"> ACTIVITE SUIVANTE</button>-->
-<!--&lt;!&ndash;   objets    <canvas></canvas>&ndash;&gt;-->
-<!--&lt;!&ndash;   TOM   <canvas></canvas>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    composant enfant activité   overlay resultat avec le canvas cuisse de poulet &ndash;&gt;-->
-<!--    </div>-->
-
-    <div class="activity-item activity-2">
-      <h1>activity 2</h1>
-      <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
-    </div>
-
-    <div class="activity-item activity-3">
-      <h1>activity 3</h1>
-      <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
-    </div>
+    <activity2></activity2>
+    <activity3></activity3>
 
 <!--  components  conclusion progression -->
 
-    <canvas ref="activitycanvas"></canvas>
+<!--    <canvas ref="activitycanvas"></canvas>-->
   </div>
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import SceneModule from "~/store/scene";
-import {GlobalSceneInitializer} from "~/core/utils/initializers";
-import ActivitySceneInitializer from "~/core/utils/initializers/ActivitySceneInitializer";
-import {SceneManager} from "~/core/managers";
 import activity1 from "~/components/activity/activity-1/activity-1.vue";
-
+import activity2 from "~/components/activity/activity-2/activity-2.vue";
+import activity3 from "~/components/activity/activity-3/activity-3.vue";
 @Component({
   components:{
-    activity1
+    activity1,
+    activity2,
+    activity3
   }
 })
 export default class activity extends Vue {

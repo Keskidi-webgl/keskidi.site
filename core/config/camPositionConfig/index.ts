@@ -19,4 +19,4 @@ export {default as TshirtCameraPosition} from './bedroom/TshirtCameraPosition'
 export {default as SkateCameraPosition} from './bedroom/SkateCameraPosition'
 
 // Activity
-export {default as ActivityCameraPosition} from './activity/ActivityCameraPosition'
+export {default as ActivityCameraPosition} from './activities/ActivityCameraPosition'

@@ -45,10 +45,11 @@ export default class ObjectPage extends Vue {
 
       console.log("okokokok")
       gsap.to('.activity-container',{translateY:0,duration:1,onComplete:()=>{
-          new ActivitySceneInitializer({canvas: this.$refs.activity.$refs.activitycanvas as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
-          SceneManager.ACTIVITY_SCENE.scene.position.set(0,0,-60)
+          // new ActivitySceneInitializer({canvas: this.$refs.activity.$refs.activitycanvas as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+          // SceneManager.ACTIVITY_SCENE.scene.position.set(0,0,-60)
 
           // SceneManager.ACTIVITY_SCENE.
+          SceneManager.GLOBAL_SCENE.pause()
         }})
     })
   }
@@ -59,7 +60,7 @@ export default class ObjectPage extends Vue {
     let currentSlide = 0
 
     activities.forEach((item,index)=>{
-      item.addEventListener('click',()=>{
+      btns[index].addEventListener('click',()=>{
         item.classList.remove('activity-itemActive')
         if (index<2){
           activities[index+1].classList.add('activity-itemActive')

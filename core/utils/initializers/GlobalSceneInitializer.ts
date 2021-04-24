@@ -55,6 +55,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       activateOrbitControl: false,
       onRender: (ctx) => {
         // Add interactions points tracking
+        // console.log("ekip")
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.updateProjectionMatrix()
         }

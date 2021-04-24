@@ -35,8 +35,11 @@ class CameraConfig {
     SkateCameraPosition,
     TshirtCameraPosition,
 
-    // Activity
+    //🚨🚨 Activity OLD🚨🚨
     ActivityCameraPosition
+
+
+    // Activities
   ]
 }
 

@@ -35,6 +35,21 @@ export default class SceneManager {
   public static GLOBAL_SCENE: SceneManager
   public static ACTIVITY_SCENE: SceneManager
 
+  // Activity 1 Accessors
+  public static ACTIVITY_1_OBJECTS: SceneManager
+  public static ACTIVITY_1_TOM: SceneManager
+  public static ACTIVITY_1_RESULTS: SceneManager
+
+  // Activity 2 Accessors
+  public static ACTIVITY_2_OBJECTS: SceneManager
+
+  // Activity 3 Accessors
+  public static ACTIVITY_3_OBJECTS: SceneManager
+  public static ACTIVITY_3_TOM: SceneManager
+  public static ACTIVITY_3_RESULTS: SceneManager
+
+
+
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
   private _camera: Camera
@@ -48,7 +63,7 @@ export default class SceneManager {
   private _rayCaster: Raycaster
   private _stats: Stats | null
   private _defaultRatio: number
-  private readonly _currentIntersect: null
+  private _currentIntersect: null
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -436,4 +451,10 @@ export default class SceneManager {
   get defaultRatio() {
     return this._defaultRatio
   }
+
+  // setters
+  set currentIntersect(currentIntersect:any) {
+    this._currentIntersect = currentIntersect
+  }
+
 }
