@@ -50,7 +50,9 @@
 
     <!-- Header buttons -->
     <div class="header-panel">
+      <!--
       <b-button variant="success" v-b-modal.modal-upload-media>Upload un média</b-button>
+      -->
 
       <b-form-radio-group
         id="btn-radios-1"
@@ -68,29 +70,34 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Titre</th>
+          <th scope="col">Type</th>
           <th scope="col">Description</th>
           <th scope="col">Date upload</th>
           <th scope="col">Taille</th>
           <th scope="col">URL</th>
+          <!--
           <th scope="col">Actions</th>
+          -->
         </tr>
         </thead>
         <tbody>
-        <tr v-for="media in filteredMediaData()">
+        <tr v-for="media in filteredMediaData()" :key="media.id">
           <th scope="row">{{ media.id }}</th>
           <td>{{ media.title }}</td>
+          <td>
+            <font-awesome-icon :id="`icon-media-${media.id}`" v-b-tooltip.hover :title="media.type" :icon="['fas', iconMediaType(media.type)]" :style="{ color: 'black' , fontSize: '25px'}"/>
+          </td>
           <td>{{ media.description }}</td>
           <td>{{ media.uploaded_time }}</td>
           <td>{{ media.size }} kb</td>
           <td><a :href="media.url">{{ media.url }}</a></td>
+          <!--
           <td>
-            <button :disabled="onProgress"
-                    @click="deleteMedia(media.id)"
-                    class="btn btn-danger"
-            >
+            <button :disabled="onProgress" @click="deleteMedia(media.id)" class="btn btn-danger">
               <font-awesome-icon :icon="['fas', 'trash']" :style="{ color: 'white' , fontSize: '20px'}"/>
             </button>
           </td>
+          -->
         </tr>
         </tbody>
       </table>
@@ -105,9 +112,10 @@ import {DataFormUpload, Media} from "~/core/types";
 import AdminModule from "~/store/admin";
 import {MEDIA_TYPE} from "~/core/enums";
 import AdminLayout from "~/layouts/admin.vue";
+import Helpers from "~/core/utils/helpers";
 
 @Component({})
-export default class UploadPanel extends Vue {
+export default class MediasPanel extends Vue {
   public adminModule: AdminModule = getModule(AdminModule, this.$store)
   public onProgress: boolean = false
   public mediaData: Array<Media> = []
@@ -128,6 +136,10 @@ export default class UploadPanel extends Vue {
       options: [{value: '*', text: 'Tout'}, ...this.typeOption],
       selected: '*'
     }
+  }
+
+  public iconMediaType(mediaType: MEDIA_TYPE) {
+    return Helpers.mediaTypeToIcon(mediaType)
   }
 
   async mounted() {

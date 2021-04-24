@@ -56,7 +56,7 @@
         </div>
         <!-- Content -->
         <div v-if="word.expressions" class="definition-infos-container">
-          <b-card v-for="expression in word.expressions" no-body>
+          <b-card v-for="expression in word.expressions" :key="expression.id" no-body>
             <b-list-group flush>
               <b-list-group-item >
                 <p class="font-weight-bold">{{ expression.content }}</p>

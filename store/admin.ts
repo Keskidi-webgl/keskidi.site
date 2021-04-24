@@ -21,15 +21,20 @@ export default class AdminModule extends VuexModule {
         icon: 'home'
       },
       {
-        name: 'Upload',
-        to: '/admin/upload',
-        icon: 'upload'
+        name: 'GLTF',
+        to: '/admin/gltf',
+        icon: 'cubes'
       },
       {
         name: 'Words',
         to: '/admin/words',
         icon: 'align-left'
-      }
+      },
+      {
+        name: 'Medias',
+        to: '/admin/medias',
+        icon: 'upload'
+      },
     ]
   }
 

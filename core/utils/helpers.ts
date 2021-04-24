@@ -1,4 +1,6 @@
 import {Vector2} from "three";
+import * as punycode from "punycode";
+import {MEDIA_TYPE} from "~/core/enums";
 
 export default class Helpers {
 
@@ -18,4 +20,28 @@ export default class Helpers {
       height: window.innerHeight
     }
   }
+
+  /**
+   * Return icon of media type
+   */
+  public static mediaTypeToIcon(mediaType: MEDIA_TYPE) {
+    let icon = ''
+    switch (mediaType) {
+      case MEDIA_TYPE.AUDIO:
+        icon = 'file-audio'
+        break;
+      case MEDIA_TYPE.VIDEO:
+        icon = 'file-video'
+        break;
+      case MEDIA_TYPE.GLTF:
+        icon = 'cubes'
+        break;
+      case MEDIA_TYPE.IMAGE:
+        icon = 'file-image'
+        break;
+    }
+
+    return icon
+  }
+
 }

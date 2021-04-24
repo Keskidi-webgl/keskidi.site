@@ -174,7 +174,7 @@
         <div v-if="word.definition && word.definition.medias.length" class="definition-media-container">
           <b-card no-body>
             <b-tabs card>
-              <b-tab :title="`Media n°${media.order} - (${media.type})`" v-for="media in word.definition.medias" active>
+              <b-tab :title="`Media n°${media.order} - (${media.type})`" v-for="media in word.definition.medias" :key="media.id" active>
                 <b-card-text>
                   <h5>Titre</h5>
                   <p>{{ media.title }}</p>

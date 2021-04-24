@@ -44,7 +44,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="word in wordsData">
+        <tr v-for="word in wordsData" :key="word.id">
           <th scope="row">{{ word.id }}</th>
           <td><span @input="test(word)">{{ word.name }}</span></td>
           <td>{{ word.slug }}</td>
@@ -123,9 +123,9 @@ export default class WordListPage extends Vue {
         data: this.dataFormCreate
       })
       await this.syncWordData()
-      AdminLayout.successToast('Mot créé avec succès', this.$bvToast)
+      AdminLayout.successToast(this.$bvToast)
     } catch (error) {
-      AdminLayout.errorToast('Une erreur s\'est produite la création du mot', this.$bvToast)
+      AdminLayout.errorToast(this.$bvToast)
     }
     this.onProgress = false
   }
@@ -139,9 +139,9 @@ export default class WordListPage extends Vue {
         data: word
       })
       await this.syncWordData()
-      AdminLayout.successToast('Mot mis à jour avec succès', this.$bvToast)
+      AdminLayout.successToast(this.$bvToast)
     } catch (error) {
-      AdminLayout.errorToast('Une erreur s\'est produite durant la mise à jour du mot', this.$bvToast)
+      AdminLayout.errorToast(this.$bvToast)
     }
 
     this.onProgress = false
@@ -155,9 +155,9 @@ export default class WordListPage extends Vue {
         method: 'DELETE',
       })
       this.wordsData = this.wordsData.filter(word => word.id !== wordToDelete.id)
-      AdminLayout.successToast('Mot mis supprimé avec succès', this.$bvToast)
+      AdminLayout.successToast(this.$bvToast)
     } catch (error) {
-      AdminLayout.errorToast('Une erreur s\'est produite durant la suppression du mot', this.$bvToast)
+      AdminLayout.errorToast(this.$bvToast)
     }
     this.onProgress = false
   }
