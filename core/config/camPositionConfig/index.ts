@@ -3,6 +3,7 @@ export {default as MezzanineCameraPosition} from './global/MezzanineCameraPositi
 export {default as HomeCameraPosition} from './global/HomeCameraPosition'
 export {default as BedroomCameraPosition} from './global/BedroomCameraPosition'
 export {default as LoungeCameraPosition} from './global/LoungeCameraPosition'
+export {default as TomCameraPosition} from './global/TomCameraPosition'
 
 // Lounge
 export {default as MagazineCameraPosition} from './lounge/MagazineCameraPosition'

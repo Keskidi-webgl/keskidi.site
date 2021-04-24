@@ -2,6 +2,7 @@
 export {default as BedroomInteractPoint} from './global/BedroomInteractPoint'
 export {default as LoungeInteractPoint} from './global/LoungeInteractPoint'
 export {default as MezzanineInteractPoint} from './global/MezzanineInteractPoint'
+export {default as TomInteractPoint} from './global/TomInteractPoint'
 
 // MEZZANINE
 export {default as NeonInteractPoint} from './mezzanine/NeonInteractPoint'
