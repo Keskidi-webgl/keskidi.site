@@ -20,7 +20,7 @@
         <form ref="form" @submit.stop.prevent="updateHomeScenario">
           <!-- Origin -->
           <b-form-group label="Contenu" label-for="content-input">
-            <b-form-textarea id="content-input" v-model="word.home_scenario" required></b-form-textarea>
+            <b-form-textarea id="content-input" v-model="word.home_scenario.content" required></b-form-textarea>
           </b-form-group>
         </form>
       </b-modal>
