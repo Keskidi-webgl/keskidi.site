@@ -121,7 +121,7 @@ export default class ExpressionWordPanel extends Vue {
       audioData.append('type', MEDIA_TYPE.AUDIO)
 
       const {data: newAudioFile} = await ApiManager.request({
-        url: '/medias/upload',
+        url: '/medias/upload?withHashName',
         method: 'POST',
         data: audioData
       })

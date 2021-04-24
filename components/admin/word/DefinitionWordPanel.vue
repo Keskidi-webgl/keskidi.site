@@ -306,7 +306,7 @@ export default class DefinitionWordPanel extends Vue {
       mediaData.append('type', this.addMediaDefinitionDataForm.mediaType)
 
       const {data: newMediaDefinition} = await ApiManager.request({
-        url: '/medias/upload',
+        url: '/medias/upload?withHashName',
         method: 'POST',
         data: mediaData
       })

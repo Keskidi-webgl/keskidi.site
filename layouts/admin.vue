@@ -10,7 +10,8 @@
     <section>
       <aside class="admin-left-menu">
         <div class="menu-link-container">
-          <nuxt-link exact v-for="link in adminModule.adminMenu.links" class="menu-link" :to="link.to">
+          <nuxt-link exact v-for="(link, index) in adminModule.adminMenu.links" :key="index" class="menu-link"
+                     :to="link.to">
             <font-awesome-icon :icon="['fas', link.icon]" :style="{ color: 'white' , fontSize: '20px'}"/>
             <span class="menu-link-text">{{ link.name }}</span>
           </nuxt-link>
