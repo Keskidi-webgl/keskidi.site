@@ -34,6 +34,12 @@
       </ExpressionWordPanel>
 
       <!-- Activity Data -->
+      <ActivityDataWordPanel
+        class="mb-3"
+        @reloadWordData="loadDataWord"
+        v-if="wordData"
+        :word="wordData">
+      </ActivityDataWordPanel>
     </div>
   </div>
 </template>
@@ -46,12 +52,14 @@ import {ApiManager} from "~/core/managers";
 import DefinitionWordPanel from "~/components/admin/word/DefinitionWordPanel.vue";
 import HomeScenarioWordPanel from "~/components/admin/word/HomeScenarioWordPanel.vue";
 import ExpressionWordPanel from "~/components/admin/word/ExpressionWordPanel.vue";
+import ActivityDataWordPanel from "~/components/admin/word/ActivityDataWordPanel.vue";
 
 @Component({
   components: {
     DefinitionWordPanel,
     HomeScenarioWordPanel,
-    ExpressionWordPanel
+    ExpressionWordPanel,
+    ActivityDataWordPanel
   }
 })
 export default class WordPage extends Vue {

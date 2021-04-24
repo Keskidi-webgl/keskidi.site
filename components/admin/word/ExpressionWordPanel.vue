@@ -55,22 +55,15 @@
         </div>
         <!-- Content -->
         <div v-if="word.expressions" class="definition-infos-container">
-          <!-- @TODO -->
           <b-card v-for="expression in word.expressions" no-body>
             <b-list-group flush>
               <b-list-group-item >
                 <h5>Expression :</h5>
-                {{ expression.content }}
-              </b-list-group-item>
-              <b-list-group-item >
-                <h5>Audio</h5>
-                <audio
-                  controls
-                  :src="expression.audio.url">
+                <p>{{ expression.content }}</p>
+                <audio controls :src="expression.audio.url">
                   Your browser does not support the
                   <code>audio</code> element.
                 </audio>
-
               </b-list-group-item>
             </b-list-group>
 

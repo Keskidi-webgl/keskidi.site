@@ -24,6 +24,7 @@ export type Word = {
   definition?: WordDefinition
   home_scenario?: WordHomeScenario
   expressions?: Array<WordExpression>
+  activity_data?: WordActivityData
 }
 
 export type WordDefinition = {
@@ -44,6 +45,17 @@ export type WordExpression = {
   id?: number
   content?: string
   audio?: Media
+}
+
+export type WordActivityData = {
+  id?: number
+  object_one?: string
+  object_two?: string
+  object_three?: string
+  object_one_description?: string
+  object_two_description?: string
+  object_three_description?: string
+  good_object?: string
 }
 
 /**
