@@ -1,5 +1,6 @@
 <template>
   <div>
+    <b-overlay class="absolute-overlay" opacity="1" :show="onProgress" rounded="sm"></b-overlay>
     <!-- Modal container -->
     <div v-if="word" class="definition-modal-container">
       <!-- Create definition modal -->
@@ -177,8 +178,12 @@
                 <b-card-text>
                   <h5>Titre</h5>
                   <p>{{ media.title }}</p>
-
-                  {{ media.url }}
+                  <h5>Source</h5>
+                  <p>{{ media.source }}</p>
+                  <h5>Légende</h5>
+                  <p>{{ media.caption }}</p>
+                  <h5>Media</h5>
+                  <a :href="media.url" target="_blank">Cliquer ici pour voir</a>
                 </b-card-text>
                 <div>
                   <b-button @click="mediaDefinitionToUpdate = media" variant="primary" v-b-modal.modal-update-definition-media>
@@ -203,10 +208,12 @@ import {Component, Prop, Vue} from 'nuxt-property-decorator'
 import {DefinitionMedia, Word} from "~/core/types";
 import {ApiManager} from "~/core/managers";
 import {MEDIA_TYPE} from "~/core/enums";
+import AdminLayout from "~/layouts/admin.vue";
 
 @Component
 export default class DefinitionWordPanel extends Vue {
   @Prop({type: Object, required: true}) readonly word!: Word
+  public onProgress: boolean = false
   public createDefinitionDataForm = {
     gender: '',
     phonetic: '',
@@ -234,92 +241,135 @@ export default class DefinitionWordPanel extends Vue {
    * Call API to create Definition
    */
   async createDefinition() {
-    await ApiManager.request({
-      url: `/words/${this.word.id}/definitions`,
-      method: 'POST',
-      data: this.createDefinitionDataForm
-    })
-    this.$emit('reloadWordData')
+    this.onProgress = true
+    try {
+      const {data: definitionCreated} = await ApiManager.request({
+        url: `/words/${this.word.id}/definitions`,
+        method: 'POST',
+        data: this.createDefinitionDataForm
+      })
+      this.word.definition = definitionCreated
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+    this.onProgress = false
   }
 
   /**
    * Call API to update Definition
    */
   async updateDefinition() {
-    await ApiManager.request({
-      url: `/words/${this.word.id}/definitions`,
-      method: 'PUT',
-      data: this.word.definition
-    })
-    this.$emit('reloadWordData')
+    this.onProgress = true
+    try {
+      const {data: definitionUpdated} = await ApiManager.request({
+        url: `/words/${this.word.id}/definitions`,
+        method: 'PUT',
+        data: this.word.definition
+      })
+      this.word.definition = definitionUpdated
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+    this.onProgress = false
   }
 
   /**
    * Call API to delete Definition
    */
   async deleteDefinition() {
-    await ApiManager.request({
-      url: `/words/${this.word.id}/definitions`,
-      method: 'DELETE',
-    })
-    this.$emit('reloadWordData')
+    this.onProgress = true
+    try {
+      await ApiManager.request({
+        url: `/words/${this.word.id}/definitions`,
+        method: 'DELETE',
+      })
+      this.word.definition = null
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+    this.onProgress = false
   }
 
   /**
    * Call API to add Media Definition
    */
   async addMediaDefinition() {
-    const mediaData = new FormData()
-    mediaData.append('media', this.addMediaDefinitionDataForm.file!, this.addMediaDefinitionDataForm.file!.name)
-    mediaData.append('title', this.addMediaDefinitionDataForm.title)
-    mediaData.append('description', `Media for definition of word ${this.word.name}`)
-    mediaData.append('type', this.addMediaDefinitionDataForm.mediaType)
+    this.onProgress = true
+    try {
+      const mediaData = new FormData()
+      mediaData.append('media', this.addMediaDefinitionDataForm.file!, this.addMediaDefinitionDataForm.file!.name)
+      mediaData.append('title', this.addMediaDefinitionDataForm.title)
+      mediaData.append('description', `Media for definition of word ${this.word.name}`)
+      mediaData.append('type', this.addMediaDefinitionDataForm.mediaType)
 
-    const {data: newMediaDefinition} = await ApiManager.request({
-      url: '/medias/upload',
-      method: 'POST',
-      data: mediaData
-    })
+      const {data: newMediaDefinition} = await ApiManager.request({
+        url: '/medias/upload',
+        method: 'POST',
+        data: mediaData
+      })
 
-    await ApiManager.request({
-      url: `/wordDefinitions/${this.word.definition!.id}/medias`,
-      method: 'POST',
-      data: {
-        media_id: newMediaDefinition.id,
-        order: this.addMediaDefinitionDataForm.order,
-        source: this.addMediaDefinitionDataForm.source,
-        caption: this.addMediaDefinitionDataForm.caption
-      }
-    })
-    this.$emit('reloadWordData')
+      const {data: createdMediaDefinition} = await ApiManager.request({
+        url: `/wordDefinitions/${this.word.definition!.id}/medias`,
+        method: 'POST',
+        data: {
+          media_id: newMediaDefinition.id,
+          order: this.addMediaDefinitionDataForm.order,
+          source: this.addMediaDefinitionDataForm.source,
+          caption: this.addMediaDefinitionDataForm.caption
+        }
+      })
+      this.word.definition?.medias?.push(createdMediaDefinition)
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+
+    this.onProgress = false
   }
 
   /**
    * Call API to update Media Definition
    */
   async updateMediaDefinition() {
-    await ApiManager.request({
-      url: `/wordDefinitions/${this.word.definition!.id}/medias`,
-      method: 'PUT',
-      data: {
-        media_id: this.mediaDefinitionToUpdate!.id,
-        order: this.mediaDefinitionToUpdate!.order,
-        source: this.mediaDefinitionToUpdate!.source,
-        caption: this.mediaDefinitionToUpdate!.caption
-      }
-    })
+    this.onProgress = true
+    try {
+      const {data: updateMediaDefinition} = await ApiManager.request({
+        url: `/wordDefinitions/${this.word.definition!.id}/medias`,
+        method: 'PUT',
+        data: {
+          media_id: this.mediaDefinitionToUpdate!.id,
+          order: this.mediaDefinitionToUpdate!.order,
+          source: this.mediaDefinitionToUpdate!.source,
+          caption: this.mediaDefinitionToUpdate!.caption
+        }
+      })
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
     this.$emit('reloadWordData')
+    this.onProgress = false
   }
 
   /**
    * Call API to delete Media Definition
    */
-  async deleteMediaDefinition(media: DefinitionMedia) {
-    await ApiManager.request({
-      url: `/wordDefinitions/${this.word.definition!.id}/medias/${media.id}`,
-      method: 'DELETE',
-    })
-    this.$emit('reloadWordData')
+  async deleteMediaDefinition(mediaToDelete: DefinitionMedia) {
+    this.onProgress = true
+    try {
+      await ApiManager.request({
+        url: `/wordDefinitions/${this.word.definition!.id}/medias/${mediaToDelete.id}`,
+        method: 'DELETE',
+      })
+      this.word.definition!.medias = this.word.definition!.medias!.filter(media => media.id !== mediaToDelete.id)
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+    this.onProgress = false
   }
 
 }

@@ -36,10 +36,10 @@ export type Word = {
   id?: number
   name?: string
   slug?: string
-  definition?: WordDefinition
-  home_scenario?: WordHomeScenario
-  expressions?: Array<WordExpression>
-  activity_data?: WordActivityData
+  definition: WordDefinition | null
+  home_scenario?: WordHomeScenario | null
+  expressions: Array<WordExpression>
+  activity_data: WordActivityData | null
 }
 
 export type WordDefinition = {
