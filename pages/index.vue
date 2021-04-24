@@ -1,6 +1,6 @@
 <template>
   <div class="page-container" data-namespace="home">
-    <InteractionPoints :data="point" v-for="(point, index) in sceneModule.activeInteractionPoints" v-bind:key="index"/>
+    <InteractionPoints :data="point" v-for="(point, index) in sceneModule.activeInteractionPoints" :key="index"/>
   </div>
 </template>
 
