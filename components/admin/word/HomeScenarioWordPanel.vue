@@ -1,5 +1,6 @@
 <template>
   <div>
+    <b-overlay class="absolute-overlay" opacity="1" :show="onProgress" rounded="sm"></b-overlay>
     <!-- Modal container -->
     <div v-if="word" class="home-scenario-modal-container">
 
@@ -68,10 +69,12 @@
 import {Component, Prop, Vue} from 'nuxt-property-decorator'
 import {Word} from "~/core/types";
 import {ApiManager} from "~/core/managers";
+import AdminLayout from "~/layouts/admin.vue";
 
 @Component
 export default class HomeScenarioWordPanel extends Vue {
   @Prop({type: Object, required: true}) readonly word!: Word
+  public onProgress: boolean = false
   public createHomeScenarioDataForm = {
     content: '',
   }
@@ -80,35 +83,58 @@ export default class HomeScenarioWordPanel extends Vue {
    * Call API to create Definition
    */
   async createHomeScenario() {
-    await ApiManager.request({
-      url: `/words/${this.word.id}/homeScenarios`,
-      method: 'POST',
-      data: this.createHomeScenarioDataForm
-    })
-    this.$emit('reloadWordData')
+
+    this.onProgress = true
+    try {
+      const {data: createdDomeScenario} = await ApiManager.request({
+        url: `/words/${this.word.id}/homeScenarios`,
+        method: 'POST',
+        data: this.createHomeScenarioDataForm
+      })
+      this.word.home_scenario = createdDomeScenario
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+    this.onProgress = false
   }
 
   /**
    * Call API to update Definition
    */
   async updateHomeScenario() {
-    await ApiManager.request({
-      url: `/words/${this.word.id}/homeScenarios`,
-      method: 'PUT',
-      data: this.word.home_scenario
-    })
-    this.$emit('reloadWordData')
+    this.onProgress = true
+    try {
+      const {data: updatedHomeScenario} = await ApiManager.request({
+        url: `/words/${this.word.id}/homeScenarios`,
+        method: 'PUT',
+        data: this.word.home_scenario
+      })
+      this.word.home_scenario = updatedHomeScenario
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+
+    this.onProgress = false
   }
 
   /**
    * Call API to delete Definition
    */
   async deleteHomeScenario() {
-    await ApiManager.request({
-      url: `/words/${this.word.id}/homeScenarios`,
-      method: 'DELETE',
-    })
-    this.$emit('reloadWordData')
+    this.onProgress = true
+    try {
+      await ApiManager.request({
+        url: `/words/${this.word.id}/homeScenarios`,
+        method: 'DELETE',
+      })
+      this.word.home_scenario = null
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+    this.onProgress = false
   }
 }
 </script>
