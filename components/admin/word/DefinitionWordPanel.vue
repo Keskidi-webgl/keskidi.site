@@ -163,19 +163,21 @@
       <div class="definition-media">
         <!-- Header -->
         <div class="definition-media-header pb-2">
-          <h2>Medias</h2>
-          <b-button v-if="word.definition.medias" variant="success" v-b-modal.modal-add-definition-media>
+          <h2>Medias de la définition</h2>
+          <p v-if="!word.definition">Ajouter une définition avant de créer un média</p>
+          <b-button v-if="word.definition" variant="success" v-b-modal.modal-add-definition-media>
             <font-awesome-icon :icon="['fas', 'plus']" :style="{ color: 'white' , fontSize: '20px'}"/>
           </b-button>
         </div>
         <!-- Content -->
-        <div v-if="word.definition.medias.length" class="definition-media-container">
+        <div v-if="word.definition && word.definition.medias.length" class="definition-media-container">
           <b-card no-body>
             <b-tabs card>
-              <b-tab :title="`Media n°${media.order}`" v-for="media in word.definition.medias" active>
+              <b-tab :title="`Media n°${media.order} - (${media.type})`" v-for="media in word.definition.medias" active>
                 <b-card-text>
-                  {{ media.title }}
-                  {{ media.type }}
+                  <h5>Titre</h5>
+                  <p>{{ media.title }}</p>
+
                   {{ media.url }}
                 </b-card-text>
                 <div>
@@ -324,4 +326,17 @@ export default class DefinitionWordPanel extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.panel-container-definition {
+  display: flex;
+  justify-content: space-between;
+
+  .definition-infos {
+    flex: 1;
+    padding-right: 50px;
+  }
+
+  .definition-media {
+    flex: 1;
+  }
+}
 </style>

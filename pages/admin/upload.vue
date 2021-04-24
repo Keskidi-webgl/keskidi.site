@@ -166,11 +166,11 @@ export default class UploadPanel extends Vue {
         await this._syncMediaData()
         this.onProgress = false
         this.$bvModal.hide('modal-upload-media')
-        AdminLayout.successToast('Media upload avec succès', this.$bvToast)
+        AdminLayout.successToast(this.$bvToast)
       } catch (e) {
         this.onProgress = false
         this.$bvModal.hide('modal-upload-media')
-        AdminLayout.errorToast('Une erreur s\'est produite pendant l\'upload du media ', this.$bvToast)
+        AdminLayout.errorToast(this.$bvToast)
       }
     }
   }
@@ -184,11 +184,11 @@ export default class UploadPanel extends Vue {
 
       await this._syncMediaData()
       this.onProgress = false
-      AdminLayout.successToast('Media supprimé avec succès', this.$bvToast)
+      AdminLayout.successToast(this.$bvToast)
     } catch (e) {
       await this._syncMediaData()
       this.onProgress = false
-      AdminLayout.errorToast('Problème lors de la suppression du média', this.$bvToast)
+      AdminLayout.errorToast(this.$bvToast)
     }
   }
 

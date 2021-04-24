@@ -44,11 +44,11 @@ export default class AdminLayout extends Vue {
     ApiManager.setAxios(this.$axios)
   }
 
-  public static successToast(message: string, toastInstance: BvToast) {
+  public static successToast(toastInstance: BvToast, message: string = 'Action effectuée avec succès !') {
     this._displayToast('Succès', message, 'success', toastInstance)
   }
 
-  public static errorToast(message: string, toastInstance: BvToast) {
+  public static errorToast(toastInstance: BvToast, message: string = 'Une erreur s\'est produite') {
     this._displayToast('Erreur', message, 'error', toastInstance)
   }
 

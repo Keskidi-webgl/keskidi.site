@@ -58,8 +58,7 @@
           <b-card v-for="expression in word.expressions" no-body>
             <b-list-group flush>
               <b-list-group-item >
-                <h5>Expression :</h5>
-                <p>{{ expression.content }}</p>
+                <p class="font-weight-bold">{{ expression.content }}</p>
                 <audio controls :src="expression.audio.url">
                   Your browser does not support the
                   <code>audio</code> element.

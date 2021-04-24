@@ -4,7 +4,7 @@
 
     <!-- Header panel -->
     <div v-if="wordData" class="header-panel">
-      <nuxt-link to="/admin/words">Retourner à la liste de mots</nuxt-link>
+      <nuxt-link class="link-back-list" to="/admin/words">Retourner à la liste de mots</nuxt-link>
       <h1>{{ wordData.name.toUpperCase() }}</h1>
     </div>
 
@@ -17,29 +17,33 @@
         :word="wordData">
       </DefinitionWordPanel>
 
-      <!-- HomeScenario -->
-      <HomeScenarioWordPanel
-        class="mb-3"
-        @reloadWordData="loadDataWord"
-        v-if="wordData"
-        :word="wordData">
-      </HomeScenarioWordPanel>
+      <div class="middle-container-panel">
+        <!-- Activity Data -->
+        <ActivityDataWordPanel
+          class="mb-3 activity-data-panel"
+          @reloadWordData="loadDataWord"
+          v-if="wordData"
+          :word="wordData">
+        </ActivityDataWordPanel>
+
+        <!-- HomeScenario -->
+        <HomeScenarioWordPanel
+          class="mb-3 home-scenario-panel"
+          @reloadWordData="loadDataWord"
+          v-if="wordData"
+          :word="wordData">
+        </HomeScenarioWordPanel>
+      </div>
 
       <!-- Expressions -->
       <ExpressionWordPanel
-        class="mb-3"
+        class="mb-3 expression-panel"
         @reloadWordData="loadDataWord"
         v-if="wordData"
         :word="wordData">
       </ExpressionWordPanel>
 
-      <!-- Activity Data -->
-      <ActivityDataWordPanel
-        class="mb-3"
-        @reloadWordData="loadDataWord"
-        v-if="wordData"
-        :word="wordData">
-      </ActivityDataWordPanel>
+
     </div>
   </div>
 </template>
@@ -105,5 +109,23 @@ export default class WordPage extends Vue {
 <style lang="scss" scoped>
 .admin-page {
   background-color: transparent !important;
+
+  .link-back-list {
+    font-size: 20px;
+  }
+
+  .middle-container-panel{
+    display: flex;
+    justify-content: space-between;
+
+    .activity-data-panel {
+      flex: 1;
+      padding-right: 50px;
+    }
+
+    .home-scenario-panel {
+      flex: 1;
+    }
+  }
 }
 </style>

@@ -132,24 +132,6 @@ export default class ActivityDataWordPanel extends Vue {
     good_object: '',
   }
 
-  public activityDataTabs = [
-    {
-      title_tab: 'Objet 1',
-      object_name: this.word.activity_data!.object_one,
-      description: this.word.activity_data!.object_one_description
-    },
-    {
-      title_tab: 'Objet 2',
-      object_name: this.word.activity_data!.object_two,
-      description: this.word.activity_data!.object_two_description
-    },
-    {
-      title_tab: 'Objet 3',
-      object_name: this.word.activity_data!.object_three,
-      description: this.word.activity_data!.object_three_description
-    }
-  ]
-
   /**
    * Call API to create Definition
    */
