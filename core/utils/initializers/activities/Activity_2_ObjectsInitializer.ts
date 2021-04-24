@@ -22,7 +22,6 @@ export default class Activity_2_0bjectsInitializer extends Initializers<{ canvas
   init() {
     SceneManager.ACTIVITY_2_OBJECTS = this._createInstance()
     this._addGltfGlobalScene()
-    this._registerPresetPositions()
     this._addLights(true)
     this._configGUI()
 
@@ -179,13 +178,5 @@ export default class Activity_2_0bjectsInitializer extends Initializers<{ canvas
 
     SceneManager.ACTIVITY_2_OBJECTS.scene.add(hemisphereLights);
   }
-
-  /**
-   * Register preset camera positions
-   */
-  private _registerPresetPositions() {
-    CameraConfig.presetPositions.forEach(presetPosition => {
-      SceneManager.ACTIVITY_2_OBJECTS.registerPresetCameraPositions(presetPosition)
-    })
-  }
+  
 }

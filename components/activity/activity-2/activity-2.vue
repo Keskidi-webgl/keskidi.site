@@ -8,11 +8,9 @@
 
     <div class="activity-itemPractice">
       <h2 class="activity-item--title">S'enjailler ACTIVITE 2</h2>
-      <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
+      <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
     </div>
   </div>
-
-
 
 </template>
 
@@ -22,18 +20,27 @@ import SceneModule from "~/store/scene";
 import Activity_1_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_1_0bjectsInitializer";
 import {SceneManager} from "~/core/managers";
 import Activity_2_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_2_ObjectsInitializer";
+import {ACTIVITY_TYPE} from "~/core/enums";
+import ActivityModule from "~/store/activity";
 
 @Component({
 })
 export default class activity2 extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
+  public activityModule = getModule(ActivityModule, this.$store)
 
   public mounted() {
     console.log("activity2")
 
-    /// object scene
     new Activity_2_0bjectsInitializer({canvas: this.$refs.activity_2_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_2_OBJECTS.scene.position.set(0,0,-60)
+  }
+  nextActivity(){
+    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_3)
+  }
+
+  beforeDestroy(){
+    SceneManager.ACTIVITY_2_OBJECTS.destroy()
   }
 
 }

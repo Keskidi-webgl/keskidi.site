@@ -73,7 +73,6 @@ export default class SceneManager {
   // -- Events
   private _onStartCallback: DefaultSceneManagerCallback
   private _onPauseCallback: DefaultSceneManagerCallback
-  private _onResumeCallback: DefaultSceneManagerCallback
   private _onDestroyCallback: DefaultSceneManagerCallback
   private _onRenderCallback: DefaultSceneManagerCallback
   private _onRayCasterIntersectCallback: RayCasterIntersectCallBack
@@ -112,8 +111,7 @@ export default class SceneManager {
     }
     this._onPauseCallback = options.onPause || function () {
     }
-    this._onResumeCallback = options.onResume || function () {
-    }
+
     this._onDestroyCallback = options.onDestroy || function () {
     }
     this._onRenderCallback = options.onRender || function () {
@@ -137,10 +135,13 @@ export default class SceneManager {
    * Destroy the scene
    */
   public destroy() {
+    // TODO --> destroy all elements
+
     this._onDestroyCallback(this)
     if (this._requestId) {
       cancelAnimationFrame(this._requestId)
     }
+    this._gui.destroy()
   }
 
   /**
@@ -149,14 +150,6 @@ export default class SceneManager {
   public pause() {
     this._onPauseCallback(this)
     this._isPlaying = false
-  }
-
-  /**
-   * Resume animations of the scene
-   */
-  public resume() {
-    this._onResumeCallback(this)
-    this._isPlaying = true
   }
 
   /**

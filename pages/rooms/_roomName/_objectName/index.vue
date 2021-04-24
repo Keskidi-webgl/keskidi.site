@@ -10,12 +10,12 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
-import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {ACTIVITY_TYPE, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import activity from "~/components/activity/activity.vue";
 import gsap from 'gsap'
-import ActivitySceneInitializer from "~/core/utils/initializers/ActivitySceneInitializer";
 import SceneModule from "~/store/scene";
+import ActivityModule from "~/store/activity";
 
 @Component({
   components:{
@@ -24,6 +24,7 @@ import SceneModule from "~/store/scene";
 })
 export default class ObjectPage extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
+  public activityModule = getModule(ActivityModule, this.$store)
 
   /**
    * Validate route params
@@ -37,7 +38,6 @@ export default class ObjectPage extends Vue {
     SceneManager.GLOBAL_SCENE.goToPresetPosition(objectIdentifier, 1, () => {
     })
     this.displayActivity()
-    this.switchActivity()
   }
 
   displayActivity(){
@@ -45,31 +45,33 @@ export default class ObjectPage extends Vue {
 
       console.log("okokokok")
       gsap.to('.activity-container',{translateY:0,duration:1,onComplete:()=>{
-          // new ActivitySceneInitializer({canvas: this.$refs.activity.$refs.activitycanvas as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
-          // SceneManager.ACTIVITY_SCENE.scene.position.set(0,0,-60)
-
-          // SceneManager.ACTIVITY_SCENE.
+          // PAUSE ON GLOBAL SCENE
           SceneManager.GLOBAL_SCENE.pause()
+          // START ACTIVITY 1
+          this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
         }})
     })
   }
 
-  switchActivity(){
-    let activities = document.querySelectorAll('.activity-item')
-    let btns = document.querySelectorAll('.activity-item--btn')
-    let currentSlide = 0
-
-    activities.forEach((item,index)=>{
-      btns[index].addEventListener('click',()=>{
-        item.classList.remove('activity-itemActive')
-        if (index<2){
-          activities[index+1].classList.add('activity-itemActive')
-        }
-        console.log(item,index)
-      })
-    })
-
-  }
+  // switchActivity(){
+  //   let activities = document.querySelectorAll('.activity-item')
+  //   let btns = document.querySelectorAll('.activity-item--btn')
+  //   let currentSlide = 0
+  //
+  //   activities.forEach((item,index)=>{
+  //     btns[index].addEventListener('click',()=>{
+  //       item.classList.remove('activity-itemActive')
+  //       if (index<2){
+  //         // this.$emit(`currentActivity${index+1}`)
+  //         this.activityModule.setCurrentActivity(index+1)
+  //         console.log(this.activityModule.currentActivity,'<--- current activity index')
+  //         activities[index+1].classList.add('activity-itemActive')
+  //       }
+  //       console.log(item,index)
+  //     })
+  //   })
+  //
+  // }
 
 }
 </script>

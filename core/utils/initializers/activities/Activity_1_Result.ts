@@ -17,16 +17,16 @@ import SceneModule from "~/store/scene";
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class Activity_1_0bjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class Activity_1_Result extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
 
   init() {
-    SceneManager.ACTIVITY_1_OBJECTS = this._createInstance()
+    SceneManager.ACTIVITY_1_RESULTS = this._createInstance()
     this._addGltfGlobalScene()
     this._addLights(true)
     this._configGUI()
 
-    console.log('Activity_1_ObjectsInitializer')
-    SceneManager.ACTIVITY_1_OBJECTS.start()
+    console.log('ACTIVITY_1_RESULTSInitializer')
+    SceneManager.ACTIVITY_1_RESULTS.start()
   }
 
   /**
@@ -35,9 +35,7 @@ export default class Activity_1_0bjectsInitializer extends Initializers<{ canvas
   private _createInstance() {
     // Set canvas dimensions
 
-    let container = document.querySelector('.activity-itemPractice')
-    console.log(container,'ACT 1💚💚')
-    console.log(container!.getBoundingClientRect().width,'ACT 1💚💚')
+    let container = document.querySelector('.activity-itemInfos')
 
     this._data.canvas.width = container!.getBoundingClientRect().width
     this._data.canvas.height = container!.getBoundingClientRect().height
@@ -96,10 +94,10 @@ export default class Activity_1_0bjectsInitializer extends Initializers<{ canvas
    * Create gui
    */
   private _configGUI() {
-    let sceneFolder = SceneManager.ACTIVITY_1_OBJECTS.gui.addFolder("Scene")
-    sceneFolder.add(SceneManager.ACTIVITY_1_OBJECTS.scene.position,'x',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.ACTIVITY_1_OBJECTS.scene.position,'y',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.ACTIVITY_1_OBJECTS.scene.position,'z',-500,500,0.01).listen()
+    let sceneFolder = SceneManager.ACTIVITY_1_RESULTS.gui.addFolder("Scene")
+    sceneFolder.add(SceneManager.ACTIVITY_1_RESULTS.scene.position,'x',-500,500,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_1_RESULTS.scene.position,'y',-500,500,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_1_RESULTS.scene.position,'z',-500,500,0.01).listen()
   }
 
   /**
@@ -147,19 +145,19 @@ export default class Activity_1_0bjectsInitializer extends Initializers<{ canvas
     // noobGltf.scene.scale.set(0.2,0.2,0.2)
     // noobGltf.scene.rotation.x = Math.PI / 2;
     //
-    // moulaGltf.scene.position.set(-30, 0, 0)
-    // moulaGltf.scene.rotation.x = Math.PI / 2;
+    moulaGltf.scene.position.set(0, 0, 0)
+    moulaGltf.scene.rotation.x = Math.PI / 2;
 
-    crushGltf.scene.position.set(-10, 0, 0)
-    crushGltf.scene.scale.set(0.5,0.5,0.5)
-    crushGltf.scene.rotation.x = Math.PI / 2;
+    // crushGltf.scene.position.set(-10, 0, 0)
+    // crushGltf.scene.scale.set(0.5,0.5,0.5)
+    // crushGltf.scene.rotation.x = Math.PI / 2;
 
 
-    // SceneManager.ACTIVITY_1_OBJECTS.scene.add(moulaGltf.scene)
-    SceneManager.ACTIVITY_1_OBJECTS.scene.add(crushGltf.scene)
-    // SceneManager.ACTIVITY_1_OBJECTS.scene.add(noobGltf.scene)
+    SceneManager.ACTIVITY_1_RESULTS.scene.add(moulaGltf.scene)
+    // SceneManager.ACTIVITY_1_RESULTS.scene.add(crushGltf.scene)
+    // SceneManager.ACTIVITY_1_RESULTS.scene.add(noobGltf.scene)
 
-    SceneManager.ACTIVITY_1_OBJECTS.scene.traverse( child => {
+    SceneManager.ACTIVITY_1_RESULTS.scene.traverse( child => {
 
       // @ts-ignore
       if ( child.material ) child.material.metalness = 0;
@@ -175,10 +173,10 @@ export default class Activity_1_0bjectsInitializer extends Initializers<{ canvas
     //hemisphereLights.position.set(100, 500, 700)
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
-      SceneManager.ACTIVITY_1_OBJECTS.scene.add(helper);
+      SceneManager.ACTIVITY_1_RESULTS.scene.add(helper);
     }
 
-    SceneManager.ACTIVITY_1_OBJECTS.scene.add(hemisphereLights);
+    SceneManager.ACTIVITY_1_RESULTS.scene.add(hemisphereLights);
   }
 
 }

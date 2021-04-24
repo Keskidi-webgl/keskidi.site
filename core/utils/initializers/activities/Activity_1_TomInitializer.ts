@@ -22,7 +22,6 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
   init() {
     SceneManager.ACTIVITY_1_TOM = this._createInstance()
     this._addGltfGlobalScene()
-    this._registerPresetPositions()
     this._addLights(true)
     this._configGUI()
 
@@ -56,18 +55,7 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: false,
-      onRayCasterIntersect: (ctx,intersect)=>{
-        if (intersect.length){
-          // need to get objects name
-          if(intersect[0].object.parent?.name === 'crushObject'){
-            // console.log(intersect)
-            ctx.currentIntersect = intersect[0]
-            // console.log(ctx.currentIntersect,'<-«-- intersect')
-          }
-        }
-
-      },
+      activateOrbitControl: true,
       onRender: (ctx) => {
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
@@ -86,8 +74,7 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).enableRayCasting()
-      .enableStats()
+    }).enableAxesHelpers(10)
 
   }
 
@@ -95,10 +82,10 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
    * Create gui
    */
   private _configGUI() {
-    let sceneFolder = SceneManager.ACTIVITY_1_TOM.gui.addFolder("Scene")
-    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'x',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'y',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'z',-500,500,0.01).listen()
+    let sceneFolder = SceneManager.ACTIVITY_1_TOM.gui.addFolder("Scene 1 TOM")
+    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'x',-100,100,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'y',-100,100,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'z',-100,100,0.01).listen()
   }
 
   /**
@@ -138,23 +125,12 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
   private _addGltfGlobalScene() {
     const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
 
-
-    // noobGltf.scene.position.set(10, 0, -20)
-    // noobGltf.scene.scale.set(0.2,0.2,0.2)
-    // noobGltf.scene.rotation.x = Math.PI / 2;
-    //
-    // moulaGltf.scene.position.set(-30, 0, 0)
-    // moulaGltf.scene.rotation.x = Math.PI / 2;
-
+    console.log(tomGltf,'tom')
     tomGltf.scene.position.set(-10, 0, 0)
     tomGltf.scene.scale.set(0.01,0.01,0.01)
     // tomGltf.scene.rotation.x = Math.PI / 2;
 
-
-    // SceneManager.ACTIVITY_1_TOM.scene.add(moulaGltf.scene)
     SceneManager.ACTIVITY_1_TOM.scene.add(tomGltf.scene)
-    // SceneManager.ACTIVITY_1_TOM.scene.add(noobGltf.scene)
-
     SceneManager.ACTIVITY_1_TOM.scene.traverse( child => {
 
       // @ts-ignore
@@ -177,12 +153,4 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
     SceneManager.ACTIVITY_1_TOM.scene.add(hemisphereLights);
   }
 
-  /**
-   * Register preset camera positions
-   */
-  private _registerPresetPositions() {
-    CameraConfig.presetPositions.forEach(presetPosition => {
-      SceneManager.ACTIVITY_1_TOM.registerPresetCameraPositions(presetPosition)
-    })
-  }
 }

@@ -16,7 +16,6 @@ export type SceneManagerOptions = {
 
   onStart?: DefaultSceneManagerCallback
   onPause?: DefaultSceneManagerCallback
-  onResume?: DefaultSceneManagerCallback
   onDestroy?: DefaultSceneManagerCallback
   onMouseMoveCanvas?: MouseMoveCanvasCallback
   onWindowResize?: WindowResizeCallback

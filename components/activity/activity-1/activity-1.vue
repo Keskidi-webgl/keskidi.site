@@ -1,7 +1,7 @@
 <template>
 
     <!--    composant activité 1-->
-    <div class="activity-item activity-1 activity-itemActive">
+    <div class="activity-item activity-1">
       <div class="activity-itemInfos">
         <span>Pour vous, quel objet représente ce mot ?</span>
         <canvas ref="activity_1_tom"  class="activity-1-tom"></canvas>
@@ -9,7 +9,7 @@
 
       <div class="activity-itemPractice">
         <h2 class="activity-item--title">S'enjailler</h2>
-        <button class="activity-item--btn"> ACTIVITE SUIVANTE</button>
+        <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
         <canvas ref="activity_1_objects" class="activity-1-objects"></canvas>
 
       </div>
@@ -29,6 +29,9 @@ import SceneModule from "~/store/scene";
 import Activity_1_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_1_0bjectsInitializer";
 import {SceneManager} from "~/core/managers";
 import Activity_1_TomInitializer from "~/core/utils/initializers/activities/Activity_1_TomInitializer";
+import ActivityModule from "~/store/activity";
+import {ACTIVITY_TYPE} from "~/core/enums";
+
 @Component({
   components:{
     activity1Result
@@ -36,20 +39,31 @@ import Activity_1_TomInitializer from "~/core/utils/initializers/activities/Acti
 })
 export default class activity1 extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
+  public activityModule = getModule(ActivityModule, this.$store)
 
   public mounted() {
     console.log("activity1")
 
+    // START ACTIVITY CANVAS
     /// object scene
     new Activity_1_0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0,0,-60)
 
-
-
     // character scene
     new Activity_1_TomInitializer({canvas: this.$refs.activity_1_tom as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
-    SceneManager.ACTIVITY_1_TOM.scene.position.set(10,-5,-10)
+    SceneManager.ACTIVITY_1_TOM.scene.position.set(10,-2,-2)
 
+    // console.log(SceneManager.ACTIVITY_1_TOM.scene)
+  }
+
+  nextActivity(){
+    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
+
+  }
+
+  beforeDestroy(){
+    SceneManager.ACTIVITY_1_TOM.destroy()
+    SceneManager.ACTIVITY_1_OBJECTS.destroy()
   }
 
 }

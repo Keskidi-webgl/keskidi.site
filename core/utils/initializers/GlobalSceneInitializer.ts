@@ -55,7 +55,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       activateOrbitControl: false,
       onRender: (ctx) => {
         // Add interactions points tracking
-        // console.log("ekip")
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.updateProjectionMatrix()
         }
@@ -70,6 +69,18 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
           this._data.sceneModule.updatePositionsInteractivePoint(updateData)
         }
+      },
+      onStart:(ctx)=>{
+        const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
+
+
+        // console.log(tomGltf,'tom')
+        tomGltf.scene.scale.set(1.3, 1.3, 1.3)
+
+
+        ctx.scene.add(tomGltf.scene)
+        console.log(ctx.scene,'on start global scene')
+
       },
       onWindowResize: (ctx) => {
         ctx.canvas.height = window.innerHeight
@@ -133,6 +144,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
+    const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
+
     console.log(globalSceneGltf)
     /*
     const box3 = new Box3().setFromObject(globalSceneGltf.scene)
@@ -141,8 +154,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     globalSceneGltf.scene.position.set(-vector.x, -vector.y, -vector.z)
      */
     globalSceneGltf.scene.position.set(0, 0, 0)
+    tomGltf.scene.scale.set(1.3, 1.3, 1.3)
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
+    SceneManager.GLOBAL_SCENE.scene.add(tomGltf.scene)
     SceneManager.GLOBAL_SCENE.scene.traverse( child => {
 
       // @ts-ignore

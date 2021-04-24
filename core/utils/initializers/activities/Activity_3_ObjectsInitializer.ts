@@ -22,7 +22,6 @@ export default class Activity_3_0bjectsInitializer extends Initializers<{ canvas
   init() {
     SceneManager.ACTIVITY_3_OBJECTS = this._createInstance()
     this._addGltfGlobalScene()
-    this._registerPresetPositions()
     this._addLights(true)
     this._configGUI()
 
@@ -145,17 +144,7 @@ export default class Activity_3_0bjectsInitializer extends Initializers<{ canvas
     noobGltf.scene.position.set(10, 0, -20)
     noobGltf.scene.scale.set(0.2,0.2,0.2)
     noobGltf.scene.rotation.x = Math.PI / 2;
-    //
-    // moulaGltf.scene.position.set(-30, 0, 0)
-    // moulaGltf.scene.rotation.x = Math.PI / 2;
 
-    // crushGltf.scene.position.set(-10, 0, 0)
-    // crushGltf.scene.scale.set(0.5,0.5,0.5)
-    // crushGltf.scene.rotation.x = Math.PI / 2;
-
-
-    // SceneManager.ACTIVITY_3_OBJECTS.scene.add(moulaGltf.scene)
-    // SceneManager.ACTIVITY_3_OBJECTS.scene.add(crushGltf.scene)
     SceneManager.ACTIVITY_3_OBJECTS.scene.add(noobGltf.scene)
 
     SceneManager.ACTIVITY_3_OBJECTS.scene.traverse( child => {
@@ -180,12 +169,4 @@ export default class Activity_3_0bjectsInitializer extends Initializers<{ canvas
     SceneManager.ACTIVITY_3_OBJECTS.scene.add(hemisphereLights);
   }
 
-  /**
-   * Register preset camera positions
-   */
-  private _registerPresetPositions() {
-    CameraConfig.presetPositions.forEach(presetPosition => {
-      SceneManager.ACTIVITY_3_OBJECTS.registerPresetCameraPositions(presetPosition)
-    })
-  }
 }
