@@ -1,5 +1,5 @@
-import {Action, Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {AuthTokenPayloads, LoginAuthCredential, RegisterAuthCredential, User} from "~/core/types";
+import {Module, Mutation, VuexModule} from "vuex-module-decorators";
+import {AuthTokenPayloads, User} from "~/core/types";
 import jwtDecode from "jwt-decode";
 import {AuthManager} from "~/core/managers";
 
@@ -18,32 +18,6 @@ export default class AuthModule extends VuexModule {
   @Mutation
   setToken(token: string|null) {
     this._token = token
-  }
-
-  @Action({rawError: true})
-  async login(credentials: LoginAuthCredential) {
-    try {
-      const authToken = await AuthManager.login(credentials)
-      this.setToken(authToken)
-    } catch (error) {
-      this.setToken(null)
-    }
-  }
-
-  @Action
-  async register(credentials: RegisterAuthCredential) {
-    try {
-      const authToken = await AuthManager.register(credentials)
-      this.setToken(authToken)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  @Action
-  logout() {
-    AuthManager.logout()
-    this.setToken(null)
   }
 
   get isAuth(): boolean {

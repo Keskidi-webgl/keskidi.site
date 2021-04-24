@@ -6,6 +6,10 @@ export type RegisterAuthCredential = {
   email: string
 }
 
+export type AuthCredential = {
+  email: string
+}
+
 export type User = {
   id: number
 }

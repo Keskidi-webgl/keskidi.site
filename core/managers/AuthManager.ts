@@ -1,4 +1,4 @@
-import {LoginAuthCredential, RegisterAuthCredential} from "~/core/types";
+import {AuthCredential, LoginAuthCredential, RegisterAuthCredential} from "~/core/types";
 import {AxiosRequestConfig} from "axios";
 import {ApiManager} from "~/core/managers";
 
@@ -14,33 +14,18 @@ class AuthManager {
   public static AUTH_TOKEN_KEY_STORAGE = 'authToken'
 
   /**
-   * Intent login request to the API
+   * Auth the user (register if email doesn't exist or login)
+   * @param credential
    */
-  public async login(credential: LoginAuthCredential): Promise<string> {
+  public async auth(credential: AuthCredential): Promise<string> {
     const payloads: AxiosRequestConfig = {
-      url: '/login',
-      method: 'POST',
-      data: credential
-    }
-    const {data} = await ApiManager.request(payloads)
-    this.storeAuthToken(data.token)
-
-    return data.token
-  }
-
-  /**
-   * Intent register request to the API
-   */
-  public async register(credential: RegisterAuthCredential): Promise<string> {
-    const payloads: AxiosRequestConfig = {
-      url: '/register',
+      url: '/auth',
       method: 'POST',
       data: credential
     }
 
     const {data} = await ApiManager.request(payloads)
     this.storeAuthToken(data.token)
-
     return data.token
   }
 
