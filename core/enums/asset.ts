@@ -4,7 +4,7 @@
 export enum ASSET_TYPE {
   GLTF,
   IMAGE,
-  VIDEO
+  VIDEO,
 }
 
 /**
