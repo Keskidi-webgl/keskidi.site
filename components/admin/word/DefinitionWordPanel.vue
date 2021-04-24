@@ -47,7 +47,71 @@
           </b-form-group>
         </form>
       </b-modal>
-
+      <!-- Add definition media -->
+      <b-modal v-if="word.definition" id="modal-add-definition-media" ref="modal"
+               title="Ajouter un média à la définition" @show=""
+               @hidden="" @ok="addMediaDefinition">
+        <form ref="form" @submit.stop.prevent="addMediaDefinition">
+          <!-- Title media -->
+          <b-form-group label="Titre" label-for="title-definition-media">
+            <b-form-input id="title-definition-media" v-model="addMediaDefinitionDataForm.title"
+                          required></b-form-input>
+          </b-form-group>
+          <!-- Media type -->
+          <b-form-group label="Type" label-for="type-definition-media">
+            <b-form-select id="type-definition-media" v-model="addMediaDefinitionDataForm.mediaType"
+                           :options="definitionMediaType"></b-form-select>
+          </b-form-group>
+          <!-- Order media -->
+          <b-form-group label="Ordre" label-for="order-definition-media">
+            <b-form-input id="order-definition-media" v-model="addMediaDefinitionDataForm.order"
+                          required></b-form-input>
+          </b-form-group>
+          <!-- File media -->
+          <b-form-file
+            v-model="addMediaDefinitionDataForm.file"
+            placeholder="Chouffe le media mamène"
+            drop-placeholder="Chouffe le media mamène"
+            required
+          ></b-form-file>
+          <!-- Source media -->
+          <b-form-group label="Source" label-for="source-definition-media">
+            <b-form-input id="source-definition-media" v-model="addMediaDefinitionDataForm.source"
+                          required></b-form-input>
+          </b-form-group>
+          <!-- Caption media -->
+          <b-form-group label="Légende" label-for="caption-definition-media">
+            <b-form-textarea id="caption-definition-media" v-model="addMediaDefinitionDataForm.caption"
+                             required></b-form-textarea>
+          </b-form-group>
+        </form>
+      </b-modal>
+      <!-- Update definition media -->
+      <b-modal v-if="mediaDefinitionToUpdate" id="modal-update-definition-media" ref="modal"
+               title="Modifier le média" @show=""
+               @hidden="" @ok="updateMediaDefinition">
+        <form ref="form" @submit.stop.prevent="updateMediaDefinition">
+          <!-- Title media -->
+          <b-form-group label="Titre" label-for="title-definition-media">
+            <b-form-input readonly id="title-definition-media" v-model="mediaDefinitionToUpdate.title"></b-form-input>
+          </b-form-group>
+          <!-- Order media -->
+          <b-form-group label="Ordre" label-for="order-definition-media">
+            <b-form-input id="order-definition-media" v-model="mediaDefinitionToUpdate.order"
+                          required></b-form-input>
+          </b-form-group>
+          <!-- Source media -->
+          <b-form-group label="Source" label-for="source-definition-media">
+            <b-form-input id="source-definition-media" v-model="mediaDefinitionToUpdate.source"
+                          required></b-form-input>
+          </b-form-group>
+          <!-- Caption media -->
+          <b-form-group label="Légende" label-for="caption-definition-media">
+            <b-form-textarea id="caption-definition-media" v-model="mediaDefinitionToUpdate.caption"
+                             required></b-form-textarea>
+          </b-form-group>
+        </form>
+      </b-modal>
     </div>
 
     <!-- Content -->
@@ -94,6 +158,39 @@
           </b-card>
         </div>
       </div>
+
+      <!-- Media -->
+      <div class="definition-media">
+        <!-- Header -->
+        <div class="definition-media-header pb-2">
+          <h2>Medias</h2>
+          <b-button v-if="word.definition.medias" variant="success" v-b-modal.modal-add-definition-media>
+            <font-awesome-icon :icon="['fas', 'plus']" :style="{ color: 'white' , fontSize: '20px'}"/>
+          </b-button>
+        </div>
+        <!-- Content -->
+        <div v-if="word.definition.medias.length" class="definition-media-container">
+          <b-card no-body>
+            <b-tabs card>
+              <b-tab :title="`Media n°${media.order}`" v-for="media in word.definition.medias" active>
+                <b-card-text>
+                  {{ media.title }}
+                  {{ media.type }}
+                  {{ media.url }}
+                </b-card-text>
+                <div>
+                  <b-button @click="mediaDefinitionToUpdate = media" variant="primary" v-b-modal.modal-update-definition-media>
+                    Modifier
+                  </b-button>
+                  <b-button @click="deleteMediaDefinition(media)" variant="danger">
+                    Supprimer
+                  </b-button>
+                </div>
+              </b-tab>
+            </b-tabs>
+          </b-card>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -101,8 +198,9 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'nuxt-property-decorator'
-import {Word} from "~/core/types";
+import {DefinitionMedia, Word} from "~/core/types";
 import {ApiManager} from "~/core/managers";
+import {MEDIA_TYPE} from "~/core/enums";
 
 @Component
 export default class DefinitionWordPanel extends Vue {
@@ -114,7 +212,21 @@ export default class DefinitionWordPanel extends Vue {
     origin: '',
   }
 
-  public addMediaDefinitionDataForm = {}
+  public addMediaDefinitionDataForm = {
+    title: '',
+    mediaType: MEDIA_TYPE.IMAGE,
+    caption: '',
+    source: '',
+    order: 1,
+    file: null as File | null
+  }
+
+  public definitionMediaType = [
+    {value: MEDIA_TYPE.IMAGE, text: MEDIA_TYPE.IMAGE},
+    {value: MEDIA_TYPE.VIDEO, text: MEDIA_TYPE.VIDEO},
+  ]
+
+  public mediaDefinitionToUpdate: DefinitionMedia | null = null
 
   /**
    * Call API to create Definition
@@ -154,22 +266,58 @@ export default class DefinitionWordPanel extends Vue {
   /**
    * Call API to add Media Definition
    */
-  addMediaDefinition() {
-    // @TODO
+  async addMediaDefinition() {
+    const mediaData = new FormData()
+    mediaData.append('media', this.addMediaDefinitionDataForm.file!, this.addMediaDefinitionDataForm.file!.name)
+    mediaData.append('title', this.addMediaDefinitionDataForm.title)
+    mediaData.append('description', `Media for definition of word ${this.word.name}`)
+    mediaData.append('type', this.addMediaDefinitionDataForm.mediaType)
+
+    const {data: newMediaDefinition} = await ApiManager.request({
+      url: '/medias/upload',
+      method: 'POST',
+      data: mediaData
+    })
+
+    await ApiManager.request({
+      url: `/wordDefinitions/${this.word.definition!.id}/medias`,
+      method: 'POST',
+      data: {
+        media_id: newMediaDefinition.id,
+        order: this.addMediaDefinitionDataForm.order,
+        source: this.addMediaDefinitionDataForm.source,
+        caption: this.addMediaDefinitionDataForm.caption
+      }
+    })
+    this.$emit('reloadWordData')
   }
 
   /**
    * Call API to update Media Definition
    */
-  updateMediaDefinition() {
-    // @TODO
+  async updateMediaDefinition() {
+    await ApiManager.request({
+      url: `/wordDefinitions/${this.word.definition!.id}/medias`,
+      method: 'PUT',
+      data: {
+        media_id: this.mediaDefinitionToUpdate!.id,
+        order: this.mediaDefinitionToUpdate!.order,
+        source: this.mediaDefinitionToUpdate!.source,
+        caption: this.mediaDefinitionToUpdate!.caption
+      }
+    })
+    this.$emit('reloadWordData')
   }
 
   /**
    * Call API to delete Media Definition
    */
-  deleteMediaDefinition() {
-    // @TODO
+  async deleteMediaDefinition(media: DefinitionMedia) {
+    await ApiManager.request({
+      url: `/wordDefinitions/${this.word.definition!.id}/medias/${media.id}`,
+      method: 'DELETE',
+    })
+    this.$emit('reloadWordData')
   }
 
 }
