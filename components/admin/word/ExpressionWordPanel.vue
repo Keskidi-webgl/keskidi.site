@@ -1,10 +1,11 @@
 <template>
   <div>
+    <b-overlay class="absolute-overlay" opacity="1" :show="onProgress" rounded="sm"></b-overlay>
     <!-- Modal container -->
     <div v-if="word" class="expression-modal-container">
 
       <!-- Create expression modal -->
-      <b-modal id="modal-create-expression" ref="modal" title="Créer une expression" @show="" @hidden=""
+      <b-modal id="modal-create-expression" ref="modal" :title="`Créer une expression pour ${word.name}`" @show="" @hidden=""
                @ok="createExpression">
         <form ref="form" @submit.stop.prevent="createExpression">
           <!-- Content -->
@@ -87,10 +88,12 @@ import {Component, Prop, Vue} from 'nuxt-property-decorator'
 import {Word, WordExpression} from "~/core/types"
 import {MEDIA_TYPE} from "~/core/enums";
 import {ApiManager} from "~/core/managers";
+import AdminLayout from "~/layouts/admin.vue";
 
 @Component
 export default class ExpressionWordPanel extends Vue {
   @Prop({type: Object, required: true}) readonly word!: Word
+  public onProgress: boolean = false
   public createExpressionFormData = {
     content: '',
     file: {
@@ -109,54 +112,72 @@ export default class ExpressionWordPanel extends Vue {
    * Call API to create Definition
    */
   async createExpression() {
-    const audioData = new FormData()
-    audioData.append('media', this.createExpressionFormData.file.data!, this.createExpressionFormData.file.data!.name)
-    audioData.append('title', this.createExpressionFormData.file.title)
-    audioData.append('description', `Audio file for expression of word ${this.word.name}`)
-    audioData.append('type', MEDIA_TYPE.AUDIO)
+    this.onProgress = true
+    try {
+      const audioData = new FormData()
+      audioData.append('media', this.createExpressionFormData.file.data!, this.createExpressionFormData.file.data!.name)
+      audioData.append('title', this.createExpressionFormData.file.title)
+      audioData.append('description', `Audio file for expression of word ${this.word.name}`)
+      audioData.append('type', MEDIA_TYPE.AUDIO)
 
-    const {data: newAudioFile} = await ApiManager.request({
-      url: '/medias/upload',
-      method: 'POST',
-      data: audioData
-    })
+      const {data: newAudioFile} = await ApiManager.request({
+        url: '/medias/upload',
+        method: 'POST',
+        data: audioData
+      })
 
-    await ApiManager.request({
-      url: `/words/${this.word.id}/expressions`,
-      method: 'POST',
-      data: {content: this.createExpressionFormData.content, audio_id: newAudioFile.id}
-    })
-
-    this.$emit('reloadWordData')
+      const {data: createdExpression} = await ApiManager.request({
+        url: `/words/${this.word.id}/expressions`,
+        method: 'POST',
+        data: {content: this.createExpressionFormData.content, audio_id: newAudioFile.id}
+      })
+      this.word.expressions.push(createdExpression)
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+    this.onProgress = false
   }
 
   /**
    * Call API to update Definition
    */
   async updateExpression() {
-    await ApiManager.request({
-      url: `/words/${this.word.id}/expressions/${this.expressionToUpdate!.id}`,
-      method: 'PUT',
-      data: {
-        id: this.expressionToUpdate!.id,
-        content: this.expressionToUpdate!.content,
-        audio_id: this.expressionToUpdate!.audio!.id
-      },
-    })
-
+    this.onProgress = true
+    try {
+      await ApiManager.request({
+        url: `/words/${this.word.id}/expressions/${this.expressionToUpdate!.id}`,
+        method: 'PUT',
+        data: {
+          id: this.expressionToUpdate!.id,
+          content: this.expressionToUpdate!.content,
+          audio_id: this.expressionToUpdate!.audio!.id
+        },
+      })
+      AdminLayout.successToast(this.$bvToast)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
     this.$emit('reloadWordData')
+    this.onProgress = false
   }
 
   /**
    * Call API to delete Definition
    */
-  async deleteExpression(expression: WordExpression) {
-    await ApiManager.request({
-      url: `/words/${this.word.id}/expressions/${expression.id}`,
-      method: 'DELETE',
-    })
-
-    this.$emit('reloadWordData')
+  async deleteExpression(expressionToDeleter: WordExpression) {
+    this.onProgress = true
+    try {
+      await ApiManager.request({
+        url: `/words/${this.word.id}/expressions/${expressionToDeleter.id}`,
+        method: 'DELETE',
+      })
+      AdminLayout.successToast(this.$bvToast)
+      this.word.expressions = this.word.expressions.filter(expression => expression.id !== expressionToDeleter.id)
+    } catch (error) {
+      AdminLayout.errorToast(this.$bvToast)
+    }
+    this.onProgress = false
   }
 }
 </script>
