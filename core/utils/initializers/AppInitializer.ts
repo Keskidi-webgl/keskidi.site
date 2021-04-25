@@ -4,7 +4,7 @@ import {
   ApiManagerInitializer,
   AssetManagerInitializer,
   GlobalSceneInitializer,
-  WordDataInitializer
+   WordDataInitializer
 } from "~/core/utils/initializers";
 import SceneModule from "~/store/scene";
 import GlobalModule from "~/store/global";
