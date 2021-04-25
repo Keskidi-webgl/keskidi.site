@@ -11,9 +11,16 @@
         <h2 v-if="activityModule.dataWord" class="activity-item--title">{{activityModule.dataWord.name}}</h2>
         <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
         <canvas ref="activity_1_objects" class="activity-1-objects"></canvas>
+
+        <div class="activity-itemChoiceWrapper">
+          <div @click="updateUserSelection(item)" v-for="(item , index) in objectsData" class="activity-itemChoiceBtn">
+            {{index+1}}
+          </div>
+        </div>
+
       </div>
       <pre>
-        {{ activityModule.dataWord.activity_data }}
+        {{ activityModule.dataWord }}
       </pre>
 
       <activity1-result style="display: none"></activity1-result>
@@ -31,6 +38,7 @@ import {SceneManager} from "~/core/managers";
 import ActivityOneTomInitializer from "~/core/utils/initializers/activities/ActivityOneTomInitializer";
 import ActivityModule from "~/store/activity";
 import {ACTIVITY_TYPE} from "~/core/enums";
+import {UserObjectSelection} from "~/core/types";
 
 @Component({
   components:{
@@ -40,8 +48,25 @@ import {ACTIVITY_TYPE} from "~/core/enums";
 export default class activity1 extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public userSelection!: UserObjectSelection
+
+  objectsData:Array<UserObjectSelection> = [
+    {
+      name: this.activityModule.dataWord!.activity_data!.object_one,
+      description: this.activityModule.dataWord!.activity_data!.object_one_description,
+    },
+    {
+      name: this.activityModule.dataWord!.activity_data!.object_two,
+      description: this.activityModule.dataWord!.activity_data!.object_two_description,
+    },
+    {
+      name: this.activityModule.dataWord!.activity_data!.object_three,
+      description: this.activityModule.dataWord!.activity_data!.object_three_description,
+    }
+  ]
 
   public mounted() {
+    this.userSelection = this.objectsData[0]
     /// object scene
     new ActivityOne0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0,0,-60)
@@ -55,6 +80,11 @@ export default class activity1 extends Vue {
   nextActivity(){
     this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
 
+  }
+
+  updateUserSelection(item:UserObjectSelection){
+    this.userSelection = item
+    console.log(this.userSelection.name)
   }
 
   beforeDestroy(){
@@ -115,6 +145,15 @@ export default class activity1 extends Vue {
   &-itemActive{
     display: flex;
     flex-direction: row!important;
+  }
+  &-itemChoiceBtn{
+    width: 40px;
+    height: 40px;
+    background: #EB5757;
+    border-radius: 50%;
+    z-index: 44;
+    cursor: pointer;
+    position: relative;
   }
 
 }
