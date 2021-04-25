@@ -311,19 +311,6 @@ export default class SceneManager {
     return this
   }
 
-  // - PRIVATE
-  /**
-   * Init elements after property binding into constructor
-   */
-  private _init() {
-    this._initRenderer()
-    this._initControls()
-
-    this._bindEvents()
-
-    this._checkConfig()
-  }
-
   /**
    * Init intern mandatory events
    */
@@ -340,6 +327,26 @@ export default class SceneManager {
       this._onWindowResizeCallback(this, event)
     })
   }
+
+
+  public setObjectVisibility(objectList: Array<string>, visibleObject: string) {
+    objectList.forEach(objectName => {
+      this.scene.getObjectByName(objectName)!.visible = objectName === visibleObject
+    })
+  }
+  // - PRIVATE
+  /**
+   * Init elements after property binding into constructor
+   */
+  private _init() {
+    this._initRenderer()
+    this._initControls()
+
+    this._bindEvents()
+
+    this._checkConfig()
+  }
+
 
   /**
    * Init renderer

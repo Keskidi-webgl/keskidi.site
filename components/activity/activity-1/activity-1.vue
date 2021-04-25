@@ -84,7 +84,12 @@ export default class activity1 extends Vue {
 
   updateUserSelection(item:UserObjectSelection){
     this.userSelection = item
-    console.log(this.userSelection.name)
+
+    SceneManager.ACTIVITY_1_OBJECTS.setObjectVisibility([
+      this.activityModule.dataWord!.activity_data!.object_one,
+      this.activityModule.dataWord!.activity_data!.object_two,
+      this.activityModule.dataWord!.activity_data!.object_three,
+    ], this.userSelection.name)
   }
 
   beforeDestroy(){
