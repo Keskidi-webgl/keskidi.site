@@ -9,8 +9,9 @@ import {Component, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
-import {SceneManager} from "~/core/managers";
+import {ApiManager, SceneManager} from "~/core/managers";
 import AuthMiddleware from "~/middleware/auth";
+import Helpers from "~/core/utils/helpers";
 
 @Component
 export default class ObjectPage extends Vue {

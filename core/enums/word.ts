@@ -1,0 +1,12 @@
+export enum WORD_ID {
+  MOULAGA= 5,
+  KICHTA = 25,
+  GHOSTER = 55,
+  GAMOS = 65,
+  TISE = 85,
+  HENDEK = 95,
+  ENJAILLER = 105,
+  CRUSH = 115,
+  CHILL = 125,
+  NOOB = 135
+}
