@@ -1,5 +1,4 @@
 <template>
-
   <div class="activity-item activity-3">
     <div class="activity-itemInfos">
       <span>Comme dirait le prof, reapeat after me ...</span>
@@ -24,26 +23,26 @@
       </div>
     </div>
 
-    <activity-3-result v-if="activityIsSucceed()"></activity-3-result>
+    <ActivityThreeResult v-if="activityIsSucceed()"></ActivityThreeResult>
 
   </div>
-
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import Activity3Result from "~/components/activity/activity-3/activity-3-result.vue";
-import {SceneManager, VoiceRecognitionManager} from "~/core/managers";
-import ActivityThree0bjectsInitializer from "~/core/utils/initializers/activities/ActivityThree0bjectsInitializer";
-import SceneModule from "~/store/scene";
-import ActivityThreeTomInitializer from "~/core/utils/initializers/activities/ActivityThreeTomInitializer";
-import ActivityModule from "~/store/activity";
-import {WordExpression} from "~/core/types";
+import {SceneManager, VoiceRecognitionManager} from "~/core/managers"
+import SceneModule from "~/store/scene"
+import ActivityModule from "~/store/activity"
+import {WordExpression} from "~/core/types"
+import ActivityThreeResult from "~/components/activities/activityThree/ActivityThreeResult.vue"
+import {ActivityThreeObjectsInitializer, ActivityThreeTomInitializer} from "~/core/utils/initializers/activities";
 
 @Component({
-  components: {Activity3Result}
+  components: {
+    ActivityThreeResult
+  }
 })
-export default class activity3 extends Vue {
+export default class ActivityThree extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
   public activeExpression: WordExpression | null = null
@@ -81,7 +80,7 @@ export default class activity3 extends Vue {
    * Init canvas of activity
    */
   private _initCanvasScenes() {
-    new ActivityThree0bjectsInitializer({
+    new ActivityThreeObjectsInitializer({
       canvas: this.$refs.activity_3_objects as HTMLCanvasElement,
       sceneModule: this.sceneModule
     }).init()

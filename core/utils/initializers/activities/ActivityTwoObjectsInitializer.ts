@@ -17,7 +17,7 @@ import SceneModule from "~/store/scene";
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class ActivityTwo0bjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class ActivityTwoObjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
 
   init() {
     SceneManager.ACTIVITY_2_OBJECTS = this._createInstance()

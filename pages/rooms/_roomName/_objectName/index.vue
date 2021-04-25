@@ -1,8 +1,7 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
-    <nuxt-link class="interactive-points" to="{{}}"></nuxt-link>
     <div @click="displayActivity" ref="btn" class="interactive-btn">Découvrir le mot</div>
-    <activity ref="activity"></activity>
+    <ActivityPanel ref="activity"></ActivityPanel>
   </div>
 </template>
 
@@ -11,18 +10,18 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {ACTIVITY_TYPE, URL_OBJECT_IDENTIFIER} from "~/core/enums";
-import activity from "~/components/activity/activity.vue";
 import gsap from 'gsap'
 import SceneModule from "~/store/scene";
 import ActivityModule from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
-import {ApiManager, SceneManager} from "~/core/managers";
+import {SceneManager} from "~/core/managers";
 import GlobalModule from "~/store/global";
 import Helpers from "~/core/utils/helpers";
+import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 
 @Component({
   components: {
-    activity
+    ActivityPanel
   }
 })
 export default class ObjectPage extends Vue {
@@ -67,7 +66,9 @@ export default class ObjectPage extends Vue {
    * (expressions, definitions ...)
    */
   private _setDataWord() {
-    const dataWord = this.globalModule.dataWord!.find(word => word.id === Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier))!
+    const dataWord = this.globalModule.dataWord!.find(word => {
+      return word.id === Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier)
+    })!
     this.activityModule.setDataWord(dataWord)
   }
 

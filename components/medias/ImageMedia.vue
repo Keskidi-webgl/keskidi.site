@@ -8,22 +8,12 @@
 </template>
 
 <script lang="ts">
-import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
-import SceneModule from "~/store/scene";
-import ActivityModule from "~/store/activity";
+import {Component, Prop, Vue} from 'nuxt-property-decorator'
 
-@Component({
-})
-export default class imageMedia extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
-  public activityModule = getModule(ActivityModule, this.$store)
+@Component({})
+export default class ImageMedia extends Vue {
   @Prop({type: String, required: true}) readonly mediaUrl!: string
   @Prop({type: String, required: true}) readonly caption!: string
-
-  public mounted() {
-    console.log("activity2")
-  }
-
 }
 </script>
 

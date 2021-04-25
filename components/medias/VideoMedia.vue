@@ -12,23 +12,15 @@
 <script lang="ts">
 import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
 import SceneModule from "~/store/scene";
-import {SceneManager} from "~/core/managers";
-import ActivityTwo0bjectsInitializer from "~/core/utils/initializers/activities/ActivityTwo0bjectsInitializer";
-import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityModule from "~/store/activity";
 
-@Component({
-})
-export default class videoMedia extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
-  public activityModule = getModule(ActivityModule, this.$store)
+@Component({})
+export default class VideoMedia extends Vue {
   @Prop({type: String, required: true}) readonly mediaUrl!: string
   @Prop({type: String, required: true}) readonly caption!: string
-  public mounted() {
-    console.log("activity2")
 
-  }
-
+  public sceneModule = getModule(SceneModule, this.$store)
+  public activityModule = getModule(ActivityModule, this.$store)
 }
 </script>
 

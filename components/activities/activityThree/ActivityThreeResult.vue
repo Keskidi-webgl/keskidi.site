@@ -7,11 +7,11 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import ActivityModule from "~/store/activity";
+import ActivityModule from "~/store/activity"
 
 
 @Component({})
-export default class activity3Result extends Vue {
+export default class ActivityThreeResult extends Vue {
   public activityModule = getModule(ActivityModule, this.$store)
 }
 </script>

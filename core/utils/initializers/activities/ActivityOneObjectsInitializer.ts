@@ -9,16 +9,13 @@ import {
   WebGLRenderer
 } from "three";
 import {Initializers} from "~/core/defs";
-import {GLTF_ASSET} from "~/core/enums";
-import CameraConfig from "~/core/config/camera.config";
-import SceneModule from "~/store/scene";
 import {Word} from "~/core/types";
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class ActivityOne0bjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, wordData: Word }, void> {
+export default class ActivityOneObjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, wordData: Word }, void> {
 
   init() {
     SceneManager.ACTIVITY_1_OBJECTS = this._createInstance()

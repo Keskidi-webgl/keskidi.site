@@ -3,7 +3,7 @@
   <div class="activity-1-resultWrapper">
     <h2 class="activity-item--title">Selection: {{userSelection.name}}</h2>
     <h2 class="activity-item--title">Result: {{getUserResult()}}</h2>
-    <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
+    <button @click="goToNextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
 
     <canvas class="activity-1-result"></canvas>
   </div>
@@ -12,46 +12,47 @@
 
 <script lang="ts">
 import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
-import {UserObjectSelection, Word} from "~/core/types";
-import {ACTIVITY_TYPE} from "~/core/enums";
-import ActivityModule from "~/store/activity";
-import {SceneManager} from "~/core/managers";
+import {UserObjectSelection} from "~/core/types"
+import {ACTIVITY_TYPE} from "~/core/enums"
+import ActivityModule from "~/store/activity"
+import {SceneManager} from "~/core/managers"
 
 
 @Component({})
-export default class activity1Result extends Vue {
-  public activityModule = getModule(ActivityModule, this.$store)
-
+export default class ActivityOneResult extends Vue {
   @Prop({type: Object, required: true}) readonly userSelection!: UserObjectSelection
   @Prop({type: String, required: true}) readonly goodObject!: string
 
-  public created(){
-    console.log('create on activity 1 rsesult')
+  public activityModule = getModule(ActivityModule, this.$store)
 
+  public created() {
+    this._resetGltfObjectVisibility()
+  }
+
+  /**
+   * Callback when click to the continue button
+   */
+  public goToNextActivity() {
+    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
+  }
+
+  /**
+   * Return result of user selection (vrai or faux)
+   */
+  public getUserResult() {
+    return (this.userSelection.name === this.goodObject) ? 'vrai' : 'faux'
+  }
+
+  /**
+   * We need to reset visible property of all gltf of the previous scene (activity one)
+   */
+  private _resetGltfObjectVisibility() {
     SceneManager.ACTIVITY_1_OBJECTS.setObjectVisibility([
       this.activityModule.dataWord!.activity_data!.object_one,
       this.activityModule.dataWord!.activity_data!.object_two,
       this.activityModule.dataWord!.activity_data!.object_three,
     ])
-
-    // SceneManager.ACTIVITY_1_TOM.destroy()
-    // SceneManager.ACTIVITY_1_OBJECTS.destroy()
-
   }
-  public mounted() {
-    console.log("activity1-result")
-  }
-
-  nextActivity(){
-    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
-
-  }
-
-
-  public getUserResult() {
-    return (this.userSelection.name === this.goodObject) ? 'vrai' : 'faux'
-  }
-
 }
 </script>
 
@@ -85,6 +86,5 @@ export default class activity1Result extends Vue {
     display: flex;
     flex-direction: column;
   }
-
 }
 </style>

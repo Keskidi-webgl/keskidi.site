@@ -1,72 +1,56 @@
 <template>
   <div class="activity-container">
-
-<!-- composant progress-bar    -->
-
-    <activity1 v-if="activityModule.currentActivity === 0" ></activity1>
-    <activity2 v-if="activityModule.currentActivity === 1"></activity2>
-    <activity3 v-if="activityModule.currentActivity === 2"></activity3>
-
-<!--    overlay transition -->
-
+    <!-- composant progress-bar    -->
+    <ActivityOne v-if="activityModule.currentActivity === 0"></ActivityOne>
+    <ActivityTwo v-if="activityModule.currentActivity === 1"></ActivityTwo>
+    <ActivityThree v-if="activityModule.currentActivity === 2"></ActivityThree>
+    <!--    overlay transition -->
     <button @click="goToHome">GO BACK</button>
-
-<!--  components  conclusion progression -->
-
+    <!--  components  conclusion progression -->
   </div>
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import SceneModule from "~/store/scene";
-import activity1 from "~/components/activity/activity-1/activity-1.vue";
-import activity2 from "~/components/activity/activity-2/activity-2.vue";
-import activity3 from "~/components/activity/activity-3/activity-3.vue";
-import {SceneManager} from "~/core/managers";
-import ActivityModule from "~/store/activity";
-import {ACTIVITY_TYPE} from "~/core/enums";
+import SceneModule from "~/store/scene"
+import {SceneManager} from "~/core/managers"
+import ActivityModule from "~/store/activity"
+import ActivityOne from "~/components/activities/activityOne/ActivityOne.vue"
+import ActivityTwo from "~/components/activities/activityTwo/ActivityTwo.vue"
+import ActivityThree from "~/components/activities/activityThree/ActivityThree.vue"
 
 @Component({
-  components:{
-    activity1,
-    activity2,
-    activity3
+  components: {
+    ActivityOne,
+    ActivityTwo,
+    ActivityThree
   }
 })
-export default class activity extends Vue {
+
+export default class ActivityPanel extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
 
-  public mounted() {
-    console.log("activity")
-  }
-  goToHome(){
+  /**
+   *
+   */
+  public goToHome() {
     SceneManager.GLOBAL_SCENE.resume()
     this.$router.push("/")
     this.destroyActivities()
   }
 
-  destroyActivities(){
-
-    // destroy activity 1
-
+  /**
+   * Callback when click to cancel cross
+   */
+  public destroyActivities() {
     SceneManager.ACTIVITY_1_OBJECTS?.destroy()
     SceneManager.ACTIVITY_1_TOM?.destroy()
-    // SceneManager.ACTIVITY_1_RESULTS.destroy()
-
-    console.log(this.activityModule.currentActivity)
-    // destroy activity 2
     SceneManager.ACTIVITY_2_OBJECTS?.destroy()
-    //
-    // // destroy activity 3
     SceneManager.ACTIVITY_3_OBJECTS?.destroy()
     SceneManager.ACTIVITY_3_TOM?.destroy()
-    // SceneManager.ACTIVITY_3_RESULTS.destroy()
-
     this.activityModule.setCurrentActivity(null)
-
   }
-
 }
 </script>
 
@@ -97,7 +81,5 @@ export default class activity extends Vue {
       z-index: 999;
     }
   }
-
-
 }
 </style>
