@@ -23,7 +23,8 @@ export default class ActivityTwo0bjectsInitializer extends Initializers<{ canvas
     SceneManager.ACTIVITY_2_OBJECTS = this._createInstance()
     this._addGltfObjectsScene()
     this._addLights(true)
-    this._configGUI()
+    // this._configGUI()
+    console.log('init activity 2')
 
     SceneManager.ACTIVITY_2_OBJECTS.start()
   }

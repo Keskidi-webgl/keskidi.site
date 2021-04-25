@@ -23,7 +23,7 @@ export default class ActivityThreeResultInitializer extends Initializers<{ canva
     SceneManager.ACTIVITY_3_RESULTS = this._createInstance()
     this._addGltfResultScene()
     this._addLights(true)
-    this._configGUI()
+    // this._configGUI()
 
     SceneManager.ACTIVITY_3_RESULTS.start()
   }

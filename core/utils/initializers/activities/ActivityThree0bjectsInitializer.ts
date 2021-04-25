@@ -23,7 +23,7 @@ export default class ActivityThree0bjectsInitializer extends Initializers<{ canv
     SceneManager.ACTIVITY_3_OBJECTS = this._createInstance()
     this._addGltfGlobalScene()
     this._addLights(true)
-    this._configGUI()
+    // this._configGUI()
 
     console.log('ACTIVITY_3_OBJECTSInitializer')
     SceneManager.ACTIVITY_3_OBJECTS.start()

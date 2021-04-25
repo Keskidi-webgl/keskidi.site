@@ -144,6 +144,14 @@ export default class SceneManager {
     if (this._requestId) {
       cancelAnimationFrame(this._requestId)
     }
+    this._renderer.dispose()
+    // @ts-ignore
+    this._scene = null
+    // this.scene.traverse(child=>{
+    //   if(child instanceof Object3D){
+    //     child.dispose()
+    //   }
+    // })
     // this._gui.destroy()
   }
 
@@ -329,9 +337,11 @@ export default class SceneManager {
   }
 
 
-  public setObjectVisibility(objectList: Array<string>, visibleObject: string) {
+  public setObjectVisibility(objectList: Array<string>, visibleObject: string | null = null) {
     objectList.forEach(objectName => {
-      this.scene.getObjectByName(objectName)!.visible = objectName === visibleObject
+      const visibleValue = (visibleObject) ? objectName === visibleObject : true
+      console.log(visibleValue)
+      this.scene.getObjectByName(objectName)!.visible = visibleValue
     })
   }
   // - PRIVATE

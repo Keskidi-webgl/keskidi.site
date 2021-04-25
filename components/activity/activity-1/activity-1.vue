@@ -9,7 +9,6 @@
 
       <div class="activity-itemPractice">
         <h2 v-if="activityModule.dataWord" class="activity-item--title">{{activityModule.dataWord.name}}</h2>
-        <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
         <canvas ref="activity_1_objects" class="activity-1-objects"></canvas>
 
         <div class="activity-itemChoiceWrapper">
@@ -18,12 +17,13 @@
           </div>
         </div>
 
+        <button @click="validateActivity" class="activity-validation">Valider</button>
       </div>
 <!--      <pre>-->
 <!--        {{ activityModule.dataWord }}-->
 <!--      </pre>-->
 
-      <activity1-result style="display: none"></activity1-result>
+      <activity1-result :good-object="activityModule.dataWord.activity_data.good_object" :user-selection="userSelection" v-if="isValidate"></activity1-result>
       <!--    composant enfant activité   overlay resultat avec le canvas cuisse de poulet -->
     </div>
 
@@ -49,6 +49,7 @@ export default class activity1 extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
   public userSelection!: UserObjectSelection
+  public isValidate:boolean = false
 
   objectsData:Array<UserObjectSelection> = [
     {
@@ -77,11 +78,6 @@ export default class activity1 extends Vue {
 
   }
 
-  nextActivity(){
-    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
-
-  }
-
   updateUserSelection(item:UserObjectSelection){
     this.userSelection = item
 
@@ -91,11 +87,18 @@ export default class activity1 extends Vue {
       this.activityModule.dataWord!.activity_data!.object_three,
     ], this.userSelection.name)
   }
+  validateActivity(){
+    this.isValidate = true
 
-  beforeDestroy(){
-    SceneManager.ACTIVITY_1_TOM.destroy()
-    SceneManager.ACTIVITY_1_OBJECTS.destroy()
+    // SceneManager.ACTIVITY_1_TOM.destroy()
+    // SceneManager.ACTIVITY_1_OBJECTS.destroy()
+
   }
+
+  // beforeDestroy(){
+  //   SceneManager.ACTIVITY_1_TOM.destroy()
+  //   SceneManager.ACTIVITY_1_OBJECTS.destroy()
+  // }
 
 }
 </script>
@@ -160,6 +163,15 @@ export default class activity1 extends Vue {
     cursor: pointer;
     position: relative;
   }
-
+  &-validation{
+    z-index: 99;
+    position: relative;
+  }
+  &-1-resultWrapper{
+    position: absolute;
+    background: pink;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

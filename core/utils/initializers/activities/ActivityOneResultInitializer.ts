@@ -23,7 +23,7 @@ export default class ActivityOneResultInitializer extends Initializers<{ canvas:
     SceneManager.ACTIVITY_1_RESULTS = this._createInstance()
     this._addGltfResultScene()
     this._addLights(true)
-    this._configGUI()
+    // this._configGUI()
 
     console.log('ACTIVITY_1_RESULTSInitializer')
     SceneManager.ACTIVITY_1_RESULTS.start()

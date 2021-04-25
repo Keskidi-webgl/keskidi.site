@@ -22,7 +22,7 @@ export default class ActivityOneTomInitializer extends Initializers<{ canvas: HT
     SceneManager.ACTIVITY_1_TOM = this._createInstance()
     this.addGltfTom()
     this._addLights(true)
-    this._configGUI()
+    // this._configGUI()
 
     console.log('ActivityOneTomInitializer')
     SceneManager.ACTIVITY_1_TOM.start()

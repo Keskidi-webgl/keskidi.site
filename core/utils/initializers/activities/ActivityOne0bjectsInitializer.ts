@@ -24,7 +24,7 @@ export default class ActivityOne0bjectsInitializer extends Initializers<{ canvas
     SceneManager.ACTIVITY_1_OBJECTS = this._createInstance()
     this._addGltfObjectsScene()
     this._addLights(true)
-    this._configGUI()
+    // this._configGUI()
 
     SceneManager.ACTIVITY_1_OBJECTS.start()
   }
@@ -148,7 +148,7 @@ export default class ActivityOne0bjectsInitializer extends Initializers<{ canvas
       obj.scene.rotation.x = Math.PI / 2;
 
       SceneManager.ACTIVITY_1_OBJECTS.scene.add(obj.scene)
-      
+
       if (index !== 0){
         obj.scene.visible = false
       }
