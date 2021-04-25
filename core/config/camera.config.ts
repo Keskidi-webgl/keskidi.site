@@ -1,5 +1,6 @@
 import {PresetCameraPosition} from "~/core/types";
 import {
+  ActivityCameraPosition,
   BedroomCameraPosition,
   HomeCameraPosition,
   LoungeCameraPosition,
@@ -35,7 +36,13 @@ class CameraConfig {
     // Bedroom
     PaperCameraPosition,
     SkateCameraPosition,
-    TshirtCameraPosition
+    TshirtCameraPosition,
+
+    //🚨🚨 Activity OLD🚨🚨
+    ActivityCameraPosition
+
+
+    // Activities
   ]
 }
 
