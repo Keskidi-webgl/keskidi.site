@@ -2,7 +2,7 @@ import {
   AxesHelper,
   Camera,
   Clock,
-  Euler,
+  Euler, Intersection, Object3D,
   PerspectiveCamera,
   Quaternion,
   Raycaster,
@@ -33,6 +33,22 @@ export default class SceneManager {
    * Static accessors for scenes instances
    */
   public static GLOBAL_SCENE: SceneManager
+  public static ACTIVITY_SCENE: SceneManager
+
+  // Activity 1 Accessors
+  public static ACTIVITY_1_OBJECTS: SceneManager
+  public static ACTIVITY_1_TOM: SceneManager
+  public static ACTIVITY_1_RESULTS: SceneManager
+
+  // Activity 2 Accessors
+  public static ACTIVITY_2_OBJECTS: SceneManager
+
+  // Activity 3 Accessors
+  public static ACTIVITY_3_OBJECTS: SceneManager
+  public static ACTIVITY_3_TOM: SceneManager
+  public static ACTIVITY_3_RESULTS: SceneManager
+
+
 
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
@@ -47,6 +63,7 @@ export default class SceneManager {
   private _rayCaster: Raycaster
   private _stats: Stats | null
   private _defaultRatio: number
+  private _currentIntersect: null
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -55,8 +72,8 @@ export default class SceneManager {
 
   // -- Events
   private _onStartCallback: DefaultSceneManagerCallback
-  private _onPauseCallback: DefaultSceneManagerCallback
   private _onResumeCallback: DefaultSceneManagerCallback
+  private _onPauseCallback: DefaultSceneManagerCallback
   private _onDestroyCallback: DefaultSceneManagerCallback
   private _onRenderCallback: DefaultSceneManagerCallback
   private _onRayCasterIntersectCallback: RayCasterIntersectCallBack
@@ -89,13 +106,15 @@ export default class SceneManager {
     this._gui = new GUI()
     this._stats = null
     this._defaultRatio = options.defaultRation || 1
+    this._currentIntersect = null
 
     this._onStartCallback = options.onStart || function () {
     }
-    this._onPauseCallback = options.onPause || function () {
-    }
     this._onResumeCallback = options.onResume || function () {
     }
+    this._onPauseCallback = options.onPause || function () {
+    }
+
     this._onDestroyCallback = options.onDestroy || function () {
     }
     this._onRenderCallback = options.onRender || function () {
@@ -119,10 +138,13 @@ export default class SceneManager {
    * Destroy the scene
    */
   public destroy() {
+    // TODO --> destroy all elements
+
     this._onDestroyCallback(this)
     if (this._requestId) {
       cancelAnimationFrame(this._requestId)
     }
+    // this._gui.destroy()
   }
 
   /**
@@ -134,19 +156,20 @@ export default class SceneManager {
   }
 
   /**
-   * Resume animations of the scene
-   */
-  public resume() {
-    this._onResumeCallback(this)
-    this._isPlaying = true
-  }
-
-  /**
    * Start animations of the scene
    */
   public start() {
     this._isPlaying = true
     this._onStartCallback(this)
+    this._tick()
+  }
+
+  /**
+   * Start animations of the scene
+   */
+  public resume() {
+    this._isPlaying = true
+    this._onResumeCallback(this)
     this._tick()
   }
 
@@ -370,7 +393,7 @@ export default class SceneManager {
 
     if (this._isRayCasting) {
       this._rayCaster.setFromCamera(this._mousePositions, this._camera)
-      const intersects = this._rayCaster.intersectObjects(this._scene.children)
+      const intersects = this._rayCaster.intersectObjects(this._scene.children,true)
       this._onRayCasterIntersectCallback(this, intersects)
     }
 
@@ -405,6 +428,11 @@ export default class SceneManager {
     return this._scene
   }
 
+  get currentIntersect(): any {
+    return this._currentIntersect
+  }
+
+
   get mousePositions(): Vector2 {
     return this._mousePositions
   }
@@ -428,4 +456,10 @@ export default class SceneManager {
   get defaultRatio() {
     return this._defaultRatio
   }
+
+  // setters
+  set currentIntersect(currentIntersect:any) {
+    this._currentIntersect = currentIntersect
+  }
+
 }

@@ -1,0 +1,5 @@
+export enum ACTIVITY_TYPE {
+  ACTIVITY_1,
+  ACTIVITY_2,
+  ACTIVITY_3
+}
