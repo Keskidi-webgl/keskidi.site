@@ -41,6 +41,8 @@ export default class activity2 extends Vue {
 
   beforeDestroy(){
     SceneManager.ACTIVITY_2_OBJECTS.destroy()
+
+    console.log("before destroy act 2")
   }
 
 }

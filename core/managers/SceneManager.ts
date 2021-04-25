@@ -144,7 +144,7 @@ export default class SceneManager {
     if (this._requestId) {
       cancelAnimationFrame(this._requestId)
     }
-    this._gui.destroy()
+    // this._gui.destroy()
   }
 
   /**

@@ -25,6 +25,7 @@ import activity2 from "~/components/activity/activity-2/activity-2.vue";
 import activity3 from "~/components/activity/activity-3/activity-3.vue";
 import {SceneManager} from "~/core/managers";
 import ActivityModule from "~/store/activity";
+import {ACTIVITY_TYPE} from "~/core/enums";
 
 @Component({
   components:{
@@ -44,6 +45,28 @@ export default class activity extends Vue {
   goToHome(){
     SceneManager.GLOBAL_SCENE.resume()
     this.$router.push("/")
+    this.destroyActivities()
+  }
+
+  destroyActivities(){
+
+    // destroy activity 1
+
+    SceneManager.ACTIVITY_1_OBJECTS?.destroy()
+    SceneManager.ACTIVITY_1_TOM?.destroy()
+    // SceneManager.ACTIVITY_1_RESULTS.destroy()
+
+    console.log(this.activityModule.currentActivity)
+    // destroy activity 2
+    SceneManager.ACTIVITY_2_OBJECTS?.destroy()
+    //
+    // // destroy activity 3
+    SceneManager.ACTIVITY_3_OBJECTS?.destroy()
+    SceneManager.ACTIVITY_3_TOM?.destroy()
+    // SceneManager.ACTIVITY_3_RESULTS.destroy()
+
+    this.activityModule.setCurrentActivity(null)
+
   }
 
 }
