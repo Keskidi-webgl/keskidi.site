@@ -11,10 +11,15 @@ import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
 import SceneModule from "~/store/scene";
 import {URL_ROOM_IDENTIFIER} from "~/core/enums";
+import AuthMiddleware from "~/middleware/auth";
 
 @Component({})
 export default class RoomPage extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
+
+  middleware(context: Context) {
+    AuthMiddleware.handle(context)
+  }
 
   /**
    * Validate route params
