@@ -13,7 +13,6 @@
 
 <!--  components  conclusion progression -->
 
-<!--    <canvas ref="activitycanvas"></canvas>-->
   </div>
 </template>
 
@@ -40,7 +39,6 @@ export default class activity extends Vue {
 
   public mounted() {
     console.log("activity")
-    console.log(this.activityModule.currentActivity)
   }
   goToHome(){
     SceneManager.GLOBAL_SCENE.resume()

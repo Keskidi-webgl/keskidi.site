@@ -23,12 +23,10 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import activity3Result from "~/components/activity/activity-3/activity-3-result.vue";
 import Activity3Result from "~/components/activity/activity-3/activity-3-result.vue";
-import Activity_1_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_1_0bjectsInitializer";
 import {SceneManager} from "~/core/managers";
-import Activity_3_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_3_ObjectsInitializer";
+import ActivityThree0bjectsInitializer from "~/core/utils/initializers/activities/ActivityThree0bjectsInitializer";
 import SceneModule from "~/store/scene";
-import Activity_1_TomInitializer from "~/core/utils/initializers/activities/Activity_1_TomInitializer";
-import Activity_3_TomInitializer from "~/core/utils/initializers/activities/Activity_3_TomInitializer";
+import ActivityThreeTomInitializer from "~/core/utils/initializers/activities/ActivityThreeTomInitializer";
 
 @Component({
   components: {Activity3Result}
@@ -37,15 +35,13 @@ export default class activity3 extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
 
   public mounted() {
-    console.log("activity3")
 
     /// object scene
-    new Activity_3_0bjectsInitializer({canvas: this.$refs.activity_3_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    new ActivityThree0bjectsInitializer({canvas: this.$refs.activity_3_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_3_OBJECTS.scene.position.set(0,0,-60)
 
-
     // character scene
-    new Activity_3_TomInitializer({canvas: this.$refs.activity_3_tom as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    new ActivityThreeTomInitializer({canvas: this.$refs.activity_3_tom as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_3_TOM.scene.position.set(10,-2,-2)
 
   }

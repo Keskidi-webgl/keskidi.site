@@ -43,7 +43,6 @@ export default class ObjectPage extends Vue {
   displayActivity(){
     this.$refs.btn.addEventListener('click',()=>{
 
-      console.log("okokokok")
       gsap.to('.activity-container',{translateY:0,duration:1,onComplete:()=>{
           // PAUSE ON GLOBAL SCENE
           SceneManager.GLOBAL_SCENE.pause()
@@ -52,26 +51,6 @@ export default class ObjectPage extends Vue {
         }})
     })
   }
-
-  // switchActivity(){
-  //   let activities = document.querySelectorAll('.activity-item')
-  //   let btns = document.querySelectorAll('.activity-item--btn')
-  //   let currentSlide = 0
-  //
-  //   activities.forEach((item,index)=>{
-  //     btns[index].addEventListener('click',()=>{
-  //       item.classList.remove('activity-itemActive')
-  //       if (index<2){
-  //         // this.$emit(`currentActivity${index+1}`)
-  //         this.activityModule.setCurrentActivity(index+1)
-  //         console.log(this.activityModule.currentActivity,'<--- current activity index')
-  //         activities[index+1].classList.add('activity-itemActive')
-  //       }
-  //       console.log(item,index)
-  //     })
-  //   })
-  //
-  // }
 
 }
 </script>

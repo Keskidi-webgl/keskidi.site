@@ -11,10 +11,7 @@
         <h2 class="activity-item--title">S'enjailler</h2>
         <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
         <canvas ref="activity_1_objects" class="activity-1-objects"></canvas>
-
       </div>
-
-
 
       <activity1-result style="display: none"></activity1-result>
       <!--    composant enfant activité   overlay resultat avec le canvas cuisse de poulet -->
@@ -26,9 +23,9 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import activity1Result from "~/components/activity/activity-1/activity-1-result.vue";
 import SceneModule from "~/store/scene";
-import Activity_1_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_1_0bjectsInitializer";
+import ActivityOne0bjectsInitializer from "~/core/utils/initializers/activities/ActivityOne0bjectsInitializer";
 import {SceneManager} from "~/core/managers";
-import Activity_1_TomInitializer from "~/core/utils/initializers/activities/Activity_1_TomInitializer";
+import ActivityOneTomInitializer from "~/core/utils/initializers/activities/ActivityOneTomInitializer";
 import ActivityModule from "~/store/activity";
 import {ACTIVITY_TYPE} from "~/core/enums";
 
@@ -42,18 +39,15 @@ export default class activity1 extends Vue {
   public activityModule = getModule(ActivityModule, this.$store)
 
   public mounted() {
-    console.log("activity1")
 
-    // START ACTIVITY CANVAS
     /// object scene
-    new Activity_1_0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    new ActivityOne0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0,0,-60)
 
     // character scene
-    new Activity_1_TomInitializer({canvas: this.$refs.activity_1_tom as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    new ActivityOneTomInitializer({canvas: this.$refs.activity_1_tom as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_1_TOM.scene.position.set(10,-2,-2)
 
-    // console.log(SceneManager.ACTIVITY_1_TOM.scene)
   }
 
   nextActivity(){

@@ -10,22 +10,23 @@ import {
 } from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
+import CameraConfig from "~/core/config/camera.config";
 import SceneModule from "~/store/scene";
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class Activity_1_TomInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class Activity_1_ResultInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
 
   init() {
-    SceneManager.ACTIVITY_1_TOM = this._createInstance()
+    SceneManager.ACTIVITY_1_RESULTS = this._createInstance()
     this._addGltfGlobalScene()
     this._addLights(true)
     this._configGUI()
 
-    console.log('ACTIVITY_1_TOMInitializer')
-    SceneManager.ACTIVITY_1_TOM.start()
+    console.log('ACTIVITY_1_RESULTSInitializer')
+    SceneManager.ACTIVITY_1_RESULTS.start()
   }
 
   /**
@@ -54,7 +55,18 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: true,
+      activateOrbitControl: false,
+      onRayCasterIntersect: (ctx,intersect)=>{
+        if (intersect.length){
+          // need to get objects name
+          if(intersect[0].object.parent?.name === 'crushObject'){
+            // console.log(intersect)
+            ctx.currentIntersect = intersect[0]
+            // console.log(ctx.currentIntersect,'<--- intersect')
+          }
+        }
+
+      },
       onRender: (ctx) => {
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
@@ -73,7 +85,8 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).enableAxesHelpers(10)
+    }).enableRayCasting()
+      .enableStats()
 
   }
 
@@ -81,10 +94,10 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
    * Create gui
    */
   private _configGUI() {
-    let sceneFolder = SceneManager.ACTIVITY_1_TOM.gui.addFolder("Scene 1 TOM")
-    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'x',-100,100,0.01).listen()
-    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'y',-100,100,0.01).listen()
-    sceneFolder.add(SceneManager.ACTIVITY_1_TOM.scene.position,'z',-100,100,0.01).listen()
+    let sceneFolder = SceneManager.ACTIVITY_1_RESULTS.gui.addFolder("Scene")
+    sceneFolder.add(SceneManager.ACTIVITY_1_RESULTS.scene.position,'x',-500,500,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_1_RESULTS.scene.position,'y',-500,500,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_1_RESULTS.scene.position,'z',-500,500,0.01).listen()
   }
 
   /**
@@ -122,12 +135,34 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
    * Retrieve gltf global scene and inject it into Global scene instance
    */
   private _addGltfGlobalScene() {
-    const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
+    const moulaGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_MOULA).data
+    const crushGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_CRUSH).data
+    const noobGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_NOOB).data
 
-    tomGltf.scene.position.set(-10, 0, 0)
-    tomGltf.scene.scale.set(0.01,0.01,0.01)
+    console.log(moulaGltf,crushGltf,noobGltf)
 
-    SceneManager.ACTIVITY_1_TOM.scene.add(tomGltf.scene)
+    // noobGltf.scene.position.set(10, 0, -20)
+    // noobGltf.scene.scale.set(0.2,0.2,0.2)
+    // noobGltf.scene.rotation.x = Math.PI / 2;
+    //
+    moulaGltf.scene.position.set(0, 0, 0)
+    moulaGltf.scene.rotation.x = Math.PI / 2;
+
+    // crushGltf.scene.position.set(-10, 0, 0)
+    // crushGltf.scene.scale.set(0.5,0.5,0.5)
+    // crushGltf.scene.rotation.x = Math.PI / 2;
+
+
+    SceneManager.ACTIVITY_1_RESULTS.scene.add(moulaGltf.scene)
+    // SceneManager.ACTIVITY_1_RESULTS.scene.add(crushGltf.scene)
+    // SceneManager.ACTIVITY_1_RESULTS.scene.add(noobGltf.scene)
+
+    SceneManager.ACTIVITY_1_RESULTS.scene.traverse( child => {
+
+      // @ts-ignore
+      if ( child.material ) child.material.metalness = 0;
+
+    } );
   }
 
   /**
@@ -138,10 +173,10 @@ export default class Activity_1_TomInitializer extends Initializers<{ canvas: HT
     //hemisphereLights.position.set(100, 500, 700)
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
-      SceneManager.ACTIVITY_1_TOM.scene.add(helper);
+      SceneManager.ACTIVITY_1_RESULTS.scene.add(helper);
     }
 
-    SceneManager.ACTIVITY_1_TOM.scene.add(hemisphereLights);
+    SceneManager.ACTIVITY_1_RESULTS.scene.add(hemisphereLights);
   }
 
 }

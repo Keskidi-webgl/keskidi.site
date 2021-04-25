@@ -17,9 +17,8 @@
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import SceneModule from "~/store/scene";
-import Activity_1_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_1_0bjectsInitializer";
 import {SceneManager} from "~/core/managers";
-import Activity_2_0bjectsInitializer from "~/core/utils/initializers/activities/Activity_2_ObjectsInitializer";
+import ActivityTwo0bjectsInitializer from "~/core/utils/initializers/activities/ActivityTwo0bjectsInitializer";
 import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityModule from "~/store/activity";
 
@@ -32,7 +31,7 @@ export default class activity2 extends Vue {
   public mounted() {
     console.log("activity2")
 
-    new Activity_2_0bjectsInitializer({canvas: this.$refs.activity_2_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    new ActivityTwo0bjectsInitializer({canvas: this.$refs.activity_2_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_2_OBJECTS.scene.position.set(0,0,-60)
   }
   nextActivity(){

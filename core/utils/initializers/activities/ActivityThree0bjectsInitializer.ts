@@ -17,16 +17,16 @@ import SceneModule from "~/store/scene";
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class Activity_3_Result extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class ActivityThree0bjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
 
   init() {
-    SceneManager.ACTIVITY_3_RESULTS = this._createInstance()
+    SceneManager.ACTIVITY_3_OBJECTS = this._createInstance()
     this._addGltfGlobalScene()
     this._addLights(true)
     this._configGUI()
 
-    console.log('ACTIVITY_3_RESULTSInitializer')
-    SceneManager.ACTIVITY_3_RESULTS.start()
+    console.log('ACTIVITY_3_OBJECTSInitializer')
+    SceneManager.ACTIVITY_3_OBJECTS.start()
   }
 
   /**
@@ -35,7 +35,7 @@ export default class Activity_3_Result extends Initializers<{ canvas: HTMLCanvas
   private _createInstance() {
     // Set canvas dimensions
 
-    let container = document.querySelector('.activity-itemInfos')
+    let container = document.querySelector('.activity-itemPractice')
 
     this._data.canvas.width = container!.getBoundingClientRect().width
     this._data.canvas.height = container!.getBoundingClientRect().height
@@ -94,10 +94,10 @@ export default class Activity_3_Result extends Initializers<{ canvas: HTMLCanvas
    * Create gui
    */
   private _configGUI() {
-    let sceneFolder = SceneManager.ACTIVITY_3_RESULTS.gui.addFolder("Scene")
-    sceneFolder.add(SceneManager.ACTIVITY_3_RESULTS.scene.position,'x',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.ACTIVITY_3_RESULTS.scene.position,'y',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.ACTIVITY_3_RESULTS.scene.position,'z',-500,500,0.01).listen()
+    let sceneFolder = SceneManager.ACTIVITY_3_OBJECTS.gui.addFolder("Scene")
+    sceneFolder.add(SceneManager.ACTIVITY_3_OBJECTS.scene.position,'x',-500,500,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_3_OBJECTS.scene.position,'y',-500,500,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_3_OBJECTS.scene.position,'z',-500,500,0.01).listen()
   }
 
   /**
@@ -144,20 +144,10 @@ export default class Activity_3_Result extends Initializers<{ canvas: HTMLCanvas
     noobGltf.scene.position.set(10, 0, -20)
     noobGltf.scene.scale.set(0.2,0.2,0.2)
     noobGltf.scene.rotation.x = Math.PI / 2;
-    //
-    // moulaGltf.scene.position.set(0, 0, 0)
-    // moulaGltf.scene.rotation.x = Math.PI / 2;
 
-    // crushGltf.scene.position.set(-10, 0, 0)
-    // crushGltf.scene.scale.set(0.5,0.5,0.5)
-    // crushGltf.scene.rotation.x = Math.PI / 2;
+    SceneManager.ACTIVITY_3_OBJECTS.scene.add(noobGltf.scene)
 
-
-    SceneManager.ACTIVITY_3_RESULTS.scene.add(moulaGltf.scene)
-    // SceneManager.ACTIVITY_3_RESULTS.scene.add(crushGltf.scene)
-    // SceneManager.ACTIVITY_3_RESULTS.scene.add(noobGltf.scene)
-
-    SceneManager.ACTIVITY_3_RESULTS.scene.traverse( child => {
+    SceneManager.ACTIVITY_3_OBJECTS.scene.traverse( child => {
 
       // @ts-ignore
       if ( child.material ) child.material.metalness = 0;
@@ -173,10 +163,10 @@ export default class Activity_3_Result extends Initializers<{ canvas: HTMLCanvas
     //hemisphereLights.position.set(100, 500, 700)
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
-      SceneManager.ACTIVITY_3_RESULTS.scene.add(helper);
+      SceneManager.ACTIVITY_3_OBJECTS.scene.add(helper);
     }
 
-    SceneManager.ACTIVITY_3_RESULTS.scene.add(hemisphereLights);
+    SceneManager.ACTIVITY_3_OBJECTS.scene.add(hemisphereLights);
   }
 
 }
