@@ -37,7 +37,6 @@ import ActivityOne0bjectsInitializer from "~/core/utils/initializers/activities/
 import {SceneManager} from "~/core/managers";
 import ActivityOneTomInitializer from "~/core/utils/initializers/activities/ActivityOneTomInitializer";
 import ActivityModule from "~/store/activity";
-import {ACTIVITY_TYPE} from "~/core/enums";
 import {UserObjectSelection} from "~/core/types";
 
 @Component({
@@ -90,15 +89,7 @@ export default class activity1 extends Vue {
   validateActivity(){
     this.isValidate = true
 
-    // SceneManager.ACTIVITY_1_TOM.destroy()
-    // SceneManager.ACTIVITY_1_OBJECTS.destroy()
-
   }
-
-  // beforeDestroy(){
-  //   SceneManager.ACTIVITY_1_TOM.destroy()
-  //   SceneManager.ACTIVITY_1_OBJECTS.destroy()
-  // }
 
 }
 </script>
