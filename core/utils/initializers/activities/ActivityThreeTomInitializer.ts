@@ -24,7 +24,7 @@ export default class ActivityThreeTomInitializer extends Initializers<{ canvas: 
     SceneManager.ACTIVITY_3_TOM = this._createInstance()
     this._addGltfTomScene()
     this._addLights(true)
-    this._configGUI()
+    // this._configGUI()
 
     SceneManager.ACTIVITY_3_TOM.start()
   }

@@ -9,14 +9,21 @@
 
       <div class="activity-itemPractice">
         <h2 v-if="activityModule.dataWord" class="activity-item--title">{{activityModule.dataWord.name}}</h2>
-        <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
         <canvas ref="activity_1_objects" class="activity-1-objects"></canvas>
-      </div>
-      <pre>
-        {{ activityModule.dataWord.activity_data }}
-      </pre>
 
-      <activity1-result style="display: none"></activity1-result>
+        <div class="activity-itemChoiceWrapper">
+          <div @click="updateUserSelection(item)" v-for="(item , index) in objectsData" class="activity-itemChoiceBtn">
+            {{index+1}}
+          </div>
+        </div>
+
+        <button @click="validateActivity" class="activity-validation">Valider</button>
+      </div>
+<!--      <pre>-->
+<!--        {{ activityModule.dataWord }}-->
+<!--      </pre>-->
+
+      <activity1-result :good-object="activityModule.dataWord.activity_data.good_object" :user-selection="userSelection" v-if="isValidate"></activity1-result>
       <!--    composant enfant activité   overlay resultat avec le canvas cuisse de poulet -->
     </div>
 
@@ -31,6 +38,7 @@ import {SceneManager} from "~/core/managers";
 import ActivityOneTomInitializer from "~/core/utils/initializers/activities/ActivityOneTomInitializer";
 import ActivityModule from "~/store/activity";
 import {ACTIVITY_TYPE} from "~/core/enums";
+import {UserObjectSelection} from "~/core/types";
 
 @Component({
   components:{
@@ -40,10 +48,28 @@ import {ACTIVITY_TYPE} from "~/core/enums";
 export default class activity1 extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public userSelection!: UserObjectSelection
+  public isValidate:boolean = false
+
+  objectsData:Array<UserObjectSelection> = [
+    {
+      name: this.activityModule.dataWord!.activity_data!.object_one,
+      description: this.activityModule.dataWord!.activity_data!.object_one_description,
+    },
+    {
+      name: this.activityModule.dataWord!.activity_data!.object_two,
+      description: this.activityModule.dataWord!.activity_data!.object_two_description,
+    },
+    {
+      name: this.activityModule.dataWord!.activity_data!.object_three,
+      description: this.activityModule.dataWord!.activity_data!.object_three_description,
+    }
+  ]
 
   public mounted() {
+    this.userSelection = this.objectsData[0]
     /// object scene
-    new ActivityOne0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    new ActivityOne0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, wordData: this.activityModule.dataWord}).init()
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0,0,-60)
 
     // character scene
@@ -52,15 +78,27 @@ export default class activity1 extends Vue {
 
   }
 
-  nextActivity(){
-    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
+  updateUserSelection(item:UserObjectSelection){
+    this.userSelection = item
+
+    SceneManager.ACTIVITY_1_OBJECTS.setObjectVisibility([
+      this.activityModule.dataWord!.activity_data!.object_one,
+      this.activityModule.dataWord!.activity_data!.object_two,
+      this.activityModule.dataWord!.activity_data!.object_three,
+    ], this.userSelection.name)
+  }
+  validateActivity(){
+    this.isValidate = true
+
+    // SceneManager.ACTIVITY_1_TOM.destroy()
+    // SceneManager.ACTIVITY_1_OBJECTS.destroy()
 
   }
 
-  beforeDestroy(){
-    SceneManager.ACTIVITY_1_TOM.destroy()
-    SceneManager.ACTIVITY_1_OBJECTS.destroy()
-  }
+  // beforeDestroy(){
+  //   SceneManager.ACTIVITY_1_TOM.destroy()
+  //   SceneManager.ACTIVITY_1_OBJECTS.destroy()
+  // }
 
 }
 </script>
@@ -116,6 +154,24 @@ export default class activity1 extends Vue {
     display: flex;
     flex-direction: row!important;
   }
-
+  &-itemChoiceBtn{
+    width: 40px;
+    height: 40px;
+    background: #EB5757;
+    border-radius: 50%;
+    z-index: 44;
+    cursor: pointer;
+    position: relative;
+  }
+  &-validation{
+    z-index: 99;
+    position: relative;
+  }
+  &-1-resultWrapper{
+    position: absolute;
+    background: pink;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

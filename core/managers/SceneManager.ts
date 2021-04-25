@@ -144,6 +144,14 @@ export default class SceneManager {
     if (this._requestId) {
       cancelAnimationFrame(this._requestId)
     }
+    this._renderer.dispose()
+    // @ts-ignore
+    this._scene = null
+    // this.scene.traverse(child=>{
+    //   if(child instanceof Object3D){
+    //     child.dispose()
+    //   }
+    // })
     // this._gui.destroy()
   }
 
@@ -311,19 +319,6 @@ export default class SceneManager {
     return this
   }
 
-  // - PRIVATE
-  /**
-   * Init elements after property binding into constructor
-   */
-  private _init() {
-    this._initRenderer()
-    this._initControls()
-
-    this._bindEvents()
-
-    this._checkConfig()
-  }
-
   /**
    * Init intern mandatory events
    */
@@ -340,6 +335,28 @@ export default class SceneManager {
       this._onWindowResizeCallback(this, event)
     })
   }
+
+
+  public setObjectVisibility(objectList: Array<string>, visibleObject: string | null = null) {
+    objectList.forEach(objectName => {
+      const visibleValue = (visibleObject) ? objectName === visibleObject : true
+      console.log(visibleValue)
+      this.scene.getObjectByName(objectName)!.visible = visibleValue
+    })
+  }
+  // - PRIVATE
+  /**
+   * Init elements after property binding into constructor
+   */
+  private _init() {
+    this._initRenderer()
+    this._initControls()
+
+    this._bindEvents()
+
+    this._checkConfig()
+  }
+
 
   /**
    * Init renderer
