@@ -10,7 +10,7 @@ export default class ApiManagerInitializer extends Initializers<{ globalModule: 
 
   public async init(): Promise<void> {
     const {data} = await ApiManager.request({
-      url: '/words?with=expressions,definition,homeScenario,activityData',
+      url: '/words?with=expressions,definition,homeScenario,activityData,definition.medias',
       method: 'GET'
     })
     this._data.globalModule.setDataWord(data)
