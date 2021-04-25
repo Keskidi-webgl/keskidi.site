@@ -56,7 +56,7 @@ export default class ObjectPage extends Vue {
         // PAUSE ON GLOBAL SCENE
         SceneManager.GLOBAL_SCENE.pause()
         // START ACTIVITY 1
-        this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_3)
+        this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
       }
     })
 
@@ -67,7 +67,7 @@ export default class ObjectPage extends Vue {
    * (expressions, definitions ...)
    */
   private _setDataWord() {
-    const dataWord = this.globalModule.dataWord?.find(word => word.id === Helpers.wordIdFromObject(this.objectIdentifier))
+    const dataWord = this.globalModule.dataWord!.find(word => word.id === Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier))!
     this.activityModule.setDataWord(dataWord)
   }
 

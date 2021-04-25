@@ -68,7 +68,10 @@ export default class activity1 extends Vue {
   public mounted() {
     this.userSelection = this.objectsData[0]
     /// object scene
-    new ActivityOne0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, wordData: this.activityModule.dataWord}).init()
+    new ActivityOne0bjectsInitializer({
+      canvas: this.$refs.activity_1_objects as HTMLCanvasElement,
+      wordData: this.activityModule.dataWord!
+    }).init()
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0,0,-60)
 
     // character scene
