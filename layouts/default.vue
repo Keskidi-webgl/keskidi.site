@@ -46,9 +46,8 @@ export default class DefaultLayout extends Vue {
 }
 </script>
 
-<style>
-canvas
-{
+<style scoped lang="scss">
+canvas {
   position: fixed;
   top: 0;
   left: 0;

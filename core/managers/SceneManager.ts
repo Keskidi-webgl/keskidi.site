@@ -2,7 +2,7 @@ import {
   AxesHelper,
   Camera,
   Clock,
-  Euler, Intersection, Object3D,
+  Euler,
   PerspectiveCamera,
   Quaternion,
   Raycaster,
@@ -13,7 +13,8 @@ import {
 } from "three";
 import {
   DefaultSceneManagerCallback,
-  MouseMoveCanvasCallback, PresetCameraPosition,
+  MouseMoveCanvasCallback,
+  PresetCameraPosition,
   RayCasterIntersectCallBack,
   SceneManagerOptions,
   WindowResizeCallback
@@ -336,14 +337,15 @@ export default class SceneManager {
     })
   }
 
-
+  /**
+   * Helper to toggle visible property of objects
+   */
   public setObjectVisibility(objectList: Array<string>, visibleObject: string | null = null) {
     objectList.forEach(objectName => {
-      const visibleValue = (visibleObject) ? objectName === visibleObject : true
-      console.log(visibleValue)
-      this.scene.getObjectByName(objectName)!.visible = visibleValue
+      this.scene.getObjectByName(objectName)!.visible = (visibleObject) ? objectName === visibleObject : true
     })
   }
+
   // - PRIVATE
   /**
    * Init elements after property binding into constructor

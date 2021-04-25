@@ -1,13 +1,11 @@
 <template>
-
   <div class="activity-1-resultWrapper">
     <h2 class="activity-item--title">Selection: {{userSelection.name}}</h2>
     <h2 class="activity-item--title">Result: {{getUserResult()}}</h2>
     <button @click="goToNextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
 
-    <canvas class="activity-1-result"></canvas>
+    <canvas ref="activityOneResult"></canvas>
   </div>
-
 </template>
 
 <script lang="ts">
@@ -16,6 +14,7 @@ import {UserObjectSelection} from "~/core/types"
 import {ACTIVITY_TYPE} from "~/core/enums"
 import ActivityModule from "~/store/activity"
 import {SceneManager} from "~/core/managers"
+import {ActivityOneResultCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
 
 
 @Component({})
@@ -27,6 +26,10 @@ export default class ActivityOneResult extends Vue {
 
   public created() {
     this._resetGltfObjectVisibility()
+  }
+
+  public mounted() {
+    this._initCanvasScenes()
   }
 
   /**
@@ -53,38 +56,26 @@ export default class ActivityOneResult extends Vue {
       this.activityModule.dataWord!.activity_data!.object_three,
     ])
   }
+
+  /**
+   * Init canvas of activity
+   */
+  private _initCanvasScenes() {
+    new ActivityOneResultCanvasInitializer({
+      wordObjectCanvas: this.$refs.activityOneResult as HTMLCanvasElement,
+      activityModule: this.activityModule
+    }).init()
+  }
 }
 </script>
 
 <style lang="scss">
-.activity{
-  &-container{
-    position: absolute;
-    z-index: 999;
-    width: 100vw;
-    height: 100vh;
-    background: white;
-    top: 0;
-    transform: translateY(100%);
-    padding: 2.5rem;
-    overflow: hidden;
-  }
-  &-item{
-    width: 100%;
-    height: 100%;
-    display: none;
-    &--title{
-      font-size: 6rem;
-    }
-    &--btn{
-      padding: 20px;
-      background: red;
-      z-index: 999;
-    }
-  }
-  &-itemActive{
-    display: flex;
-    flex-direction: column;
-  }
+
+.activity-1-resultWrapper {
+  position: absolute;
+  background: pink;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
 }
 </style>

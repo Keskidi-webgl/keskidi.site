@@ -2,12 +2,12 @@
   <div class="activity-item activity-3">
     <div class="activity-itemInfos">
       <span>Comme dirait le prof, reapeat after me ...</span>
-      <canvas ref="activity_3_tom"  class="activity-3-tom"></canvas>
+      <canvas ref="activityThreeTom" class="activity-3-tom"></canvas>
     </div>
 
     <div class="activity-itemPractice">
       <h2 class="activity-item--title">{{ activityModule.dataWord.name }}</h2>
-      <canvas ref="activity_3_objects" class="activity-3-objects"></canvas>
+      <canvas ref="activityThreeObjects" class="activity-3-objects"></canvas>
 
       <div v-if="activeExpression">
         <span>{{ activeExpression.content }}</span>
@@ -30,12 +30,12 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import {SceneManager, VoiceRecognitionManager} from "~/core/managers"
+import {VoiceRecognitionManager} from "~/core/managers"
 import SceneModule from "~/store/scene"
 import ActivityModule from "~/store/activity"
 import {WordExpression} from "~/core/types"
 import ActivityThreeResult from "~/components/activities/activityThree/ActivityThreeResult.vue"
-import {ActivityThreeObjectsInitializer, ActivityThreeTomInitializer} from "~/core/utils/initializers/activities";
+import {ActivityThreeCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
 
 @Component({
   components: {
@@ -80,17 +80,11 @@ export default class ActivityThree extends Vue {
    * Init canvas of activity
    */
   private _initCanvasScenes() {
-    new ActivityThreeObjectsInitializer({
-      canvas: this.$refs.activity_3_objects as HTMLCanvasElement,
-      sceneModule: this.sceneModule
+    new ActivityThreeCanvasInitializer({
+      tomCanvas: this.$refs.activityThreeTom as HTMLCanvasElement,
+      wordObjectCanvas: this.$refs.activityThreeObjects as HTMLCanvasElement,
+      activityModule: this.activityModule
     }).init()
-    SceneManager.ACTIVITY_3_OBJECTS.scene.position.set(0, 0, -60)
-
-    new ActivityThreeTomInitializer({
-      canvas: this.$refs.activity_3_tom as HTMLCanvasElement,
-      sceneModule: this.sceneModule
-    }).init()
-    SceneManager.ACTIVITY_3_TOM.scene.position.set(10, -2, -2)
   }
 
   /**

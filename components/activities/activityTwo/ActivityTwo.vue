@@ -2,7 +2,7 @@
   <div class="activity-item activity-2">
     <div class="activity-itemInfos">
       <span>Pour vous, quel objet représente ce mot ?</span>
-      <canvas ref="activity_2_objects" class="activity-2-objects"></canvas>
+      <canvas ref="activityTwoObjects"></canvas>
     </div>
 
     <div class="activity-itemPractice">
@@ -30,9 +30,9 @@ import SceneModule from "~/store/scene";
 import {SceneManager} from "~/core/managers";
 import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityModule from "~/store/activity";
-import {ActivityTwoObjectsInitializer} from "~/core/utils/initializers/activities";
 import ImageMedia from "~/components/medias/ImageMedia.vue";
 import VideoMedia from "~/components/medias/VideoMedia.vue";
+import {ActivityTwoCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
 
 @Component({
   components: {
@@ -63,11 +63,10 @@ export default class ActivityTwo extends Vue {
    * Init canvas of activity
    */
   private _initCanvasScenes() {
-    new ActivityTwoObjectsInitializer({
-      canvas: this.$refs.activity_2_objects as HTMLCanvasElement,
-      sceneModule: this.sceneModule
+    new ActivityTwoCanvasInitializer({
+      wordObjectCanvas: this.$refs.activityTwoObjects as HTMLCanvasElement,
+      activityModule: this.activityModule
     }).init()
-    SceneManager.ACTIVITY_2_OBJECTS.scene.position.set(0, 0, -60)
   }
 }
 </script>

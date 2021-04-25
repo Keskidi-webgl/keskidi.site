@@ -10,7 +10,7 @@ import {Word} from "~/core/types";
 })
 export default class ActivityModule extends VuexModule {
   private _dataWord: Word | null = null
-  private _currentActivity:ACTIVITY_TYPE | null = null
+  private _currentActivity: ACTIVITY_TYPE | null = null
 
   @Mutation
   public setCurrentActivity(activity:ACTIVITY_TYPE | null) {
