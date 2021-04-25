@@ -37,8 +37,8 @@ export default class ActivityThree0bjectsInitializer extends Initializers<{ canv
 
     let container = document.querySelector('.activity-itemPractice')
 
-    this._data.canvas.width = container!.getBoundingClientRect().width
-    this._data.canvas.height = container!.getBoundingClientRect().height
+    this._data.canvas.width = 100
+    this._data.canvas.height = 100
 
     // Create camera
     const camera = this._createCamera()

@@ -1,56 +1,31 @@
 <template>
-
   <div class="activity-3-result">
-    <h2 class="activity-item--title">Result</h2>
-    <canvas class="activity-3-result"></canvas>
+    <h2 v-if="activityModule.dataWord" class="activity-item--title">Bravo tu as validé le mot
+      {{ activityModule.dataWord.name }}</h2>
   </div>
-
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
+import ActivityModule from "~/store/activity";
 
 
 @Component({})
 export default class activity3Result extends Vue {
-
-  public mounted() {
-    console.log("activity3-result")
-  }
-
+  public activityModule = getModule(ActivityModule, this.$store)
 }
 </script>
 
-<style lang="scss">
-.activity{
-  &-container{
-    position: absolute;
-    z-index: 999;
-    width: 100vw;
-    height: 100vh;
-    background: white;
-    top: 0;
-    transform: translateY(100%);
-    padding: 2.5rem;
-    overflow: hidden;
-  }
-  &-item{
-    width: 100%;
-    height: 100%;
-    display: none;
-    &--title{
-      font-size: 6rem;
-    }
-    &--btn{
-      padding: 20px;
-      background: red;
-      z-index: 999;
-    }
-  }
-  &-itemActive{
-    display: flex;
-    flex-direction: column;
-  }
-
+<style scoped lang="scss">
+.activity-3-result {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: red;
+  z-index: 10;
 }
 </style>
