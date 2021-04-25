@@ -21,11 +21,10 @@ export default class ActivityTwo0bjectsInitializer extends Initializers<{ canvas
 
   init() {
     SceneManager.ACTIVITY_2_OBJECTS = this._createInstance()
-    this._addGltfGlobalScene()
+    this._addGltfObjectsScene()
     this._addLights(true)
     this._configGUI()
 
-    console.log('ACTIVITY_2_OBJECTSInitializer')
     SceneManager.ACTIVITY_2_OBJECTS.start()
   }
 
@@ -134,28 +133,13 @@ export default class ActivityTwo0bjectsInitializer extends Initializers<{ canvas
   /**
    * Retrieve gltf global scene and inject it into Global scene instance
    */
-  private _addGltfGlobalScene() {
+  private _addGltfObjectsScene() {
     const moulaGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_MOULA).data
-    const crushGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_CRUSH).data
-    const noobGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_NOOB).data
 
-    console.log(moulaGltf,crushGltf,noobGltf)
-
-    // noobGltf.scene.position.set(10, 0, -20)
-    // noobGltf.scene.scale.set(0.2,0.2,0.2)
-    // noobGltf.scene.rotation.x = Math.PI / 2;
-    //
     moulaGltf.scene.position.set(0, 0, 0)
     moulaGltf.scene.rotation.x = Math.PI / 2;
 
-    // crushGltf.scene.position.set(-10, 0, 0)
-    // crushGltf.scene.scale.set(0.5,0.5,0.5)
-    // crushGltf.scene.rotation.x = Math.PI / 2;
-
-
     SceneManager.ACTIVITY_2_OBJECTS.scene.add(moulaGltf.scene)
-    // SceneManager.ACTIVITY_2_OBJECTS.scene.add(crushGltf.scene)
-    // SceneManager.ACTIVITY_2_OBJECTS.scene.add(noobGltf.scene)
 
     SceneManager.ACTIVITY_2_OBJECTS.scene.traverse( child => {
 

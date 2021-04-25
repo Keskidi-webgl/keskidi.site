@@ -18,15 +18,14 @@ import to = gsap.to;
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class Activity_3_TomInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class ActivityThreeTomInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
 
   init() {
     SceneManager.ACTIVITY_3_TOM = this._createInstance()
-    this._addGltfGlobalScene()
+    this._addGltfTomScene()
     this._addLights(true)
     this._configGUI()
 
-    console.log('ACTIVITY_3_TOMInitializer')
     SceneManager.ACTIVITY_3_TOM.start()
   }
 
@@ -123,7 +122,7 @@ export default class Activity_3_TomInitializer extends Initializers<{ canvas: HT
   /**
    * Retrieve gltf global scene and inject it into Global scene instance
    */
-  private _addGltfGlobalScene() {
+  private _addGltfTomScene() {
     const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
 
     let tom = tomGltf.scene.clone()

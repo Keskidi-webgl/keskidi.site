@@ -17,15 +17,14 @@ import SceneModule from "~/store/scene";
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class Activity_3_ResultInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class ActivityThreeResultInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
 
   init() {
     SceneManager.ACTIVITY_3_RESULTS = this._createInstance()
-    this._addGltfGlobalScene()
+    this._addGltfResultScene()
     this._addLights(true)
     this._configGUI()
 
-    console.log('ACTIVITY_3_RESULTSInitializer')
     SceneManager.ACTIVITY_3_RESULTS.start()
   }
 
@@ -134,28 +133,13 @@ export default class Activity_3_ResultInitializer extends Initializers<{ canvas:
   /**
    * Retrieve gltf global scene and inject it into Global scene instance
    */
-  private _addGltfGlobalScene() {
-    const moulaGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_MOULA).data
-    const crushGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_CRUSH).data
-    const noobGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_NOOB).data
+  private _addGltfResultScene() {
 
-    console.log(moulaGltf,crushGltf,noobGltf)
+    const noobGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_NOOB).data
 
     noobGltf.scene.position.set(10, 0, -20)
     noobGltf.scene.scale.set(0.2,0.2,0.2)
     noobGltf.scene.rotation.x = Math.PI / 2;
-    //
-    // moulaGltf.scene.position.set(0, 0, 0)
-    // moulaGltf.scene.rotation.x = Math.PI / 2;
-
-    // crushGltf.scene.position.set(-10, 0, 0)
-    // crushGltf.scene.scale.set(0.5,0.5,0.5)
-    // crushGltf.scene.rotation.x = Math.PI / 2;
-
-
-    SceneManager.ACTIVITY_3_RESULTS.scene.add(moulaGltf.scene)
-    // SceneManager.ACTIVITY_3_RESULTS.scene.add(crushGltf.scene)
-    // SceneManager.ACTIVITY_3_RESULTS.scene.add(noobGltf.scene)
 
     SceneManager.ACTIVITY_3_RESULTS.scene.traverse( child => {
 

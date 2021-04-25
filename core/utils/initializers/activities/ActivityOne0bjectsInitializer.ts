@@ -17,15 +17,14 @@ import SceneModule from "~/store/scene";
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class Activity_1_0bjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class ActivityOne0bjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
 
   init() {
     SceneManager.ACTIVITY_1_OBJECTS = this._createInstance()
-    this._addGltfGlobalScene()
+    this._addGltfObjectsScene()
     this._addLights(true)
     this._configGUI()
 
-    console.log('Activity_1_ObjectsInitializer')
     SceneManager.ACTIVITY_1_OBJECTS.start()
   }
 
@@ -36,8 +35,6 @@ export default class Activity_1_0bjectsInitializer extends Initializers<{ canvas
     // Set canvas dimensions
 
     let container = document.querySelector('.activity-itemPractice')
-    console.log(container,'ACT 1💚💚')
-    console.log(container!.getBoundingClientRect().width,'ACT 1💚💚')
 
     this._data.canvas.width = container!.getBoundingClientRect().width
     this._data.canvas.height = container!.getBoundingClientRect().height
@@ -136,28 +133,14 @@ export default class Activity_1_0bjectsInitializer extends Initializers<{ canvas
   /**
    * Retrieve gltf global scene and inject it into Global scene instance
    */
-  private _addGltfGlobalScene() {
-    const moulaGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_MOULA).data
+  private _addGltfObjectsScene() {
     const crushGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_CRUSH).data
-    const noobGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_NOOB).data
-
-    console.log(moulaGltf,crushGltf,noobGltf)
-
-    // noobGltf.scene.position.set(10, 0, -20)
-    // noobGltf.scene.scale.set(0.2,0.2,0.2)
-    // noobGltf.scene.rotation.x = Math.PI / 2;
-    //
-    // moulaGltf.scene.position.set(-30, 0, 0)
-    // moulaGltf.scene.rotation.x = Math.PI / 2;
 
     crushGltf.scene.position.set(-10, 0, 0)
     crushGltf.scene.scale.set(0.5,0.5,0.5)
     crushGltf.scene.rotation.x = Math.PI / 2;
 
-
-    // SceneManager.ACTIVITY_1_OBJECTS.scene.add(moulaGltf.scene)
     SceneManager.ACTIVITY_1_OBJECTS.scene.add(crushGltf.scene)
-    // SceneManager.ACTIVITY_1_OBJECTS.scene.add(noobGltf.scene)
 
     SceneManager.ACTIVITY_1_OBJECTS.scene.traverse( child => {
 
