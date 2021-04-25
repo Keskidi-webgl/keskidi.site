@@ -8,7 +8,7 @@
       </div>
 
       <div class="activity-itemPractice">
-        <h2 class="activity-item--title">S'enjailler</h2>
+        <h2 v-if="activityModule.dataWord" class="activity-item--title">{{activityModule.dataWord.name}}</h2>
         <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
         <canvas ref="activity_1_objects" class="activity-1-objects"></canvas>
       </div>

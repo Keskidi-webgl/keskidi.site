@@ -16,8 +16,8 @@ import gsap from 'gsap'
 import SceneModule from "~/store/scene";
 import ActivityModule from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
-import Helpers from "~/core/utils/helpers";
 import {ApiManager, SceneManager} from "~/core/managers";
+import Helpers from "~/core/utils/helpers";
 
 @Component({
   components: {
@@ -27,6 +27,7 @@ import {ApiManager, SceneManager} from "~/core/managers";
 export default class ObjectPage extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public objectIdentifier: string = ''
 
   middleware(context: Context) {
     AuthMiddleware.handle(context)
@@ -39,13 +40,20 @@ export default class ObjectPage extends Vue {
     return RouteValidator.validateObjectPageParam(params.roomName, params.objectName)
   }
 
-  mounted() {
-    const objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(objectIdentifier, 1, () => {
+  async mounted() {
+    this.objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
+
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.objectIdentifier, 1, () => {
     })
   }
 
-  displayActivity() {
+  async displayActivity() {
+    const wordId = Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier)
+    const {data} = await ApiManager.request({
+      url: `/words/${wordId}?with=expressions,definition,homeScenario,activityData`,
+      method: 'GET'
+    })
+    this.activityModule.setDataWord(data)
 
     gsap.to('.activity-container', {
       translateY: 0, duration: 1, onComplete: () => {
