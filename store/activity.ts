@@ -1,6 +1,6 @@
 import {Module, Mutation, VuexModule} from "vuex-module-decorators";
 import {ACTIVITY_TYPE} from "~/core/enums";
-import {UserWordData} from "~/core/types";
+import {Word} from "~/core/types";
 
 
 @Module({
@@ -9,7 +9,7 @@ import {UserWordData} from "~/core/types";
   stateFactory: true,
 })
 export default class ActivityModule extends VuexModule {
-  private _dataWord: UserWordData | null = null
+  private _dataWord: Word | null = null
   private _currentActivity:ACTIVITY_TYPE | null = null
 
   @Mutation
@@ -18,7 +18,7 @@ export default class ActivityModule extends VuexModule {
   }
 
   @Mutation
-  public setDataWord(dataWord: UserWordData | null) {
+  public setDataWord(dataWord: Word | null) {
     this._dataWord = dataWord
   }
 

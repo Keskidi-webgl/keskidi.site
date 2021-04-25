@@ -17,6 +17,7 @@ import SceneModule from "~/store/scene";
 import ActivityModule from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
 import {ApiManager, SceneManager} from "~/core/managers";
+import GlobalModule from "~/store/global";
 import Helpers from "~/core/utils/helpers";
 
 @Component({
@@ -27,6 +28,7 @@ import Helpers from "~/core/utils/helpers";
 export default class ObjectPage extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public globalModule = getModule(GlobalModule, this.$store)
   public objectIdentifier: string = ''
 
   middleware(context: Context) {
@@ -48,13 +50,7 @@ export default class ObjectPage extends Vue {
   }
 
   async displayActivity() {
-    const wordId = Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier)
-    const {data} = await ApiManager.request({
-      url: `/words/${wordId}?with=expressions,definition,homeScenario,activityData`,
-      method: 'GET'
-    })
-    this.activityModule.setDataWord(data)
-
+    this._setDataWord()
     gsap.to('.activity-container', {
       translateY: 0, duration: 1, onComplete: () => {
         // PAUSE ON GLOBAL SCENE
@@ -64,6 +60,15 @@ export default class ObjectPage extends Vue {
       }
     })
 
+  }
+
+  /**
+   * On click of activity button, we update activity store with target word of the activity
+   * (expressions, definitions ...)
+   */
+  private _setDataWord() {
+    const dataWord = this.globalModule.dataWord?.find(word => word.id === Helpers.wordIdFromObject(this.objectIdentifier))
+    this.activityModule.setDataWord(dataWord)
   }
 
 }
