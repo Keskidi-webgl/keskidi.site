@@ -6,14 +6,15 @@
 
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'nuxt-property-decorator'
+import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
 import {InteractionPointConfig} from "~/core/types";
+import GlobalModule from "~/store/global";
 
 
 @Component
 export default class InteractionPoints extends Vue {
-
   @Prop({type: Object, required: true}) readonly data!: InteractionPointConfig
+  public globalModule: GlobalModule = getModule(GlobalModule, this.$store)
 
   public mounted() {
   }
@@ -21,7 +22,7 @@ export default class InteractionPoints extends Vue {
   public style() {
     return `
     transform: translateX(${this.data.transformX}px) translateY(${this.data.transformY}px);
-    background-color: ${this.data.isCompleted() ? 'red' : '#00000077'};
+    background-color: ${this.data.isCompleted(this.globalModule) ? 'red' : '#00000077'};
     `
   }
 }

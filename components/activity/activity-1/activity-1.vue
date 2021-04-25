@@ -4,14 +4,17 @@
     <div class="activity-item activity-1">
       <div class="activity-itemInfos">
         <span>Pour vous, quel objet représente ce mot ?</span>
-        <canvas ref="activity_1_tom"  class="activity-1-tom"></canvas>
+        <canvas ref="activity_1_tom" class="activity-1-tom"></canvas>
       </div>
 
       <div class="activity-itemPractice">
-        <h2 class="activity-item--title">S'enjailler</h2>
+        <h2 v-if="activityModule.dataWord" class="activity-item--title">{{activityModule.dataWord.name}}</h2>
         <button @click="nextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
         <canvas ref="activity_1_objects" class="activity-1-objects"></canvas>
       </div>
+      <pre>
+        {{ activityModule.dataWord.activity_data }}
+      </pre>
 
       <activity1-result style="display: none"></activity1-result>
       <!--    composant enfant activité   overlay resultat avec le canvas cuisse de poulet -->
@@ -39,7 +42,6 @@ export default class activity1 extends Vue {
   public activityModule = getModule(ActivityModule, this.$store)
 
   public mounted() {
-
     /// object scene
     new ActivityOne0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0,0,-60)
@@ -56,8 +58,6 @@ export default class activity1 extends Vue {
   }
 
   beforeDestroy(){
-    console.log("before destroy act 1")
-
     SceneManager.ACTIVITY_1_TOM.destroy()
     SceneManager.ACTIVITY_1_OBJECTS.destroy()
   }

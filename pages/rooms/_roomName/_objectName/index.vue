@@ -16,8 +16,9 @@ import gsap from 'gsap'
 import SceneModule from "~/store/scene";
 import ActivityModule from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
-import Helpers from "~/core/utils/helpers";
 import {ApiManager, SceneManager} from "~/core/managers";
+import GlobalModule from "~/store/global";
+import Helpers from "~/core/utils/helpers";
 
 @Component({
   components: {
@@ -27,6 +28,8 @@ import {ApiManager, SceneManager} from "~/core/managers";
 export default class ObjectPage extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public globalModule = getModule(GlobalModule, this.$store)
+  public objectIdentifier: string = ''
 
   middleware(context: Context) {
     AuthMiddleware.handle(context)
@@ -39,14 +42,15 @@ export default class ObjectPage extends Vue {
     return RouteValidator.validateObjectPageParam(params.roomName, params.objectName)
   }
 
-  mounted() {
-    const objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(objectIdentifier, 1, () => {
+  async mounted() {
+    this.objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
+
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.objectIdentifier, 1, () => {
     })
   }
 
-  displayActivity() {
-
+  async displayActivity() {
+    this._setDataWord()
     gsap.to('.activity-container', {
       translateY: 0, duration: 1, onComplete: () => {
         // PAUSE ON GLOBAL SCENE
@@ -56,6 +60,15 @@ export default class ObjectPage extends Vue {
       }
     })
 
+  }
+
+  /**
+   * On click of activity button, we update activity store with target word of the activity
+   * (expressions, definitions ...)
+   */
+  private _setDataWord() {
+    const dataWord = this.globalModule.dataWord?.find(word => word.id === Helpers.wordIdFromObject(this.objectIdentifier))
+    this.activityModule.setDataWord(dataWord)
   }
 
 }
