@@ -22,6 +22,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   init() {
     SceneManager.GLOBAL_SCENE = this._createInstance()
     this._addGltfGlobalScene()
+    this._addGltfTom()
     this._registerPresetPositions()
     this._addLights(true)
     this._configGUI()
@@ -70,17 +71,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
           this._data.sceneModule.updatePositionsInteractivePoint(updateData)
         }
       },
-      onStart:(ctx)=>{
-        const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
-
-
-        // console.log(tomGltf,'tom')
-        tomGltf.scene.scale.set(1.3, 1.3, 1.3)
-
-
-        ctx.scene.add(tomGltf.scene)
-        console.log(ctx.scene,'on start global scene')
-
+      onResume:(ctx)=> {
+        this._addGltfTom()
       },
       onWindowResize: (ctx) => {
         ctx.canvas.height = window.innerHeight
@@ -144,26 +136,22 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
-    const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
-
-    console.log(globalSceneGltf)
-    /*
-    const box3 = new Box3().setFromObject(globalSceneGltf.scene)
-    const vector = new Vector3()
-    box3.getCenter(vector)
-    globalSceneGltf.scene.position.set(-vector.x, -vector.y, -vector.z)
-     */
     globalSceneGltf.scene.position.set(0, 0, 0)
-    tomGltf.scene.scale.set(1.3, 1.3, 1.3)
+
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
-    SceneManager.GLOBAL_SCENE.scene.add(tomGltf.scene)
     SceneManager.GLOBAL_SCENE.scene.traverse( child => {
-
       // @ts-ignore
       if ( child.material ) child.material.metalness = 0;
 
     } );
+  }
+
+  private _addGltfTom() {
+    const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
+    tomGltf.scene.scale.set(1.3, 1.3, 1.3)
+    tomGltf.scene.position.set(0, 30, 500)
+    SceneManager.GLOBAL_SCENE.scene.add(tomGltf.scene)
   }
 
   /**

@@ -98,8 +98,8 @@ class AssetsManager {
   public getGltf(name: string): GltfAsset {
     const gltf = this._gltfAssets.find(gltf => gltf.source.name === name)
     if (!gltf) throw new Error(`Gltf asset ${name} is not founded`)
-    let obj = Object.create(gltf)
-    return obj //gltf
+    // let obj = Object.create(gltf)
+    return gltf //obj //gltf
   }
 
   /**

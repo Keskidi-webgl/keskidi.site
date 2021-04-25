@@ -45,8 +45,8 @@ export default class activity3 extends Vue {
 
 
     // character scene
-    // new Activity_3_TomInitializer({canvas: this.$refs.activity_3_tom as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
-    // SceneManager.ACTIVITY_3_TOM.scene.position.set(10,-2,-2)
+    new Activity_3_TomInitializer({canvas: this.$refs.activity_3_tom as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    SceneManager.ACTIVITY_3_TOM.scene.position.set(10,-2,-2)
 
   }
 

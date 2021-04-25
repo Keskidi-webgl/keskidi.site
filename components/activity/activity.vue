@@ -42,7 +42,7 @@ export default class activity extends Vue {
     console.log(this.activityModule.currentActivity)
   }
   goToHome(){
-    SceneManager.GLOBAL_SCENE.start()
+    SceneManager.GLOBAL_SCENE.resume()
     this.$router.push("/")
   }
 

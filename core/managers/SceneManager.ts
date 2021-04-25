@@ -72,6 +72,7 @@ export default class SceneManager {
 
   // -- Events
   private _onStartCallback: DefaultSceneManagerCallback
+  private _onResumeCallback: DefaultSceneManagerCallback
   private _onPauseCallback: DefaultSceneManagerCallback
   private _onDestroyCallback: DefaultSceneManagerCallback
   private _onRenderCallback: DefaultSceneManagerCallback
@@ -108,6 +109,8 @@ export default class SceneManager {
     this._currentIntersect = null
 
     this._onStartCallback = options.onStart || function () {
+    }
+    this._onResumeCallback = options.onResume || function () {
     }
     this._onPauseCallback = options.onPause || function () {
     }
@@ -158,6 +161,15 @@ export default class SceneManager {
   public start() {
     this._isPlaying = true
     this._onStartCallback(this)
+    this._tick()
+  }
+
+  /**
+   * Start animations of the scene
+   */
+  public resume() {
+    this._isPlaying = true
+    this._onResumeCallback(this)
     this._tick()
   }
 

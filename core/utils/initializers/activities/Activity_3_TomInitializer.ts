@@ -12,6 +12,7 @@ import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
 import SceneModule from "~/store/scene";
+import to = gsap.to;
 
 /**
  * @description
@@ -125,11 +126,12 @@ export default class Activity_3_TomInitializer extends Initializers<{ canvas: HT
   private _addGltfGlobalScene() {
     const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
 
-    tomGltf.scene.position.set(-10, 0, 0)
-    tomGltf.scene.scale.set(0.01,0.01,0.01)
+    let tom = tomGltf.scene.clone()
+    tom.position.set(-10, 0, 0)
+    tom.scale.set(0.01,0.01,0.01)
     // tomGltf.scene.rotation.x = Math.PI / 2;
 
-    SceneManager.ACTIVITY_3_TOM.scene.add(tomGltf.scene)
+    SceneManager.ACTIVITY_3_TOM.scene.add(tom)
 
     SceneManager.ACTIVITY_3_TOM.scene.traverse( child => {
 
