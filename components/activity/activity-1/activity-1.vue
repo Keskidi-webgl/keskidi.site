@@ -19,9 +19,9 @@
         </div>
 
       </div>
-      <pre>
-        {{ activityModule.dataWord }}
-      </pre>
+<!--      <pre>-->
+<!--        {{ activityModule.dataWord }}-->
+<!--      </pre>-->
 
       <activity1-result style="display: none"></activity1-result>
       <!--    composant enfant activité   overlay resultat avec le canvas cuisse de poulet -->
@@ -68,7 +68,7 @@ export default class activity1 extends Vue {
   public mounted() {
     this.userSelection = this.objectsData[0]
     /// object scene
-    new ActivityOne0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, sceneModule: this.sceneModule}).init()
+    new ActivityOne0bjectsInitializer({canvas: this.$refs.activity_1_objects as HTMLCanvasElement, wordData: this.activityModule.dataWord}).init()
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0,0,-60)
 
     // character scene

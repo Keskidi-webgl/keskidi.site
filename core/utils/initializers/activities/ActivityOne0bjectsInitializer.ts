@@ -12,12 +12,13 @@ import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
 import SceneModule from "~/store/scene";
+import {Word} from "~/core/types";
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class ActivityOne0bjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class ActivityOne0bjectsInitializer extends Initializers<{ canvas: HTMLCanvasElement, wordData: Word }, void> {
 
   init() {
     SceneManager.ACTIVITY_1_OBJECTS = this._createInstance()
@@ -134,13 +135,27 @@ export default class ActivityOne0bjectsInitializer extends Initializers<{ canvas
    * Retrieve gltf global scene and inject it into Global scene instance
    */
   private _addGltfObjectsScene() {
-    const crushGltf = AssetsManager.getGltf(GLTF_ASSET.ACTIVITY_OBJECT_CRUSH).data
+    const {object_one, object_two, object_three} = this._data.wordData.activity_data!
 
-    crushGltf.scene.position.set(-10, 0, 0)
-    crushGltf.scene.scale.set(0.5,0.5,0.5)
-    crushGltf.scene.rotation.x = Math.PI / 2;
+    const objects = [object_one,object_two,object_three]
 
-    SceneManager.ACTIVITY_1_OBJECTS.scene.add(crushGltf.scene)
+    objects.forEach((el,index)=>{
+
+      const obj = AssetsManager.getGltf(el).data
+
+      obj.scene.position.set(-10, 0, 0)
+      obj.scene.scale.set(0.5,0.5,0.5)
+      obj.scene.rotation.x = Math.PI / 2;
+
+      SceneManager.ACTIVITY_1_OBJECTS.scene.add(obj.scene)
+      
+      if (index !== 0){
+        obj.scene.visible = false
+      }
+      console.log(obj)
+
+    })
+
 
     SceneManager.ACTIVITY_1_OBJECTS.scene.traverse( child => {
 
