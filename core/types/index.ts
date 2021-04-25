@@ -5,3 +5,5 @@ export * from './admin'
 export * from './asset'
 export * from './funfact'
 export * from './level'
+export * from './activity'
+

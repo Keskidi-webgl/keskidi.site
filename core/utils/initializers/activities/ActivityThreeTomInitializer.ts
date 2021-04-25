@@ -12,22 +12,21 @@ import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
 import SceneModule from "~/store/scene";
+import to = gsap.to;
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class ActivityThreeTomInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
 
   init() {
-    SceneManager.GLOBAL_SCENE = this._createInstance()
-    this._addGltfGlobalScene()
-    this._addGltfTom()
-    this._registerPresetPositions()
+    SceneManager.ACTIVITY_3_TOM = this._createInstance()
+    this._addGltfTomScene()
     this._addLights(true)
-    this._configGUI()
+    // this._configGUI()
 
-    SceneManager.GLOBAL_SCENE.start()
+    SceneManager.ACTIVITY_3_TOM.start()
   }
 
   /**
@@ -35,8 +34,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _createInstance() {
     // Set canvas dimensions
-    this._data.canvas.width = Helpers.getWindowSizes().width
-    this._data.canvas.height = Helpers.getWindowSizes().height
+
+    let container = document.querySelector('.activity-itemInfos')
+
+    this._data.canvas.width = container!.getBoundingClientRect().width
+    this._data.canvas.height = container!.getBoundingClientRect().height
 
     // Create camera
     const camera = this._createCamera()
@@ -59,20 +61,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.updateProjectionMatrix()
         }
-        for (const point of this._data.sceneModule.activeInteractionPoints) {
-          const screenPosition = point.canvasCoords().clone()
-          screenPosition.project(SceneManager.GLOBAL_SCENE.camera)
-          const updateData = {
-            name: point.name,
-            transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,
-            transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
-          }
-
-          this._data.sceneModule.updatePositionsInteractivePoint(updateData)
-        }
-      },
-      onResume:(ctx)=> {
-        this._addGltfTom()
       },
       onWindowResize: (ctx) => {
         ctx.canvas.height = window.innerHeight
@@ -80,13 +68,13 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.aspect = ctx.canvas.width / ctx.canvas.height
-          camera.updateProjectionMatrix()
+          ctx.camera.updateProjectionMatrix()
         }
 
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    })//.enableStats().enableAxesHelpers(1000)
+    })
 
   }
 
@@ -94,10 +82,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    * Create gui
    */
   private _configGUI() {
-    let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'x',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'y',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'z',-500,500,0.01).listen()
+    let sceneFolder = SceneManager.ACTIVITY_3_TOM.gui.addFolder("Scene Tom 3")
+    sceneFolder.add(SceneManager.ACTIVITY_3_TOM.scene.position,'x',-50,50,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_3_TOM.scene.position,'y',-50,50,0.01).listen()
+    sceneFolder.add(SceneManager.ACTIVITY_3_TOM.scene.position,'z',-50,50,0.01).listen()
   }
 
   /**
@@ -134,24 +122,22 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   /**
    * Retrieve gltf global scene and inject it into Global scene instance
    */
-  private _addGltfGlobalScene() {
-    const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
-    globalSceneGltf.scene.position.set(0, 0, 0)
+  private _addGltfTomScene() {
+    const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
 
+    let tom = tomGltf.scene.clone()
+    tom.position.set(-10, 0, 0)
+    tom.scale.set(0.01,0.01,0.01)
+    // tomGltf.scene.rotation.x = Math.PI / 2;
 
-    SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
-    SceneManager.GLOBAL_SCENE.scene.traverse( child => {
+    SceneManager.ACTIVITY_3_TOM.scene.add(tom)
+
+    SceneManager.ACTIVITY_3_TOM.scene.traverse( child => {
+
       // @ts-ignore
       if ( child.material ) child.material.metalness = 0;
+
     } );
-
-  }
-
-  private _addGltfTom() {
-    const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
-    tomGltf.scene.scale.set(1.3, 1.3, 1.3)
-    tomGltf.scene.position.set(0, 30, 500)
-    SceneManager.GLOBAL_SCENE.scene.add(tomGltf.scene)
   }
 
   /**
@@ -162,18 +148,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     //hemisphereLights.position.set(100, 500, 700)
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
-      SceneManager.GLOBAL_SCENE.scene.add(helper);
+      SceneManager.ACTIVITY_3_TOM.scene.add(helper);
     }
 
-    SceneManager.GLOBAL_SCENE.scene.add(hemisphereLights);
+    SceneManager.ACTIVITY_3_TOM.scene.add(hemisphereLights);
   }
 
-  /**
-   * Register preset camera positions
-   */
-  private _registerPresetPositions() {
-    CameraConfig.presetPositions.forEach(presetPosition => {
-      SceneManager.GLOBAL_SCENE.registerPresetCameraPositions(presetPosition)
-    })
-  }
 }
