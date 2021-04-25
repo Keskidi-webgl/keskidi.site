@@ -18,6 +18,7 @@ class AuthManager {
    * @param credential
    */
   public async auth(credential: AuthCredential): Promise<string> {
+    console.log('auth rquest')
     const payloads: AxiosRequestConfig = {
       url: '/auth',
       method: 'POST',
@@ -26,6 +27,7 @@ class AuthManager {
 
     const {data} = await ApiManager.request(payloads)
     this.storeAuthToken(data.token)
+
     return data.token
   }
 

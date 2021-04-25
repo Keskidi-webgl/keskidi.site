@@ -10,10 +10,14 @@ import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
+import AuthMiddleware from "~/middleware/auth";
 
 @Component
 export default class ObjectPage extends Vue {
 
+  middleware(context: Context) {
+    AuthMiddleware.handle(context)
+  }
   /**
    * Validate route params
    */

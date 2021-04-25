@@ -42,6 +42,13 @@ export type Word = {
   activity_data: WordActivityData | null
 }
 
+export type UserWordData = {
+  id: number
+  is_achieved: boolean
+  name: string,
+  slug: string
+}
+
 export type WordDefinition = {
   id?: number
   gender?: string

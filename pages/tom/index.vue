@@ -6,7 +6,7 @@
         <p class="message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
         <p>Pour acceder à l’experience, entrez votre adresse mail :</p>
         <input type="text" v-model="dataFormAuth.email" class="form-control" id="email" placeholder="Ton email">
-        <button class="button" @click="auth()">C'est parti !</button>
+        <button class="button" @click="auth">C'est parti !</button>
       </div>
       <div v-if="this.authStore.isAuth">
         <p class="message">{{ currentFact.content }}</p>
@@ -26,6 +26,7 @@ import AuthModule from '~/store/auth';
 @Component
 export default class AuthPage extends Vue {
   public onProgress: boolean = false
+  public autModule: AuthModule = getModule(AuthModule, this.$store)
   public dataFormAuth: AuthCredential = {
     email: ''
   }
@@ -47,7 +48,7 @@ export default class AuthPage extends Vue {
   async auth() {
     if (this.dataFormAuth.email) {
       try {
-        await AuthManager.auth(this.dataFormAuth)
+        await this.autModule.auth(this.dataFormAuth)
         this.back()
       } catch (e) {
         this.onProgress = false
