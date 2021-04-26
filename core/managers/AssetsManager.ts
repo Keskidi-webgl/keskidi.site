@@ -22,6 +22,7 @@ class AssetsManager {
   private _imageAssets: Array<ImageAsset>
   private _videoAssets: Array<VideoAsset>
   private _gltfAssets: Array<GltfAsset>
+  private _isLocalMode: boolean = false
 
   // -- Loaders
   private _gltfLoader: GLTFLoader
@@ -65,11 +66,17 @@ class AssetsManager {
     return this
   }
 
+  public enableLocalMode() {
+    this._isLocalMode = true
+
+    return this
+  }
+
   /**
    * Register new gltf asset source
    */
-  public registerGltf(name: string, url: string) {
-    this._registerSource({name, url, type: ASSET_TYPE.GLTF})
+  public registerGltf(name: string, url: string, localUrl: string | null = null) {
+    this._registerSource(name, ASSET_TYPE.GLTF, url, localUrl)
 
     return this
   }
@@ -77,8 +84,8 @@ class AssetsManager {
   /**
    * Register new video asset source
    */
-  public registerVideo(name: string, url: string) {
-    this._registerSource({name, url, type: ASSET_TYPE.VIDEO})
+  public registerVideo(name: string, url: string, localUrl: string | null = null) {
+    this._registerSource(name, ASSET_TYPE.VIDEO, url, localUrl)
 
     return this
   }
@@ -86,8 +93,8 @@ class AssetsManager {
   /**
    * Register new image asset source
    */
-  public registerImage(name: string, url: string) {
-    this._registerSource({name, url, type: ASSET_TYPE.IMAGE})
+  public registerImage(name: string, url: string, localUrl: string | null = null) {
+    this._registerSource(name, ASSET_TYPE.IMAGE, url, localUrl)
 
     return this
   }
@@ -125,7 +132,12 @@ class AssetsManager {
   /**
    * Register new asset source
    */
-  private _registerSource(source: AssetSource) {
+  private _registerSource(name: string, type: ASSET_TYPE, url: string, localUrl: string | null) {
+    const source: AssetSource = {
+      name: name,
+      type: type,
+      url: (this._isLocalMode && localUrl) ? `/models/${localUrl}`  : url
+    }
     this._assetSource.push(source)
   }
 
