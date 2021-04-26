@@ -11,6 +11,7 @@ import {
 import SceneManager from "~/core/managers/SceneManager";
 import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import GlobalModule from "~/store/global";
+import AuthModule from "~/store/auth";
 
 /**
  * Option to create SceneManager
@@ -73,6 +74,7 @@ export type PresetCameraPosition = {
 export type InteractionPointConfig = {
   name: INTERACT_POINT_NAME
   isCompleted: (globalModule: GlobalModule) => boolean
+  isVisible: (globalModule: GlobalModule, authModule: AuthModule) => boolean
   canvasCoords: () => Vector3
   transformX: number
   transformY: number
