@@ -1,26 +1,30 @@
 <template>
-  <div class="activity-item activity-2">
-    <div class="activity-itemInfos">
-      <span>Pour vous, quel objet représente ce mot ?</span>
+  <div class="activity-page">
+
+    <aside class="activity-page-aside" ref="activityPageAside">
+      <div class="progress-bar"></div>
       <canvas ref="activityTwoObjects"></canvas>
-    </div>
+      <button @click="validateActivity" class="activity-validation">Valider</button>
+    </aside>
 
-    <div class="activity-itemPractice">
-      <h2 class="activity-item--title">{{ activityModule.dataWord.name }}</h2>
-      <p class="activity-item--phonetic">{{ activityModule.dataWord.definition.phonetic }}</p>
-      <p class="activity-item--definition">{{ activityModule.dataWord.definition.definition }}</p>
-      <p class="activity-item--origin">{{ activityModule.dataWord.definition.origin }}</p>
+    <main class="activity-page-content">
+      <div>
+          <h2 class="activity-item--title">{{ activityModule.dataWord.name }}</h2>
+          <p class="activity-item--phonetic">{{ activityModule.dataWord.definition.phonetic }}</p>
+          <p class="activity-item--definition">{{ activityModule.dataWord.definition.definition }}</p>
+          <p class="activity-item--origin">{{ activityModule.dataWord.definition.origin }}</p>
 
+          <div class="activity-item--mediaContainer">
+            <div class="activity-item--mediasWrapper" v-for="item in activityModule.dataWord.definition.medias">
+              <ImageMedia :caption="item.caption" :media-url="item.url" v-if="item.type === 'image'"></ImageMedia>
+              <VideoMedia :caption="item.caption" :media-url="item.url" v-if="item.type === 'video'"></VideoMedia>
+            </div>
+          </div>
 
-      <div class="activity-item--mediaContainer">
-        <div class="activity-item--mediasWrapper" v-for="item in activityModule.dataWord.definition.medias">
-          <ImageMedia :caption="item.caption" :media-url="item.url" v-if="item.type === 'image'"></ImageMedia>
-          <VideoMedia :caption="item.caption" :media-url="item.url" v-if="item.type === 'video'"></VideoMedia>
-        </div>
       </div>
 
-      <button @click="goToNextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
-    </div>
+    </main>
+
   </div>
 </template>
 
@@ -43,6 +47,8 @@ import {ActivityTwoCanvasInitializer} from "~/core/utils/initializers/activities
 export default class ActivityTwo extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public isValidate: boolean = false
+
 
   public mounted() {
     this._initCanvasScenes()
@@ -50,6 +56,14 @@ export default class ActivityTwo extends Vue {
 
   public beforeDestroy() {
     SceneManager.ACTIVITY_2_OBJECTS.destroy()
+  }
+
+
+  /**
+   * Callback on user validate activity
+   */
+  public validateActivity() {
+    this.isValidate = true
   }
 
   /**
@@ -78,4 +92,8 @@ export default class ActivityTwo extends Vue {
 .activity-2-objects{
   position: absolute;
 }
+.activity-page-content{
+  padding: 0 4rem;
+}
+
 </style>
