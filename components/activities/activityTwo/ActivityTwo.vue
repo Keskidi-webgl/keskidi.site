@@ -4,7 +4,7 @@
     <aside class="activity-page-aside" ref="activityPageAside">
       <div class="progress-bar"></div>
       <canvas ref="activityTwoObjects"></canvas>
-      <button @click="validateActivity" class="activity-validation">Valider</button>
+      <button @click="goToNextActivity" class="activity-validation">Valider</button>
     </aside>
 
     <main class="activity-page-content">
@@ -93,7 +93,15 @@ export default class ActivityTwo extends Vue {
   position: absolute;
 }
 .activity-page-content{
-  padding: 0 4rem;
+  padding: 8rem 4rem;
+}
+.activity-item{
+  color: $dark-blue;
+  &--title{
+    font-size: 6rem;
+    font-family: "TTNormsPro";
+    font-weight: bold;
+  }
 }
 
 </style>
