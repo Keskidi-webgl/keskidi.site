@@ -10,9 +10,11 @@
         <span class="common-text instruction">
           Alors alors ... Parmis ces 3 objets lequel représente le mot {{ activityModule.dataWord.name }} ?
         </span>
-        <div class="choice-block-container">
+        <div v-if="userSelection" class="choice-block-container">
           <div @click="updateUserSelection(item)" v-for="(item , index) in objectsData"
-               class="choice-block-item">{{ index + 1 }}
+               class="choice-block-item" :class="{isActive: item.name === userSelection.name}">
+            <span class="circle"></span>
+            <span class="text">{{ item.description }}</span>
           </div>
         </div>
         <button @click="validateActivity" class="activity-validation">Valider</button>
@@ -49,7 +51,7 @@ import {ActivityOneCanvasInitializer} from "~/core/utils/initializers/activities
 export default class ActivityOne extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
-  public userSelection!: UserObjectSelection
+  public userSelection: UserObjectSelection|null = null
   public isValidate: boolean = false
   public objectsData: Array<UserObjectSelection> = [
     {
@@ -132,6 +134,32 @@ export default class ActivityOne extends Vue {
       .choice-block-container {
         display: flex;
         flex-direction: column;
+        cursor: pointer;
+
+        .choice-block-item {
+          width: 270px;
+          border: 2px solid #FF9D6F;
+          border-radius: 30px;
+          padding: 10px 20px;
+          display: flex;
+          align-items: center;
+          margin: 5px 0;
+
+          .circle {
+            width: 20px;
+            height: 20px;
+            display: block;
+            border-radius: 50%;
+            border: 2px solid #FF9D6F;
+            margin-right: 15px;
+          }
+
+          &.isActive {
+            .circle {
+              background-color: #FF9D6F;
+            }
+          }
+        }
       }
     }
 
