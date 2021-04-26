@@ -98,6 +98,7 @@ export default class ObjectPage extends Vue {
     opacity: 0.6;
     color: #000648;
     padding-bottom: 25px;
+    font-family: $main_font;
   }
 
 }
