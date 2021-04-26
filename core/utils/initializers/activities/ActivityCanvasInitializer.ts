@@ -32,12 +32,16 @@ export default abstract class ActivityCanvasInitializer<OptionData, InitReturn> 
       scene,
       renderer,
       defaultRation: 2,
-      activateOrbitControl: false,
+      activateOrbitControl: true,
     })
 
     const tomGltf = this._getTomGltf()
-    tomGltf.scene.position.set(-10, 0, 0)
-    tomGltf.scene.scale.set(0.01,0.01,0.01)
+    tomGltf.scene.position.set(0, 0, 0)
+    tomGltf.scene.scale.set(0.2,0.2,0.2)
+
+    const light = SceneHelper.createFreshHemisphereLight()
+    light.position.z = 10
+    sceneContext.scene.add(light)
 
     sceneContext.scene.add(tomGltf.scene)
 

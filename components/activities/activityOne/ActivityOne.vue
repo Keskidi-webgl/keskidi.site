@@ -1,28 +1,35 @@
 <template>
-    <div class="activity-item activity-1">
-      <div class="activity-itemInfos">
-        <span>Pour vous, quel objet représente ce mot ?</span>
-        <canvas ref="activityOneTom" class="activity-1-tom"></canvas>
-      </div>
-      <div class="activity-itemPractice">
-        <h2 v-if="activityModule.dataWord" class="activity-item--title">{{activityModule.dataWord.name}}</h2>
-        <canvas ref="activityOneObjects" class="activity-1-objects"></canvas>
-        <div class="activity-itemChoiceWrapper">
+  <div class="activity-page">
+    <aside class="activity-page-aside" ref="activityPageAside">
+      <div class="progress-bar"></div>
+      <h2 v-if="activityModule.dataWord" class="word-title">{{ activityModule.dataWord.name }}</h2>
+      <canvas ref="activityOneTom" class="tom-canvas"></canvas>
+    </aside>
+    <main class="activity-page-content">
+      <div>
+        <span class="common-text instruction">
+          Alors alors ... Parmis ces 3 objets lequel représente le mot {{ activityModule.dataWord.name }} ?
+        </span>
+        <div class="choice-block-container">
           <div @click="updateUserSelection(item)" v-for="(item , index) in objectsData"
-               class="activity-itemChoiceBtn"
-          >
-            {{ index + 1 }}
+               class="choice-block-item">{{ index + 1 }}
           </div>
         </div>
         <button @click="validateActivity" class="activity-validation">Valider</button>
       </div>
-      <ActivityOneResult
-        :good-object="activityModule.dataWord.activity_data.good_object"
-        :user-selection="userSelection"
-        v-if="isValidate">
-      </ActivityOneResult>
-    </div>
+      <div>
+        <canvas ref="activityOneObjects" class="activityOneObjects"></canvas>
+      </div>
 
+    </main>
+
+    <ActivityOneResult
+      :good-object="activityModule.dataWord.activity_data.good_object"
+      :user-selection="userSelection"
+      v-if="isValidate">
+    </ActivityOneResult>
+
+  </div>
 </template>
 
 <script lang="ts">
@@ -88,6 +95,12 @@ export default class ActivityOne extends Vue {
    * Init canvas of activity
    */
   private _initCanvasScenes() {
+    (<HTMLCanvasElement>this.$refs.activityOneTom).width = 440;
+    (<HTMLCanvasElement>this.$refs.activityOneTom).height = 520;
+
+    (<HTMLCanvasElement>this.$refs.activityOneObjects).width = 525;
+    (<HTMLCanvasElement>this.$refs.activityOneObjects).height = 430;
+
     new ActivityOneCanvasInitializer({
       tomCanvas: this.$refs.activityOneTom as HTMLCanvasElement,
       objectsCanvas: this.$refs.activityOneObjects as HTMLCanvasElement,
@@ -98,8 +111,32 @@ export default class ActivityOne extends Vue {
 </script>
 
 <style scoped lang="scss">
-canvas {
-  width: 300px;
-  height: 200px;
+.activity-page {
+  .activity-page-content {
+    padding: 0 30px 0 60px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+
+    div:first-child {
+      flex: 1;
+    }
+
+    div:nth-child(1) {
+      .instruction {
+        width: 315px;
+        display: block;
+        padding-bottom: 70px;
+      }
+
+      .choice-block-container {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    canvas.activityOneObjects {
+    }
+  }
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
-    <div @click="displayActivity" ref="btn" class="interactive-btn">Découvrir le mot</div>
-    <ActivityPanel ref="activity"></ActivityPanel>
+    <div @click="canDisplayActivityPanel = true" ref="btn" class="interactive-btn">Découvrir le mot</div>
+    <transition v-on:enter="displayActivityPanel">
+      <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
+    </transition>
+
   </div>
 </template>
 
@@ -29,6 +32,7 @@ export default class ObjectPage extends Vue {
   public activityModule = getModule(ActivityModule, this.$store)
   public globalModule = getModule(GlobalModule, this.$store)
   public objectIdentifier: string = ''
+  public canDisplayActivityPanel = false
 
   middleware(context: Context) {
     AuthMiddleware.handle(context)
@@ -48,17 +52,16 @@ export default class ObjectPage extends Vue {
     })
   }
 
-  async displayActivity() {
+  displayActivityPanel() {
     this._setDataWord()
+    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     gsap.to('.activity-container', {
-      translateY: 0, duration: 1, onComplete: () => {
-        // PAUSE ON GLOBAL SCENE
+      translateY: 0,
+      duration: 1,
+      onComplete: () => {
         SceneManager.GLOBAL_SCENE.pause()
-        // START ACTIVITY 1
-        this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
       }
     })
-
   }
 
   /**
@@ -79,7 +82,7 @@ export default class ObjectPage extends Vue {
 .interactive-btn {
   display: flex;
   position: absolute;
-  z-index: 99;
+  z-index: 18;
   top: 30%;
   right: 20%;
   text-decoration: none;

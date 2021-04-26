@@ -28,10 +28,9 @@ export default class SceneHelper {
     const hemisphereLights = new HemisphereLight(0xdff9fb, 0x080820, 1);
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
-      SceneManager.ACTIVITY_1_TOM.scene.add(helper);
     }
 
-    SceneManager.ACTIVITY_1_TOM.scene.add(hemisphereLights);
+    return hemisphereLights
   }
 
   public static createStarterSceneContext(canvas: HTMLCanvasElement) {

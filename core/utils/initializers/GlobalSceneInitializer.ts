@@ -25,7 +25,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addGltfTom()
     this._registerPresetPositions()
     this._addLights(true)
-    this._configGUI()
+    //this._configGUI()
 
     SceneManager.GLOBAL_SCENE.start()
   }

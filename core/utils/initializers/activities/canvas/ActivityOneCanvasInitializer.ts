@@ -15,7 +15,7 @@ export default class ActivityOneCanvasInitializer extends ActivityCanvasInitiali
    */
   private _initTomCanvas() {
     SceneManager.ACTIVITY_1_TOM = this._createTomScene(this._data.tomCanvas)
-    SceneManager.ACTIVITY_1_TOM.scene.position.set(10, -2, -2)
+    SceneManager.ACTIVITY_1_TOM.scene.position.set(0, -30, -15)
     SceneManager.ACTIVITY_1_TOM.start()
   }
 

@@ -5,8 +5,21 @@
     <ActivityTwo v-if="activityModule.currentActivity === 1"></ActivityTwo>
     <ActivityThree v-if="activityModule.currentActivity === 2"></ActivityThree>
     <!--    overlay transition -->
-    <button @click="goToHome">GO BACK</button>
+    <span class="leave-activity" @click="goToHome">
+      <img src="~/assets/img/cross.svg" alt="">
+    </span>
     <!--  components  conclusion progression -->
+
+    <!--
+    <section class="activity-page">
+      <aside class="activity-page-aside">
+
+      </aside>
+      <main class="activity-page-content">
+
+      </main>
+    </section>
+    -->
   </div>
 </template>
 
@@ -55,31 +68,64 @@ export default class ActivityPanel extends Vue {
 </script>
 
 <style lang="scss">
-.activity{
-  &-container{
-    position: absolute;
-    z-index: 999;
-    width: 100vw;
-    height: 100vh;
-    background: white;
-    top: 0;
-    transform: translateY(100%);
-    padding: 2.5rem;
-    overflow: hidden;
+.activity-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  background-color: #FFF8EE;
+  transform: translateY(100%);
+
+  .leave-activity {
+    width: 76px;
+    height: 76px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
   }
-  &-item{
-    width: 100%;
-    height: 100%;
+
+  .activity-page {
     display: flex;
-    position: relative;
-    &--title{
-      font-size: 6rem;
+    align-items: stretch;
+    height: 100%;
+
+    &-aside {
+      width: 30%;
+      max-width: 440px;
+      background: linear-gradient(107.28deg, #FF6644 29.48%, #FF9D6F 100%);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .word-title {
+        font-size: 90px;
+        color: white;
+        text-align: center;
+      }
+
+      .tom-canvas {
+        width: 100% !important;
+        height: 55% !important;
+        max-height: 520px;
+      }
     }
-    &--btn{
-      padding: 20px;
-      background: red;
-      z-index: 999;
+
+    &-content {
+      overflow-y: scroll;
+      flex: 1;
     }
   }
+}
+.common-text {
+  color: #000648;
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: 500;
 }
 </style>
