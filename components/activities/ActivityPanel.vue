@@ -104,7 +104,7 @@ export default class ActivityPanel extends Vue {
       justify-content: space-between;
 
       .word-title {
-        font-size: 90px;
+        font-size: $title-activity;
         color: white;
         text-align: center;
       }
