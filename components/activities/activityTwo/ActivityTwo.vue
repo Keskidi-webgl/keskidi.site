@@ -98,7 +98,7 @@ export default class ActivityTwo extends Vue {
 .activity-item{
   color: $dark-blue;
   &--title{
-    font-size: 6rem;
+    font-size: $title-activity;
     font-family: "TTNormsPro";
     font-weight: bold;
   }
