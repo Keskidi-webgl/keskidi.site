@@ -25,7 +25,7 @@ export default class VideoMedia extends Vue {
 </script>
 
 <style lang="scss">
-.activity-2-objects{
-  position: absolute;
+.activity-item--video{
+  width: 100%;
 }
 </style>

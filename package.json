@@ -31,6 +31,7 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.3",
     "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/style-resources": "^1.0.0",
     "@types/dat.gui": "^0.7.6",
     "@types/three": "^0.127.0",
     "node-sass": "^5.0.0",

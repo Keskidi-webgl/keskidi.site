@@ -20,5 +20,6 @@ export default class ImageMedia extends Vue {
 <style scoped lang="scss">
 .activity-item--img{
   border-radius: 8px;
+  width: 100%;
 }
 </style>
