@@ -17,7 +17,7 @@ export default abstract class ActivityCanvasInitializer<OptionData, InitReturn> 
    * Return Tom gltf object
    */
   protected _getTomGltf() {
-    return AssetsManager.getGltf(GLTF_ASSET.TOM).data
+    return AssetsManager.getFbx(GLTF_ASSET.TOM).data
   }
 
   /**
@@ -36,14 +36,14 @@ export default abstract class ActivityCanvasInitializer<OptionData, InitReturn> 
     })
 
     const tomGltf = this._getTomGltf()
-    tomGltf.scene.position.set(0, 0, 0)
-    tomGltf.scene.scale.set(0.2,0.2,0.2)
+    tomGltf.position.set(0, 0, 0)
+    tomGltf.scale.set(0.2, 0.2, 0.2)
 
     const light = SceneHelper.createFreshHemisphereLight()
     light.position.z = 10
     sceneContext.scene.add(light)
 
-    sceneContext.scene.add(tomGltf.scene)
+    sceneContext.scene.add(tomGltf)
 
     return sceneContext
   }
