@@ -1,4 +1,13 @@
-import {Clock, Intersection, OrthographicCamera, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
+import {
+  AnimationMixer,
+  Clock,
+  Intersection,
+  OrthographicCamera,
+  PerspectiveCamera,
+  Scene,
+  Vector3,
+  WebGLRenderer
+} from "three";
 import SceneManager from "~/core/managers/SceneManager";
 import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import GlobalModule from "~/store/global";
@@ -76,4 +85,9 @@ export type RoomConfig = {
   previousSceneUrl: string
   fullUrl: string
   objects: Array<{ urlId: URL_OBJECT_IDENTIFIER, interactPointName: INTERACT_POINT_NAME }>
+}
+
+export type AnimationMixerElement = {
+  name: string
+  instance: AnimationMixer
 }
