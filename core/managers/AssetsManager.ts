@@ -1,6 +1,7 @@
-import {AssetSource, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types";
+import {AssetSource, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types";
 import {ASSET_TYPE} from "~/core/enums";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
 
 /**
  * @description
@@ -22,10 +23,12 @@ class AssetsManager {
   private _imageAssets: Array<ImageAsset>
   private _videoAssets: Array<VideoAsset>
   private _gltfAssets: Array<GltfAsset>
+  private _fbxAssets: Array<FbxAsset>
   private _isLocalMode: boolean = false
 
   // -- Loaders
   private _gltfLoader: GLTFLoader
+  private _fbxLoader: FBXLoader
 
   // -- Events
   private _onProgressCallback: ProgressCallback
@@ -37,8 +40,10 @@ class AssetsManager {
     this._imageAssets = []
     this._videoAssets = []
     this._gltfAssets = []
+    this._fbxAssets = []
 
     this._gltfLoader = new GLTFLoader()
+    this._fbxLoader = new FBXLoader()
 
     this._onProgressCallback = function () {}
     this._onSuccessCallback = function () {}
@@ -100,6 +105,15 @@ class AssetsManager {
   }
 
   /**
+   * Register new image asset source
+   */
+  public registerFbx(name: string, url: string, localUrl: string | null = null) {
+    this._registerSource(name, ASSET_TYPE.FBX, url, localUrl)
+
+    return this
+  }
+
+  /**
    * Retrieve gltf asset loaded
    */
   public getGltf(name: string): GltfAsset {
@@ -130,6 +144,16 @@ class AssetsManager {
   }
 
   /**
+   * Retrieve fbx asset loaded
+   */
+  public getFbx(name: string): FbxAsset {
+    const fbx = this._fbxAssets.find(object => object.source.name === name) || null
+    if (!fbx) throw new Error(`Video asset ${name} is not founded`)
+
+    return fbx
+  }
+
+  /**
    * Register new asset source
    */
   private _registerSource(name: string, type: ASSET_TYPE, url: string, localUrl: string | null) {
@@ -149,13 +173,16 @@ class AssetsManager {
       switch (source.type) {
         case ASSET_TYPE.GLTF:
           await this._loadGltfAsset(source)
-          break;
+          break
         case ASSET_TYPE.IMAGE:
           await this._loadImageAsset(source)
-          break;
+          break
         case ASSET_TYPE.VIDEO:
           await this._loadVideoAsset(source)
-          break;
+          break
+        case ASSET_TYPE.FBX:
+          await this._loadFbx(source)
+          break
       }
     } catch (error) {
       this._onErrorCallback()
@@ -195,6 +222,19 @@ class AssetsManager {
     const video = new HTMLVideoElement()
     video.src = URL.createObjectURL(response.blob())
     this._videoAssets.push({source, data: video})
+  }
+
+  /**
+   * Fbx loader handler
+   */
+  private async _loadFbx(source: AssetSource) {
+    return new Promise<void>(resolve => {
+      this._fbxLoader.load(source.url, object => {
+        object.name = source.name
+        this._fbxAssets.push({source, data: object})
+        resolve()
+      })
+    })
   }
 
 }
