@@ -1,13 +1,6 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {
-  Box3,
-  HemisphereLight,
-  HemisphereLightHelper,
-  PerspectiveCamera,
-  Scene, Vector3,
-  WebGLRenderer
-} from "three";
+import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
@@ -148,10 +141,14 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
   private _addGltfTom() {
-    const tomGltf = AssetsManager.getGltf(GLTF_ASSET.TOM).data
-    tomGltf.scene.scale.set(1.3, 1.3, 1.3)
-    tomGltf.scene.position.set(0, 30, 500)
-    SceneManager.GLOBAL_SCENE.scene.add(tomGltf.scene)
+    const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
+    //tomGltf.scale.set(1, 1.1, 1.1)
+    tomGltf.position.set(0, 40, 500)
+    tomGltf.rotation.y = -45
+    SceneManager.GLOBAL_SCENE.scene.add(tomGltf)
+
+    SceneManager.GLOBAL_SCENE.createAnimationMixer(GLTF_ASSET.TOM, tomGltf)
+    SceneManager.GLOBAL_SCENE.playAnimation(tomGltf.animations[0], GLTF_ASSET.TOM)
   }
 
   /**
