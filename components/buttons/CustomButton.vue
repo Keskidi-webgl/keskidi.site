@@ -55,6 +55,8 @@ export default class CustomButton extends Vue {
   cursor: pointer;
   border: 3px solid;
   box-sizing: border-box;
+  height: 60px;
+  align-items: center;
 
   span {
     flex: 1;
@@ -65,8 +67,8 @@ export default class CustomButton extends Vue {
 
   .arrow-container {
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 59px;
+    height: 59px;
     background-color: black;
     display: flex;
     justify-content: center;

@@ -1,10 +1,15 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
-    <div @click="canDisplayActivityPanel = true" ref="btn" class="interactive-btn">Découvrir le mot</div>
+    <CustomCard v-if="this.activityModule.dataWord" class="scenario-container" background-color="white" width="460">
+      <span class="scenario-container-text text-common">
+        {{ this.activityModule.dataWord.home_scenario.content }}
+      </span>
+      <CustomButton @click="canDisplayActivityPanel = true" arrow-color="white" color="#000648"
+                    text="Découvrir ce mot"></CustomButton>
+    </CustomCard>
     <transition v-on:enter="displayActivityPanel">
       <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
     </transition>
-
   </div>
 </template>
 
@@ -21,10 +26,14 @@ import {SceneManager} from "~/core/managers";
 import GlobalModule from "~/store/global";
 import Helpers from "~/core/utils/helpers";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
+import CustomCard from "~/components/cards/CustomCard.vue";
+import CustomButton from "~/components/buttons/CustomButton.vue";
 
 @Component({
   components: {
-    ActivityPanel
+    ActivityPanel,
+    CustomCard,
+    CustomButton
   }
 })
 export default class ObjectPage extends Vue {
@@ -50,10 +59,10 @@ export default class ObjectPage extends Vue {
 
     SceneManager.GLOBAL_SCENE.goToPresetPosition(this.objectIdentifier, 1, () => {
     })
+    this._setDataWord()
   }
 
   displayActivityPanel() {
-    this._setDataWord()
     this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     gsap.to('.activity-container', {
       translateY: 0,
@@ -74,22 +83,22 @@ export default class ObjectPage extends Vue {
     })!
     this.activityModule.setDataWord(dataWord)
   }
-
 }
 </script>
 
-<style lang="scss">
-.interactive-btn {
-  display: flex;
+<style scoped lang="scss">
+.scenario-container {
+  z-index: 20;
   position: absolute;
-  z-index: 18;
-  top: 30%;
-  right: 20%;
-  text-decoration: none;
-  padding: 20px;
-  border-radius: 30px;
-  background: red;
-  color: white;
-  cursor: pointer;
+  right: 120px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &-text {
+    opacity: 0.6;
+    color: #000648;
+    padding-bottom: 25px;
+  }
+
 }
 </style>
