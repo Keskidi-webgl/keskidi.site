@@ -1,8 +1,10 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
-    <nuxt-link class="interactive-points" to="{{}}"></nuxt-link>
-    <div @click="displayActivity" ref="btn" class="interactive-btn">Découvrir le mot</div>
-    <activity ref="activity"></activity>
+    <div @click="canDisplayActivityPanel = true" ref="btn" class="interactive-btn">Découvrir le mot</div>
+    <transition v-on:enter="displayActivityPanel">
+      <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
+    </transition>
+
   </div>
 </template>
 
@@ -11,18 +13,18 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {ACTIVITY_TYPE, URL_OBJECT_IDENTIFIER} from "~/core/enums";
-import activity from "~/components/activity/activity.vue";
 import gsap from 'gsap'
 import SceneModule from "~/store/scene";
 import ActivityModule from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
-import {ApiManager, SceneManager} from "~/core/managers";
+import {SceneManager} from "~/core/managers";
 import GlobalModule from "~/store/global";
 import Helpers from "~/core/utils/helpers";
+import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 
 @Component({
   components: {
-    activity
+    ActivityPanel
   }
 })
 export default class ObjectPage extends Vue {
@@ -30,6 +32,7 @@ export default class ObjectPage extends Vue {
   public activityModule = getModule(ActivityModule, this.$store)
   public globalModule = getModule(GlobalModule, this.$store)
   public objectIdentifier: string = ''
+  public canDisplayActivityPanel = false
 
   middleware(context: Context) {
     AuthMiddleware.handle(context)
@@ -49,17 +52,16 @@ export default class ObjectPage extends Vue {
     })
   }
 
-  async displayActivity() {
+  displayActivityPanel() {
     this._setDataWord()
+    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     gsap.to('.activity-container', {
-      translateY: 0, duration: 1, onComplete: () => {
-        // PAUSE ON GLOBAL SCENE
+      translateY: 0,
+      duration: 1,
+      onComplete: () => {
         SceneManager.GLOBAL_SCENE.pause()
-        // START ACTIVITY 1
-        this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
       }
     })
-
   }
 
   /**
@@ -67,7 +69,9 @@ export default class ObjectPage extends Vue {
    * (expressions, definitions ...)
    */
   private _setDataWord() {
-    const dataWord = this.globalModule.dataWord!.find(word => word.id === Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier))!
+    const dataWord = this.globalModule.dataWord!.find(word => {
+      return word.id === Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier)
+    })!
     this.activityModule.setDataWord(dataWord)
   }
 
@@ -78,7 +82,7 @@ export default class ObjectPage extends Vue {
 .interactive-btn {
   display: flex;
   position: absolute;
-  z-index: 99;
+  z-index: 18;
   top: 30%;
   right: 20%;
   text-decoration: none;
