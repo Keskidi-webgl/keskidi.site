@@ -55,15 +55,15 @@ export default class ObjectPage extends Vue {
   }
 
   async mounted() {
-    this.objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
-
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.objectIdentifier, 1, () => {
-    })
+    const objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
+    this.objectIdentifier = objectIdentifier
+    this.sceneModule.setActiveObject(objectIdentifier)
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.objectIdentifier, 1)
     this._setDataWord()
   }
 
-  displayActivityPanel() {
-    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_3)
+  public displayActivityPanel() {
+    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     gsap.to('.activity-container', {
       translateY: 0,
       duration: 1,
@@ -71,6 +71,10 @@ export default class ObjectPage extends Vue {
         SceneManager.GLOBAL_SCENE.pause()
       }
     })
+  }
+
+  public beforeDestroy() {
+    this.sceneModule.setActiveObject(null)
   }
 
   /**

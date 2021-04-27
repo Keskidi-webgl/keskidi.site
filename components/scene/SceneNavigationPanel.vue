@@ -1,12 +1,16 @@
 <template>
   <div class="scene-navigation-panel">
-    <nuxt-link class="scene-navigation-panel-button previous-scene" :to="previousSceneLink()">
+    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button previous-scene"
+               :to="previousSceneLink()">
       <img src="~/assets/img/next-arrow.svg" alt="">
     </nuxt-link>
-    <nuxt-link class="scene-navigation-panel-button back-home" :to="backHomeLink()">
+    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button back-home" :to="backHomeLink()">
       <img src="~/assets/img/home.svg" alt="">
     </nuxt-link>
-    <nuxt-link class="scene-navigation-panel-button next-scene" :to="nextSceneLink()">
+    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button next-scene" :to="nextSceneLink()">
+      <img src="~/assets/img/next-arrow.svg" alt="">
+    </nuxt-link>
+    <nuxt-link v-if="sceneModule.activeObject" class="scene-navigation-panel-button object-room" :to="goBackObjectRoom()">
       <img src="~/assets/img/next-arrow.svg" alt="">
     </nuxt-link>
   </div>
@@ -31,13 +35,17 @@ export default class SceneNavigationPanel extends Vue {
   public previousSceneLink() {
     return this.sceneModule.activeRoom?.previousSceneUrl
   }
+
+  public goBackObjectRoom() {
+    return this.sceneModule.activeRoom?.fullUrl
+  }
 }
 </script>
 
 <style lang="scss">
 .scene-navigation-panel {
   position: fixed;
-  bottom: 10%;
+  bottom: 26px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -45,9 +53,9 @@ export default class SceneNavigationPanel extends Vue {
   align-items: center;
 
   .scene-navigation-panel-button {
-    width: 60px;
-    height: 60px;
-    background-color: #c3c0c0;
+    width: 48px;
+    height: 48px;
+    background-color: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -56,17 +64,34 @@ export default class SceneNavigationPanel extends Vue {
     margin: 10px;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
 
-    img {
-      width: 20px;
-      height: 20px;
-    }
-
     &.previous-scene {
       transform: rotate(180deg);
     }
+
+    &.next-scene .previous-scene {
+      img {
+        width: 8px;
+      }
+    }
+
     &.back-home {
-      width: 40px;
-      height: 40px;
+      background-color: $eletric-blue;
+      width: 52px;
+      height: 52px;
+
+      img {
+        width: 16px;
+      }
+    }
+
+    &.object-room {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        transform: rotate(90deg);
+      }
     }
   }
 }

@@ -3,6 +3,8 @@ import {SceneManager} from "~/core/managers";
 import {BedroomConfig} from "~/core/config/roomConfig";
 import {InteractionPointConfig} from "~/core/types";
 import {Vector3} from "three";
+import GlobalModule from "~/store/global";
+import AuthModule from "~/store/auth";
 
 const BedroomInteractPoint: InteractionPointConfig = {
   name: INTERACT_POINT_NAME.BEDROOM,
@@ -16,6 +18,10 @@ const BedroomInteractPoint: InteractionPointConfig = {
 
   isCompleted: () => {
     return false;
+  },
+
+  isVisible(globalModule: GlobalModule, authModule: AuthModule): boolean {
+    return authModule.isAuth
   },
 
   url: BedroomConfig.fullUrl,

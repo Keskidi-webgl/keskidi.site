@@ -2,6 +2,8 @@ import {INTERACT_POINT_NAME} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import {InteractionPointConfig} from "~/core/types";
 import {Vector3} from "three";
+import GlobalModule from "~/store/global";
+import AuthModule from "~/store/auth";
 
 const TomInteractPoint: InteractionPointConfig = {
   name: INTERACT_POINT_NAME.TOM,
@@ -16,6 +18,10 @@ const TomInteractPoint: InteractionPointConfig = {
 
   isCompleted: () => {
     return false;
+  },
+
+  isVisible(globalModule: GlobalModule, authModule: AuthModule): boolean {
+    return true;
   },
 
   url: '/tom',

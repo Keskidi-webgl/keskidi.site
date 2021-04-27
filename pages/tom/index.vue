@@ -1,19 +1,30 @@
 <template>
   <div class="page-container" data-namespace="auth">
-    <div v-if="isReady" class="card">
-      <div v-if="!this.authStore.isAuth">
-        <h1>Welcome</h1>
-        <p class="message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-        <p>Pour acceder à l’experience, entrez votre adresse mail :</p>
-        <input type="text" v-model="dataFormAuth.email" class="form-control" id="email" placeholder="Ton email">
-        <button class="button" @click="auth">C'est parti !</button>
+
+    <CustomCard v-if="isReady && !this.authStore.isAuth" class="auth-container" background-color="white" width="610">
+      <h1 class="big-title main-font w-100">Wesh alors !</h1>
+      <p class="sub-title text-common secondary-font w-100">Bienvenue chez mes parents. Mi casa es tu Casa.</p>
+      <p class="w-100 main-font">Je me présente rapidement. Moi, c'est Tom, j'ai 18 ans ! J'adore jouer aux jeux vidéos, faire du skate et de la msucu. trouver un autre truc.</p>
+      <p class="w-100 main-font">Pour continuer, j'ai besoin de ton adresse mail pour que tu puisse garder ta progression.</p>
+      <input type="text" v-model="dataFormAuth.email" class="form-control" id="email" placeholder="Ton email">
+      <div class="w-100 action-container">
+        <CustomButton @click.native="auth()" arrow-color="white" color="#000648" text="Valider"/>
       </div>
-      <div v-if="this.authStore.isAuth">
-        <p class="message">{{ currentFact.content }}</p>
-        <button class="button" @click="back()">Retour</button>
-        <button class="button" @click="random()">Une autre</button>
+      <span class="leave-activity" @click="back()">
+        <img src="~/assets/img/cross.svg" alt="">
+      </span>
+    </CustomCard>
+
+    <CustomCard v-if="isReady && this.authStore.isAuth" class="auth-container" background-color="white" width="610">
+      <p class="w-100">{{ currentFact.content }}</p>
+      <span class="leave-activity" @click="back()">
+        <img src="~/assets/img/cross.svg" alt="">
+      </span>
+      <div class="w-100 action-container">
+        <CustomButton @click.native="random()" arrow-color="white" color="#000648" text="Une autre"/>
       </div>
-    </div>
+    </CustomCard>
+
   </div>
 </template>
 
@@ -22,8 +33,15 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator';
 import {AuthManager, SceneManager} from "~/core/managers";
 import {AuthCredential, FunFactElement} from '~/core/types';
 import AuthModule from '~/store/auth';
+import CustomCard from "~/components/cards/CustomCard.vue";
+import CustomButton from "~/components/buttons/CustomButton.vue";
 
-@Component
+@Component({
+  components: {
+    CustomCard,
+    CustomButton
+  }
+})
 export default class AuthPage extends Vue {
   public onProgress: boolean = false
   public autModule: AuthModule = getModule(AuthModule, this.$store)
@@ -67,79 +85,34 @@ export default class AuthPage extends Vue {
 </script>
 
 <style scoped lang="scss">
-.page-container {
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  padding-left: 7vw ;
+.auth-container {
+  z-index: 20;
+  position: absolute;
+  left: 120px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $dark-blue;
 
-  .card {
-    width: 50%;
-    background: #F2F2F2;
-    border-radius: 73px;
-    padding: 100px 50px;
-    height: 60vh;
+  .leave-activity {
+    width: 76px;
+    height: 76px;
+    position: fixed;
+    top: 50px;
+    right: 10px;
+    cursor: pointer;
+  }
 
-    display: flex;
-    align-items: flex-end;
+  .sub-title {
+    font-size: 24px;
+    opacity: 0.6;
+  }
 
-    h1 {
-      font-family: DM Sans;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 70px;
-      line-height: 91px;
+  .action-container {
+    padding-top: 24px;
+  }
 
-      /* Gray 1 */
-      color: #333333;
-    }
-
-    p {
-      font-family: DM Sans;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 20px;
-      line-height: 26px;
-
-      /* Gray 1 */
-      color: #333333;
-    }
-
-    .message {
-      margin-bottom: 5vh;
-    }
-
-    input {
-      border: none;
-      background-color: white;
-      padding: 12px 25px;
-      width: 100%;
-
-      font-family: DM Sans;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 24.3174px;
-      line-height: 32px;
-
-      /* Gray 1 */
-      color: #333333;
-
-      &:focus {
-        outline: none;
-      }
-    }
-
-    .button {
-      padding: 8px 13px;
-      background: #EB5757;
-      border-radius: 67.147px;
-      border: none;
-      width: fit-content;
-      color: white;
-      cursor: pointer;
-
-      margin-top: 2vh;
-    }
+  .action {
+    float: left;
   }
 }
 </style>

@@ -8,10 +8,12 @@ const PaperCameraPosition: PresetCameraPosition = {
   coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('papier_anim')!.getWorldPosition(lookAtPosition)
-    lookAtPosition.x = lookAtPosition.x * 1.15
+    lookAtPosition.x = lookAtPosition.x * 0.95
+    lookAtPosition.z = lookAtPosition.z * 1.1
 
     const cameraPos = lookAtPosition.clone()
     cameraPos.y = cameraPos.y * 3
+    cameraPos.x = cameraPos.x * 0.9
 
     return { cameraPos, lookAtPosition }
   }
