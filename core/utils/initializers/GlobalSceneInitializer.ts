@@ -79,7 +79,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    })//.enableStats().enableAxesHelpers(1000)
+    }).enableStats()//.enableAxesHelpers(1000)
 
   }
 

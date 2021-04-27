@@ -3,6 +3,8 @@ import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
 import {BedroomConfig} from "~/core/config/roomConfig";
 import {InteractionPointConfig} from "~/core/types";
+import GlobalModule from "~/store/global";
+import AuthModule from "~/store/auth";
 
 const TshirtInteractPoint: InteractionPointConfig = {
   name: INTERACT_POINT_NAME.T_SHIRT,
@@ -16,6 +18,10 @@ const TshirtInteractPoint: InteractionPointConfig = {
 
   isCompleted: () => {
     return false;
+  },
+
+  isVisible(globalModule: GlobalModule, authModule: AuthModule): boolean {
+    return true;
   },
 
   url: BedroomConfig.fullUrl + '/' + URL_OBJECT_IDENTIFIER.T_SHIRT,

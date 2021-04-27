@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :style="style()" class="point point-0" :to="data.url">
+  <nuxt-link v-if="isVisible()" :style="style()" class="point point-0" :to="data.url">
   </nuxt-link>
 
 </template>
@@ -9,12 +9,14 @@
 import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
 import {InteractionPointConfig} from "~/core/types";
 import GlobalModule from "~/store/global";
+import AuthModule from "~/store/auth";
 
 
 @Component
 export default class InteractionPoints extends Vue {
   @Prop({type: Object, required: true}) readonly data!: InteractionPointConfig
   public globalModule: GlobalModule = getModule(GlobalModule, this.$store)
+  public authModule: AuthModule = getModule(AuthModule, this.$store)
 
   public mounted() {
   }
@@ -24,6 +26,10 @@ export default class InteractionPoints extends Vue {
     transform: translateX(${this.data.transformX}px) translateY(${this.data.transformY}px);
     background-color: ${this.data.isCompleted(this.globalModule) ? 'red' : '#00000077'};
     `
+  }
+
+  public isVisible() {
+    return this.data.isVisible(this.globalModule, this.authModule)
   }
 }
 </script>
