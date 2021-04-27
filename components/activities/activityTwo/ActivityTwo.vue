@@ -144,7 +144,7 @@ export default class ActivityTwo extends Vue {
   &--arrow{
     position: absolute;
     right: 30px;
-    top: 100vh;
+    top: 90vh;
   }
 }
 

@@ -30,7 +30,7 @@ export default class ActivityOneCanvasInitializer extends ActivityCanvasInitiali
       scene,
       renderer,
       defaultRation: 2,
-      activateOrbitControl: false,
+      activateOrbitControl: true,
     })
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0, 0, -60)
 

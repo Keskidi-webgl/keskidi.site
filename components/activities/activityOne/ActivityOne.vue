@@ -5,11 +5,11 @@
       <h2 v-if="activityModule.dataWord" class="word-title">{{ activityModule.dataWord.name }}</h2>
       <canvas ref="activityOneTom" class="tom-canvas"></canvas>
     </aside>
-    <main class="activity-page-content">
+    <main ref="activityPageContent" class="activity-page-content">
         <span class="common-text instruction">
           Alors alors ... Parmis ces 3 objets lequel représente le mot {{ activityModule.dataWord.name }} ?
         </span>
-      <div class="activity-page-contentWrapper">
+<!--      <div class="activity-page-contentWrapper">-->
         <div v-if="userSelection" class="choice-block-container">
           <div @click="updateUserSelection(item)" v-for="(item , index) in objectsData"
                class="choice-block-item" :class="{isActive: item.name === userSelection.name}">
@@ -20,7 +20,7 @@
         <div>
           <canvas ref="activityOneObjects" class="activityOneObjects"></canvas>
         </div>
-      </div>
+<!--      </div>-->
       <custom-button class="activity-page--btn" @click.native="validateActivity"  color="#000648" text="Valider" arrow-color="white"></custom-button>
 
 
@@ -100,11 +100,11 @@ export default class ActivityOne extends Vue {
    * Init canvas of activity
    */
   private _initCanvasScenes() {
-    (<HTMLCanvasElement>this.$refs.activityOneTom).width = 440;
-    (<HTMLCanvasElement>this.$refs.activityOneTom).height = 520;
+    (<HTMLCanvasElement>this.$refs.activityOneTom).width = (<HTMLElement>this.$refs.activityPageAside).getBoundingClientRect().width;
+    (<HTMLCanvasElement>this.$refs.activityOneTom).height = (<HTMLElement>this.$refs.activityPageAside).getBoundingClientRect().height;
 
-    (<HTMLCanvasElement>this.$refs.activityOneObjects).width = 525;
-    (<HTMLCanvasElement>this.$refs.activityOneObjects).height = 430;
+    (<HTMLCanvasElement>this.$refs.activityOneObjects).width = (<HTMLElement>this.$refs.activityPageContent).getBoundingClientRect().width;
+    (<HTMLCanvasElement>this.$refs.activityOneObjects).height = (<HTMLElement>this.$refs.activityPageContent).getBoundingClientRect().height;
 
     new ActivityOneCanvasInitializer({
       tomCanvas: this.$refs.activityOneTom as HTMLCanvasElement,
@@ -119,11 +119,13 @@ export default class ActivityOne extends Vue {
 
 .activity-page {
   .activity-page-content {
-    padding: 180px 30px 0 60px;
+    padding: 180px 30px 30px 60px;
     display: flex;
     align-items: center;
     box-sizing: border-box;
     flex-direction: column;
+    position: relative;
+    justify-content: space-between;
 
     //.activity-page-contentWrapper {
     //  flex: 1;
@@ -138,39 +140,45 @@ export default class ActivityOne extends Vue {
         padding-bottom: 70px;
       }
 
-      .choice-block-container {
+
+    }
+    .choice-block-container {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      align-self: flex-start;
+      z-index: 5;
+
+      .choice-block-item {
+        width: 270px;
+        border: 2px solid #FF9D6F;
+        border-radius: 30px;
+        padding: 10px 20px;
         display: flex;
-        flex-direction: column;
-        cursor: pointer;
+        align-items: center;
+        margin: 5px 0;
 
-        .choice-block-item {
-          width: 270px;
+        .circle {
+          width: 20px;
+          height: 20px;
+          display: block;
+          border-radius: 50%;
           border: 2px solid #FF9D6F;
-          border-radius: 30px;
-          padding: 10px 20px;
-          display: flex;
-          align-items: center;
-          margin: 5px 0;
+          margin-right: 15px;
+        }
 
+        &.isActive {
           .circle {
-            width: 20px;
-            height: 20px;
-            display: block;
-            border-radius: 50%;
-            border: 2px solid #FF9D6F;
-            margin-right: 15px;
-          }
-
-          &.isActive {
-            .circle {
-              background-color: #FF9D6F;
-            }
+            background-color: #FF9D6F;
           }
         }
       }
     }
 
     canvas.activityOneObjects {
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   }
   &--btn{
