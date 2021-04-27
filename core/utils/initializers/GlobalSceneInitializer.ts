@@ -1,6 +1,6 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {AnimationClip, HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
@@ -14,7 +14,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   init() {
     SceneManager.GLOBAL_SCENE = this._createInstance()
-    console.log(SceneManager.GLOBAL_SCENE)
     this._addGltfGlobalScene()
     this._addGltfTom()
     this._registerPresetPositions()
@@ -79,20 +78,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
-      },
-      bindEvents: (context => {
-        /*
-        document.addEventListener('mousemove', (event) => {
-          const mouseX = event.clientX - window.innerWidth / 2;
-          const mouseY = event.clientY - window.innerHeight / 2;
-          context.camera.position.x += (mouseX - camera.position.x) * 0.005;
-          context.camera.position.y += (mouseY - camera.position.y) * 0.005;
-          //set up camera position
-          //camera.lookAt(scene.position);
-        }, false)
-
-         */
-      })
+      }
     })//.enableStats().enableAxesHelpers(1000)
 
   }
