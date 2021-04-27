@@ -29,8 +29,10 @@ export default class CustomCard extends Vue {
 .custom-card {
   padding: 25px;
   background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
   display: inline-block;
   border-radius: 32px;
+  border: 0.5px solid $dark-cream;
 
   &-container {
     padding: 35px 32px ;
@@ -39,6 +41,7 @@ export default class CustomCard extends Vue {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    opacity: 0.8;
   }
 }
 </style>
