@@ -2,10 +2,8 @@
   <div class="activity-page">
 
     <aside class="activity-page-aside" ref="activityPageAside">
-      <div class="progress-bar"></div>
       <canvas ref="activityTwoObjects"></canvas>
-<!--      <button @click="goToNextActivity" class="activity-validation">Valider</button>-->
-      <custom-button @click.native="goToNextActivity" class="activity-result--btn"  color="white" text="Continuer" arrow-color="#FF7651"></custom-button>
+      <custom-button @click.native="goToNextActivity" class="next-activity-btn"  color="white" text="Continuer" arrow-color="#FF7651"></custom-button>
     </aside>
 
     <main class="activity-page-content">
@@ -19,7 +17,7 @@
           </div>
 
 
-        <p class="activity-item--origin">{{ activityModule.dataWord.definition.origin }}</p>
+        <p class="activity-item--origin main-font">{{ activityModule.dataWord.definition.origin }}</p>
 
           <div class="activity-item--mediaContainer">
             <div class="activity-item--mediasWrapper" v-for="item in activityModule.dataWord.definition.medias">
@@ -91,6 +89,9 @@ export default class ActivityTwo extends Vue {
    * Init canvas of activity
    */
   private _initCanvasScenes() {
+    (<HTMLCanvasElement>this.$refs.activityTwoObjects).width = (<HTMLElement>this.$refs.activityPageAside).getBoundingClientRect().width;
+    (<HTMLCanvasElement>this.$refs.activityTwoObjects).height = 600;
+
     new ActivityTwoCanvasInitializer({
       wordObjectCanvas: this.$refs.activityTwoObjects as HTMLCanvasElement,
       activityModule: this.activityModule
@@ -101,8 +102,15 @@ export default class ActivityTwo extends Vue {
 
 <style scoped lang="scss">
 .activity-page-aside{
-  justify-content: space-around;
-  align-items: center;
+  align-items: center !important;
+  justify-content: center !important;
+
+  canvas {
+    margin-bottom: 50px;
+  }
+  .next-activity-btn {
+
+  }
 }
 .activity-itemPractice{
   overflow-y: scroll;

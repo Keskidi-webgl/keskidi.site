@@ -76,7 +76,7 @@ export default class ActivityPanel extends Vue {
   bottom: 0;
   width: 100%;
   height: 100%;
-  z-index: 30;
+  z-index: 100;
   background-color: #FFF8EE;
   transform: translateY(100%);
 

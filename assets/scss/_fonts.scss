@@ -2,7 +2,16 @@
   font-family: "TiempoFine";
   src: url("~assets/fonts/TiemposFine-Regular.woff") format("woff");
   font-style: normal;
+  font-weight: normal;
   font-display: swap;
+}
+
+@font-face {
+  font-family: "TiempoFine";
+  src: url("~assets/fonts/TiemposFine-Bold.otf") format("woff");
+  font-style: normal;
+  font-display: swap;
+  font-weight: bold;
 }
 
 @font-face {
