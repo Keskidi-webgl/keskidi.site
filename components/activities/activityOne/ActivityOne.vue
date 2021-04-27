@@ -118,6 +118,9 @@ export default class ActivityOne extends Vue {
 <style scoped lang="scss">
 
 .activity-page {
+  &-aside{
+    justify-content: start;
+  }
   .activity-page-content {
     padding: 180px 30px 30px 60px;
     display: flex;
@@ -178,7 +181,8 @@ export default class ActivityOne extends Vue {
     canvas.activityOneObjects {
       position: absolute;
       top: 0;
-      left: 0;
+      left: 30%;
+      transform: translateX(0%);
     }
   }
   &--btn{

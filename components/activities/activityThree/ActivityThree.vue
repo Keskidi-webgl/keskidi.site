@@ -22,7 +22,7 @@
          </div>
 
          <div class="activity-recordWrapper">
-           <button class="activity-expressions--record start-record"
+           <button ref="activityRecord" class="activity-expressions--record start-record"
                 @click="startRecordVoice(expression)"
                 v-for="expression in activityModule.dataWord.expressions"
                 :disabled="expression.id !== activeExpression.id">
@@ -42,53 +42,9 @@
 
       <canvas ref="activityThreeObjects" class="activity-3-objects"></canvas>
     </main>
+    <ActivityThreeResult  v-if="activityIsSucceed()"></ActivityThreeResult>
+<!--   -->
   </section>
-
-<!--  <div class="activity-item activity-3">-->
-<!--    <div class="activity-itemInfos">-->
-<!--      <span>Comme dirait le prof, reapeat after me ...</span>-->
-<!--      <canvas ref="activityThreeTom" class="activity-3-tom"></canvas>-->
-<!--    </div>-->
-
-<!--    <div class="activity-itemPractice">-->
-<!--      <h2 class="activity-item&#45;&#45;title">{{ activityModule.dataWord.name }}</h2>-->
-<!--      <canvas ref="activityThreeObjects" class="activity-3-objects"></canvas>-->
-
-<!--      <div v-if="activeExpression">-->
-<!--        <span>{{ activeExpression.content }}</span>-->
-<!--        <button class="start-record"-->
-<!--                @click="startRecordVoice(expression)"-->
-<!--                v-for="expression in activityModule.dataWord.expressions"-->
-<!--                :disabled="expression.id !== activeExpression.id"-->
-<!--        >-->
-<!--          Start-->
-<!--        </button>-->
-<!--        <button @click="playExpressionAudio">Play audio</button>-->
-<!--        <audio style="display: none" ref="audioElement" :src='activeExpression.audio.url'></audio>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <ActivityThreeResult v-if="activityIsSucceed()"></ActivityThreeResult>-->
-
-<!--  </div>-->
-
-
-<!-- 🚧🚧BUTTON SOUND-->
-<!--  <svg width="33" height="24" viewBox="0 0 33 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-<!--    <path d="M14.8985 1.93365L7.68303 7.70604H1.91064V16.3646H7.68303L14.8985 22.137V1.93365Z" stroke="#000648" stroke-width="2.5" stroke-linejoin="round"/>-->
-<!--    <path d="M26.5448 1.83044C29.2501 4.53665 30.7699 8.20657 30.7699 12.0331C30.7699 15.8597 29.2501 19.5296 26.5448 22.2358M21.4506 6.92458C22.8033 8.27768 23.5632 10.1126 23.5632 12.0259C23.5632 13.9392 22.8033 15.7742 21.4506 17.1273" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>-->
-<!--  </svg>-->
-
-
-<!--  🚨🚨button record-->
-<!--  <svg width="28" height="40" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-<!--    <g opacity="0.2">-->
-<!--      <path d="M14.0001 1.59088C12.6051 1.59088 11.2673 2.11984 10.2809 3.06138C9.29447 4.00293 8.74033 5.27993 8.74033 6.61148V19.9997C8.74033 21.3313 9.29447 22.6083 10.2809 23.5498C11.2673 24.4914 12.6051 25.0203 14.0001 25.0203C15.395 25.0203 16.7329 24.4914 17.7193 23.5498C18.7057 22.6083 19.2598 21.3313 19.2598 19.9997V6.61148C19.2598 5.27993 18.7057 4.00293 17.7193 3.06138C16.7329 2.11984 15.395 1.59088 14.0001 1.59088V1.59088Z" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>-->
-<!--      <path d="M26.2726 16.6529V20C26.2726 23.1069 24.9796 26.0866 22.678 28.2835C20.3765 30.4805 17.2548 31.7147 13.9999 31.7147C10.745 31.7147 7.62338 30.4805 5.3218 28.2835C3.02022 26.0866 1.7272 23.1069 1.7272 20V16.6529" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>-->
-<!--      <path d="M13.9999 31.715V38.4091" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>-->
-<!--      <path d="M6.98663 38.4083H21.0126" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>-->
-<!--    </g>-->
-<!--  </svg>-->
 
 <!--  ✅✅✅-->
 <!--  <svg width="36" height="23" viewBox="0 0 36 23" fill="none" xmlns="http://www.w3.org/2000/svg">-->
@@ -117,11 +73,13 @@ export default class ActivityThree extends Vue {
   public activityModule = getModule(ActivityModule, this.$store)
   public activeExpression: WordExpression | null = null
   public countExpressionSuccess: number = 0
+  // public activityRecord:HTMLElement = document.querySelectorAll('.start-record')
 
   public mounted() {
     this.activeExpression = this.activityModule.dataWord!.expressions[0]
     this._initCanvasScenes()
     this._initVoiceRecognitionManager()
+    // console.log(this.activityRecord)
   }
 
   /**
@@ -171,6 +129,7 @@ export default class ActivityThree extends Vue {
   private _initVoiceRecognitionManager() {
     VoiceRecognitionManager.onResult((result => {
       if (result.distance > 0.5) {
+        // this.activityRecord[this.countExpressionSuccess].classList.add('active')
         this.countExpressionSuccess++
         if (this.countExpressionSuccess < this.activityModule.dataWord!.expressions.length) {
           this.activeExpression = this.activityModule.dataWord!.expressions[this.countExpressionSuccess]
@@ -192,8 +151,9 @@ export default class ActivityThree extends Vue {
 
 .activity-3-objects {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-20%);
 }
 .activity-content{
   &--title{

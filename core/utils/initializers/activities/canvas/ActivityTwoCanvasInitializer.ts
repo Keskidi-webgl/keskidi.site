@@ -22,6 +22,7 @@ export default class ActivityTwoCanvasInitializer extends ActivityCanvasInitiali
 
     const wordGltfObject = this._getGltfWordRepresentation(this._data.activityModule.dataWord!)
     wordGltfObject.scene.position.set(0, 0, 0)
+    // wordGltfObject.scene.scale.set(1, 1, 1)
     wordGltfObject.scene.rotation.x = Math.PI / 2;
     scene.add(wordGltfObject.scene)
 

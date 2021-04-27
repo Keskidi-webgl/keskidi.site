@@ -63,7 +63,7 @@ export default class ObjectPage extends Vue {
   }
 
   displayActivityPanel() {
-    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_3)
     gsap.to('.activity-container', {
       translateY: 0,
       duration: 1,

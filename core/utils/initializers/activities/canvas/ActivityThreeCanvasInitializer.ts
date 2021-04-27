@@ -14,7 +14,8 @@ export default class ActivityThreeCanvasInitializer extends ActivityCanvasInitia
    */
   private _initTomCanvas() {
     SceneManager.ACTIVITY_3_TOM = this._createTomScene(this._data.tomCanvas)
-    SceneManager.ACTIVITY_3_TOM.scene.position.set(0, -30, -15)
+    SceneManager.ACTIVITY_3_TOM.scene.position.set(0, -17, -15)
+    SceneManager.ACTIVITY_3_TOM.scene.scale.set(0.5, 0.5, 0.5)
     // SceneManager.ACTIVITY_3_TOM.scene.scale.set(0.5, 0.5, 0.5)
     console.log(SceneManager.ACTIVITY_3_TOM.scene)
     SceneManager.ACTIVITY_3_TOM.start()
@@ -38,7 +39,6 @@ export default class ActivityThreeCanvasInitializer extends ActivityCanvasInitia
     wordGltfObject.scene.position.set(0, 0, 0)
     wordGltfObject.scene.rotation.x = Math.PI / 2;
 
-    // SceneManager.ACTIVITY_3_TOM.scene.scale.set(0.5, 0.5, 0.5)
 
     scene.add(wordGltfObject.scene)
 
