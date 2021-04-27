@@ -9,5 +9,13 @@
   font-family: "TTNormsPro";
   src: url("~assets/fonts/TT-Norms-Pro-Regular.woff") format("woff");
   font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TTNormsPro";
+  src: url("~assets/fonts/TT-Norms-Pro-Bold.otf") format("woff");
+  font-weight: bold;
   font-display: swap;
 }

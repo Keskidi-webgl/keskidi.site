@@ -107,6 +107,7 @@ export default class ActivityPanel extends Vue {
         font-size: $title-activity;
         color: white;
         text-align: center;
+        font-weight: bold;
       }
 
       .tom-canvas {
