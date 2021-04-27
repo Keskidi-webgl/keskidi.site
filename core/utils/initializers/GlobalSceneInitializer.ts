@@ -1,6 +1,6 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {AnimationClip, HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import CameraConfig from "~/core/config/camera.config";
@@ -79,7 +79,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).enableStats()//.enableAxesHelpers(1000)
+    })//.enableStats().enableAxesHelpers(1000)
 
   }
 
@@ -143,7 +143,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addGltfTom() {
     const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
     //tomGltf.scale.set(1, 1.1, 1.1)
-    tomGltf.position.set(0, 40, 500)
+    tomGltf.position.set(50, 40, 500)
     tomGltf.rotation.y = -45
     SceneManager.GLOBAL_SCENE.scene.add(tomGltf)
 

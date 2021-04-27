@@ -1,6 +1,6 @@
 <template>
   <div :style="buttonContainerStyle()" class="custom-button">
-    <span class="text-infos" :style="textStyle()">{{ text }}</span>
+    <span class="text-infos main-font" :style="textStyle()">{{ text }}</span>
     <div :style="arrowContainerStyle()" class="arrow-container">
       <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M2 13.5H25" :stroke="arrowColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>

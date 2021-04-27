@@ -19,7 +19,6 @@ export default class AppInitializer extends Initializers<
   > {
   async init(): Promise<void> {
     new ApiManagerInitializer({axios: this._data.axios}).init()
-    await new AssetManagerInitializer(null).init()
     new GlobalSceneInitializer({canvas: this._data.canvas, sceneModule: this._data.sceneModule}).init()
     await new WordDataInitializer({globalModule: this._data.globalModule}).init()
   }
