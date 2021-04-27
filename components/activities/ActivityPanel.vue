@@ -110,9 +110,10 @@ export default class ActivityPanel extends Vue {
       }
 
       .tom-canvas {
-        width: 100% !important;
-        height: 55% !important;
-        max-height: 520px;
+        //width: 100% !important;
+        //height: 55% !important;
+        //max-height: 520px;
+        position: absolute;
       }
     }
 

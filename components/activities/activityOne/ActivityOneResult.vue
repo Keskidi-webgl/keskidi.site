@@ -1,5 +1,5 @@
 <template>
-  <div class="activity-1-resultWrapper">
+  <div ref="activityWrapper" class="activity-1-resultWrapper">
     <div class="marqueeWrapper">
       <span v-for="item in marqueeNumber">{{getUserResult()}}</span>
     </div>
@@ -68,8 +68,8 @@ export default class ActivityOneResult extends Vue {
    * Init canvas of activity
    */
   private _initCanvasScenes() {
-    (<HTMLCanvasElement>this.$refs.activityOneResult).width = window.innerWidth;
-    (<HTMLCanvasElement>this.$refs.activityOneResult).height = window.innerHeight;
+    (<HTMLCanvasElement>this.$refs.activityOneResult).width = (<HTMLElement>this.$refs.activityWrapper).getBoundingClientRect().width;
+    (<HTMLCanvasElement>this.$refs.activityOneResult).height =  (<HTMLElement>this.$refs.activityWrapper).getBoundingClientRect().height;
 
     new ActivityOneResultCanvasInitializer({
       wordObjectCanvas: this.$refs.activityOneResult as HTMLCanvasElement,
