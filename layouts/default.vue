@@ -1,8 +1,6 @@
 <template>
   <div>
-    <!--
     <Loader class="site-loader" :loading-data="loadingProgressions"></Loader>
-    -->
     <LogoMedia class='logo' />
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
     <Nuxt v-if="this.globalModule.isAppInit"/>
