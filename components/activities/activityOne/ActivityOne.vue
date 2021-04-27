@@ -6,10 +6,10 @@
       <canvas ref="activityOneTom" class="tom-canvas"></canvas>
     </aside>
     <main class="activity-page-content">
-      <div>
         <span class="common-text instruction">
           Alors alors ... Parmis ces 3 objets lequel représente le mot {{ activityModule.dataWord.name }} ?
         </span>
+      <div class="activity-page-contentWrapper">
         <div v-if="userSelection" class="choice-block-container">
           <div @click="updateUserSelection(item)" v-for="(item , index) in objectsData"
                class="choice-block-item" :class="{isActive: item.name === userSelection.name}">
@@ -17,11 +17,12 @@
             <span class="text">{{ item.description }}</span>
           </div>
         </div>
-        <button @click="validateActivity" class="activity-validation">Valider</button>
+        <div>
+          <canvas ref="activityOneObjects" class="activityOneObjects"></canvas>
+        </div>
       </div>
-      <div>
-        <canvas ref="activityOneObjects" class="activityOneObjects"></canvas>
-      </div>
+      <custom-button class="activity-page--btn" @click.native="validateActivity"  color="#000648" text="Valider" arrow-color="white"></custom-button>
+
 
     </main>
 
@@ -43,9 +44,11 @@ import {UserObjectSelection} from "~/core/types"
 import ActivityOneResult from "~/components/activities/activityOne/ActivityOneResult.vue"
 import {ActivityOneCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
 
+import CustomButton from "~/components/buttons/CustomButton.vue";
 @Component({
   components: {
-    ActivityOneResult
+    ActivityOneResult,
+    CustomButton
   }
 })
 export default class ActivityOne extends Vue {
@@ -113,18 +116,22 @@ export default class ActivityOne extends Vue {
 </script>
 
 <style scoped lang="scss">
+
 .activity-page {
   .activity-page-content {
-    padding: 0 30px 0 60px;
+    padding: 180px 30px 0 60px;
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    flex-direction: column;
 
-    div:first-child {
-      flex: 1;
-    }
+    //.activity-page-contentWrapper {
+    //  flex: 1;
+    //}
 
-    div:nth-child(1) {
+    .activity-page-contentWrapper {
+      display: flex;
+      align-items: center;
       .instruction {
         width: 315px;
         display: block;
@@ -165,6 +172,9 @@ export default class ActivityOne extends Vue {
 
     canvas.activityOneObjects {
     }
+  }
+  &--btn{
+    align-self: flex-start;
   }
 }
 </style>

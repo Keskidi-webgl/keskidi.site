@@ -1,26 +1,42 @@
 <template>
-  <div class="activity-item activity-2">
-    <div class="activity-itemInfos">
-      <span>Pour vous, quel objet représente ce mot ?</span>
+  <div class="activity-page">
+
+    <aside class="activity-page-aside" ref="activityPageAside">
+      <div class="progress-bar"></div>
       <canvas ref="activityTwoObjects"></canvas>
-    </div>
+<!--      <button @click="goToNextActivity" class="activity-validation">Valider</button>-->
+      <custom-button @click.native="goToNextActivity" class="activity-result--btn"  color="white" text="Continuer" arrow-color="#FF7651"></custom-button>
+    </aside>
 
-    <div class="activity-itemPractice">
-      <h2 class="activity-item--title">{{ activityModule.dataWord.name }}</h2>
-      <p class="activity-item--phonetic">{{ activityModule.dataWord.definition.phonetic }}</p>
-      <p class="activity-item--definition">{{ activityModule.dataWord.definition.definition }}</p>
-      <p class="activity-item--origin">{{ activityModule.dataWord.definition.origin }}</p>
+    <main class="activity-page-content">
+      <div>
+          <h2 class="activity-item--title">{{ activityModule.dataWord.name }}</h2>
+          <div class="activity-item--info">
+            <span class="activity-item--phonetic">{{ activityModule.dataWord.definition.phonetic }}</span>
+            <span class="activity-item--gender">{{ activityModule.dataWord.definition.gender }}</span>
+            <p class="activity-item--definition">"{{ activityModule.dataWord.definition.definition }}"</p>
+
+          </div>
 
 
-      <div class="activity-item--mediaContainer">
-        <div class="activity-item--mediasWrapper" v-for="item in activityModule.dataWord.definition.medias">
-          <ImageMedia :caption="item.caption" :media-url="item.url" v-if="item.type === 'image'"></ImageMedia>
-          <VideoMedia :caption="item.caption" :media-url="item.url" v-if="item.type === 'video'"></VideoMedia>
-        </div>
+        <p class="activity-item--origin">{{ activityModule.dataWord.definition.origin }}</p>
+
+          <div class="activity-item--mediaContainer">
+            <div class="activity-item--mediasWrapper" v-for="item in activityModule.dataWord.definition.medias">
+              <ImageMedia :caption="item.caption" :media-url="item.url" v-if="item.type === 'image'"></ImageMedia>
+              <VideoMedia :caption="item.caption" :media-url="item.url" v-if="item.type === 'video'"></VideoMedia>
+            </div>
+          </div>
+
       </div>
 
-      <button @click="goToNextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
-    </div>
+      <svg class="activity-item--arrow" width="15" height="73" viewBox="0 0 15 73" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="7.25" y1="1.25" x2="7.25" y2="68.75" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12.7183 65.3591L7.35914 70.7183L2.00001 65.3591" stroke="#000648" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+    </main>
+
   </div>
 </template>
 
@@ -33,16 +49,20 @@ import ActivityModule from "~/store/activity";
 import ImageMedia from "~/components/medias/ImageMedia.vue";
 import VideoMedia from "~/components/medias/VideoMedia.vue";
 import {ActivityTwoCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
+import CustomButton from "~/components/buttons/CustomButton.vue";
 
 @Component({
   components: {
     ImageMedia,
-    VideoMedia
+    VideoMedia,
+    CustomButton
   }
 })
 export default class ActivityTwo extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public isValidate: boolean = false
+
 
   public mounted() {
     this._initCanvasScenes()
@@ -50,6 +70,14 @@ export default class ActivityTwo extends Vue {
 
   public beforeDestroy() {
     SceneManager.ACTIVITY_2_OBJECTS.destroy()
+  }
+
+
+  /**
+   * Callback on user validate activity
+   */
+  public validateActivity() {
+    this.isValidate = true
   }
 
   /**
@@ -72,10 +100,52 @@ export default class ActivityTwo extends Vue {
 </script>
 
 <style scoped lang="scss">
+.activity-page-aside{
+  justify-content: space-around;
+  align-items: center;
+}
 .activity-itemPractice{
   overflow-y: scroll;
 }
 .activity-2-objects{
   position: absolute;
 }
+.activity-page-content{
+  padding-top: 8rem;
+  color: $dark-blue;
+  div:first-child{
+    margin: auto;
+    max-width: 630px;
+  }
+}
+.activity-item{
+  &--title{
+    font-size: $title-activity;
+    font-family: "TTNormsPro";
+    font-weight: bold;
+  }
+  &--info{
+    font-family: "TiempoFine";
+    font-size: 30px;
+    margin-top: 30px;
+    margin-bottom: 0;
+  }
+  &--phonetic{
+    font-weight: bold;
+  }
+  &--definition{
+    font-family: "TiempoFine";
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+  &--origin{
+    font-size: 18px;
+  }
+  &--arrow{
+    position: absolute;
+    right: 30px;
+    top: 100vh;
+  }
+}
+
 </style>

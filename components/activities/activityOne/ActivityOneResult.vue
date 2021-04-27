@@ -1,10 +1,11 @@
 <template>
   <div class="activity-1-resultWrapper">
-    <h2 class="activity-item--title">Selection: {{userSelection.name}}</h2>
-    <h2 class="activity-item--title">Result: {{getUserResult()}}</h2>
-    <button @click="goToNextActivity" ref="nextActivity" class="activity-item--btn"> ACTIVITE SUIVANTE</button>
+    <div class="marqueeWrapper">
+      <span v-for="item in marqueeNumber">{{getUserResult()}}</span>
+    </div>
+    <canvas class="activityOneResult" ref="activityOneResult"></canvas>
 
-    <canvas ref="activityOneResult"></canvas>
+    <custom-button @click.native="goToNextActivity" class="activity-result--btn"  color="white" text="Continuer" arrow-color="#FF7651"></custom-button>
   </div>
 </template>
 
@@ -15,13 +16,19 @@ import {ACTIVITY_TYPE} from "~/core/enums"
 import ActivityModule from "~/store/activity"
 import {SceneManager} from "~/core/managers"
 import {ActivityOneResultCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
+import CustomButton from "~/components/buttons/CustomButton.vue";
 
 
-@Component({})
+@Component({
+  components:{
+    CustomButton
+  }
+})
 export default class ActivityOneResult extends Vue {
   @Prop({type: Object, required: true}) readonly userSelection!: UserObjectSelection
   @Prop({type: String, required: true}) readonly goodObject!: string
 
+  private marqueeNumber:number = 6
   public activityModule = getModule(ActivityModule, this.$store)
 
   public created() {
@@ -61,6 +68,9 @@ export default class ActivityOneResult extends Vue {
    * Init canvas of activity
    */
   private _initCanvasScenes() {
+    (<HTMLCanvasElement>this.$refs.activityOneResult).width = window.innerWidth;
+    (<HTMLCanvasElement>this.$refs.activityOneResult).height = window.innerHeight;
+
     new ActivityOneResultCanvasInitializer({
       wordObjectCanvas: this.$refs.activityOneResult as HTMLCanvasElement,
       activityModule: this.activityModule
@@ -73,9 +83,31 @@ export default class ActivityOneResult extends Vue {
 
 .activity-1-resultWrapper {
   position: absolute;
-  background: pink;
+  background: $orange-gradient;
   width: 100%;
   height: 100%;
-  z-index: 10;
+  z-index: 60;
+  .marqueeWrapper{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: -1;
+    span{
+      font-size: 120px;
+      font-family: "TTNormsPro";
+      font-weight: bold;
+      text-transform: uppercase;
+      color: white;
+    }
+  }
+  .activityOneResult{
+    z-index: 3;
+  }
+  .activity-result--btn{
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 </style>
