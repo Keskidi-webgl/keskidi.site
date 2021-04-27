@@ -22,12 +22,6 @@ import {Component, Prop, Vue} from 'nuxt-property-decorator'
 export default class LogoMedia extends Vue {
     @Prop({type: String, default: "#000648"}) readonly theme!: string
 
-  public mounted() {
-  }
-
-    public containerWidth() {
-    return `${this.width}px`
-  }
 }
 </script>
 

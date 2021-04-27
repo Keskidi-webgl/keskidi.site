@@ -1,10 +1,9 @@
 <template>
   <div>
-<<<<<<< HEAD
+    <!--
     <Loader class="site-loader" :loading-data="loadingProgressions"></Loader>
-=======
+    -->
     <LogoMedia class='logo' />
->>>>>>> b97bd665526bf135c3f2469382c7c20b0544a4dc
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
     <Nuxt v-if="this.globalModule.isAppInit"/>
     <SceneNavigationPanel v-if="this.sceneModule.activeRoom"/>
