@@ -1,6 +1,10 @@
 <template>
   <div>
+<<<<<<< HEAD
     <Loader class="site-loader" :loading-data="loadingProgressions"></Loader>
+=======
+    <LogoMedia class='logo' />
+>>>>>>> b97bd665526bf135c3f2469382c7c20b0544a4dc
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
     <Nuxt v-if="this.globalModule.isAppInit"/>
     <SceneNavigationPanel v-if="this.sceneModule.activeRoom"/>
@@ -15,10 +19,12 @@ import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
 import SceneModule from "~/store/scene";
 import {AssetsManager} from "~/core/managers";
 import {AssetManagerInitializer} from "~/core/utils/initializers";
+import LogoMedia from "~/components/medias/LogoMedia.vue";
 
 @Component({
   components: {
-    SceneNavigationPanel
+    SceneNavigationPanel,
+    LogoMedia
   }
 })
 export default class DefaultLayout extends Vue {
@@ -57,6 +63,14 @@ export default class DefaultLayout extends Vue {
 </script>
 
 <style scoped lang="scss">
+.logo {
+  width: 100px;
+  margin-top: 10px;
+  position: absolute;
+  z-index: 40;
+  left: 50%;
+  transform: translate(-50%, 0px);
+}
 canvas {
   position: fixed;
   top: 0;
@@ -71,7 +85,7 @@ canvas {
 
 .site-loader {
   position: fixed;
-  z-index: 30;
+  z-index: 90;
   background: linear-gradient(180deg, #FCEEE6 0%, #EFDEDD 100%);
   top: 0;
   left: 0;
