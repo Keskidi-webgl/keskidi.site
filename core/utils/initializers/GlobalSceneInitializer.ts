@@ -142,6 +142,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addGltfTom() {
     const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
+    console.log(tomGltf)
     //tomGltf.scale.set(1, 1.1, 1.1)
     tomGltf.position.set(0, 40, 500)
     tomGltf.rotation.y = -45

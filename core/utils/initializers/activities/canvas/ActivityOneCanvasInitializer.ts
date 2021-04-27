@@ -2,6 +2,7 @@ import ActivityCanvasInitializer from "~/core/utils/initializers/activities/Acti
 import ActivityModule from "~/store/activity";
 import SceneHelper from "~/core/utils/sceneHelper";
 import {AssetsManager, SceneManager} from "~/core/managers";
+import {DirectionalLight, SpotLight} from "three";
 
 export default class ActivityOneCanvasInitializer extends ActivityCanvasInitializer<{ tomCanvas: HTMLCanvasElement, objectsCanvas: HTMLCanvasElement, activityModule: ActivityModule }, void> {
 
@@ -42,8 +43,12 @@ export default class ActivityOneCanvasInitializer extends ActivityCanvasInitiali
       gltfObject.scene.position.set(-10, 0, 0)
       gltfObject.scene.scale.set(0.5, 0.5, 0.5)
       gltfObject.scene.rotation.x = Math.PI / 2;
+      const directionalLight = new SpotLight( 0xffffff);
+      scene.add( directionalLight );
+      directionalLight.target = gltfObject.scene
       scene.add(gltfObject.scene)
       gltfObject.scene.visible = index === 0
+
     })
 
     SceneManager.ACTIVITY_1_OBJECTS.start()
