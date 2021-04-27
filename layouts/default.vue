@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LogoMedia class='logo' />
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
     <Nuxt v-if="this.globalModule.isAppInit"/>
     <SceneNavigationPanel v-if="this.sceneModule.activeRoom"/>
@@ -12,10 +13,12 @@ import GlobalModule from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
 import SceneModule from "~/store/scene";
+import LogoMedia from "~/components/medias/LogoMedia.vue";
 
 @Component({
   components: {
-    SceneNavigationPanel
+    SceneNavigationPanel,
+    LogoMedia
   }
 })
 export default class DefaultLayout extends Vue {
@@ -47,6 +50,14 @@ export default class DefaultLayout extends Vue {
 </script>
 
 <style scoped lang="scss">
+.logo {
+  width: 100px;
+  margin-top: 10px;
+  position: absolute;
+  z-index: 40;
+  left: 50%;
+  transform: translate(-50%, 0px);
+}
 canvas {
   position: fixed;
   top: 0;
