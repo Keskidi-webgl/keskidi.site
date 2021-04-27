@@ -1,6 +1,6 @@
-import {Initializers} from "~/core/defs";
-import {AssetsManager} from "~/core/managers";
-import {GLTF_ASSET} from "~/core/enums";
+import { Initializers } from "~/core/defs";
+import { AssetsManager } from "~/core/managers";
+import { GLTF_ASSET } from "~/core/enums";
 
 /**
  * @description
@@ -9,7 +9,7 @@ import {GLTF_ASSET} from "~/core/enums";
 export default class AssetManagerInitializer extends Initializers<null, Promise<void>> {
   async init(): Promise<void> {
     await AssetsManager
-      .enableLocalMode()
+      // .enableLocalMode()
       .registerGltf(GLTF_ASSET.GLOBAL_SCENE, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale.gltf')
       .registerGltf(GLTF_ASSET.ACTIVITY_OBJECT_MOULA, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/moulaga.gltf')
       .registerGltf(GLTF_ASSET.ACTIVITY_OBJECT_NOOB, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/pouce_bad.gltf')
