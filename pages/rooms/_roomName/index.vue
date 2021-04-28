@@ -10,7 +10,6 @@ import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
 import GlobalSceneStore from "~/store/globalScene";
-import {URL_ROOM_IDENTIFIER} from "~/core/enums";
 import AuthMiddleware from "~/middleware/auth";
 
 @Component({})
@@ -29,8 +28,7 @@ export default class RoomPage extends Vue {
   }
 
   mounted() {
-    const roomIdentifier = <URL_ROOM_IDENTIFIER>this.$route.params.roomName
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomIdentifier, 2, () => {
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.$route.params.roomName, 2, () => {
       this.globalSceneStore.setActiveRoom(roomIdentifier)
       this.addInteractionPoints()
     })
