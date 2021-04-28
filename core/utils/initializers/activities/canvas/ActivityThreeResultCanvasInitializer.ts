@@ -25,7 +25,6 @@ export default class ActivityThreeResultCanvasInitializer extends ActivityCanvas
     wordGltfObject.scene.rotation.x = Math.PI / 2;
     scene.add(wordGltfObject.scene)
 
-    console.log(SceneManager.ACTIVITY_3_RESULTS.scene)
     SceneManager.ACTIVITY_3_RESULTS.start()
   }
 

@@ -8,7 +8,7 @@ import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
 
 
 @Module({
-  name: 'scene',
+  name: 'globalScene',
   namespaced: true,
   stateFactory: true,
 })

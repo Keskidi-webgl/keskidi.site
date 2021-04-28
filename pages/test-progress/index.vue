@@ -68,7 +68,6 @@ export default class TestProgressPage extends Vue {
   increment() {
     if (this.nb < ProgressPercentManager.words) {
       ProgressPercentManager.update(() => {
-        console.log("NEW LEVEL !");
       });
       this.nb++;
       this.level = ProgressPercentManager.current;
