@@ -7,7 +7,7 @@
 
     </aside>
     <main ref="activityPageContent" class="activity-page-content">
-      <span class="activity-content--title main-font">Comme dirait le prof, reapeat after me ...</span>
+      <span class="activity-content--title main-font">Comme dirait le prof, repeat after me ...</span>
 
        <div class="activity-expressionsWrapper" v-if="activeExpression">
 
