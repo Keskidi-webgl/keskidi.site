@@ -23,7 +23,7 @@ const MezzanineInteractPoint: InteractionPoint = {
     return authStore.isAuth
   },
 
-  url: Mezzanine.fullUrl,
+  url: () => Mezzanine.fullUrl,
 
   transformX: 0,
 

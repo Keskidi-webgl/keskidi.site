@@ -23,7 +23,7 @@ const BedroomInteractPoint: InteractionPoint = {
     return authStore.isAuth
   },
 
-  url: Bedroom.fullUrl,
+  url: () => Bedroom.fullUrl,
 
   transformX: 0,
 

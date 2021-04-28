@@ -5,7 +5,7 @@ import {WORD_ID} from "~/core/enums/word";
 export type RoomObject = {
   name: string
   urlSlug: ROOM_OBJECT_SLUG
-  room: Room
+  room: () => Room
   fullUrl: string
   wordId: WORD_ID
 }

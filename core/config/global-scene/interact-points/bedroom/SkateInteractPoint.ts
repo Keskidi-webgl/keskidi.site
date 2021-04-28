@@ -24,7 +24,7 @@ const SkateInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: SkateRoomObject.fullUrl,
+  url: () => SkateRoomObject.fullUrl,
 
   transformX: 0,
 

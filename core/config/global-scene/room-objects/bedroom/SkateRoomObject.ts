@@ -7,7 +7,7 @@ import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 const SkateRoomObject: RoomObject = {
   name: 'skate',
   urlSlug: ROOM_OBJECT_SLUG.SKATE,
-  room: Bedroom,
+  room: () => Bedroom,
 
   fullUrl: `/rooms/${ROOM_SLUG.BEDROOM}/${ROOM_OBJECT_SLUG.SKATE}`,
   wordId: WORD_ID.HENDEK

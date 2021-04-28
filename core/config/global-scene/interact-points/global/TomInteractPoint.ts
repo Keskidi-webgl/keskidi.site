@@ -23,7 +23,7 @@ const TomInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: '/tom',
+  url: () => '/tom',
 
   transformX: 0,
 

@@ -37,7 +37,7 @@ export default class SceneNavigationPanel extends Vue {
   }
 
   public goBackObjectRoom() {
-    return this.globalSceneStore.activeObject?.room.fullUrl
+    return this.globalSceneStore.activeObject?.room().fullUrl
   }
 }
 </script>

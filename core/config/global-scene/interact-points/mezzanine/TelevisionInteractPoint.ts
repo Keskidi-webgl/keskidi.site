@@ -24,7 +24,7 @@ const TelevisionInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: TelevisionRoomObject.fullUrl,
+  url: () => TelevisionRoomObject.fullUrl,
 
   transformX: 0,
 

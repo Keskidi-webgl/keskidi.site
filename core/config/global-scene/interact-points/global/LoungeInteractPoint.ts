@@ -23,7 +23,7 @@ const LoungeInteractPoint: InteractionPoint = {
     return authStore.isAuth
   },
 
-  url: Lounge.fullUrl,
+  url: () => Lounge.fullUrl,
 
   transformX: 0,
 

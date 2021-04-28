@@ -9,5 +9,5 @@ export type InteractionPoint = {
   canvasCoords: () => Vector3
   transformX: number
   transformY: number
-  url: string
+  url: () => string
 }

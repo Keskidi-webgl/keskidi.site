@@ -24,7 +24,7 @@ const PaperInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: PaperRoomObject.fullUrl,
+  url: () => PaperRoomObject.fullUrl,
 
   transformX: 0,
 

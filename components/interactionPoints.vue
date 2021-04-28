@@ -3,7 +3,7 @@
     v-if="isVisible()"
     :style="style()"
     class="point point-0"
-    :to="data.url"
+    :to="data.url()"
   >
     <div :class="{isCompleted: isCompleted()}" class="center"></div>
   </nuxt-link>

@@ -25,7 +25,7 @@ const VinylInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: VinylRoomObject.fullUrl,
+  url: () => VinylRoomObject.fullUrl,
 
   transformX: 0,
 
