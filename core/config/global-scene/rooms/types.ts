@@ -4,8 +4,8 @@ import {RoomObject} from "~/core/config/global-scene/room-objects/types";
 export type Room = {
   urlSlug: ROOM_SLUG
   name: string
-  nextRoom: Room
-  previousRoom: Room
+  nextRoom: () => Room
+  previousRoom: () => Room
   fullUrl: string
-  objects: Array<RoomObject>
+  objects: () => Array<RoomObject>
 }

@@ -8,13 +8,13 @@ const Bedroom: Room = {
 
   name: 'bedroom',
 
-  nextRoom: Mezzanine,
+  nextRoom: () => Mezzanine,
 
-  previousRoom: Lounge,
+  previousRoom: () => Lounge,
 
   fullUrl: `/rooms/${ROOM_SLUG.BEDROOM}`,
 
-  objects: [SkateRoomObject, PaperRoomObject]
+  objects: () => [SkateRoomObject, PaperRoomObject]
 }
 
 export default Bedroom

@@ -8,12 +8,12 @@ const Mezzanine: Room = {
   urlSlug: ROOM_SLUG.MEZZANINE,
   name: 'mezzanine',
 
-  nextRoom: Lounge,
-  previousRoom: Bedroom,
+  nextRoom: () => Lounge,
+  previousRoom: () => Bedroom,
 
   fullUrl: `/rooms/${URL_ROOM_IDENTIFIER.MEZZANINE}`,
 
-  objects: [TelevisionRoomObject]
+  objects: () => [TelevisionRoomObject]
 }
 
 export default Mezzanine

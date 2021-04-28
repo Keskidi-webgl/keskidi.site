@@ -7,13 +7,13 @@ const Lounge: Room = {
   urlSlug: ROOM_SLUG.LOUNGE,
   name: 'lounge',
 
-  nextRoom: Bedroom,
+  nextRoom: () => Bedroom,
 
-  previousRoom: Mezzanine,
+  previousRoom: () => Mezzanine,
 
   fullUrl: `/rooms/${ROOM_SLUG.LOUNGE}`,
 
-  objects: [VinylRoomObject]
+  objects: () => [VinylRoomObject]
 }
 
 export default Lounge

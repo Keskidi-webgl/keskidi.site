@@ -41,13 +41,13 @@ export default class RoomPage extends Vue {
   }
 
   addInteractionPoints() {
-    this.globalSceneStore.activeRoom!.objects.forEach((object) => {
+    this.globalSceneStore.activeRoom!.objects().forEach((object) => {
       this.globalSceneStore.addInteractivePoint(object.urlSlug)
     })
   }
 
   removeInteractionPoints() {
-    this.globalSceneStore.activeRoom?.objects.forEach((object) => {
+    this.globalSceneStore.activeRoom?.objects().forEach((object) => {
       this.globalSceneStore.removeInteractivePoint(object.urlSlug)
     })
   }

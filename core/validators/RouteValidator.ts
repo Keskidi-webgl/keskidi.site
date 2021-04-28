@@ -33,7 +33,7 @@ export default class RouteValidator {
     try {
       const room = GlobalSceneHelper.getRoomBySlug(roomSlug)
       const roomObjectFromUrl = GlobalSceneHelper.getRoomObjectBySlug(roomObjectSlug)
-      isValid = isValid && room.objects.some(roomObject => roomObject.urlSlug === roomObjectFromUrl.urlSlug)
+      isValid = isValid && room.objects().some(roomObject => roomObject.urlSlug === roomObjectFromUrl.urlSlug)
     } catch (error) {
       isValid = false
     }
