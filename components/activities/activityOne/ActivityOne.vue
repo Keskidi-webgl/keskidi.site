@@ -1,12 +1,11 @@
 <template>
   <div class="activity-page">
     <aside class="activity-page-aside" ref="activityPageAside">
-      <div class="progress-bar"></div>
-      <h2 v-if="activityModule.dataWord" class="word-title">{{ activityModule.dataWord.name }}</h2>
+      <h2 v-if="activityModule.dataWord" class="word-title main-font">{{ activityModule.dataWord.name }}</h2>
       <canvas ref="activityOneTom" class="tom-canvas"></canvas>
     </aside>
     <main ref="activityPageContent" class="activity-page-content">
-        <span class="common-text instruction">
+        <span class="common-text instruction main-font">
           Alors alors ... Parmis ces 3 objets lequel représente le mot {{ activityModule.dataWord.name }} ?
         </span>
 <!--      <div class="activity-page-contentWrapper">-->
@@ -120,8 +119,13 @@ export default class ActivityOne extends Vue {
 .activity-page {
   &-aside{
     justify-content: start;
+
+    .word-title {
+      padding-top: 100px;
+    }
   }
   .activity-page-content {
+    overflow: hidden;
     padding: 180px 30px 30px 60px;
     display: flex;
     align-items: center;
@@ -130,19 +134,17 @@ export default class ActivityOne extends Vue {
     position: relative;
     justify-content: space-between;
 
-    //.activity-page-contentWrapper {
-    //  flex: 1;
-    //}
-
     .activity-page-contentWrapper {
       display: flex;
       align-items: center;
+
       .instruction {
         width: 315px;
         display: block;
         padding-bottom: 70px;
+        font-size: 40px;
+        font-weight: bold !important;
       }
-
 
     }
     .choice-block-container {

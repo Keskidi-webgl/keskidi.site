@@ -1,11 +1,11 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
     <CustomCard v-if="this.activityModule.dataWord" class="scenario-container" background-color="white" width="460">
-      <span class="scenario-container-text text-common">
+      <span v-if="this.activityModule.dataWord.home_scenario" class="scenario-container-text text-common">
         {{ this.activityModule.dataWord.home_scenario.content }}
       </span>
-      <CustomButton @click.native="canDisplayActivityPanel = true" arrow-color="white" color="#000648"
-                    text="Découvrir ce mot"></CustomButton>
+      <CustomButton class="btn-discover" @click.native="canDisplayActivityPanel = true" arrow-color="white" color="#000648"
+                    :text="`Découvrir le mot ${activityModule.dataWord.name}`"></CustomButton>
     </CustomCard>
     <transition v-on:enter="displayActivityPanel">
       <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
@@ -103,6 +103,10 @@ export default class ObjectPage extends Vue {
     color: #000648;
     padding-bottom: 25px;
     font-family: $main_font;
+  }
+
+  .btn-discover {
+    width: 280px;
   }
 
 }

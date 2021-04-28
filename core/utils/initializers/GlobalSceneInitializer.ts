@@ -79,7 +79,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    })//.enableStats().enableAxesHelpers(1000)
+    }).hideGui()//.enableStats().enableAxesHelpers(1000)
 
   }
 
@@ -143,7 +143,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addGltfTom() {
     const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
     console.log(tomGltf)
-    //tomGltf.scale.set(1, 1.1, 1.1)
+    tomGltf.scale.set(0.8, 0.8, 0.8)
     tomGltf.position.set(50, 40, 500)
     tomGltf.rotation.y = -45
     SceneManager.GLOBAL_SCENE.scene.add(tomGltf)

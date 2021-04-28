@@ -2,12 +2,29 @@
   font-family: "TiempoFine";
   src: url("~assets/fonts/TiemposFine-Regular.woff") format("woff");
   font-style: normal;
+  font-weight: normal;
   font-display: swap;
+}
+
+@font-face {
+  font-family: "TiempoFine";
+  src: url("~assets/fonts/TiemposFine-Bold.otf") format("woff");
+  font-style: normal;
+  font-display: swap;
+  font-weight: bold;
 }
 
 @font-face {
   font-family: "TTNormsPro";
   src: url("~assets/fonts/TT-Norms-Pro-Regular.woff") format("woff");
   font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TTNormsPro";
+  src: url("~assets/fonts/TT-Norms-Pro-Bold.otf") format("woff");
+  font-weight: bold;
   font-display: swap;
 }

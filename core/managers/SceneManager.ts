@@ -387,6 +387,12 @@ export default class SceneManager {
     animationToPlay.play()
   }
 
+  public hideGui() {
+    this._gui.hide()
+
+    return this
+  }
+
 
   // - PRIVATE
   /**

@@ -4,8 +4,8 @@
     <CustomCard v-if="isReady && !this.authStore.isAuth" class="auth-container" background-color="white" width="610">
       <h1 class="big-title main-font w-100">Wesh alors !</h1>
       <p class="sub-title text-common secondary-font w-100">Bienvenue chez mes parents. Mi casa es tu Casa.</p>
-      <p class="w-100 main-font">Je me présente rapidement. Moi, c'est Tom, j'ai 18 ans ! J'adore jouer aux jeux vidéos, faire du skate et de la msucu. trouver un autre truc.</p>
-      <p class="w-100 main-font">Pour continuer, j'ai besoin de ton adresse mail pour que tu puisse garder ta progression.</p>
+      <p class="w-100 main-font">Je me présente rapidement. Moi, c'est Tom, j'ai 18 ans ! J'adore jouer aux jeux vidéos, faire du skate et de la muscu.</p>
+      <p class="w-100 main-font">Je ne laisse pas n'importe qui rentrer chez moi. J'ai donc besoin que tu me donne ton email 😀</p>
       <input type="text" v-model="dataFormAuth.email" class="form-control" id="email" placeholder="Ton email">
       <div class="w-100 action-container">
         <CustomButton @click.native="auth()" arrow-color="white" color="#000648" text="Valider"/>
