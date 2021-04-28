@@ -1,9 +1,10 @@
 import {Vector3} from "three";
 import {SceneManager} from "~/core/managers";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {Mezzanine} from "~/core/config/global-scene/rooms";
 
 const MezzanineCameraPosition: CameraPosition = {
-  name: '',
+  name: Mezzanine.urlSlug,
 
   coords: () => {
     const lookAtPosition = new Vector3()

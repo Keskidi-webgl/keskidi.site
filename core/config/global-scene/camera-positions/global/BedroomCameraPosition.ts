@@ -1,8 +1,9 @@
 import {SceneManager} from "~/core/managers";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {Bedroom} from "~/core/config/global-scene/rooms";
 
 const BedroomCameraPosition: CameraPosition = {
-  name: '',
+  name: Bedroom.urlSlug,
 
   coords: () => {
     const lookAtPosition = SceneManager.GLOBAL_SCENE.scene.getObjectByName('chambre')!.position
