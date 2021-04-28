@@ -58,4 +58,6 @@ class GlobalSceneHelper {
   }
 }
 
-export default GlobalSceneHelper
+const instance = new GlobalSceneHelper()
+
+export default instance
