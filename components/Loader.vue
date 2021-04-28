@@ -9,7 +9,7 @@
       </p>
 
       <p class="main-font text-common site-loader-container-description">Tu n'as rien compris à cette phrase ? Tu es au bon endroit ! Plonge et part à la
-        découverte de la culture des jeunes d'aujourd'hui</p>
+        découverte de la culture des jeunes d'aujourd'hui.</p>
 
       <CustomButton :class="{disabled: !globalModule.isAppInit}" @click.native="hide" arrow-color="white"
                     color="#000648" :text="text()"></CustomButton>
