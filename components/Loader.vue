@@ -22,7 +22,6 @@ import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
 import GlobalModule from "~/store/global";
 import AuthModule from "~/store/auth";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import {InteractionPointConfig} from "~/core/types";
 import gsap from 'gsap'
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 

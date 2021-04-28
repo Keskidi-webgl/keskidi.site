@@ -11,18 +11,16 @@
 
 <script lang="ts">
 import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
-import {InteractionPointConfig} from "~/core/types";
 import GlobalModule from "~/store/global";
 import AuthModule from "~/store/auth";
+import {InteractionPoint as InteractionPointData} from "~/core/config/global-scene/interact-points/types";
 
 @Component
 export default class InteractionPoints extends Vue {
   @Prop({type: Object, required: true})
-  readonly data!: InteractionPointConfig;
+  readonly data!: InteractionPointData;
   public globalModule: GlobalModule = getModule(GlobalModule, this.$store);
   public authModule: AuthModule = getModule(AuthModule, this.$store);
-
-  public mounted() {}
 
   public style() {
     return `
@@ -37,7 +35,6 @@ export default class InteractionPoints extends Vue {
   }
 
   public isCompleted() {
-    console.log(this.data.isCompleted(this.globalModule))
     return this.data.isCompleted(this.globalModule)
   }
 }

@@ -10,20 +10,12 @@ import SceneConfig from "~/core/config/scene.config";
 import {INTERACT_POINT_NAME, URL_ROOM_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import SceneModule from "~/store/scene";
-import {Vector3} from "three";
+import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
+import {LoungeInteractPoint, MezzanineInteractPoint} from "~/core/config/global-scene/interact-points";
 
 @Component
 export default class HomePage extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
-  /**
-   * Data for point of interactive points
-   */
-  public dataInteractivePoints = {
-    auth: {url: '/auth'},
-    lounge: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.LOUNGE)?.fullUrl},
-    mezzanine: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.MEZZANINE)?.fullUrl},
-    bedroom: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.BEDROOM)?.fullUrl},
-  }
 
   mounted() {
     this.sceneModule.clearActiveRoom()
@@ -31,6 +23,7 @@ export default class HomePage extends Vue {
       this.addInteractionPoints()
     })
   }
+
   beforeDestroy() {
     this.removeInteractionPoints()
   }

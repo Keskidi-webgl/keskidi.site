@@ -23,6 +23,13 @@ import {
   VinylInteractPoint
 } from "~/core/config/global-scene/interact-points";
 import {Bedroom, Lounge, Mezzanine} from "~/core/config/global-scene/rooms";
+import {RoomObject} from "~/core/config/global-scene/room-objects/types";
+import {
+  PaperRoomObject,
+  SkateRoomObject,
+  TelevisionRoomObject,
+  VinylRoomObject
+} from "~/core/config/global-scene/room-objects";
 
 const GlobalSceneConfig = {
   // ROOMS
@@ -31,6 +38,17 @@ const GlobalSceneConfig = {
     Lounge,
     Mezzanine
   ] as Array<Room>,
+
+  // ROOM OBJECTS
+  roomObjects: [
+    /* Bedroom */
+    SkateRoomObject,
+    PaperRoomObject,
+    /* Lounge */
+    VinylRoomObject,
+    /* Mezzanine */
+    TelevisionRoomObject
+  ] as Array<RoomObject>,
 
   // CAMERA POSITIONS
   cameraPositions: [
