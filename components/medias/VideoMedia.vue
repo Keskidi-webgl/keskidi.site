@@ -11,16 +11,16 @@
 
 <script lang="ts">
 import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
-import SceneModule from "~/store/scene";
-import ActivityModule from "~/store/activity";
+import GlobalSceneStore from "~/store/globalScene";
+import ActivityStore from "~/store/activity";
 
 @Component({})
 export default class VideoMedia extends Vue {
   @Prop({type: String, required: true}) readonly mediaUrl!: string
   @Prop({type: String, required: true}) readonly caption!: string
 
-  public sceneModule = getModule(SceneModule, this.$store)
-  public activityModule = getModule(ActivityModule, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
 }
 </script>
 

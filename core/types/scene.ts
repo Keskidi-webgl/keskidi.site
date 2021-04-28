@@ -1,17 +1,5 @@
-import {
-  AnimationMixer,
-  Clock,
-  Intersection,
-  OrthographicCamera,
-  PerspectiveCamera,
-  Scene,
-  Vector3,
-  WebGLRenderer
-} from "three";
+import {AnimationMixer, Clock, Intersection, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import SceneManager from "~/core/managers/SceneManager";
-import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
-import GlobalModule from "~/store/global";
-import AuthModule from "~/store/auth";
 
 /**
  * Option to create SceneManager
@@ -56,38 +44,6 @@ export type MouseMoveCanvasCallback = (context: SceneManager, event: MouseEvent)
  * Callback for SceneManager when windows is resized
  */
 export type WindowResizeCallback = (context: SceneManager, event: UIEvent) => void
-
-
-/**
- * Canvas dimension
- */
-export type CanvasDimension = {
-  width: number
-  height: number
-}
-
-export type PresetCameraPosition = {
-  name: string
-  coords: () => {cameraPos: Vector3, lookAtPosition: Vector3}
-}
-
-export type InteractionPointConfig = {
-  name: INTERACT_POINT_NAME
-  isCompleted: (globalModule: GlobalModule) => boolean
-  isVisible: (globalModule: GlobalModule, authModule: AuthModule) => boolean
-  canvasCoords: () => Vector3
-  transformX: number
-  transformY: number
-  url: string
-}
-
-export type RoomConfig = {
-  urlIdentifier: string
-  nextSceneUrl: string
-  previousSceneUrl: string
-  fullUrl: string
-  objects: Array<{ urlId: URL_OBJECT_IDENTIFIER, interactPointName: INTERACT_POINT_NAME }>
-}
 
 export type AnimationMixerElement = {
   name: string

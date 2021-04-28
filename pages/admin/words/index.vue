@@ -71,14 +71,14 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from "nuxt-property-decorator";
-import AdminModule from "~/store/admin";
 import {DataFormCreateWord, Word} from "~/core/types";
 import {ApiManager} from "~/core/managers";
 import AdminLayout from "~/layouts/admin.vue";
+import AdminStore from "~/store/admin";
 
 @Component({})
 export default class WordListPage extends Vue {
-  public adminModule: AdminModule = getModule(AdminModule, this.$store)
+  public adminStore: AdminStore = getModule(AdminStore, this.$store)
   public wordsData: Array<Word> = []
   public onProgress: boolean = false
   public dataFormCreate: DataFormCreateWord = {
@@ -86,7 +86,7 @@ export default class WordListPage extends Vue {
   }
 
   mounted() {
-    this.adminModule.setBasicMenu()
+    this.adminStore.setBasicMenu()
     this.syncWordData()
   }
 

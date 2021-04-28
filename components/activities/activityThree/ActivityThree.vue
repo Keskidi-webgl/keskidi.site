@@ -1,7 +1,7 @@
 <template>
   <section class="activity-page">
     <aside ref="activityPageAside" class="activity-page-aside">
-      <h2 v-if="activityModule.dataWord" class="word-title main-font">{{ activityModule.dataWord.name }}</h2>
+      <h2 v-if="activityStore.dataWord" class="word-title main-font">{{ activityStore.dataWord.name }}</h2>
 
       <canvas ref="activityThreeTom" class="activity-3-tom"></canvas>
 
@@ -23,7 +23,7 @@
          <div class="activity-recordWrapper">
            <button :class="{disableClick: disableClick}" ref="activityRecord" class="activity-expressions--record start-record"
                 @click="startRecordVoice(expression)"
-                v-for="expression in activityModule.dataWord.expressions"
+                v-for="expression in activityStore.dataWord.expressions"
                 :disabled="expression.id !== activeExpression.id">
                <svg class="activity-expressions--recordActive" width="28" height="40" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                  <g>
@@ -56,12 +56,12 @@
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {VoiceRecognitionManager} from "~/core/managers"
-import SceneModule from "~/store/scene"
-import ActivityModule from "~/store/activity"
+import GlobalSceneStore from "~/store/globalScene"
+import ActivityStore from "~/store/activity"
 import {WordExpression} from "~/core/types"
 import ActivityThreeResult from "~/components/activities/activityThree/ActivityThreeResult.vue"
 import {ActivityThreeCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
-import AuthModule from "~/store/auth";
+import AuthStore from "~/store/auth";
 
 @Component({
   components: {
@@ -69,15 +69,15 @@ import AuthModule from "~/store/auth";
   }
 })
 export default class ActivityThree extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
-  public activityModule = getModule(ActivityModule, this.$store)
-  public authModule = getModule(AuthModule, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
+  public authStore = getModule(AuthStore, this.$store)
   public activeExpression: WordExpression | null = null
   public countExpressionSuccess: number = 0
   public disableClick = false
 
   public mounted() {
-    this.activeExpression = this.activityModule.dataWord!.expressions[0]
+    this.activeExpression = this.activityStore.dataWord!.expressions[0]
     this._initCanvasScenes()
     this._initVoiceRecognitionManager()
   }
@@ -119,7 +119,7 @@ export default class ActivityThree extends Vue {
     new ActivityThreeCanvasInitializer({
       tomCanvas: this.$refs.activityThreeTom as HTMLCanvasElement,
       wordObjectCanvas: this.$refs.activityThreeObjects as HTMLCanvasElement,
-      activityModule: this.activityModule
+      activityStore: this.activityStore
     }).init()
   }
 
@@ -130,8 +130,8 @@ export default class ActivityThree extends Vue {
     VoiceRecognitionManager.onResult((result => {
       if (result.distance > 0.5) {
         this.countExpressionSuccess++
-        if (this.countExpressionSuccess < this.activityModule.dataWord!.expressions.length) {
-          this.activeExpression = this.activityModule.dataWord!.expressions[this.countExpressionSuccess]
+        if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
+          this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
         }
       }
     }))

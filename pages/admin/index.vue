@@ -7,15 +7,15 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from "nuxt-property-decorator";
-import AdminModule from "~/store/admin";
+import AdminStore from "~/store/admin";
 
 @Component
 export default class HomeAdmin extends Vue {
-  public adminModule: AdminModule = getModule(AdminModule, this.$store)
+  public adminStore: AdminStore = getModule(AdminStore, this.$store)
 
   mounted()
   {
-    this.adminModule.setBasicMenu()
+    this.adminStore.setBasicMenu()
   }
 
   layout()

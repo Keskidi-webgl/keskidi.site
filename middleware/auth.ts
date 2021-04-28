@@ -1,24 +1,24 @@
 import {getModule} from "nuxt-property-decorator";
-import AuthModule from "~/store/auth";
+import AuthStore from "~/store/auth";
 import {Context} from "@nuxt/types/app";
-import GlobalModule from "~/store/global";
+import GlobalStore from "~/store/global";
 import {ApiManager} from "~/core/managers";
 
 
 export default class AuthMiddleware {
   public static  async handle(ctx: Context) {
-    const authModule = getModule(AuthModule, ctx.store)
-    const globalModule = getModule(GlobalModule, ctx.store)
-    if (!authModule.isAuth) {
+    const authStore = getModule(AuthStore, ctx.store)
+    const globalStore = getModule(GlobalStore, ctx.store)
+    if (!authStore.isAuth) {
       ctx.redirect('/tom')
     }
 
-    if (authModule.isAuth && !globalModule.userWordData) {
+    if (authStore.isAuth && !globalStore.userWordData) {
       const {data} = await ApiManager.request({
-        url: `/users/${authModule.user!.id}/words`
+        url: `/users/${authStore.user!.id}/words`
       })
 
-      globalModule.setUserWordData(data)
+      globalStore.setUserWordData(data)
     }
   }
 }

@@ -91,13 +91,13 @@
 import {Component, getModule, Vue} from "nuxt-property-decorator";
 import {ApiManager} from "~/core/managers";
 import {DataFormUpload, Media} from "~/core/types";
-import AdminModule from "~/store/admin";
+import AdminStore from "~/store/admin";
 import {MEDIA_TYPE} from "~/core/enums";
 import AdminLayout from "~/layouts/admin.vue";
 
 @Component({})
 export default class GltfPanel extends Vue {
-  public adminModule: AdminModule = getModule(AdminModule, this.$store)
+  public adminStore: AdminStore = getModule(AdminStore, this.$store)
   public onProgress: boolean = false
   public gltfData: Array<Media> = []
   public dataFormUpload: DataFormUpload = {
@@ -120,7 +120,7 @@ export default class GltfPanel extends Vue {
   }
 
   async mounted() {
-    this.adminModule.setBasicMenu()
+    this.adminStore.setBasicMenu()
     await this._syncGltfData()
   }
 

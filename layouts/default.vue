@@ -1,22 +1,22 @@
 <template>
   <div>
     <Loader class="site-loader" :loading-data="loadingProgressions"></Loader>
-    <LogoMedia class='logo' />
+    <LogoMedia class='logo'/>
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
-    <Nuxt v-if="this.globalModule.isAppInit"/>
-    <SceneNavigationPanel v-if="this.sceneModule.activeRoom"/>
+    <Nuxt v-if="this.globalStore.isAppInit"/>
+    <SceneNavigationPanel v-if="this.globalSceneStore.activeRoom"/>
   </div>
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from "nuxt-property-decorator";
-import GlobalModule from "~/store/global";
+import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import SceneModule from "~/store/scene";
 import {AssetsManager} from "~/core/managers";
 import {AssetManagerInitializer} from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
+import GlobalSceneStore from "~/store/globalScene";
 
 @Component({
   components: {
@@ -25,8 +25,8 @@ import LogoMedia from "~/components/medias/LogoMedia.vue";
   }
 })
 export default class DefaultLayout extends Vue {
-  public globalModule = getModule(GlobalModule, this.$store)
-  public sceneModule = getModule(SceneModule, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public isLoaderVisible: boolean = true
   public loadingProgressions: string = ''
 
@@ -39,7 +39,7 @@ export default class DefaultLayout extends Vue {
    * Init app for the first connection
    */
   public async initApp() {
-    if (!this.globalModule.isAppInit) {
+    if (!this.globalStore.isAppInit) {
       /* We need to download all asset before init app */
       new AssetManagerInitializer(null).init()
       await AssetsManager.onProgress((done, total) => {
@@ -49,11 +49,11 @@ export default class DefaultLayout extends Vue {
       await new AppInitializer({
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
         axios: this.$axios,
-        sceneModule: this.sceneModule,
-        globalModule: this.globalModule
+        globalSceneStore: this.globalSceneStore,
+        globalStore: this.globalStore
       }).init()
 
-      this.globalModule.setIsAppInit(true)
+      this.globalStore.setIsAppInit(true)
     }
   }
 }

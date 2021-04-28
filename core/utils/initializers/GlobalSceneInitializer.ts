@@ -1,16 +1,16 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {AnimationClip, HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
-import CameraConfig from "~/core/config/camera.config";
-import SceneModule from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
+import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, globalSceneStore: GlobalSceneStore }, void> {
 
   init() {
     SceneManager.GLOBAL_SCENE = this._createInstance()
@@ -52,7 +52,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.updateProjectionMatrix()
         }
-        for (const point of this._data.sceneModule.activeInteractionPoints) {
+        for (const point of this._data.globalSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
           screenPosition.project(SceneManager.GLOBAL_SCENE.camera)
           const updateData = {
@@ -61,7 +61,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
             transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
           }
 
-          this._data.sceneModule.updatePositionsInteractivePoint(updateData)
+          this._data.globalSceneStore.updatePositionsInteractivePoint(updateData)
         }
       },
       onResume:(ctx)=> {
@@ -142,7 +142,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addGltfTom() {
     const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
-    console.log(tomGltf)
     tomGltf.scale.set(0.8, 0.8, 0.8)
     tomGltf.position.set(50, 40, 500)
     tomGltf.rotation.y = -45
@@ -170,7 +169,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    * Register preset camera positions
    */
   private _registerPresetPositions() {
-    CameraConfig.presetPositions.forEach(presetPosition => {
+    GlobalSceneConfig.cameraPositions.forEach(presetPosition => {
       SceneManager.GLOBAL_SCENE.registerPresetCameraPositions(presetPosition)
     })
   }

@@ -7,7 +7,7 @@ import {UserWordData, Word} from "~/core/types";
   namespaced: true,
   stateFactory: true,
 })
-export default class GlobalModule extends VuexModule {
+export default class GlobalStore extends VuexModule {
   private _isAppInit: boolean = false
   private _userWordData: Array<UserWordData> | null = null
   private _dataWord: Array<Word> | null = null

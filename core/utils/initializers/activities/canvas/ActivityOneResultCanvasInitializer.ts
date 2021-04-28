@@ -1,10 +1,10 @@
 import ActivityCanvasInitializer from "~/core/utils/initializers/activities/ActivityCanvasInitializer";
 import {SceneManager} from "~/core/managers";
 import SceneHelper from "~/core/utils/sceneHelper";
-import ActivityModule from "~/store/activity";
+import ActivityStore from "~/store/activity";
 import {Color} from "three";
 
-export default class ActivityOneResultCanvasInitializer extends ActivityCanvasInitializer<{ wordObjectCanvas: HTMLCanvasElement, activityModule: ActivityModule }, void> {
+export default class ActivityOneResultCanvasInitializer extends ActivityCanvasInitializer<{ wordObjectCanvas: HTMLCanvasElement, activityStore: ActivityStore }, void> {
   init(): void {
     this._initWordObjectCanvas()
   }
@@ -21,7 +21,7 @@ export default class ActivityOneResultCanvasInitializer extends ActivityCanvasIn
       activateOrbitControl: false,
     })
 
-    const gltfObject = this._getGltfWordRepresentation(this._data.activityModule.dataWord!)
+    const gltfObject = this._getGltfWordRepresentation(this._data.activityStore.dataWord!)
     gltfObject.scene.position.set(0, 0, 0)
     gltfObject.scene.rotation.x = Math.PI / 2
     scene.add(gltfObject.scene)

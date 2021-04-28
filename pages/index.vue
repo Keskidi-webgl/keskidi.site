@@ -1,52 +1,47 @@
 <template>
   <div class="page-container" data-namespace="home">
-    <InteractionPoints :data="point" v-for="(point, index) in sceneModule.activeInteractionPoints" :key="index"/>
+    <InteractionPoints :data="point" v-for="(point, index) in globalSceneStore.activeInteractionPoints" :key="index"/>
   </div>
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import SceneConfig from "~/core/config/scene.config";
-import {INTERACT_POINT_NAME, URL_ROOM_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
-import SceneModule from "~/store/scene";
-import {Vector3} from "three";
+import GlobalSceneStore from "~/store/globalScene";
+import {
+  BedroomInteractPoint,
+  LoungeInteractPoint,
+  MezzanineInteractPoint,
+  TomInteractPoint
+} from "~/core/config/global-scene/interact-points";
 
 @Component
 export default class HomePage extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
-  /**
-   * Data for point of interactive points
-   */
-  public dataInteractivePoints = {
-    auth: {url: '/auth'},
-    lounge: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.LOUNGE)?.fullUrl},
-    mezzanine: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.MEZZANINE)?.fullUrl},
-    bedroom: {url: SceneConfig.getRoomConfig(URL_ROOM_IDENTIFIER.BEDROOM)?.fullUrl},
-  }
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
 
   mounted() {
-    this.sceneModule.clearActiveRoom()
+    this.globalSceneStore.clearActiveRoom()
     SceneManager.GLOBAL_SCENE.goToPresetPosition('home', 2, () => {
       this.addInteractionPoints()
     })
   }
+
   beforeDestroy() {
     this.removeInteractionPoints()
   }
 
   addInteractionPoints() {
-    this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.BEDROOM)
-    this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.LOUNGE)
-    this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.MEZZANINE)
-    this.sceneModule.addInteractivePoint(INTERACT_POINT_NAME.TOM)
+    this.globalSceneStore.addInteractivePoint(BedroomInteractPoint.name)
+    this.globalSceneStore.addInteractivePoint(LoungeInteractPoint.name)
+    this.globalSceneStore.addInteractivePoint(MezzanineInteractPoint.name)
+    this.globalSceneStore.addInteractivePoint(TomInteractPoint.name)
   }
 
   removeInteractionPoints() {
-    this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.BEDROOM)
-    this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.LOUNGE)
-    this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.MEZZANINE)
-    this.sceneModule.removeInteractivePoint(INTERACT_POINT_NAME.TOM)
+    this.globalSceneStore.removeInteractivePoint(BedroomInteractPoint.name)
+    this.globalSceneStore.removeInteractivePoint(LoungeInteractPoint.name)
+    this.globalSceneStore.removeInteractivePoint(MezzanineInteractPoint.name)
+    this.globalSceneStore.removeInteractivePoint(TomInteractPoint.name)
   }
 }
 </script>

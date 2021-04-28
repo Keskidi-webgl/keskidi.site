@@ -6,7 +6,7 @@ import {Module, Mutation, VuexModule} from "vuex-module-decorators";
   namespaced: true,
   stateFactory: true,
 })
-export default class AdminModule extends VuexModule {
+export default class AdminStore extends VuexModule {
   private _adminMenu = {
     links: [] as Array<AdminMenuLink>
   }

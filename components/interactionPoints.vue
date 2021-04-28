@@ -3,7 +3,7 @@
     v-if="isVisible()"
     :style="style()"
     class="point point-0"
-    :to="data.url"
+    :to="data.url()"
   >
     <div :class="{isCompleted: isCompleted()}" class="center"></div>
   </nuxt-link>
@@ -11,18 +11,16 @@
 
 <script lang="ts">
 import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
-import {InteractionPointConfig} from "~/core/types";
-import GlobalModule from "~/store/global";
-import AuthModule from "~/store/auth";
+import GlobalStore from "~/store/global";
+import AuthStore from "~/store/auth";
+import {InteractionPoint as InteractionPointData} from "~/core/config/global-scene/interact-points/types";
 
 @Component
 export default class InteractionPoints extends Vue {
   @Prop({type: Object, required: true})
-  readonly data!: InteractionPointConfig;
-  public globalModule: GlobalModule = getModule(GlobalModule, this.$store);
-  public authModule: AuthModule = getModule(AuthModule, this.$store);
-
-  public mounted() {}
+  readonly data!: InteractionPointData;
+  public globalStore: GlobalStore = getModule(GlobalStore, this.$store);
+  public authStore: AuthStore = getModule(AuthStore, this.$store);
 
   public style() {
     return `
@@ -33,12 +31,11 @@ export default class InteractionPoints extends Vue {
   }
 
   public isVisible() {
-    return this.data.isVisible(this.globalModule, this.authModule);
+    return this.data.isVisible(this.globalStore, this.authStore);
   }
 
   public isCompleted() {
-    console.log(this.data.isCompleted(this.globalModule))
-    return this.data.isCompleted(this.globalModule)
+    return this.data.isCompleted(this.globalStore)
   }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
-    <CustomCard v-if="this.activityModule.dataWord" class="scenario-container" background-color="white" width="460">
-      <span v-if="this.activityModule.dataWord.home_scenario" class="scenario-container-text text-common">
-        {{ this.activityModule.dataWord.home_scenario.content }}
+    <CustomCard v-if="this.activityStore.dataWord" class="scenario-container" background-color="white" width="460">
+      <span v-if="this.activityStore.dataWord.home_scenario" class="scenario-container-text text-common">
+        {{ this.activityStore.dataWord.home_scenario.content }}
       </span>
       <CustomButton class="btn-discover" @click.native="canDisplayActivityPanel = true" arrow-color="white" color="#000648"
-                    :text="`Découvrir le mot ${activityModule.dataWord.name}`"></CustomButton>
+                    :text="`Découvrir le mot ${activityStore.dataWord.name}`"></CustomButton>
     </CustomCard>
     <transition v-on:enter="displayActivityPanel">
       <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
@@ -17,17 +17,18 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
-import {ACTIVITY_TYPE, URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {ACTIVITY_TYPE} from "~/core/enums";
 import gsap from 'gsap'
-import SceneModule from "~/store/scene";
-import ActivityModule from "~/store/activity";
+import GlobalSceneStore from "~/store/globalScene";
+import ActivityStore from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
 import {SceneManager} from "~/core/managers";
-import GlobalModule from "~/store/global";
-import Helpers from "~/core/utils/helpers";
+import GlobalStore from "~/store/global";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
+import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
+import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 
 @Component({
   components: {
@@ -37,10 +38,9 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
   }
 })
 export default class ObjectPage extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
-  public activityModule = getModule(ActivityModule, this.$store)
-  public globalModule = getModule(GlobalModule, this.$store)
-  public objectIdentifier: string = ''
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
   public canDisplayActivityPanel = false
 
   middleware(context: Context) {
@@ -51,19 +51,19 @@ export default class ObjectPage extends Vue {
    * Validate route params
    */
   public validate({params}: Context) {
-    return RouteValidator.validateObjectPageParam(params.roomName, params.objectName)
+    return RouteValidator.validateRoomObjectSlug(<ROOM_SLUG>params.roomName, <ROOM_OBJECT_SLUG>params.objectName)
   }
 
   async mounted() {
-    const objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
-    this.objectIdentifier = objectIdentifier
-    this.sceneModule.setActiveObject(objectIdentifier)
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.objectIdentifier, 1)
+    const roomObjectSlug = <ROOM_OBJECT_SLUG>this.$route.params.objectName
+    this.globalSceneStore.setActiveObject(roomObjectSlug)
+
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomObjectSlug, 1)
     this._setDataWord()
   }
 
   public displayActivityPanel() {
-    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     gsap.to('.activity-container', {
       translateY: 0,
       duration: 1,
@@ -74,7 +74,7 @@ export default class ObjectPage extends Vue {
   }
 
   public beforeDestroy() {
-    this.sceneModule.setActiveObject(null)
+    this.globalSceneStore.setActiveObject(null)
   }
 
   /**
@@ -82,10 +82,10 @@ export default class ObjectPage extends Vue {
    * (expressions, definitions ...)
    */
   private _setDataWord() {
-    const dataWord = this.globalModule.dataWord!.find(word => {
-      return word.id === Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier)
+    const dataWord = this.globalStore.dataWord!.find(word => {
+      return word.id === this.globalSceneStore.activeObject!.wordId
     })!
-    this.activityModule.setDataWord(dataWord)
+    this.activityStore.setDataWord(dataWord)
   }
 }
 </script>

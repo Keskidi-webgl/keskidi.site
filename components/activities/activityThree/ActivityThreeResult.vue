@@ -1,7 +1,7 @@
 <template>
   <div ref="activityResult" class="activity-3-result">
-    <h2 v-if="activityModule.dataWord" class="activity-item--title big-title main-font">Bravo tu as validé le mot
-      {{ activityModule.dataWord.name }}</h2>
+    <h2 v-if="activityStore.dataWord" class="activity-item--title big-title main-font">Bravo tu as validé le mot
+      {{ activityStore.dataWord.name }}</h2>
     <!--
     <canvas class="activityThreeResult-canvas" ref="activityThreeResult"></canvas>
     -->
@@ -11,12 +11,12 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import ActivityModule from "~/store/activity"
+import ActivityStore from "~/store/activity"
 import {ActivityThreeResultCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
 import {ApiManager, SceneManager} from "~/core/managers";
-import SceneModule from "~/store/scene";
-import AuthModule from "~/store/auth";
-import GlobalModule from "~/store/global";
+import GlobalSceneStore from "~/store/globalScene";
+import AuthStore from "~/store/auth";
+import GlobalStore from "~/store/global";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 
 
@@ -26,10 +26,10 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
   }
 })
 export default class ActivityThreeResult extends Vue {
-  public activityModule = getModule(ActivityModule, this.$store)
-  public sceneModule = getModule(SceneModule, this.$store)
-  public authModule = getModule(AuthModule, this.$store)
-  public globalModule = getModule(GlobalModule, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public authStore = getModule(AuthStore, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
 
   public  async mounted() {
     await this._updateUserAchievedWords()
@@ -42,25 +42,25 @@ export default class ActivityThreeResult extends Vue {
 
     new ActivityThreeResultCanvasInitializer({
       wordObjectCanvas: this.$refs.activityThreeResult as HTMLCanvasElement,
-      activityModule: this.activityModule
+      activityStore: this.activityStore
     })
   }
 
   public goBackHome() {
     SceneManager.GLOBAL_SCENE.resume()
-    this.$router.push(this.sceneModule.activeRoom!.fullUrl)
+    this.$router.push(this.globalSceneStore.activeRoom!.fullUrl)
   }
 
   private async _updateUserAchievedWords() {
     await ApiManager.request({
       method: 'POST',
-      url: `/users/${this.authModule.user!.id}/words/${this.activityModule.dataWord!.id}/validate`
+      url: `/users/${this.authStore.user!.id}/words/${this.activityStore.dataWord!.id}/validate`
     })
     const {data} = await ApiManager.request({
-      url: `/users/${this.authModule.user!.id}/words`
+      url: `/users/${this.authStore.user!.id}/words`
     })
 
-    this.globalModule.setUserWordData(data)
+    this.globalStore.setUserWordData(data)
   }
 }
 </script>

@@ -1,16 +1,16 @@
 <template>
   <div class="scene-navigation-panel">
-    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button previous-scene"
+    <nuxt-link v-if="!globalSceneStore.activeObject" class="scene-navigation-panel-button previous-scene"
                :to="previousSceneLink()">
       <img src="~/assets/img/next-arrow.svg" alt="">
     </nuxt-link>
-    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button back-home" :to="backHomeLink()">
+    <nuxt-link v-if="!globalSceneStore.activeObject" class="scene-navigation-panel-button back-home" :to="backHomeLink()">
       <img src="~/assets/img/home.svg" alt="">
     </nuxt-link>
-    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button next-scene" :to="nextSceneLink()">
+    <nuxt-link v-if="!globalSceneStore.activeObject" class="scene-navigation-panel-button next-scene" :to="nextSceneLink()">
       <img src="~/assets/img/next-arrow.svg" alt="">
     </nuxt-link>
-    <nuxt-link v-if="sceneModule.activeObject" class="scene-navigation-panel-button object-room" :to="goBackObjectRoom()">
+    <nuxt-link v-if="globalSceneStore.activeObject" class="scene-navigation-panel-button object-room" :to="goBackObjectRoom()">
       <img src="~/assets/img/next-arrow.svg" alt="">
     </nuxt-link>
   </div>
@@ -18,26 +18,26 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import SceneModule from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
 
 @Component({})
 export default class SceneNavigationPanel extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
 
   public backHomeLink() {
     return '/'
   }
 
   public nextSceneLink() {
-    return this.sceneModule.activeRoom?.nextSceneUrl
+    return this.globalSceneStore.activeRoom?.nextRoom().fullUrl
   }
 
   public previousSceneLink() {
-    return this.sceneModule.activeRoom?.previousSceneUrl
+    return this.globalSceneStore.activeRoom?.previousRoom().fullUrl
   }
 
   public goBackObjectRoom() {
-    return this.sceneModule.activeRoom?.fullUrl
+    return this.globalSceneStore.activeObject?.room().fullUrl
   }
 }
 </script>
