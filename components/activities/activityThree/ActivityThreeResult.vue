@@ -14,7 +14,7 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import ActivityStore from "~/store/activity"
 import {ActivityThreeResultCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
 import {ApiManager, SceneManager} from "~/core/managers";
-import GlobalSceneStore from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
 import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
 import CustomButton from "~/components/buttons/CustomButton.vue";

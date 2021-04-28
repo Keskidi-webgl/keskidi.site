@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
-import GlobalSceneStore from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 
 @Component({})

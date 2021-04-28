@@ -19,7 +19,7 @@ import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {ACTIVITY_TYPE, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import gsap from 'gsap'
-import GlobalSceneStore from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
 import {SceneManager} from "~/core/managers";

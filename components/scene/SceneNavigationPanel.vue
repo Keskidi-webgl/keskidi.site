@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import GlobalSceneStore from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
 
 @Component({})
 export default class SceneNavigationPanel extends Vue {

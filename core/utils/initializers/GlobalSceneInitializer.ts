@@ -3,7 +3,7 @@ import Helpers from "~/core/utils/helpers";
 import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
-import GlobalSceneStore from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 
 /**

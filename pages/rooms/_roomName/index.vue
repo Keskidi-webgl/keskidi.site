@@ -9,7 +9,7 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
-import GlobalSceneStore from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
 import {URL_ROOM_IDENTIFIER} from "~/core/enums";
 import AuthMiddleware from "~/middleware/auth";
 

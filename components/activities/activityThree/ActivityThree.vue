@@ -56,7 +56,7 @@
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {VoiceRecognitionManager} from "~/core/managers"
-import GlobalSceneStore from "~/store/scene"
+import GlobalSceneStore from "~/store/globalScene"
 import ActivityStore from "~/store/activity"
 import {WordExpression} from "~/core/types"
 import ActivityThreeResult from "~/components/activities/activityThree/ActivityThreeResult.vue"
