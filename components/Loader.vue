@@ -24,6 +24,7 @@ import AuthStore from "~/store/auth";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import gsap from 'gsap'
 import LogoMedia from "~/components/medias/LogoMedia.vue";
+import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
 
 
 @Component({
@@ -33,7 +34,7 @@ import LogoMedia from "~/components/medias/LogoMedia.vue";
   }
 })
 export default class Loader extends Vue {
-  @Prop({type: String, required: true}) readonly loadingData!: InteractionPointConfig
+  @Prop({type: String, required: true}) readonly loadingData!: InteractionPoint
   public globalStore: GlobalStore = getModule(GlobalStore, this.$store)
   public authStore: AuthStore = getModule(AuthStore, this.$store)
   public isActive: boolean = true

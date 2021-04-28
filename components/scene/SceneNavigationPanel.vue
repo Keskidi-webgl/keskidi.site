@@ -29,15 +29,15 @@ export default class SceneNavigationPanel extends Vue {
   }
 
   public nextSceneLink() {
-    return this.globalSceneStore.activeRoom?.nextSceneUrl
+    return this.globalSceneStore.activeRoom?.nextRoom.fullUrl
   }
 
   public previousSceneLink() {
-    return this.globalSceneStore.activeRoom?.previousSceneUrl
+    return this.globalSceneStore.activeRoom?.previousRoom.fullUrl
   }
 
   public goBackObjectRoom() {
-    return this.globalSceneStore.activeRoom?.fullUrl
+    return this.globalSceneStore.activeObject?.room.fullUrl
   }
 }
 </script>
