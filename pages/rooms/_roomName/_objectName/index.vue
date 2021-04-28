@@ -17,17 +17,17 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
-import {ACTIVITY_TYPE, URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {ACTIVITY_TYPE} from "~/core/enums";
 import gsap from 'gsap'
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
 import {SceneManager} from "~/core/managers";
 import GlobalStore from "~/store/global";
-import Helpers from "~/core/utils/helpers";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
+import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
 
 @Component({
   components: {
@@ -40,7 +40,6 @@ export default class ObjectPage extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
   public globalStore = getModule(GlobalStore, this.$store)
-  public objectIdentifier: string = ''
   public canDisplayActivityPanel = false
 
   middleware(context: Context) {
@@ -55,10 +54,10 @@ export default class ObjectPage extends Vue {
   }
 
   async mounted() {
-    const objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
-    this.objectIdentifier = objectIdentifier
-    this.globalSceneStore.setActiveObject(objectIdentifier)
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.objectIdentifier, 1)
+    const roomObjectSlug = <ROOM_OBJECT_SLUG>this.$route.params.objectName
+    this.globalSceneStore.setActiveObject(roomObjectSlug)
+
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomObjectSlug, 1)
     this._setDataWord()
   }
 
@@ -83,7 +82,7 @@ export default class ObjectPage extends Vue {
    */
   private _setDataWord() {
     const dataWord = this.globalStore.dataWord!.find(word => {
-      return word.id === Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier)
+      return word.id === this.globalSceneStore.activeObject!.wordId
     })!
     this.activityStore.setDataWord(dataWord)
   }
