@@ -1,14 +1,14 @@
-import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
-import {LoungeConfig} from "~/core/config/roomConfig";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import Helpers from "~/core/utils/helpers";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
+import {VinylRoomObject} from "~/core/config/global-scene/room-objects";
 
 const VinylInteractPoint: InteractionPoint = {
-  name: INTERACT_POINT_NAME.VINYL,
+  name: VinylRoomObject.urlSlug,
 
   canvasCoords: () => {
     const position = new Vector3()
@@ -25,7 +25,7 @@ const VinylInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: LoungeConfig.fullUrl + '/' + URL_OBJECT_IDENTIFIER.VINYL,
+  url: VinylRoomObject.fullUrl,
 
   transformX: 0,
 

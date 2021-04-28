@@ -1,13 +1,13 @@
-import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
-import {BedroomConfig} from "~/core/config/roomConfig";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
+import {SkateRoomObject} from "~/core/config/global-scene/room-objects";
 
 const SkateInteractPoint: InteractionPoint = {
-  name: '',
+  name: SkateRoomObject.urlSlug,
 
   canvasCoords: () => {
     const position = new Vector3()
@@ -24,7 +24,7 @@ const SkateInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: BedroomConfig.fullUrl + '/' + URL_OBJECT_IDENTIFIER.SKATE,
+  url: SkateRoomObject.fullUrl,
 
   transformX: 0,
 

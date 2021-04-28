@@ -1,13 +1,13 @@
-import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
-import {MezzanineConfig} from "~/core/config/roomConfig";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
+import {TelevisionRoomObject} from "~/core/config/global-scene/room-objects";
 
 const TelevisionInteractPoint: InteractionPoint = {
-  name: INTERACT_POINT_NAME.TELEVISION,
+  name: TelevisionRoomObject.urlSlug,
 
   canvasCoords: () => {
     const position = new Vector3()
@@ -24,7 +24,7 @@ const TelevisionInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: MezzanineConfig.fullUrl + '/' + URL_OBJECT_IDENTIFIER.TELEVISION,
+  url: TelevisionRoomObject.fullUrl,
 
   transformX: 0,
 

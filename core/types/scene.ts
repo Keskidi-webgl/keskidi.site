@@ -1,17 +1,5 @@
-import {
-  AnimationMixer,
-  Clock,
-  Intersection,
-  OrthographicCamera,
-  PerspectiveCamera,
-  Scene,
-  Vector3,
-  WebGLRenderer
-} from "three";
+import {AnimationMixer, Clock, Intersection, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import SceneManager from "~/core/managers/SceneManager";
-import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
-import GlobalStore from "~/store/global";
-import AuthStore from "~/store/auth";
 
 /**
  * Option to create SceneManager

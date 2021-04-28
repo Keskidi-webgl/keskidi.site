@@ -5,7 +5,7 @@ import AuthStore from "~/store/auth";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
 
 const TomInteractPoint: InteractionPoint = {
-  name: '',
+  name: 'tom',
 
   canvasCoords: () => {
     const position = new Vector3()

@@ -1,13 +1,12 @@
-import {INTERACT_POINT_NAME} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
-import {BedroomConfig} from "~/core/config/roomConfig";
 import {Vector3} from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
+import {Bedroom} from "~/core/config/global-scene/rooms";
 
 const BedroomInteractPoint: InteractionPoint = {
-  name: '',
+  name: Bedroom.urlSlug,
 
   canvasCoords: () => {
     const position = new Vector3()
@@ -24,7 +23,7 @@ const BedroomInteractPoint: InteractionPoint = {
     return authStore.isAuth
   },
 
-  url: BedroomConfig.fullUrl,
+  url: Bedroom.fullUrl,
 
   transformX: 0,
 

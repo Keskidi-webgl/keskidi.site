@@ -1,5 +1,4 @@
 import {Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {INTERACT_POINT_NAME} from "~/core/enums";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
 import {Room} from "~/core/config/global-scene/rooms/types";
 import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";

@@ -1,12 +1,12 @@
 import {SceneManager} from "~/core/managers";
-import {MezzanineConfig} from "~/core/config/roomConfig";
 import {Vector3} from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
+import {Mezzanine} from "~/core/config/global-scene/rooms";
 
 const MezzanineInteractPoint: InteractionPoint = {
-  name: '',
+  name: Mezzanine.urlSlug,
 
   canvasCoords: () => {
     const position = new Vector3()
@@ -23,7 +23,7 @@ const MezzanineInteractPoint: InteractionPoint = {
     return authStore.isAuth
   },
 
-  url: MezzanineConfig.fullUrl,
+  url: Mezzanine.fullUrl,
 
   transformX: 0,
 

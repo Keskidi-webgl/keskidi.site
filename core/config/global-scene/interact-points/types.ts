@@ -1,4 +1,3 @@
-import {INTERACT_POINT_NAME} from "~/core/enums";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import {Vector3} from "three";

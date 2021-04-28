@@ -1,13 +1,13 @@
-import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
-import {BedroomConfig} from "~/core/config/roomConfig";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
+import {PaperRoomObject} from "~/core/config/global-scene/room-objects";
 
 const PaperInteractPoint: InteractionPoint = {
-  name: '',
+  name: PaperRoomObject.urlSlug,
 
   canvasCoords: () => {
     const position = new Vector3()
@@ -24,7 +24,7 @@ const PaperInteractPoint: InteractionPoint = {
     return true;
   },
 
-  url: BedroomConfig.fullUrl + '/' + URL_OBJECT_IDENTIFIER.PAPER,
+  url: PaperRoomObject.fullUrl,
 
   transformX: 0,
 
