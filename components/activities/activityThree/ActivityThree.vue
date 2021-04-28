@@ -20,9 +20,8 @@
                </svg>
            </button>
          </div>
-
          <div class="activity-recordWrapper">
-           <button ref="activityRecord" class="activity-expressions--record start-record"
+           <button :class="{disableClick: disableClick}" ref="activityRecord" class="activity-expressions--record start-record"
                 @click="startRecordVoice(expression)"
                 v-for="expression in activityModule.dataWord.expressions"
                 :disabled="expression.id !== activeExpression.id">
@@ -42,7 +41,7 @@
 
       <canvas ref="activityThreeObjects" class="activity-3-objects"></canvas>
     </main>
-    <ActivityThreeResult  v-if="activityIsSucceed()"></ActivityThreeResult>
+    <ActivityThreeResult v-if="countExpressionSuccess === 3"></ActivityThreeResult>
 <!--   -->
   </section>
 
@@ -62,6 +61,7 @@ import ActivityModule from "~/store/activity"
 import {WordExpression} from "~/core/types"
 import ActivityThreeResult from "~/components/activities/activityThree/ActivityThreeResult.vue"
 import {ActivityThreeCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
+import AuthModule from "~/store/auth";
 
 @Component({
   components: {
@@ -71,21 +71,22 @@ import {ActivityThreeCanvasInitializer} from "~/core/utils/initializers/activiti
 export default class ActivityThree extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public authModule = getModule(AuthModule, this.$store)
   public activeExpression: WordExpression | null = null
   public countExpressionSuccess: number = 0
-  // public activityRecord:HTMLElement = document.querySelectorAll('.start-record')
+  public disableClick = false
 
   public mounted() {
     this.activeExpression = this.activityModule.dataWord!.expressions[0]
     this._initCanvasScenes()
     this._initVoiceRecognitionManager()
-    // console.log(this.activityRecord)
   }
 
   /**
    * Start voice recognition for current expression
    */
   public startRecordVoice(expression: WordExpression) {
+    this.disableClick = true
     VoiceRecognitionManager.setTextToRecognize(expression.content!)
     VoiceRecognitionManager.start()
   }
@@ -115,7 +116,6 @@ export default class ActivityThree extends Vue {
     (<HTMLCanvasElement>this.$refs.activityThreeObjects).width = (<HTMLElement>this.$refs.activityPageContent).getBoundingClientRect().width;
     (<HTMLCanvasElement>this.$refs.activityThreeObjects).height = (<HTMLElement>this.$refs.activityPageContent).getBoundingClientRect().height;
 
-
     new ActivityThreeCanvasInitializer({
       tomCanvas: this.$refs.activityThreeTom as HTMLCanvasElement,
       wordObjectCanvas: this.$refs.activityThreeObjects as HTMLCanvasElement,
@@ -129,13 +129,15 @@ export default class ActivityThree extends Vue {
   private _initVoiceRecognitionManager() {
     VoiceRecognitionManager.onResult((result => {
       if (result.distance > 0.5) {
-        // this.activityRecord[this.countExpressionSuccess].classList.add('active')
         this.countExpressionSuccess++
         if (this.countExpressionSuccess < this.activityModule.dataWord!.expressions.length) {
           this.activeExpression = this.activityModule.dataWord!.expressions[this.countExpressionSuccess]
         }
       }
     }))
+    VoiceRecognitionManager.onEnd(() => {
+      this.disableClick = false
+    })
   }
 }
 </script>
@@ -262,5 +264,9 @@ export default class ActivityThree extends Vue {
 canvas {
   width: 100px;
   height: 100px;
+}
+
+.disableClick {
+  pointer-events: none;
 }
 </style>
