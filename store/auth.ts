@@ -12,7 +12,7 @@ import {AuthManager} from "~/core/managers";
   namespaced: true,
   stateFactory: true,
 })
-export default class AuthModule extends VuexModule {
+export default class AuthStore extends VuexModule {
   private _token: string|null = AuthManager.getAuthToken()
 
   @Action

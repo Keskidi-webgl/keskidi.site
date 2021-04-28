@@ -8,7 +8,7 @@ import {Word} from "~/core/types";
   namespaced: true,
   stateFactory: true,
 })
-export default class ActivityModule extends VuexModule {
+export default class ActivityStore extends VuexModule {
   private _dataWord: Word | null = null
   private _currentActivity: ACTIVITY_TYPE | null = null
 
