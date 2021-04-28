@@ -10,7 +10,7 @@ const VinylRoomObject: RoomObject = {
   room: () => Lounge,
 
   fullUrl: `/rooms/${ROOM_SLUG.LOUNGE}/${ROOM_OBJECT_SLUG.VINYL}`,
-  wordId: WORD_ID.CRUSH
+  wordId: WORD_ID.MOULAGA
 }
 
 export default VinylRoomObject
