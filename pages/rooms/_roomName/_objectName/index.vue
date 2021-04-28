@@ -1,8 +1,15 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
-    <nuxt-link class="interactive-points" to="{{}}"></nuxt-link>
-    <div @click="displayActivity" ref="btn" class="interactive-btn">Découvrir le mot</div>
-    <activity ref="activity"></activity>
+    <CustomCard v-if="this.activityModule.dataWord" class="scenario-container" background-color="white" width="460">
+      <span v-if="this.activityModule.dataWord.home_scenario" class="scenario-container-text text-common">
+        {{ this.activityModule.dataWord.home_scenario.content }}
+      </span>
+      <CustomButton class="btn-discover" @click.native="canDisplayActivityPanel = true" arrow-color="white" color="#000648"
+                    :text="`Découvrir le mot ${activityModule.dataWord.name}`"></CustomButton>
+    </CustomCard>
+    <transition v-on:enter="displayActivityPanel">
+      <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
+    </transition>
   </div>
 </template>
 
@@ -11,22 +18,30 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {ACTIVITY_TYPE, URL_OBJECT_IDENTIFIER} from "~/core/enums";
-import activity from "~/components/activity/activity.vue";
 import gsap from 'gsap'
 import SceneModule from "~/store/scene";
 import ActivityModule from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
+import {SceneManager} from "~/core/managers";
+import GlobalModule from "~/store/global";
 import Helpers from "~/core/utils/helpers";
-import {ApiManager, SceneManager} from "~/core/managers";
+import ActivityPanel from "~/components/activities/ActivityPanel.vue";
+import CustomCard from "~/components/cards/CustomCard.vue";
+import CustomButton from "~/components/buttons/CustomButton.vue";
 
 @Component({
   components: {
-    activity
+    ActivityPanel,
+    CustomCard,
+    CustomButton
   }
 })
 export default class ObjectPage extends Vue {
   public sceneModule = getModule(SceneModule, this.$store)
   public activityModule = getModule(ActivityModule, this.$store)
+  public globalModule = getModule(GlobalModule, this.$store)
+  public objectIdentifier: string = ''
+  public canDisplayActivityPanel = false
 
   middleware(context: Context) {
     AuthMiddleware.handle(context)
@@ -39,40 +54,60 @@ export default class ObjectPage extends Vue {
     return RouteValidator.validateObjectPageParam(params.roomName, params.objectName)
   }
 
-  mounted() {
+  async mounted() {
     const objectIdentifier = <URL_OBJECT_IDENTIFIER>this.$route.params.objectName
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(objectIdentifier, 1, () => {
-    })
+    this.objectIdentifier = objectIdentifier
+    this.sceneModule.setActiveObject(objectIdentifier)
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.objectIdentifier, 1)
+    this._setDataWord()
   }
 
-  displayActivity() {
-
+  public displayActivityPanel() {
+    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     gsap.to('.activity-container', {
-      translateY: 0, duration: 1, onComplete: () => {
-        // PAUSE ON GLOBAL SCENE
+      translateY: 0,
+      duration: 1,
+      onComplete: () => {
         SceneManager.GLOBAL_SCENE.pause()
-        // START ACTIVITY 1
-        this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
       }
     })
-
   }
 
+  public beforeDestroy() {
+    this.sceneModule.setActiveObject(null)
+  }
+
+  /**
+   * On click of activity button, we update activity store with target word of the activity
+   * (expressions, definitions ...)
+   */
+  private _setDataWord() {
+    const dataWord = this.globalModule.dataWord!.find(word => {
+      return word.id === Helpers.wordIdFromObject(<URL_OBJECT_IDENTIFIER>this.objectIdentifier)
+    })!
+    this.activityModule.setDataWord(dataWord)
+  }
 }
 </script>
 
-<style lang="scss">
-.interactive-btn {
-  display: flex;
+<style scoped lang="scss">
+.scenario-container {
+  z-index: 20;
   position: absolute;
-  z-index: 99;
-  top: 30%;
-  right: 20%;
-  text-decoration: none;
-  padding: 20px;
-  border-radius: 30px;
-  background: red;
-  color: white;
-  cursor: pointer;
+  right: 120px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &-text {
+    opacity: 0.6;
+    color: #000648;
+    padding-bottom: 25px;
+    font-family: $main_font;
+  }
+
+  .btn-discover {
+    width: 280px;
+  }
+
 }
 </style>

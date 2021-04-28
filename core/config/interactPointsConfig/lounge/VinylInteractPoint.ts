@@ -3,6 +3,9 @@ import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
 import {LoungeConfig} from "~/core/config/roomConfig";
 import {InteractionPointConfig} from "~/core/types";
+import GlobalModule from "~/store/global";
+import AuthModule from "~/store/auth";
+import Helpers from "~/core/utils/helpers";
 
 const VinylInteractPoint: InteractionPointConfig = {
   name: INTERACT_POINT_NAME.VINYL,
@@ -14,8 +17,12 @@ const VinylInteractPoint: InteractionPointConfig = {
     return position
   },
 
-  isCompleted: () => {
-    return false;
+  isCompleted: (globalModule: GlobalModule) => {
+    return globalModule.userWordData!.some(word => word.id === Helpers.wordIdFromObject(URL_OBJECT_IDENTIFIER.VINYL) && word.is_achieved)
+  },
+
+  isVisible(globalModule: GlobalModule, authModule: AuthModule): boolean {
+    return true;
   },
 
   url: LoungeConfig.fullUrl + '/' + URL_OBJECT_IDENTIFIER.VINYL,

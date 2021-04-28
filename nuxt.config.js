@@ -40,12 +40,19 @@ export default {
     '@nuxt/typescript-build',
     '@nuxtjs/fontawesome'
   ],
-
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
+    '@nuxtjs/style-resources'
   ],
+
+  //
+  styleResources: {
+    scss: [
+      '~/assets/scss/_variables.scss',
+    ]
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
@@ -53,7 +60,7 @@ export default {
   },
 
   axios: {
-    baseURL: 'https://api.keskidi.site/'
+    baseURL: 'https://api.keskidi.site'
   },
 
   router: {

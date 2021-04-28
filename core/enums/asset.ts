@@ -5,6 +5,7 @@ export enum ASSET_TYPE {
   GLTF,
   IMAGE,
   VIDEO,
+  FBX
 }
 
 /**
@@ -15,6 +16,10 @@ export enum GLTF_ASSET {
   ACTIVITY_OBJECT_MOULA= 'moulaObject',
   ACTIVITY_OBJECT_NOOB= 'noobObject',
   ACTIVITY_OBJECT_CRUSH= 'crushObject',
+  ACTIVITY_OBJECT_WATCH= 'watchObject',
+  ACTIVITY_OBJECT_BOOK= 'bookObject',
+  ACTIVITY_OBJECT_CHICKEN= 'chickenObject',
+  ACTIVITY_OBJECT_BEER= 'beerObject',
   TOM = 'tom'
 }
 

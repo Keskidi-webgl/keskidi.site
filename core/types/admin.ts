@@ -70,14 +70,14 @@ export type WordExpression = {
 }
 
 export type WordActivityData = {
-  id?: number
-  object_one?: string
-  object_two?: string
-  object_three?: string
-  object_one_description?: string
-  object_two_description?: string
-  object_three_description?: string
-  good_object?: string
+  id: number
+  object_one: string
+  object_two: string
+  object_three: string
+  object_one_description: string
+  object_two_description: string
+  object_three_description: string
+  good_object: string
 }
 
 /**

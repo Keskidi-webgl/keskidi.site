@@ -1,8 +1,10 @@
 import {
+  AnimationClip,
+  AnimationMixer,
   AxesHelper,
   Camera,
   Clock,
-  Euler, Intersection, Object3D,
+  Euler,
   PerspectiveCamera,
   Quaternion,
   Raycaster,
@@ -12,8 +14,10 @@ import {
   WebGLRenderer
 } from "three";
 import {
+  AnimationMixerElement,
   DefaultSceneManagerCallback,
-  MouseMoveCanvasCallback, PresetCameraPosition,
+  MouseMoveCanvasCallback,
+  PresetCameraPosition,
   RayCasterIntersectCallBack,
   SceneManagerOptions,
   WindowResizeCallback
@@ -22,6 +26,8 @@ import gsap from 'gsap'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 import {GUI} from "dat.gui";
+import {Object3D} from "three/src/core/Object3D";
+import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
 
 /**
  * @description
@@ -64,6 +70,7 @@ export default class SceneManager {
   private _stats: Stats | null
   private _defaultRatio: number
   private _currentIntersect: null
+  private _animationMixers: Array<AnimationMixerElement>
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -107,6 +114,7 @@ export default class SceneManager {
     this._stats = null
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
+    this._animationMixers = []
 
     this._onStartCallback = options.onStart || function () {
     }
@@ -144,6 +152,14 @@ export default class SceneManager {
     if (this._requestId) {
       cancelAnimationFrame(this._requestId)
     }
+    this._renderer.dispose()
+    // @ts-ignore
+    this._scene = null
+    // this.scene.traverse(child=>{
+    //   if(child instanceof Object3D){
+    //     child.dispose()
+    //   }
+    // })
     // this._gui.destroy()
   }
 
@@ -311,19 +327,6 @@ export default class SceneManager {
     return this
   }
 
-  // - PRIVATE
-  /**
-   * Init elements after property binding into constructor
-   */
-  private _init() {
-    this._initRenderer()
-    this._initControls()
-
-    this._bindEvents()
-
-    this._checkConfig()
-  }
-
   /**
    * Init intern mandatory events
    */
@@ -340,6 +343,70 @@ export default class SceneManager {
       this._onWindowResizeCallback(this, event)
     })
   }
+
+  /**
+   * Helper to toggle visible property of objects
+   */
+  public setObjectVisibility(objectList: Array<string>, visibleObject: string | null = null) {
+    objectList.forEach(objectName => {
+      this.scene.getObjectByName(objectName)!.visible = (visibleObject) ? objectName === visibleObject : true
+    })
+  }
+
+  /**
+   * Create animationMixer for 3D object
+   */
+  public createAnimationMixer(name: string, object: Object3D | AnimationObjectGroup) {
+    const mixer = new AnimationMixer(object)
+    this._animationMixers.push({name, instance: mixer})
+  }
+
+  /**
+   * Remove animationMixer for 3D object
+   */
+  public removeAnimationMixer(name: string) {
+    this._animationMixers = this._animationMixers.filter(mixer => mixer.name === name)
+  }
+
+  public getAnimationMixer(name: string) {
+    const mixer = this._animationMixers.find(mixer => mixer.name === name)
+    if (!mixer) {
+      throw new Error(`Mixer ${name} doesn't exist !`)
+    }
+
+    return mixer
+  }
+
+  /**
+   * Play animation of specific object and animation mixer
+   */
+  public playAnimation(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
+    const mixer = this.getAnimationMixer(mixerName)
+    const animationToPlay = mixer.instance.clipAction(animationClip)
+
+    animationToPlay.play()
+  }
+
+  public hideGui() {
+    this._gui.hide()
+
+    return this
+  }
+
+
+  // - PRIVATE
+  /**
+   * Init elements after property binding into constructor
+   */
+  private _init() {
+    this._initRenderer()
+    this._initControls()
+
+    this._bindEvents()
+
+    this._checkConfig()
+  }
+
 
   /**
    * Init renderer
@@ -385,6 +452,10 @@ export default class SceneManager {
    * Logic to render the scene (for each frame)
    */
   private _render() {
+    const elapsedTime = this._clock.getElapsedTime()
+    this._deltaTime = elapsedTime - this._previousTime
+    this._previousTime = elapsedTime
+
     this._onRenderCallback(this)
 
     if (this._controls) {
@@ -401,9 +472,10 @@ export default class SceneManager {
       this._camera.updateProjectionMatrix()
     }
 
-    const elapsedTime = this._clock.getElapsedTime()
-    this._deltaTime = elapsedTime - this._previousTime
-    this._previousTime = elapsedTime
+    this._animationMixers.forEach(mixer => {
+      mixer.instance.update(this._deltaTime)
+    })
+
     this._renderer.render(this._scene, this._camera)
   }
 
