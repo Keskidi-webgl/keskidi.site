@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator';
-import {AuthManager, SceneManager} from "~/core/managers";
+import {SceneManager} from "~/core/managers";
 import {AuthCredential, FunFactElement} from '~/core/types';
 import AuthStore from '~/store/auth';
 import CustomCard from "~/components/cards/CustomCard.vue";

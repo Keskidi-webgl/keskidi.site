@@ -30,7 +30,6 @@ import {Component, getModule, Vue} from "nuxt-property-decorator";
 import AdminStore from "~/store/admin";
 import {ApiManager} from "~/core/managers";
 import {BvToast} from "bootstrap-vue";
-import AdminStore from "~/store/admin";
 
 @Component({})
 export default class AdminLayout extends Vue {

@@ -11,6 +11,7 @@ import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
 import GlobalSceneStore from "~/store/globalScene";
 import AuthMiddleware from "~/middleware/auth";
+import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 
 @Component({})
 export default class RoomPage extends Vue {
@@ -24,12 +25,13 @@ export default class RoomPage extends Vue {
    * Validate route params
    */
   public validate({params}: Context) {
-    return RouteValidator.validateRoomPageParam(params.roomName)
+    return RouteValidator.validateRoomSlug(<ROOM_SLUG>params.roomName)
   }
 
   mounted() {
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(this.$route.params.roomName, 2, () => {
-      this.globalSceneStore.setActiveRoom(roomIdentifier)
+    const roomSlug = <ROOM_SLUG>this.$route.params.roomName
+    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomSlug, 2, () => {
+      this.globalSceneStore.setActiveRoom(roomSlug)
       this.addInteractionPoints()
     })
   }
@@ -39,14 +41,14 @@ export default class RoomPage extends Vue {
   }
 
   addInteractionPoints() {
-    this.globalSceneStore.activeRoom?.objects.forEach((object) => {
-      this.globalSceneStore.addInteractivePoint(object.interactPointName)
+    this.globalSceneStore.activeRoom!.objects.forEach((object) => {
+      this.globalSceneStore.addInteractivePoint(object.urlSlug)
     })
   }
 
   removeInteractionPoints() {
     this.globalSceneStore.activeRoom?.objects.forEach((object) => {
-      this.globalSceneStore.removeInteractivePoint(object.interactPointName)
+      this.globalSceneStore.removeInteractivePoint(object.urlSlug)
     })
   }
 

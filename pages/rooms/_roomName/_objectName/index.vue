@@ -28,6 +28,7 @@ import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
+import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 
 @Component({
   components: {
@@ -50,7 +51,7 @@ export default class ObjectPage extends Vue {
    * Validate route params
    */
   public validate({params}: Context) {
-    return RouteValidator.validateObjectPageParam(params.roomName, params.objectName)
+    return RouteValidator.validateRoomObjectSlug(<ROOM_SLUG>params.roomName, <ROOM_OBJECT_SLUG>params.objectName)
   }
 
   async mounted() {
