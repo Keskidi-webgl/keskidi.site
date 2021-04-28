@@ -6,8 +6,8 @@ import {
   GlobalSceneInitializer,
    WordDataInitializer
 } from "~/core/utils/initializers";
-import SceneModule from "~/store/scene";
-import GlobalModule from "~/store/global";
+import GlobalSceneStore from "~/store/scene";
+import GlobalStore from "~/store/global";
 
 /**
  * @description
@@ -15,12 +15,12 @@ import GlobalModule from "~/store/global";
  * connexion of the user
  */
 export default class AppInitializer extends Initializers<
-  { axios: NuxtAxiosInstance, canvas: HTMLCanvasElement, sceneModule: SceneModule, globalModule: GlobalModule }, Promise<void>
+  { axios: NuxtAxiosInstance, canvas: HTMLCanvasElement, globalSceneStore: GlobalSceneStore, globalStore: GlobalStore }, Promise<void>
   > {
   async init(): Promise<void> {
     new ApiManagerInitializer({axios: this._data.axios}).init()
-    new GlobalSceneInitializer({canvas: this._data.canvas, sceneModule: this._data.sceneModule}).init()
-    await new WordDataInitializer({globalModule: this._data.globalModule}).init()
+    new GlobalSceneInitializer({canvas: this._data.canvas, globalSceneStore: this._data.globalSceneStore}).init()
+    await new WordDataInitializer({globalStore: this._data.globalStore}).init()
   }
 
 }

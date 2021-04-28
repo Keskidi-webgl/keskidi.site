@@ -1,9 +1,9 @@
 <template>
   <div class="activity-container">
     <!-- composant progress-bar    -->
-    <ActivityOne v-if="activityModule.currentActivity === 0"></ActivityOne>
-    <ActivityTwo v-if="activityModule.currentActivity === 1"></ActivityTwo>
-    <ActivityThree v-if="activityModule.currentActivity === 2"></ActivityThree>
+    <ActivityOne v-if="activityStore.currentActivity === 0"></ActivityOne>
+    <ActivityTwo v-if="activityStore.currentActivity === 1"></ActivityTwo>
+    <ActivityThree v-if="activityStore.currentActivity === 2"></ActivityThree>
     <!--    overlay transition -->
     <span class="leave-activity" @click="goToHome">
       <img src="~/assets/img/cross.svg" alt="">
@@ -25,9 +25,9 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import SceneModule from "~/store/scene"
+import GlobalSceneStore from "~/store/scene"
 import {SceneManager} from "~/core/managers"
-import ActivityModule from "~/store/activity"
+import ActivityStore from "~/store/activity"
 import ActivityOne from "~/components/activities/activityOne/ActivityOne.vue"
 import ActivityTwo from "~/components/activities/activityTwo/ActivityTwo.vue"
 import ActivityThree from "~/components/activities/activityThree/ActivityThree.vue"
@@ -41,8 +41,8 @@ import ActivityThree from "~/components/activities/activityThree/ActivityThree.v
 })
 
 export default class ActivityPanel extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
-  public activityModule = getModule(ActivityModule, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
 
   /**
    *
@@ -62,7 +62,7 @@ export default class ActivityPanel extends Vue {
     SceneManager.ACTIVITY_2_OBJECTS?.destroy()
     SceneManager.ACTIVITY_3_OBJECTS?.destroy()
     SceneManager.ACTIVITY_3_TOM?.destroy()
-    this.activityModule.setCurrentActivity(null)
+    this.activityStore.setCurrentActivity(null)
   }
 }
 </script>

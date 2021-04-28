@@ -1,6 +1,6 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName">
-    <InteractionPoints :data="point" v-for="(point, index) in sceneModule.activeInteractionPoints" v-bind:key="index"/>
+    <InteractionPoints :data="point" v-for="(point, index) in globalSceneStore.activeInteractionPoints" v-bind:key="index"/>
   </div>
 </template>
 
@@ -9,13 +9,13 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
 import {SceneManager} from "~/core/managers";
-import SceneModule from "~/store/scene";
+import GlobalSceneStore from "~/store/scene";
 import {URL_ROOM_IDENTIFIER} from "~/core/enums";
 import AuthMiddleware from "~/middleware/auth";
 
 @Component({})
 export default class RoomPage extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
 
   middleware(context: Context) {
     AuthMiddleware.handle(context)
@@ -31,7 +31,7 @@ export default class RoomPage extends Vue {
   mounted() {
     const roomIdentifier = <URL_ROOM_IDENTIFIER>this.$route.params.roomName
     SceneManager.GLOBAL_SCENE.goToPresetPosition(roomIdentifier, 2, () => {
-      this.sceneModule.setActiveRoom(roomIdentifier)
+      this.globalSceneStore.setActiveRoom(roomIdentifier)
       this.addInteractionPoints()
     })
   }
@@ -41,14 +41,14 @@ export default class RoomPage extends Vue {
   }
 
   addInteractionPoints() {
-    this.sceneModule.activeRoom?.objects.forEach((object) => {
-      this.sceneModule.addInteractivePoint(object.interactPointName)
+    this.globalSceneStore.activeRoom?.objects.forEach((object) => {
+      this.globalSceneStore.addInteractivePoint(object.interactPointName)
     })
   }
 
   removeInteractionPoints() {
-    this.sceneModule.activeRoom?.objects.forEach((object) => {
-      this.sceneModule.removeInteractivePoint(object.interactPointName)
+    this.globalSceneStore.activeRoom?.objects.forEach((object) => {
+      this.globalSceneStore.removeInteractivePoint(object.interactPointName)
     })
   }
 

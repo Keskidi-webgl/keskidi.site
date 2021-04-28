@@ -32,7 +32,7 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator';
 import {AuthManager, SceneManager} from "~/core/managers";
 import {AuthCredential, FunFactElement} from '~/core/types';
-import AuthModule from '~/store/auth';
+import AuthStore from '~/store/auth';
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 
@@ -44,12 +44,12 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 })
 export default class AuthPage extends Vue {
   public onProgress: boolean = false
-  public autModule: AuthModule = getModule(AuthModule, this.$store)
+  public autModule: AuthStore = getModule(AuthStore, this.$store)
   public dataFormAuth: AuthCredential = {
     email: ''
   }
   public isReady: boolean = false
-  public authStore: AuthModule = getModule(AuthModule, this.$store)
+  public authStore: AuthStore = getModule(AuthStore, this.$store)
   public currentFact: FunFactElement = {
     content: ''
   }

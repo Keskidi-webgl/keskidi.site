@@ -1,10 +1,10 @@
 import ActivityCanvasInitializer from "~/core/utils/initializers/activities/ActivityCanvasInitializer";
-import ActivityModule from "~/store/activity";
+import ActivityStore from "~/store/activity";
 import SceneHelper from "~/core/utils/sceneHelper";
 import {AssetsManager, SceneManager} from "~/core/managers";
 import {DirectionalLight, SpotLight} from "three";
 
-export default class ActivityOneCanvasInitializer extends ActivityCanvasInitializer<{ tomCanvas: HTMLCanvasElement, objectsCanvas: HTMLCanvasElement, activityModule: ActivityModule }, void> {
+export default class ActivityOneCanvasInitializer extends ActivityCanvasInitializer<{ tomCanvas: HTMLCanvasElement, objectsCanvas: HTMLCanvasElement, activityStore: ActivityStore }, void> {
 
   init(): void {
     this._initTomCanvas()
@@ -37,7 +37,7 @@ export default class ActivityOneCanvasInitializer extends ActivityCanvasInitiali
     })
     SceneManager.ACTIVITY_1_OBJECTS.scene.position.set(0, 0, -60)
 
-    const {object_one, object_two, object_three} = this._data.activityModule.dataWord!.activity_data!
+    const {object_one, object_two, object_three} = this._data.activityStore.dataWord!.activity_data!
     const gltfNames = [object_one, object_two, object_three]
 
     gltfNames.forEach((gltfName, index) => {

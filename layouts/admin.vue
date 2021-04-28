@@ -27,14 +27,14 @@
 <script lang="ts">
 
 import {Component, getModule, Vue} from "nuxt-property-decorator";
-import AdminModule from "~/store/admin";
+import AdminStore from "~/store/admin";
 import {ApiManager} from "~/core/managers";
 import {BvToast} from "bootstrap-vue";
 import AdminStore from "~/store/admin";
 
 @Component({})
 export default class AdminLayout extends Vue {
-  public adminStore: AdminModule = getModule(AdminStore, this.$store)
+  public adminStore: AdminStore = getModule(AdminStore, this.$store)
 
   head() {
     return {

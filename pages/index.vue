@@ -20,7 +20,7 @@ export default class HomePage extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
 
   mounted() {
-    this.sceneModule.clearActiveRoom()
+    this.globalSceneStore.clearActiveRoom()
     SceneManager.GLOBAL_SCENE.goToPresetPosition('home', 2, () => {
       this.addInteractionPoints()
     })

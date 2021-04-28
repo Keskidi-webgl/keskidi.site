@@ -2,8 +2,8 @@ import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
 import {MezzanineConfig} from "~/core/config/roomConfig";
-import GlobalModule from "~/store/global";
-import AuthModule from "~/store/auth";
+import GlobalStore from "~/store/global";
+import AuthStore from "~/store/auth";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
 
 const TelevisionInteractPoint: InteractionPoint = {
@@ -20,7 +20,7 @@ const TelevisionInteractPoint: InteractionPoint = {
     return false;
   },
 
-  isVisible(globalModule: GlobalModule, authModule: AuthModule): boolean {
+  isVisible(globalStore: GlobalStore, authStore: AuthStore): boolean {
     return true;
   },
 

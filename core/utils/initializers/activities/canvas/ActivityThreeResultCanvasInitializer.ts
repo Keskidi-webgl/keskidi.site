@@ -1,9 +1,9 @@
 import ActivityCanvasInitializer from "~/core/utils/initializers/activities/ActivityCanvasInitializer";
 import SceneHelper from "~/core/utils/sceneHelper";
 import {SceneManager} from "~/core/managers";
-import ActivityModule from "~/store/activity";
+import ActivityStore from "~/store/activity";
 
-export default class ActivityThreeResultCanvasInitializer extends ActivityCanvasInitializer<{ wordObjectCanvas: HTMLCanvasElement, activityModule: ActivityModule }, void> {
+export default class ActivityThreeResultCanvasInitializer extends ActivityCanvasInitializer<{ wordObjectCanvas: HTMLCanvasElement, activityStore: ActivityStore }, void> {
   init(): void {
     this._initObjectCanvas()
   }
@@ -20,7 +20,7 @@ export default class ActivityThreeResultCanvasInitializer extends ActivityCanvas
     })
 
     SceneManager.ACTIVITY_3_RESULTS.scene.position.set(0, 0, -60)
-    const wordGltfObject = this._getGltfWordRepresentation(this._data.activityModule.dataWord!)
+    const wordGltfObject = this._getGltfWordRepresentation(this._data.activityStore.dataWord!)
     wordGltfObject.scene.position.set(0, 0, 0)
     wordGltfObject.scene.rotation.x = Math.PI / 2;
     scene.add(wordGltfObject.scene)

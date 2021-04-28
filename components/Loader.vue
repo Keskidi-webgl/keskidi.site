@@ -11,7 +11,7 @@
       <p class="main-font text-common site-loader-container-description">Tu n'as rien compris à cette phrase ? Tu es au bon endroit ! Plonge et part à la
         découverte de la culture des jeunes d'aujourd'hui.</p>
 
-      <CustomButton :class="{disabled: !globalModule.isAppInit}" @click.native="hide" arrow-color="white"
+      <CustomButton :class="{disabled: !globalStore.isAppInit}" @click.native="hide" arrow-color="white"
                     color="#000648" :text="text()"></CustomButton>
     </div>
   </div>
@@ -19,8 +19,8 @@
 
 <script lang="ts">
 import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
-import GlobalModule from "~/store/global";
-import AuthModule from "~/store/auth";
+import GlobalStore from "~/store/global";
+import AuthStore from "~/store/auth";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import gsap from 'gsap'
 import LogoMedia from "~/components/medias/LogoMedia.vue";
@@ -34,14 +34,14 @@ import LogoMedia from "~/components/medias/LogoMedia.vue";
 })
 export default class Loader extends Vue {
   @Prop({type: String, required: true}) readonly loadingData!: InteractionPointConfig
-  public globalModule: GlobalModule = getModule(GlobalModule, this.$store)
-  public authModule: AuthModule = getModule(AuthModule, this.$store)
+  public globalStore: GlobalStore = getModule(GlobalStore, this.$store)
+  public authStore: AuthStore = getModule(AuthStore, this.$store)
   public isActive: boolean = true
 
   text() {
     let text = 'Et c\'est parti !'
 
-    if (!this.globalModule.isAppInit) {
+    if (!this.globalStore.isAppInit) {
       text = `Chargement ${this.loadingData} %`
     }
 

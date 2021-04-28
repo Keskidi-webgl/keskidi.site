@@ -49,8 +49,8 @@ export default class DefaultLayout extends Vue {
       await new AppInitializer({
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
         axios: this.$axios,
-        sceneModule: this.globalSceneStore,
-        globalModule: this.globalStore
+        globalSceneStore: this.globalSceneStore,
+        globalStore: this.globalStore
       }).init()
 
       this.globalStore.setIsAppInit(true)

@@ -2,8 +2,8 @@ import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
 import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
 import {LoungeConfig} from "~/core/config/roomConfig";
-import GlobalModule from "~/store/global";
-import AuthModule from "~/store/auth";
+import GlobalStore from "~/store/global";
+import AuthStore from "~/store/auth";
 import Helpers from "~/core/utils/helpers";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
 
@@ -17,11 +17,11 @@ const VinylInteractPoint: InteractionPoint = {
     return position
   },
 
-  isCompleted: (globalModule: GlobalModule) => {
-    return globalModule.userWordData!.some(word => word.id === Helpers.wordIdFromObject(URL_OBJECT_IDENTIFIER.VINYL) && word.is_achieved)
+  isCompleted: (globalStore: GlobalStore) => {
+    return globalStore.userWordData!.some(word => word.id === Helpers.wordIdFromObject(URL_OBJECT_IDENTIFIER.VINYL) && word.is_achieved)
   },
 
-  isVisible(globalModule: GlobalModule, authModule: AuthModule): boolean {
+  isVisible(globalStore: GlobalStore, authStore: AuthStore): boolean {
     return true;
   },
 

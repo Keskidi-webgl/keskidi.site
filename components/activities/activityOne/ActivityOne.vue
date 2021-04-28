@@ -1,12 +1,12 @@
 <template>
   <div class="activity-page">
     <aside class="activity-page-aside" ref="activityPageAside">
-      <h2 v-if="activityModule.dataWord" class="word-title main-font">{{ activityModule.dataWord.name }}</h2>
+      <h2 v-if="activityStore.dataWord" class="word-title main-font">{{ activityStore.dataWord.name }}</h2>
       <canvas ref="activityOneTom" class="tom-canvas"></canvas>
     </aside>
     <main ref="activityPageContent" class="activity-page-content">
         <span class="common-text instruction main-font">
-          Alors alors ... Parmis ces 3 objets lequel représente le mot {{ activityModule.dataWord.name }} ?
+          Alors alors ... Parmis ces 3 objets lequel représente le mot {{ activityStore.dataWord.name }} ?
         </span>
 <!--      <div class="activity-page-contentWrapper">-->
         <div v-if="userSelection" class="choice-block-container">
@@ -26,7 +26,7 @@
     </main>
 
     <ActivityOneResult
-      :good-object="activityModule.dataWord.activity_data.good_object"
+      :good-object="activityStore.dataWord.activity_data.good_object"
       :user-selection="userSelection"
       v-if="isValidate">
     </ActivityOneResult>
@@ -36,9 +36,9 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import SceneModule from "~/store/scene"
+import GlobalSceneStore from "~/store/scene"
 import {SceneManager} from "~/core/managers"
-import ActivityModule from "~/store/activity"
+import ActivityStore from "~/store/activity"
 import {UserObjectSelection} from "~/core/types"
 import ActivityOneResult from "~/components/activities/activityOne/ActivityOneResult.vue"
 import {ActivityOneCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
@@ -51,22 +51,22 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
   }
 })
 export default class ActivityOne extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
-  public activityModule = getModule(ActivityModule, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
   public userSelection: UserObjectSelection|null = null
   public isValidate: boolean = false
   public objectsData: Array<UserObjectSelection> = [
     {
-      name: this.activityModule.dataWord!.activity_data!.object_one,
-      description: this.activityModule.dataWord!.activity_data!.object_one_description,
+      name: this.activityStore.dataWord!.activity_data!.object_one,
+      description: this.activityStore.dataWord!.activity_data!.object_one_description,
     },
     {
-      name: this.activityModule.dataWord!.activity_data!.object_two,
-      description: this.activityModule.dataWord!.activity_data!.object_two_description,
+      name: this.activityStore.dataWord!.activity_data!.object_two,
+      description: this.activityStore.dataWord!.activity_data!.object_two_description,
     },
     {
-      name: this.activityModule.dataWord!.activity_data!.object_three,
-      description: this.activityModule.dataWord!.activity_data!.object_three_description,
+      name: this.activityStore.dataWord!.activity_data!.object_three,
+      description: this.activityStore.dataWord!.activity_data!.object_three_description,
     }
   ]
 
@@ -82,9 +82,9 @@ export default class ActivityOne extends Vue {
     this.userSelection = item
 
     SceneManager.ACTIVITY_1_OBJECTS.setObjectVisibility([
-      this.activityModule.dataWord!.activity_data!.object_one,
-      this.activityModule.dataWord!.activity_data!.object_two,
-      this.activityModule.dataWord!.activity_data!.object_three,
+      this.activityStore.dataWord!.activity_data!.object_one,
+      this.activityStore.dataWord!.activity_data!.object_two,
+      this.activityStore.dataWord!.activity_data!.object_three,
     ], this.userSelection.name)
   }
 
@@ -108,7 +108,7 @@ export default class ActivityOne extends Vue {
     new ActivityOneCanvasInitializer({
       tomCanvas: this.$refs.activityOneTom as HTMLCanvasElement,
       objectsCanvas: this.$refs.activityOneObjects as HTMLCanvasElement,
-      activityModule: this.activityModule
+      activityStore: this.activityStore
     }).init()
   }
 }

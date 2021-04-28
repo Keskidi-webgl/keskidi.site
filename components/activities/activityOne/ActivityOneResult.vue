@@ -13,7 +13,7 @@
 import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
 import {UserObjectSelection} from "~/core/types"
 import {ACTIVITY_TYPE} from "~/core/enums"
-import ActivityModule from "~/store/activity"
+import ActivityStore from "~/store/activity"
 import {SceneManager} from "~/core/managers"
 import {ActivityOneResultCanvasInitializer} from "~/core/utils/initializers/activities/canvas";
 import CustomButton from "~/components/buttons/CustomButton.vue";
@@ -29,7 +29,7 @@ export default class ActivityOneResult extends Vue {
   @Prop({type: String, required: true}) readonly goodObject!: string
 
   private marqueeNumber:number = 6
-  public activityModule = getModule(ActivityModule, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
 
   public created() {
     this._resetGltfObjectVisibility()
@@ -43,7 +43,7 @@ export default class ActivityOneResult extends Vue {
    * Callback when click to the continue button
    */
   public goToNextActivity() {
-    this.activityModule.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
+    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
   }
 
   /**
@@ -58,9 +58,9 @@ export default class ActivityOneResult extends Vue {
    */
   private _resetGltfObjectVisibility() {
     SceneManager.ACTIVITY_1_OBJECTS.setObjectVisibility([
-      this.activityModule.dataWord!.activity_data!.object_one,
-      this.activityModule.dataWord!.activity_data!.object_two,
-      this.activityModule.dataWord!.activity_data!.object_three,
+      this.activityStore.dataWord!.activity_data!.object_one,
+      this.activityStore.dataWord!.activity_data!.object_two,
+      this.activityStore.dataWord!.activity_data!.object_three,
     ])
   }
 
@@ -73,7 +73,7 @@ export default class ActivityOneResult extends Vue {
 
     new ActivityOneResultCanvasInitializer({
       wordObjectCanvas: this.$refs.activityOneResult as HTMLCanvasElement,
-      activityModule: this.activityModule
+      activityStore: this.activityStore
     }).init()
   }
 }

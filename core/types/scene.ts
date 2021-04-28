@@ -10,8 +10,8 @@ import {
 } from "three";
 import SceneManager from "~/core/managers/SceneManager";
 import {INTERACT_POINT_NAME, URL_OBJECT_IDENTIFIER} from "~/core/enums";
-import GlobalModule from "~/store/global";
-import AuthModule from "~/store/auth";
+import GlobalStore from "~/store/global";
+import AuthStore from "~/store/auth";
 
 /**
  * Option to create SceneManager

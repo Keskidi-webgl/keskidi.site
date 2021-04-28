@@ -1,7 +1,7 @@
 import {SceneManager} from "~/core/managers";
 import {Vector3} from "three";
-import GlobalModule from "~/store/global";
-import AuthModule from "~/store/auth";
+import GlobalStore from "~/store/global";
+import AuthStore from "~/store/auth";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
 
 const TomInteractPoint: InteractionPoint = {
@@ -19,7 +19,7 @@ const TomInteractPoint: InteractionPoint = {
     return false;
   },
 
-  isVisible(globalModule: GlobalModule, authModule: AuthModule): boolean {
+  isVisible(globalStore: GlobalStore, authStore: AuthStore): boolean {
     return true;
   },
 
