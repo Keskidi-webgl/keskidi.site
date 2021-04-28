@@ -17,7 +17,6 @@ import {
   AnimationMixerElement,
   DefaultSceneManagerCallback,
   MouseMoveCanvasCallback,
-  PresetCameraPosition,
   RayCasterIntersectCallBack,
   SceneManagerOptions,
   WindowResizeCallback
@@ -28,6 +27,7 @@ import Stats from "three/examples/jsm/libs/stats.module";
 import {GUI} from "dat.gui";
 import {Object3D} from "three/src/core/Object3D";
 import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
+import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 
 /**
  * @description
@@ -60,7 +60,7 @@ export default class SceneManager {
   private _canvas: HTMLCanvasElement
   private _camera: Camera
   private _controls: OrbitControls | null
-  private _presetCameraPositions: Array<PresetCameraPosition>
+  private _presetCameraPositions: Array<CameraPosition>
   private _renderer: WebGLRenderer
   private _clock: Clock
   private _mousePositions: Vector2
@@ -192,7 +192,7 @@ export default class SceneManager {
   /**
    * Register preset camera positions
    */
-  public registerPresetCameraPositions(position: PresetCameraPosition): SceneManager {
+  public registerPresetCameraPositions(position: CameraPosition): SceneManager {
     this._presetCameraPositions.push(position)
 
     return this

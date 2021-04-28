@@ -57,38 +57,6 @@ export type MouseMoveCanvasCallback = (context: SceneManager, event: MouseEvent)
  */
 export type WindowResizeCallback = (context: SceneManager, event: UIEvent) => void
 
-
-/**
- * Canvas dimension
- */
-export type CanvasDimension = {
-  width: number
-  height: number
-}
-
-export type PresetCameraPosition = {
-  name: string
-  coords: () => {cameraPos: Vector3, lookAtPosition: Vector3}
-}
-
-export type InteractionPointConfig = {
-  name: INTERACT_POINT_NAME
-  isCompleted: (globalModule: GlobalModule) => boolean
-  isVisible: (globalModule: GlobalModule, authModule: AuthModule) => boolean
-  canvasCoords: () => Vector3
-  transformX: number
-  transformY: number
-  url: string
-}
-
-export type RoomConfig = {
-  urlIdentifier: string
-  nextSceneUrl: string
-  previousSceneUrl: string
-  fullUrl: string
-  objects: Array<{ urlId: URL_OBJECT_IDENTIFIER, interactPointName: INTERACT_POINT_NAME }>
-}
-
 export type AnimationMixerElement = {
   name: string
   instance: AnimationMixer

@@ -24,7 +24,7 @@ import {
 } from "~/core/config/global-scene/interact-points";
 import {Bedroom, Lounge, Mezzanine} from "~/core/config/global-scene/rooms";
 
-export default {
+const GlobalSceneConfig = {
   // ROOMS
   rooms: [
     Bedroom,
@@ -65,3 +65,5 @@ export default {
     TelevisionInteractPoint
   ] as Array<InteractionPoint>,
 }
+
+export default GlobalSceneConfig

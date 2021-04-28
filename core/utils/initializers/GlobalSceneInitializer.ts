@@ -1,10 +1,10 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {AnimationClip, HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
-import CameraConfig from "~/core/config/camera.config";
 import SceneModule from "~/store/scene";
+import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 
 /**
  * @description
@@ -170,7 +170,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    * Register preset camera positions
    */
   private _registerPresetPositions() {
-    CameraConfig.presetPositions.forEach(presetPosition => {
+    GlobalSceneConfig.cameraPositions.forEach(presetPosition => {
       SceneManager.GLOBAL_SCENE.registerPresetCameraPositions(presetPosition)
     })
   }
