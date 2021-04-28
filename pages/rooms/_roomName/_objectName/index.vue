@@ -5,7 +5,7 @@
         {{ this.activityModule.dataWord.home_scenario.content }}
       </span>
       <CustomButton @click.native="canDisplayActivityPanel = true" arrow-color="white" color="#000648"
-                    text="Découvrir ce mot"></CustomButton>
+                    :text="`Découvrir le mot ${activityModule.dataWord.name}`"></CustomButton>
     </CustomCard>
     <transition v-on:enter="displayActivityPanel">
       <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
