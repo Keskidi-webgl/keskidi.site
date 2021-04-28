@@ -1,9 +1,11 @@
 import {Vector3} from "three";
 import {SceneManager} from "~/core/managers";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {TelevisionRoomObject} from "~/core/config/global-scene/room-objects";
 
 const TelevisionCameraPosition: CameraPosition = {
-  name: '',
+  name: TelevisionRoomObject.urlSlug,
+
   coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('tv')!.getWorldPosition(lookAtPosition)

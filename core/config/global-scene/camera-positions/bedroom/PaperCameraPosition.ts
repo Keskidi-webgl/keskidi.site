@@ -1,9 +1,10 @@
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 import {Vector3} from "three";
 import {SceneManager} from "~/core/managers";
+import {PaperRoomObject} from "~/core/config/global-scene/room-objects";
 
 const PaperCameraPosition: CameraPosition = {
-  name: '',
+  name: PaperRoomObject.urlSlug,
 
   coords: () => {
     const lookAtPosition = new Vector3()

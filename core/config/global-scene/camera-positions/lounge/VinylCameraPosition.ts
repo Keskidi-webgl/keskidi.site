@@ -1,9 +1,11 @@
 import {Vector3} from "three";
 import {SceneManager} from "~/core/managers";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {VinylRoomObject} from "~/core/config/global-scene/room-objects";
 
 const VinylCameraPosition: CameraPosition = {
-  name: '',
+  name: VinylRoomObject.urlSlug,
+
   coords: () => {
     const lookAtPosition = new Vector3()
     SceneManager.GLOBAL_SCENE.scene.getObjectByName('vinyles')!.getWorldPosition(lookAtPosition)
