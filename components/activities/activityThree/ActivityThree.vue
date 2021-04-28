@@ -1,13 +1,13 @@
 <template>
   <section class="activity-page">
     <aside ref="activityPageAside" class="activity-page-aside">
-      <h2 v-if="activityModule.dataWord" class="word-title">{{ activityModule.dataWord.name }}</h2>
+      <h2 v-if="activityModule.dataWord" class="word-title main-font">{{ activityModule.dataWord.name }}</h2>
 
       <canvas ref="activityThreeTom" class="activity-3-tom"></canvas>
 
     </aside>
     <main ref="activityPageContent" class="activity-page-content">
-      <span class="activity-content--title">Comme dirait le prof, reapeat after me ...</span>
+      <span class="activity-content--title main-font">Comme dirait le prof, reapeat after me ...</span>
 
        <div class="activity-expressionsWrapper" v-if="activeExpression">
 
@@ -141,9 +141,15 @@ export default class ActivityThree extends Vue {
 </script>
 
 <style scoped lang="scss">
+.activity-page-aside {
+  .word-title {
+    padding-top: 100px;
+  }
+}
 .activity-page-content{
   position: relative;
   padding: 100px 60px 60px 60px;
+  overflow: hidden !important;
 }
 .activity-3-tom {
   position: absolute;
@@ -162,6 +168,7 @@ export default class ActivityThree extends Vue {
     font-weight: bold;
     margin-bottom: 90px;
     display: block;
+    max-width: 600px;
   }
 }
 .activity-expressionsWrapper{
