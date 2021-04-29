@@ -22,12 +22,13 @@ import {
   WindowResizeCallback
 } from "~/core/types";
 import gsap from 'gsap'
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
-import { GUI } from "dat.gui";
-import { Object3D } from "three/src/core/Object3D";
-import { AnimationObjectGroup } from "three/src/animation/AnimationObjectGroup";
-import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
+import {GUI} from "dat.gui";
+import {Object3D} from "three/src/core/Object3D";
+import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
+import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import Helpers from "~/core/utils/helpers";
 
 /**
  * @description
@@ -71,6 +72,7 @@ export default class SceneManager {
   private _defaultRatio: number
   private _currentIntersect: null
   private _animationMixers: Array<AnimationMixerElement>
+  private _globalSceneRotation: { x: number, y: number }
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -93,6 +95,7 @@ export default class SceneManager {
   private _isPlaying: boolean
   private _isRayCasting: boolean
   private _isStatsActive: boolean
+  private _isParallaxActive: boolean
 
   // - CONSTRUCTOR
   constructor(options: SceneManagerOptions) {
@@ -104,9 +107,6 @@ export default class SceneManager {
     this._renderer = options.renderer
     this._scene = options.scene
     this._rayCaster = new Raycaster()
-    this._isPlaying = false
-    this._isRayCasting = false
-    this._isStatsActive = false
     this._controls = null
     this._deltaTime = 0
     this._previousTime = 0
@@ -115,6 +115,12 @@ export default class SceneManager {
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
+    this._globalSceneRotation = {x: 0, y: 0}
+
+    this._isPlaying = false
+    this._isRayCasting = false
+    this._isStatsActive = false
+    this._isParallaxActive = false
 
     this._onStartCallback = options.onStart || function () {
     }
@@ -233,7 +239,6 @@ export default class SceneManager {
     const updateQuaternion = new Quaternion();
     const o = { t: 0 };
 
-
     gsap.to(this._camera.position, {
       duration,
       x: newCameraPosition.x,
@@ -245,7 +250,6 @@ export default class SceneManager {
           this._camera.updateProjectionMatrix()
           //this.camera.lookAt(lookAtPosition)
         }
-
       },
       onComplete: () => {
         successCallBack(this)
@@ -330,15 +334,41 @@ export default class SceneManager {
   }
 
   /**
+   * Enable parallax camera on mouse move
+   */
+  public enableParallax() {
+    this._isParallaxActive = true
+
+    return this
+  }
+
+  /**
+   * Disable parallax camera on mouse move
+   */
+  public disableParallax() {
+    this._isParallaxActive = false
+
+    return this
+  }
+
+  /**
    * Init intern mandatory events
    */
   public _bindEvents() {
     this._bindExternEvents(this)
 
     this._canvas.addEventListener('mousemove', event => {
-      this._mousePositions.x = event.clientX / this._canvas.width * 2 - 1
-      this._mousePositions.y = -(event.clientY / this._canvas.height) * 2 + 1
+      this._mousePositions.x = event.clientX / this._canvas.width / 2
+      this._mousePositions.y = event.clientY / this._canvas.height / 2
       this._onMouseMoveCanvasCallback(this, event)
+
+      if (this._isParallaxActive) {
+        this._globalSceneRotation.x = Helpers.lerp(this._globalSceneRotation.x, this._mousePositions.x, 0.1)
+        this._globalSceneRotation.y = Helpers.lerp(this._globalSceneRotation.y, this._mousePositions.y, 0.1)
+
+        this._scene.rotation.x = - this._globalSceneRotation.y * 0.015
+        this._scene.rotation.y = - this._globalSceneRotation.x * 0.25
+      }
     })
 
     window.addEventListener('resize', event => {
@@ -506,7 +536,6 @@ export default class SceneManager {
     return this._currentIntersect
   }
 
-
   get mousePositions(): Vector2 {
     return this._mousePositions
   }
@@ -531,9 +560,12 @@ export default class SceneManager {
     return this._defaultRatio
   }
 
+  get globalSceneRotation() {
+    return this._globalSceneRotation
+  }
+
   // setters
   set currentIntersect(currentIntersect: any) {
     this._currentIntersect = currentIntersect
   }
-
 }

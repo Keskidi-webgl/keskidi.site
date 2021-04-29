@@ -18,7 +18,7 @@ const VinylInteractPoint: InteractionPoint = {
   },
 
   isCompleted: (globalStore: GlobalStore) => {
-    return globalStore.userWordData!.some(word => word.id === Helpers.wordIdFromObject(URL_OBJECT_IDENTIFIER.VINYL) && word.is_achieved)
+    return globalStore.userWordData!.some(word => word.id === VinylRoomObject.wordId && word.is_achieved)
   },
 
   isVisible(globalStore: GlobalStore, authStore: AuthStore): boolean {

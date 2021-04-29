@@ -1,8 +1,8 @@
-import {AssetsManager, SceneManager} from "~/core/managers";
+import { AssetsManager, SceneManager } from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
-import {Initializers} from "~/core/defs";
-import {GLTF_ASSET} from "~/core/enums";
+import { HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { Initializers } from "~/core/defs";
+import { GLTF_ASSET } from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 
@@ -18,7 +18,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addGltfTom()
     this._registerPresetPositions()
     this._addLights(true)
-    //this._configGUI()
+    this._configGUI()
 
     SceneManager.GLOBAL_SCENE.start()
   }
@@ -63,8 +63,23 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
           this._data.globalSceneStore.updatePositionsInteractivePoint(updateData)
         }
+
       },
-      onResume:(ctx)=> {
+      /*
+      bindEvents: (ctx) => {
+        document.addEventListener("mousemove", (event) => {
+          let cursorX = event.clientX / ctx.canvas.width / 2
+          let cursorY = event.clientY / ctx.canvas.height / 2
+
+          ctx.globalSceneRotation.x = Helpers.lerp(ctx.globalSceneRotation.x, cursorX, 0.1)
+          ctx.globalSceneRotation.y = Helpers.lerp(ctx.globalSceneRotation.y, cursorY, 0.1)
+
+          ctx.scene.rotation.x = - ctx.globalSceneRotation.y * 0.0125
+          ctx.scene.rotation.y = - ctx.globalSceneRotation.x * 0.25
+        });
+      },
+       */
+      onResume: (ctx) => {
         this._addGltfTom()
       },
       onWindowResize: (ctx) => {
@@ -79,7 +94,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).hideGui()//.enableStats().enableAxesHelpers(1000)
+    }).hideGui()
+      .enableStats()
+      .enableParallax()
+      //.enableAxesHelpers(1000)
 
   }
 
@@ -88,9 +106,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _configGUI() {
     let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'x',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'y',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'z',-500,500,0.01).listen()
+    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'x', -500, 500, 0.01).listen()
+    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'y', -500, 500, 0.01).listen()
+    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'z', -500, 500, 0.01).listen()
   }
 
   /**
@@ -133,10 +151,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
-    SceneManager.GLOBAL_SCENE.scene.traverse( child => {
+    SceneManager.GLOBAL_SCENE.scene.traverse(child => {
       // @ts-ignore
-      if ( child.material ) child.material.metalness = 0;
-    } );
+      if (child.material) child.material.metalness = 0;
+    });
 
   }
 
