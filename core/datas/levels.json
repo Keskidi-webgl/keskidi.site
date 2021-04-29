@@ -2,21 +2,21 @@
     {
         "name": "newbie",
         "order": 0,
-        "rules": 0
+        "rule": 0
     },
     {
         "name": "débutant",
         "order": 1,
-        "rules": 20
+        "rule": 20
     },
     {
         "name": "Intermediaire",
         "order": 2,
-        "rules": 30
+        "rule": 30
     },
     {
         "name": "Expert",
         "order": 3,
-        "rules": 50
+        "rule": 50
     }
 ]

@@ -3,6 +3,8 @@
     <div class="card">
       <button class="button" @click="increment()">new word</button>
 
+      <ProgressLevel :percent="percent" :stroke="2" :radius="50"/>
+
       <p>Ton nombre de mots : {{ nb }}</p>
       <p v-if="level">Ton niveau : {{ level.name }}</p>
       <p v-if="nextLevel">
@@ -27,6 +29,7 @@
 import { Component, Vue } from "nuxt-property-decorator";
 import { ProgressPercentManager } from "~/core/managers";
 import { Level } from "~/core/types";
+import ProgressLevel from "~/components/activities/ProgressLevel.vue";
 
 /**
  * @info
@@ -38,7 +41,11 @@ import { Level } from "~/core/types";
  * 2021-04-25 : deuxième version du ProgressPercentManager. Les données sont calculées en pourcentage.
  */
 
-@Component
+@Component({
+  components: {
+    ProgressLevel
+  }
+})
 export default class TestProgressPage extends Vue {
   // Default
   public onProgress: boolean = false;
@@ -48,6 +55,7 @@ export default class TestProgressPage extends Vue {
 
   // Get from ProgressPercentManager
   public width: string = "0";
+  public percent: number = 0
   public level: Level | null = null;
   public nextLevel: Level | null = null;
   public nextSteps: number = 0;
@@ -58,6 +66,7 @@ export default class TestProgressPage extends Vue {
     ProgressPercentManager.init();
     this.init();
     this.level = ProgressPercentManager.current;
+    this.percent = ProgressPercentManager.percent
     this.width = ProgressPercentManager.percent + "%";
     this.nextLevel = ProgressPercentManager.next;
     this.nextSteps = ProgressPercentManager.steps;
@@ -71,6 +80,7 @@ export default class TestProgressPage extends Vue {
       });
       this.nb++;
       this.level = ProgressPercentManager.current;
+      this.percent = ProgressPercentManager.percent
       this.width = ProgressPercentManager.percent + "%";
       this.nextLevel = ProgressPercentManager.next;
       this.nextSteps = ProgressPercentManager.steps;
@@ -104,7 +114,7 @@ export default class TestProgressPage extends Vue {
 
   .card {
     width: 50%;
-    background: #f2f2f2;
+    background: bisque;
     border-radius: 73px;
     padding: 100px 50px;
     height: 60vh;
