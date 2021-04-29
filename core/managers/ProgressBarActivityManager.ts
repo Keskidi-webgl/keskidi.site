@@ -6,12 +6,12 @@ import { Step } from "../types";
  */
 class ProgressBarActivityManager {
   // >> PROPERTIES
-  private _steps: Array<Step> = [];
+  private _steps: Array<Step> = require("../datas/activitiesSteps.json");
   private _currentStep: Step | null = null;
   private _progress: number = 0;
 
   init() {
-    this._initSteps();
+    this._currentStep = this._steps[0];
     this._progress = (this._currentStep!.id * 100) / this._steps.length;
   }
 
@@ -20,24 +20,6 @@ class ProgressBarActivityManager {
       this._currentStep = this._steps[this._currentStep!.id];
 
     this._progress = (this._currentStep!.id * 100) / this._steps.length;
-  }
-
-  _initSteps() {
-    this.steps = [
-      {
-        id: 1,
-        text: "Allez Narvalo !"
-      },
-      {
-        id: 2,
-        text: "Tu gères !"
-      },
-      {
-        id: 3,
-        text: "T'es un ouf !"
-      }
-    ];
-    this._currentStep = this._steps[0];
   }
 
   get step(): Step | null {
