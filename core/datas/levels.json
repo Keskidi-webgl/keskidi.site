@@ -1,21 +1,21 @@
 [
     {
-        "name": "newbie",
+        "name": "Noob",
         "order": 0,
         "rule": 0
     },
     {
-        "name": "débutant",
+        "name": "Frais",
         "order": 1,
         "rule": 20
     },
     {
-        "name": "Intermediaire",
+        "name": "Badass",
         "order": 2,
         "rule": 30
     },
     {
-        "name": "Expert",
+        "name": "Le crack",
         "order": 3,
         "rule": 50
     }

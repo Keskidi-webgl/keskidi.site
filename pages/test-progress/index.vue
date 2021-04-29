@@ -3,7 +3,14 @@
     <div class="card">
       <button class="button" @click="increment()">new word</button>
 
-      <ProgressLevel :percent="percent" :stroke="2" :radius="50"/>
+      <ProgressLevel
+        v-if="level"
+        :stroke="4"
+        :radius="170 / 2"
+        :total="9"
+        :progress="nb"
+        :level="level.name"
+      />
 
       <p>Ton nombre de mots : {{ nb }}</p>
       <p v-if="level">Ton niveau : {{ level.name }}</p>
@@ -55,7 +62,6 @@ export default class TestProgressPage extends Vue {
 
   // Get from ProgressPercentManager
   public width: string = "0";
-  public percent: number = 0
   public level: Level | null = null;
   public nextLevel: Level | null = null;
   public nextSteps: number = 0;
@@ -66,7 +72,6 @@ export default class TestProgressPage extends Vue {
     ProgressPercentManager.init();
     this.init();
     this.level = ProgressPercentManager.current;
-    this.percent = ProgressPercentManager.percent
     this.width = ProgressPercentManager.percent + "%";
     this.nextLevel = ProgressPercentManager.next;
     this.nextSteps = ProgressPercentManager.steps;
@@ -76,11 +81,9 @@ export default class TestProgressPage extends Vue {
 
   increment() {
     if (this.nb < ProgressPercentManager.words) {
-      ProgressPercentManager.update(() => {
-      });
+      ProgressPercentManager.update(() => {});
       this.nb++;
       this.level = ProgressPercentManager.current;
-      this.percent = ProgressPercentManager.percent
       this.width = ProgressPercentManager.percent + "%";
       this.nextLevel = ProgressPercentManager.next;
       this.nextSteps = ProgressPercentManager.steps;
@@ -113,11 +116,11 @@ export default class TestProgressPage extends Vue {
   padding-left: 7vw;
 
   .card {
-    width: 50%;
-    background: bisque;
+    width: 80%;
+    background: #ff7869;
     border-radius: 73px;
-    padding: 100px 50px;
-    height: 60vh;
+    // padding: 100px 50px;
+    height: 80vh;
 
     display: flex;
   }
