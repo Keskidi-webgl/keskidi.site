@@ -65,36 +65,20 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         }
 
       },
+      /*
       bindEvents: (ctx) => {
         document.addEventListener("mousemove", (event) => {
-          const windowHalfX = this._data.canvas.clientWidth / 2;
-          const windowHalfY = this._data.canvas.clientHeight / 2;
+          let cursorX = event.clientX / ctx.canvas.width / 2
+          let cursorY = event.clientY / ctx.canvas.height / 2
 
-          let mouseX = ctx.camera.position.x;
-          let mouseY = ctx.camera.position.y;
+          ctx.globalSceneRotation.x = Helpers.lerp(ctx.globalSceneRotation.x, cursorX, 0.1)
+          ctx.globalSceneRotation.y = Helpers.lerp(ctx.globalSceneRotation.y, cursorY, 0.1)
 
-          mouseX = (event.clientX - windowHalfX) / 100;
-          mouseY = (event.clientY - windowHalfY) / 100;
-
-          console.log('Mouse pos X', mouseX);
-          console.log('Mouse pos Y', mouseY);
-
-          // console.log(ctx.currentCameraPosition);
-
-          ctx.camera.position.x += (ctx.currentCameraPosition.x - mouseX) * 1;
-          ctx.camera.position.y += (- ctx.currentCameraPosition.y - mouseY) * 1;
-
-          // ctx.camera.position.x += mouseX;
-          // ctx.camera.position.y += -mouseY
-
-          // console.log('>> ------------------');
-
-          // console.log('==> lookat', ctx.currentCameraLookAt);
-          // console.log('==> pos', ctx.camera.position);
-
-          ctx.camera.lookAt(ctx.currentCameraLookAt);
+          ctx.scene.rotation.x = - ctx.globalSceneRotation.y * 0.0125
+          ctx.scene.rotation.y = - ctx.globalSceneRotation.x * 0.25
         });
       },
+       */
       onResume: (ctx) => {
         this._addGltfTom()
       },
@@ -110,7 +94,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).hideGui().enableStats().enableAxesHelpers(1000)
+    }).hideGui()
+      .enableStats()
+      .enableParallax()
+      //.enableAxesHelpers(1000)
 
   }
 

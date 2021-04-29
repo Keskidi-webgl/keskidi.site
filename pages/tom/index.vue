@@ -56,6 +56,7 @@ export default class AuthPage extends Vue {
   public funfacts: Array<FunFactElement> = require('../../core/datas/funfacts.json')
 
     mounted() {
+      SceneManager.GLOBAL_SCENE.disableParallax()
       SceneManager.GLOBAL_SCENE.goToPresetPosition('tom', 2, () => {
         this.isReady = true;
       })
@@ -72,6 +73,10 @@ export default class AuthPage extends Vue {
         this.onProgress = false
       }
     }
+  }
+
+  beforeDestroy() {
+    SceneManager.GLOBAL_SCENE.enableParallax()
   }
 
   back() {
