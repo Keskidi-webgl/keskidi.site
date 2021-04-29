@@ -1,16 +1,27 @@
 <template>
   <div class="scene-navigation-panel">
-    <nuxt-link v-if="!globalSceneStore.activeObject" class="scene-navigation-panel-button previous-scene"
+    <nuxt-link :class="{isDisabled: globalSceneStore.isCameraMoving}"
+               v-if="!globalSceneStore.activeObject"
+               class="scene-navigation-panel-button previous-scene"
                :to="previousSceneLink()">
       <img src="~/assets/img/next-arrow.svg" alt="">
     </nuxt-link>
-    <nuxt-link v-if="!globalSceneStore.activeObject" class="scene-navigation-panel-button back-home" :to="backHomeLink()">
+    <nuxt-link v-if="!globalSceneStore.activeObject"
+               :class="{isDisabled: globalSceneStore.isCameraMoving}"
+               class="scene-navigation-panel-button back-home"
+               :to="backHomeLink()">
       <img src="~/assets/img/home.svg" alt="">
     </nuxt-link>
-    <nuxt-link v-if="!globalSceneStore.activeObject" class="scene-navigation-panel-button next-scene" :to="nextSceneLink()">
+    <nuxt-link :class="{isDisabled: globalSceneStore.isCameraMoving}"
+               v-if="!globalSceneStore.activeObject"
+               class="scene-navigation-panel-button next-scene"
+               :to="nextSceneLink()">
       <img src="~/assets/img/next-arrow.svg" alt="">
     </nuxt-link>
-    <nuxt-link v-if="globalSceneStore.activeObject" class="scene-navigation-panel-button object-room" :to="goBackObjectRoom()">
+    <nuxt-link v-if="globalSceneStore.activeObject"
+               :class="{isDisabled: globalSceneStore.isCameraMoving}"
+               class="scene-navigation-panel-button object-room"
+               :to="goBackObjectRoom()">
       <img src="~/assets/img/next-arrow.svg" alt="">
     </nuxt-link>
   </div>
@@ -93,6 +104,10 @@ export default class SceneNavigationPanel extends Vue {
         transform: rotate(90deg);
       }
     }
+  }
+
+  .isDisabled {
+    pointer-events: none;
   }
 }
 </style>

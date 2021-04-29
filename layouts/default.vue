@@ -4,7 +4,7 @@
     <LogoMedia class='logo'/>
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
     <Nuxt v-if="this.globalStore.isAppInit"/>
-    <SceneNavigationPanel v-if="this.globalSceneStore.activeRoom"/>
+    <SceneNavigationPanel v-if="this.globalSceneStore.activeRoom || this.globalSceneStore.activeObject"/>
   </div>
 </template>
 
