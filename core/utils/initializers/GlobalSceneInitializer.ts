@@ -1,8 +1,8 @@
-import {AssetsManager, SceneManager} from "~/core/managers";
+import { AssetsManager, SceneManager } from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
-import {Initializers} from "~/core/defs";
-import {GLTF_ASSET} from "~/core/enums";
+import { HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { Initializers } from "~/core/defs";
+import { GLTF_ASSET } from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 
@@ -18,7 +18,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addGltfTom()
     this._registerPresetPositions()
     this._addLights(true)
-    //this._configGUI()
+    this._configGUI()
 
     SceneManager.GLOBAL_SCENE.start()
   }
@@ -63,8 +63,39 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
           this._data.globalSceneStore.updatePositionsInteractivePoint(updateData)
         }
+
       },
-      onResume:(ctx)=> {
+      bindEvents: (ctx) => {
+        document.addEventListener("mousemove", (event) => {
+          const windowHalfX = this._data.canvas.clientWidth / 2;
+          const windowHalfY = this._data.canvas.clientHeight / 2;
+
+          let mouseX = ctx.camera.position.x;
+          let mouseY = ctx.camera.position.y;
+
+          mouseX = (event.clientX - windowHalfX) / 100;
+          mouseY = (event.clientY - windowHalfY) / 100;
+
+          console.log('Mouse pos X', mouseX);
+          console.log('Mouse pos Y', mouseY);
+
+          // console.log(ctx.currentCameraPosition);
+
+          ctx.camera.position.x += (ctx.currentCameraPosition.x - mouseX) * 1;
+          ctx.camera.position.y += (- ctx.currentCameraPosition.y - mouseY) * 1;
+
+          // ctx.camera.position.x += mouseX;
+          // ctx.camera.position.y += -mouseY
+
+          // console.log('>> ------------------');
+
+          // console.log('==> lookat', ctx.currentCameraLookAt);
+          // console.log('==> pos', ctx.camera.position);
+
+          ctx.camera.lookAt(ctx.currentCameraLookAt);
+        });
+      },
+      onResume: (ctx) => {
         this._addGltfTom()
       },
       onWindowResize: (ctx) => {
@@ -79,7 +110,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).hideGui()//.enableStats().enableAxesHelpers(1000)
+    }).hideGui().enableStats().enableAxesHelpers(1000)
 
   }
 
@@ -88,9 +119,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _configGUI() {
     let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'x',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'y',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'z',-500,500,0.01).listen()
+    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'x', -500, 500, 0.01).listen()
+    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'y', -500, 500, 0.01).listen()
+    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'z', -500, 500, 0.01).listen()
   }
 
   /**
@@ -133,10 +164,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
-    SceneManager.GLOBAL_SCENE.scene.traverse( child => {
+    SceneManager.GLOBAL_SCENE.scene.traverse(child => {
       // @ts-ignore
-      if ( child.material ) child.material.metalness = 0;
-    } );
+      if (child.material) child.material.metalness = 0;
+    });
 
   }
 

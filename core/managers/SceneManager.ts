@@ -28,6 +28,7 @@ import { GUI } from "dat.gui";
 import { Object3D } from "three/src/core/Object3D";
 import { AnimationObjectGroup } from "three/src/animation/AnimationObjectGroup";
 import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
+import { HomeCameraPosition } from "../config/global-scene/camera-positions";
 
 /**
  * @description
@@ -71,6 +72,8 @@ export default class SceneManager {
   private _defaultRatio: number
   private _currentIntersect: null
   private _animationMixers: Array<AnimationMixerElement>
+  private _currentCameraLookAt: Vector3
+  private _currentCameraPosition: Vector3
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -115,6 +118,8 @@ export default class SceneManager {
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
+    this._currentCameraLookAt = new Vector3(0, 0, 0)
+    this._currentCameraPosition = new Vector3(0, 0, 0)
 
     this._onStartCallback = options.onStart || function () {
     }
@@ -222,7 +227,9 @@ export default class SceneManager {
     const originRotation = new Euler().copy(this._camera.rotation);
 
     this._camera.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z);
-    this._camera.lookAt(lookAtPosition);
+    this._currentCameraLookAt = lookAtPosition;
+    this._currentCameraPosition = newCameraPosition.clone()
+    this._camera.lookAt(this._currentCameraLookAt);
     const destinationRotation = new Euler().copy(this._camera.rotation)
 
     this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
@@ -233,6 +240,7 @@ export default class SceneManager {
     const updateQuaternion = new Quaternion();
     const o = { t: 0 };
 
+    console.log('LOOK AT', this._currentCameraLookAt)
 
     gsap.to(this._camera.position, {
       duration,
@@ -245,7 +253,6 @@ export default class SceneManager {
           this._camera.updateProjectionMatrix()
           //this.camera.lookAt(lookAtPosition)
         }
-
       },
       onComplete: () => {
         successCallBack(this)
@@ -506,6 +513,13 @@ export default class SceneManager {
     return this._currentIntersect
   }
 
+  get currentCameraLookAt(): Vector3 {
+    return this._currentCameraLookAt
+  }
+
+  get currentCameraPosition(): Vector3 {
+    return this._currentCameraPosition
+  }
 
   get mousePositions(): Vector2 {
     return this._mousePositions
@@ -534,6 +548,15 @@ export default class SceneManager {
   // setters
   set currentIntersect(currentIntersect: any) {
     this._currentIntersect = currentIntersect
+  }
+
+  set currentCameraLookAt(currentCameraLookAt: Vector3) {
+    this._currentCameraLookAt = currentCameraLookAt
+    console.log('call current look at setter');
+  }
+
+  set currentCameraPosition(currentCameraPosition: Vector3) {
+    this._currentCameraPosition = currentCameraPosition
   }
 
 }
