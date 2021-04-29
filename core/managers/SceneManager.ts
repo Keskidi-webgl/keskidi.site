@@ -22,12 +22,12 @@ import {
   WindowResizeCallback
 } from "~/core/types";
 import gsap from 'gsap'
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
-import {GUI} from "dat.gui";
-import {Object3D} from "three/src/core/Object3D";
-import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
-import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import { GUI } from "dat.gui";
+import { Object3D } from "three/src/core/Object3D";
+import { AnimationObjectGroup } from "three/src/animation/AnimationObjectGroup";
+import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
 
 /**
  * @description
@@ -216,7 +216,7 @@ export default class SceneManager {
       return
     }
 
-    const {cameraPos: newCameraPosition, lookAtPosition} = presetCameraPosition.coords()
+    const { cameraPos: newCameraPosition, lookAtPosition } = presetCameraPosition.coords()
 
     const originPosition = new Vector3().copy(this._camera.position);
     const originRotation = new Euler().copy(this._camera.rotation);
@@ -231,7 +231,7 @@ export default class SceneManager {
     const originQuaternion = new Quaternion().copy(this._camera.quaternion);
     const destinationQuaternion = new Quaternion().setFromEuler(destinationRotation);
     const updateQuaternion = new Quaternion();
-    const o = {t: 0};
+    const o = { t: 0 };
 
 
     gsap.to(this._camera.position, {
@@ -239,6 +239,7 @@ export default class SceneManager {
       x: newCameraPosition.x,
       y: newCameraPosition.y,
       z: newCameraPosition.z,
+      // ease: "sine.inOut",
       onUpdate: () => {
         if (this._camera instanceof PerspectiveCamera) {
           this._camera.updateProjectionMatrix()
@@ -253,6 +254,7 @@ export default class SceneManager {
     gsap.to(o, {
       duration,
       t: 1,
+      ease: "sin.out",
       onUpdate: () => {
         updateQuaternion.slerpQuaternions(originQuaternion, destinationQuaternion, o.t)
         this._camera.quaternion.set(updateQuaternion.x, updateQuaternion.y, updateQuaternion.z, updateQuaternion.w)
@@ -358,7 +360,7 @@ export default class SceneManager {
    */
   public createAnimationMixer(name: string, object: Object3D | AnimationObjectGroup) {
     const mixer = new AnimationMixer(object)
-    this._animationMixers.push({name, instance: mixer})
+    this._animationMixers.push({ name, instance: mixer })
   }
 
   /**
@@ -464,7 +466,7 @@ export default class SceneManager {
 
     if (this._isRayCasting) {
       this._rayCaster.setFromCamera(this._mousePositions, this._camera)
-      const intersects = this._rayCaster.intersectObjects(this._scene.children,true)
+      const intersects = this._rayCaster.intersectObjects(this._scene.children, true)
       this._onRayCasterIntersectCallback(this, intersects)
     }
 
@@ -530,7 +532,7 @@ export default class SceneManager {
   }
 
   // setters
-  set currentIntersect(currentIntersect:any) {
+  set currentIntersect(currentIntersect: any) {
     this._currentIntersect = currentIntersect
   }
 
