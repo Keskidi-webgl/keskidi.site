@@ -8,7 +8,7 @@ import {
   PerspectiveCamera,
   Quaternion,
   Raycaster,
-  Scene,
+  Scene, sRGBEncoding,
   Vector2,
   Vector3,
   WebGLRenderer
@@ -412,6 +412,9 @@ export default class SceneManager {
    * Init renderer
    */
   private _initRenderer() {
+    this._renderer.outputEncoding = sRGBEncoding
+    this._renderer.shadowMap.enabled = true;
+    // this._renderer.shadowMap.type = new THREE.PCFSoftShadowMap;
     this._renderer.setSize(this._canvas.width, this._canvas.height)
     this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, this._defaultRatio))
   }
