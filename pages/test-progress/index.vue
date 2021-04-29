@@ -1,7 +1,7 @@
 <template>
   <div class="page-container" data-namespace="test-progress">
     <div class="card">
-      <button class="button" @click="increment()">new word</button>
+      <!-- <button class="button" @click="increment()">new word</button>
 
       <p>Ton nombre de mots : {{ nb }}</p>
       <p v-if="level">Ton niveau : {{ level.name }}</p>
@@ -18,15 +18,26 @@
           {{ width }}
         </div>
       </div>
-      <div class="bar" id="bar"></div>
+      <div class="bar" id="bar"></div> -->
+
+      <button class="button" @click="nextActivity()">
+        new activity passed
+      </button>
+      <p v-if="currentStep">
+        {{ currentStep.id }} / {{ totalSteps }} || {{ currentStep.text }} ||
+        {{ progress }}
+      </p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
-import { ProgressPercentManager } from "~/core/managers";
-import { Level } from "~/core/types";
+import {
+  ProgressBarActivityManager,
+  ProgressPercentManager
+} from "~/core/managers";
+import { Level, Step } from "~/core/types";
 
 /**
  * @info
@@ -54,43 +65,64 @@ export default class TestProgressPage extends Vue {
   public prevlevel: Level | null = null;
   public prevPosition: number = 0;
 
+  // for ProgressBarActivityManager
+  public totalSteps: number = 0;
+  public currentStep: Step | null = null;
+  public progress: string = "";
+
   mounted() {
-    ProgressPercentManager.init();
-    this.init();
-    this.level = ProgressPercentManager.current;
-    this.width = ProgressPercentManager.percent + "%";
-    this.nextLevel = ProgressPercentManager.next;
-    this.nextSteps = ProgressPercentManager.steps;
-    this.prevlevel = ProgressPercentManager.prev;
-    this.prevPosition = ProgressPercentManager.prevPercent;
+    // ProgressPercentManager.init();
+    // this.init();
+    // this.level = ProgressPercentManager.current;
+    // this.width = ProgressPercentManager.percent + "%";
+    // this.nextLevel = ProgressPercentManager.next;
+    // this.nextSteps = ProgressPercentManager.steps;
+    // this.prevlevel = ProgressPercentManager.prev;
+    // this.prevPosition = ProgressPercentManager.prevPercent;
+
+    this.initActivityBar();
   }
 
   increment() {
-    if (this.nb < ProgressPercentManager.words) {
-      ProgressPercentManager.update(() => {
-      });
-      this.nb++;
-      this.level = ProgressPercentManager.current;
-      this.width = ProgressPercentManager.percent + "%";
-      this.nextLevel = ProgressPercentManager.next;
-      this.nextSteps = ProgressPercentManager.steps;
-      this.prevlevel = ProgressPercentManager.prev;
-      this.prevPosition = ProgressPercentManager.prevPercent;
-    }
+    // if (this.nb < ProgressPercentManager.words) {
+    //   ProgressPercentManager.update(() => {
+    //   });
+    //   this.nb++;
+    //   this.level = ProgressPercentManager.current;
+    //   this.width = ProgressPercentManager.percent + "%";
+    //   this.nextLevel = ProgressPercentManager.next;
+    //   this.nextSteps = ProgressPercentManager.steps;
+    //   this.prevlevel = ProgressPercentManager.prev;
+    //   this.prevPosition = ProgressPercentManager.prevPercent;
+    // }
   }
 
   init() {
-    const bar = document.getElementById("bar");
-    let left = 0;
-    const all = ProgressPercentManager.levels;
-    all.reverse().forEach(level => {
-      left = left + level.rule;
-      let lvl = document.createElement("span");
-      lvl.innerHTML = "| " + level.name;
-      lvl.style.left = left + "%";
-      lvl.style.position = "absolute";
-      bar?.appendChild(lvl);
-    });
+    // const bar = document.getElementById("bar");
+    // let left = 0;
+    // const all = ProgressPercentManager.levels;
+    // all.reverse().forEach(level => {
+    //   left = left + level.rule;
+    //   let lvl = document.createElement("span");
+    //   lvl.innerHTML = "| " + level.name;
+    //   lvl.style.left = left + "%";
+    //   lvl.style.position = "absolute";
+    //   bar?.appendChild(lvl);
+    // });
+  }
+
+  initActivityBar() {
+    ProgressBarActivityManager.init();
+    this.totalSteps = ProgressBarActivityManager.steps.length;
+    this.currentStep = ProgressBarActivityManager.step;
+    this.progress = ProgressBarActivityManager.progress + "%";
+  }
+
+  nextActivity() {
+    ProgressBarActivityManager.next();
+    this.totalSteps = ProgressBarActivityManager.steps.length;
+    this.currentStep = ProgressBarActivityManager.step;
+    this.progress = ProgressBarActivityManager.progress + "%";
   }
 }
 </script>
