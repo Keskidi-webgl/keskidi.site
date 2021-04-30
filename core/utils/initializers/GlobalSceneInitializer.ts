@@ -1,8 +1,18 @@
-import { AssetsManager, SceneManager } from "~/core/managers";
+import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import { HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { Initializers } from "~/core/defs";
-import { GLTF_ASSET } from "~/core/enums";
+import {
+  HemisphereLight,
+  HemisphereLightHelper,
+  Mesh,
+  MeshBasicMaterial,
+  PCFSoftShadowMap,
+  PerspectiveCamera,
+  Scene,
+  sRGBEncoding,
+  WebGLRenderer
+} from "three";
+import {Initializers} from "~/core/defs";
+import {GLTF_ASSET} from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 
@@ -17,6 +27,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addGltfGlobalScene()
     this._addGltfTom()
     this._registerPresetPositions()
+    this._optimizeScene()
     this._addLights(true)
     this._configGUI()
 
@@ -39,6 +50,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     // Create renderer
     const renderer = this._createRender()
+    renderer.outputEncoding = sRGBEncoding
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
 
     return new SceneManager({
       canvas: this._data.canvas,
@@ -65,20 +79,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         }
 
       },
-      /*
-      bindEvents: (ctx) => {
-        document.addEventListener("mousemove", (event) => {
-          let cursorX = event.clientX / ctx.canvas.width / 2
-          let cursorY = event.clientY / ctx.canvas.height / 2
-
-          ctx.globalSceneRotation.x = Helpers.lerp(ctx.globalSceneRotation.x, cursorX, 0.1)
-          ctx.globalSceneRotation.y = Helpers.lerp(ctx.globalSceneRotation.y, cursorY, 0.1)
-
-          ctx.scene.rotation.x = - ctx.globalSceneRotation.y * 0.0125
-          ctx.scene.rotation.y = - ctx.globalSceneRotation.x * 0.25
-        });
-      },
-       */
       onResume: (ctx) => {
         this._addGltfTom()
       },
@@ -148,6 +148,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
     globalSceneGltf.scene.position.set(0, 0, 0)
+    console.log(globalSceneGltf)
 
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
@@ -189,6 +190,23 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _registerPresetPositions() {
     GlobalSceneConfig.cameraPositions.forEach(presetPosition => {
       SceneManager.GLOBAL_SCENE.registerPresetCameraPositions(presetPosition)
+    })
+  }
+
+  private _optimizeScene() {
+    const blacklist = ['chat', 'tom']
+    SceneManager.GLOBAL_SCENE.scene.traverse(child => {
+      if (child instanceof Mesh && !blacklist.includes(child.name) && child.parent) {
+        try {
+          const prevMaterial = child.material
+          const newMaterial = new MeshBasicMaterial()
+          newMaterial.copy(prevMaterial)
+          newMaterial.map = prevMaterial.emissiveMap
+          newMaterial.map = prevMaterial.emissiveMap
+          child.material = newMaterial
+        } catch (e) {
+        }
+      }
     })
   }
 }

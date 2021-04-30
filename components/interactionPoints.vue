@@ -72,10 +72,10 @@ export default class InteractionPoints extends Vue {
       height: 78px;
       width: 78px;
       position: absolute;
-      border-top: 1px solid $dark-cream;
-      border-right: 1px solid $dark-cream;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      border-top: 2px solid $dark-cream;
+      border-right: 2px solid $dark-cream;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      border-left: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 50%;
       animation: rotate-center 5s linear infinite both;
     }

@@ -4,12 +4,9 @@
       <span v-if="this.activityStore.dataWord.home_scenario" class="scenario-container-text text-common">
         {{ this.activityStore.dataWord.home_scenario.content }}
       </span>
-      <CustomButton class="btn-discover" @click.native="canDisplayActivityPanel = true" arrow-color="white" color="#000648"
+      <CustomButton class="btn-discover" @click.native="startActivity" arrow-color="white" color="#000648"
                     :text="`Découvrir le mot ${activityStore.dataWord.name}`"></CustomButton>
     </CustomCard>
-    <transition v-on:enter="displayActivityPanel">
-      <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
-    </transition>
   </div>
 </template>
 
@@ -65,6 +62,9 @@ export default class ObjectPage extends Vue {
     this._setDataWord()
   }
 
+  /**
+   * @deprecated
+   */
   public displayActivityPanel() {
     this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     gsap.to('.activity-container', {
@@ -74,6 +74,11 @@ export default class ObjectPage extends Vue {
         SceneManager.GLOBAL_SCENE.pause()
       }
     })
+  }
+
+
+  public startActivity() {
+    this.activityStore.displayActivityPanel()
   }
 
   public beforeDestroy() {

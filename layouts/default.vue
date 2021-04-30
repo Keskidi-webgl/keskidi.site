@@ -1,7 +1,10 @@
 <template>
   <div>
-    <Loader class="site-loader" :loading-data="loadingProgressions"></Loader>
+    <!-- Loader -->
+    <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
+
     <button @click="toggleSound">toggle sound</button>
+    <!-- Progress level -->
     <ProgressLevel
       class="progress-level"
       v-if="level"
@@ -11,14 +14,19 @@
       :progress="progress"
       :level="level.name"
     />
+    <!-- Logo -->
     <LogoMedia class="logo" />
+    <!-- Global scene -->
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
+    <!-- Page Slot -->
     <Nuxt v-if="this.globalStore.isAppInit" />
-    <SceneNavigationPanel
-      v-if="
-        this.globalSceneStore.activeRoom || this.globalSceneStore.activeObject
-      "
-    />
+    <!-- Navigation panel -->
+    <SceneNavigationPanel v-if="this.globalSceneStore.activeRoom || this.globalSceneStore.activeObject"/>
+
+    <!-- Activity onboarding -->
+    <ActivityOnboarding class="activity-onboarding overlay-element"/>
+    <!-- Activity panel -->
+    <ActivityPanel class="activity-panel overlay-element"/>
   </div>
 </template>
 
@@ -39,12 +47,16 @@ import AuthStore from "~/store/auth";
 import ProgressLevel from "~/components/activities/ProgressLevel.vue";
 import { ProgressPercentManager } from "~/core/managers";
 import { Level } from "~/core/types";
+import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
+import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 
 @Component({
   components: {
     SceneNavigationPanel,
     LogoMedia,
-    ProgressLevel
+    ProgressLevel,
+    ActivityOnboarding,
+    ActivityPanel
   }
 })
 export default class DefaultLayout extends Vue {
@@ -142,15 +154,26 @@ canvas {
   z-index: 3;
 }
 
-.site-loader {
-  position: fixed;
-  z-index: 90;
-  background: linear-gradient(180deg, #fceee6 0%, #efdedd 100%);
+.overlay-element {
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   width: 100%;
   height: 100%;
+  position: fixed;
+  z-index: 90;
+}
+
+.site-loader {
+  background: linear-gradient(180deg, #fceee6 0%, #efdedd 100%);
+}
+
+.activity-onboarding {
+
+}
+
+.activity-panel {
+
 }
 </style>

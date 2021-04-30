@@ -39,7 +39,7 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
       .registerGltf(
         GLTF_ASSET.GLOBAL_SCENE,
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_global_no_bake.gltf",
-        "scene_globale.gltf"
+        "scene_globale_bake.gltf"
       )
       .registerGltf(
         GLTF_ASSET.ACTIVITY_OBJECT_CRUSH,
