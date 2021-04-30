@@ -24,7 +24,7 @@ import {
   SpotLight,
   FrontSide,
   Color,
-  BoxGeometry, MeshLambertMaterial, sRGBEncoding, PCFSoftShadowMap, SpotLightHelper
+  BoxGeometry, MeshLambertMaterial, sRGBEncoding, PCFSoftShadowMap, SpotLightHelper, BackSide,
 } from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
@@ -70,8 +70,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     renderer.outputEncoding = sRGBEncoding
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
-    renderer.sortObjects = false
-    // renderer.gammaOutPut
+
     return new SceneManager({
       canvas: this._data.canvas,
       camera: camera,
@@ -159,62 +158,37 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
 
   private _createPlanesBackground(){
-    // let shadowGroup = new Group()
-    // shadowGroup.position.y = -2
+
     let globalScene = SceneManager.GLOBAL_SCENE.scene
 
-    // globalScene.background = new Color(0x000000)
-    // globalScene.add(shadowGroup)
-
-
     const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
-    // var material = new ShadowMaterial({
-    //   depthWrite: false
-    // });
-    // material.opacity = 0.5;
-    let material = new MeshPhongMaterial( {
-      color : 0xECDCCA,
-      side: DoubleSide,
-      // depthWrite: false,
-      // alphaTest: 1
-
-    } );
+    var material = new ShadowMaterial({
+      depthWrite: false,
+      side: BackSide,
+      opacity: 0.1,
+    });
 
     let floor = new Mesh(planeGeometry,material)
     floor.position.y = -1
     floor.receiveShadow = true
     globalScene.add(floor)
 
-    // var geometry = new BoxGeometry(50, 50, 50);
-    // var mat = new MeshLambertMaterial({ // Required For Shadows
-    //   color: 0xFF0000,
-    // });
-
-    // var cube = new Mesh(geometry, mat);
-    // cube.position.y = 0.8;
-    // cube.castShadow = true;
-    // cube.receiveShadow = true;
-    // globalScene.add(cube);
-
     const light = new SpotLight( 0xD3D3D3);
     const helper = new SpotLightHelper( light );
+    light.position.set(332,1664,332)
 
-    // light.castShadow = true; // default false
-    // light.shadow.camera.left = -100;
-    // light.shadow.camera.right = 100;
-    // light.shadow.camera.top = 100;
-    // light.shadow.camera.bottom = -100;
-    // let light = new DirectionalLight( 0xFFFFFF);
-    // const helper = new DirectionalLightHelper( light, 5 );
+
     light.angle = 0.4;
     light.penumbra = 0.05;
     light.decay = 1;
     light.distance = 2000;
-    light.castShadow = true
-    light.power = 50
+    light.shadow.radius = 1
+    // light.power = 50
 
-    // light.shadow.mapSize.height = 1024;
-    // light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 2048;
+    light.shadow.mapSize.width = 2048;
+    light.castShadow = true
+
     //
     // light.shadow.camera.left = -100;
     // light.shadow.camera.right = 100;
@@ -224,16 +198,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     globalScene.add( light );
     globalScene.add( helper );
 
-    // light.position.set(0,50,0)
-
-    // light.castShadow = true
-
-    // globalScene.add( light );
-    // globalScene.add( helper );
-
-    // const light = new THREE.PointLight( 0xff0000, 1, 100 );
-    // light.position.set( 50, 50, 50 );
-    // scene.add( light );
 
     let floorFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Floor")
     floorFolder.add(floor.position,'x',-1000,1000,0.01).listen()
@@ -244,27 +208,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
     sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
     sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
-
-    // const planeMaterial = new MeshBasicMaterial( {
-    //   color: 0x000000,
-    //   side: DoubleSide,
-    //   // map: renderTarget.texture,
-    //   // opacity: state.shadow.opacity,
-    //   opacity: 0,
-    //   transparent: true,
-    //   depthWrite: false,
-    // } );
-    // let plane = new Mesh( planeGeometry, planeMaterial );
-    // plane.name = "floor"
-    //
-    // globalScene.add(plane)
-
-    /***********************/
-
-
-
-
-
+    
     console.log(globalScene,'global scene')
 
   }
@@ -276,8 +220,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     let ctx = canvas.getContext('2d');
 
     var my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
-    my_gradient.addColorStop(0, "#ECDCCA");
-    my_gradient.addColorStop(1, "#ffDDE3");
+    my_gradient.addColorStop(0, "#FCE9E1");
+    // my_gradient.addColorStop(0.5, "#FDF0E9");
+    my_gradient.addColorStop(1, "#FF0000");
     ctx!.fillStyle = my_gradient;
     ctx!.fillRect(0, 0, SceneManager.GLOBAL_SCENE.width, SceneManager.GLOBAL_SCENE.height);
 
