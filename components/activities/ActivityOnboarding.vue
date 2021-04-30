@@ -29,5 +29,8 @@ export default class ActivityOnboarding extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
+.activity-panel-onboarding {
+  background-color: blue;
+}
 </style>

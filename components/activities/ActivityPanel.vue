@@ -4,7 +4,10 @@
     v-on:leave="_onLeave">
 
     <div v-if="activityStore.canDisplayActivityPanel" class="activity-panel">
-      ActivityPanel
+      <aside>
+
+      </aside>
+      <main></main>
     </div>
 
   </transition>
@@ -15,6 +18,7 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import GlobalSceneStore from "~/store/globalScene"
 import {SceneManager} from "~/core/managers"
 import ActivityStore from "~/store/activity"
+import gsap from "gsap";
 
 @Component({
 })
@@ -39,8 +43,15 @@ export default class ActivityPanel extends Vue {
 
   }
 
-  private _onEnter(el) {
-    console.log(el)
+  private _onEnter(el, done) {
+    gsap.to(el, {
+      duration: 1,
+      autoAlpha: 1,
+      onComplete: () => {
+        SceneManager.GLOBAL_SCENE.pause()
+        done()
+      }
+    })
   }
 
   private _onLeave(el) {
@@ -49,5 +60,9 @@ export default class ActivityPanel extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
+.activity-panel {
+  background-color: green;
+  opacity: 0;
+}
 </style>

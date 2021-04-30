@@ -34,6 +34,15 @@ export default class ActivityStore extends VuexModule {
     this._canDisplayOnboarding = true
   }
 
+  @Mutation
+  public hideActivityOnboarding() {
+    this._canDisplayOnboarding = false
+  }
+
+  public hideActivityPanel() {
+    this._canDisplayActivityPanel = false
+  }
+
   get currentActivity() {
     return this._currentActivity
   }
