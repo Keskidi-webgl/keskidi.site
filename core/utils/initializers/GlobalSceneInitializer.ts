@@ -1,13 +1,30 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
-  CanvasTexture, CircleGeometry, CylinderGeometry, DirectionalLight,
+  CanvasTexture,
+  CircleGeometry,
+  CylinderGeometry,
+  DirectionalLight,
   HemisphereLight,
-  HemisphereLightHelper, Mesh, MeshBasicMaterial, MeshPhongMaterial,
+  HemisphereLightHelper,
+  Mesh,
+  MeshBasicMaterial,
+  MeshPhongMaterial,
   PerspectiveCamera,
+  PlaneBufferGeometry,
   Scene,
+  DoubleSide,
   ShadowMaterial,
-  WebGLRenderer
+  WebGLRenderer,
+  DirectionalLightHelper,
+  Group,
+  PlaneGeometry,
+  CameraHelper,
+  AmbientLight,
+  SpotLight,
+  FrontSide,
+  Color,
+  BoxGeometry, MeshLambertMaterial, sRGBEncoding, PCFSoftShadowMap, SpotLightHelper
 } from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
@@ -24,6 +41,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     SceneManager.GLOBAL_SCENE = this._createInstance()
     this._createCanvasBackground()
     this._addGltfGlobalScene()
+    this._createPlanesBackground()
     this._addGltfTom()
     this._registerPresetPositions()
     this._addLights(true)
@@ -49,14 +67,20 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // Create renderer
     const renderer = this._createRender()
 
+    renderer.outputEncoding = sRGBEncoding
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
+    renderer.sortObjects = false
+    // renderer.gammaOutPut
     return new SceneManager({
       canvas: this._data.canvas,
       camera: camera,
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: false,
+      activateOrbitControl: true,
       onRender: (ctx) => {
+
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.updateProjectionMatrix()
@@ -133,6 +157,118 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     })
   }
 
+
+  private _createPlanesBackground(){
+    // let shadowGroup = new Group()
+    // shadowGroup.position.y = -2
+    let globalScene = SceneManager.GLOBAL_SCENE.scene
+
+    // globalScene.background = new Color(0x000000)
+    // globalScene.add(shadowGroup)
+
+
+    const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
+    // var material = new ShadowMaterial({
+    //   depthWrite: false
+    // });
+    // material.opacity = 0.5;
+    let material = new MeshPhongMaterial( {
+      color : 0xECDCCA,
+      side: DoubleSide,
+      // depthWrite: false,
+      // alphaTest: 1
+
+    } );
+
+    let floor = new Mesh(planeGeometry,material)
+    floor.position.y = -1
+    floor.receiveShadow = true
+    globalScene.add(floor)
+
+    // var geometry = new BoxGeometry(50, 50, 50);
+    // var mat = new MeshLambertMaterial({ // Required For Shadows
+    //   color: 0xFF0000,
+    // });
+
+    // var cube = new Mesh(geometry, mat);
+    // cube.position.y = 0.8;
+    // cube.castShadow = true;
+    // cube.receiveShadow = true;
+    // globalScene.add(cube);
+
+    const light = new SpotLight( 0xD3D3D3);
+    const helper = new SpotLightHelper( light );
+
+    // light.castShadow = true; // default false
+    // light.shadow.camera.left = -100;
+    // light.shadow.camera.right = 100;
+    // light.shadow.camera.top = 100;
+    // light.shadow.camera.bottom = -100;
+    // let light = new DirectionalLight( 0xFFFFFF);
+    // const helper = new DirectionalLightHelper( light, 5 );
+    light.angle = 0.4;
+    light.penumbra = 0.05;
+    light.decay = 1;
+    light.distance = 2000;
+    light.castShadow = true
+    light.power = 50
+
+    // light.shadow.mapSize.height = 1024;
+    // light.shadow.mapSize.width = 1024;
+    //
+    // light.shadow.camera.left = -100;
+    // light.shadow.camera.right = 100;
+    // light.shadow.camera.top = 100;
+    // light.shadow.camera.bottom = -100;
+
+    globalScene.add( light );
+    globalScene.add( helper );
+
+    // light.position.set(0,50,0)
+
+    // light.castShadow = true
+
+    // globalScene.add( light );
+    // globalScene.add( helper );
+
+    // const light = new THREE.PointLight( 0xff0000, 1, 100 );
+    // light.position.set( 50, 50, 50 );
+    // scene.add( light );
+
+    let floorFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Floor")
+    floorFolder.add(floor.position,'x',-1000,1000,0.01).listen()
+    floorFolder.add(floor.position,'y',-1000,1000,0.01).listen()
+    floorFolder.add(floor.position,'z',-1000,1000,0.01).listen()
+
+    let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Light")
+    sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
+    sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
+    sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
+
+    // const planeMaterial = new MeshBasicMaterial( {
+    //   color: 0x000000,
+    //   side: DoubleSide,
+    //   // map: renderTarget.texture,
+    //   // opacity: state.shadow.opacity,
+    //   opacity: 0,
+    //   transparent: true,
+    //   depthWrite: false,
+    // } );
+    // let plane = new Mesh( planeGeometry, planeMaterial );
+    // plane.name = "floor"
+    //
+    // globalScene.add(plane)
+
+    /***********************/
+
+
+
+
+
+    console.log(globalScene,'global scene')
+
+  }
+
   private _createCanvasBackground(){
 
 
@@ -141,7 +277,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     var my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
     my_gradient.addColorStop(0, "#ECDCCA");
-    my_gradient.addColorStop(1, "#f0dfde");
+    my_gradient.addColorStop(1, "#ffDDE3");
     ctx!.fillStyle = my_gradient;
     ctx!.fillRect(0, 0, SceneManager.GLOBAL_SCENE.width, SceneManager.GLOBAL_SCENE.height);
 
@@ -163,40 +299,60 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
     SceneManager.GLOBAL_SCENE.scene.traverse( child => {
+
+      // child.castShadow = true
+      // child.receiveShadow = true
+
+      if(child instanceof Mesh){
+        child.receiveShadow = true
+        child.castShadow = true
+        // child.material = new MeshPhongMaterial({
+        //   color:0xFF0000
+        // })
+      }
+
       // @ts-ignore
       if ( child.material ) child.material.metalness = 0;
 
       if (child.name ==='socle'){
 
+        child.castShadow = true
+        child.receiveShadow = true
         // let transparentSocle =  child.clone()
         // transparentSocle.name = "cloned_socle"
         // transparentSocle.position.y = -20
         // const material = new MeshBasicMaterial( { color: 0xffff00 } );
 
+        /** first version **/
         let socle = child.getObjectByName('socle_2')
-        console.log(socle)
         socle!.castShadow = true
+        socle!.receiveShadow = true
 
-        const geometry = new CylinderGeometry( 100, 100, 20, 32 );
-        const material = new MeshPhongMaterial({
-          specular: 0x000000,
-          shininess: 100
-        });
-        material.opacity = 0.5
-        const circle = new Mesh( geometry, material );
-        circle.position.set(420,-208,44)
-        circle.scale.set(3.5,3.5,3.5)
-        circle.receiveShadow = true
-        // circle.rotation.x = Math.PI / 2;
-
-        child.add(circle)
-
-        const color = 0xFFFFFF;
-        const intensity = 1;
-        const light = new DirectionalLight(color, intensity);
-        light.position.set(0, 10, 5);
-        light.castShadow = true;
-        child.add(light);
+        //
+        // let __socle = child.getObjectByName('socle_1')
+        // __socle!.castShadow = true
+        // __socle!.receiveShadow = true
+        //
+        // const geometry = new CylinderGeometry( 100, 100, 20, 32 );
+        // const material = new MeshPhongMaterial({
+        //   specular: 0x000000,
+        //   shininess: 100
+        // });
+        // material.opacity = 0.5
+        // const circle = new Mesh( geometry, material );
+        // circle.position.set(420,-208,44)
+        // circle.scale.set(3.5,3.5,3.5)
+        // circle.receiveShadow = true
+        // // circle.rotation.x = Math.PI / 2;
+        //
+        // child.add(circle)
+        //
+        // const color = 0xFFFFFF;
+        // const intensity = 1;
+        // const light = new DirectionalLight(color, intensity);
+        // light.position.set(0, 10, 5);
+        // light.castShadow = true;
+        // child.add(light);
 
         // child.add(light.target);
         // let material = new ShadowMaterial()
@@ -205,13 +361,13 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         // child.parent?.add(transparentSocle)
 
 
-        let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
-        sceneFolder.add(circle.position,'x',-500,500,0.01).listen()
-        sceneFolder.add(circle.position,'y',-500,500,0.01).listen()
-        sceneFolder.add(circle.position,'z',-500,500,0.01).listen()
-        sceneFolder.add(light.position,'x',-500,500,0.01).listen()
-        sceneFolder.add(light.position,'y',-500,500,0.01).listen()
-        sceneFolder.add(light.position,'z',-500,500,0.01).listen()
+        // let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
+        // sceneFolder.add(circle.position,'x',-500,500,0.01).listen()
+        // sceneFolder.add(circle.position,'y',-500,500,0.01).listen()
+        // sceneFolder.add(circle.position,'z',-500,500,0.01).listen()
+        // sceneFolder.add(light.position,'x',-500,500,0.01).listen()
+        // sceneFolder.add(light.position,'y',-500,500,0.01).listen()
+        // sceneFolder.add(light.position,'z',-500,500,0.01).listen()
 
 
 
