@@ -2,6 +2,8 @@
   <div>
     <!-- Loader -->
     <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
+
+    <button @click="toggleSound">toggle sound</button>
     <!-- Progress level -->
     <ProgressLevel
       class="progress-level"
@@ -72,7 +74,11 @@ export default class DefaultLayout extends Vue {
   public level: Level | null = null;
   public words: number = 0;
 
+  public sound: HTMLAudioElement | null = null
+
   public async mounted() {
+    this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
+    this.audio.play();
     await this.initApp();
     if (this.globalStore.isAppInit && this.authStore.isAuth)
       await this.initProgressLevel();
@@ -87,6 +93,13 @@ export default class DefaultLayout extends Vue {
     this.percent = ProgressPercentManager.percent;
     this.progress = userAchievedWords;
     this.words = words;
+  }
+
+  toggleSound() {
+    // if play alor spause
+    // if pause alors play
+
+    // this.globalStore.setUserAudioPreferences()
   }
 
   /**
