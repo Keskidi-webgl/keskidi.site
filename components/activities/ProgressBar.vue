@@ -3,7 +3,7 @@
   <div class="progress-bar-width" :style="{width: containerWidth()}"></div>
     <div class="progress-bar-info">
     <p> {{step.id}}/{{total}} </p>
-    <p> {{step.text}} </p>
+    <p :style="{color: textColor}"> {{ step.text }} </p>
     </div>
   </div>
 </template>
@@ -11,17 +11,18 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'nuxt-property-decorator'
-import { Step } from "~/core/types";
+import {Step} from "~/core/types";
 
 @Component
 export default class ProgressBar extends Vue {
-  @Prop({type: Step, required: true}) readonly step!: Step;
+  @Prop({type: Object, required: true}) readonly step!: Step;
   @Prop({type: Number, required: true}) readonly total!: number
+  @Prop({type: String, required: true}) readonly textColor!: string
 
   public mounted() {
   }
 
-    public containerWidth() {
+  public containerWidth() {
     return (this.step.id * 100) / this.total + "%";
   }
 
@@ -44,10 +45,11 @@ export default class ProgressBar extends Vue {
     }
 
     .progress-bar-info {
-        display: flex;
-        justify-content: space-between;
-        transform: translate(0px, -27px);
-        padding: 0 16px;
+      display: flex;
+      justify-content: space-between;
+      transform: translate(0px, -27px);
+      padding: 0 16px;
+      color: $dark-orange;
     }
 
 }

@@ -1,11 +1,7 @@
 <template>
-  <transition
-    v-on:enter="_onEnter"
-    v-on:leave="_onLeave">
-    <div v-if="activityStore.canDisplayOnboarding" class="activity-panel-onboarding">
-      ActivityOnboarding
-    </div>
-  </transition>
+  <div v-if="activityStore.canDisplayOnboarding" class="activity-panel-onboarding">
+    ActivityOnboarding
+  </div>
 
 </template>
 
@@ -18,14 +14,6 @@ import ActivityStore from "~/store/activity";
 export default class ActivityOnboarding extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
-
-  private _onEnter(el) {
-    console.log(el)
-  }
-
-  private _onLeave(el) {
-    console.log(el)
-  }
 }
 </script>
 
