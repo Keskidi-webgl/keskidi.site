@@ -3,6 +3,15 @@
     <div class="card">
       <button class="button" @click="increment()">new word</button>
 
+      <ProgressLevel
+        v-if="level"
+        :stroke="4"
+        :radius="170 / 2"
+        :total="9"
+        :progress="nb"
+        :level="level.name"
+      />
+
       <p>Ton nombre de mots : {{ nb }}</p>
       <p v-if="level">Ton niveau : {{ level.name }}</p>
       <p v-if="nextLevel">
@@ -27,6 +36,7 @@
 import { Component, Vue } from "nuxt-property-decorator";
 import { ProgressPercentManager } from "~/core/managers";
 import { Level } from "~/core/types";
+import ProgressLevel from "~/components/activities/ProgressLevel.vue";
 
 /**
  * @info
@@ -38,7 +48,11 @@ import { Level } from "~/core/types";
  * 2021-04-25 : deuxième version du ProgressPercentManager. Les données sont calculées en pourcentage.
  */
 
-@Component
+@Component({
+  components: {
+    ProgressLevel
+  }
+})
 export default class TestProgressPage extends Vue {
   // Default
   public onProgress: boolean = false;
@@ -67,8 +81,7 @@ export default class TestProgressPage extends Vue {
 
   increment() {
     if (this.nb < ProgressPercentManager.words) {
-      ProgressPercentManager.update(() => {
-      });
+      ProgressPercentManager.update(() => {});
       this.nb++;
       this.level = ProgressPercentManager.current;
       this.width = ProgressPercentManager.percent + "%";
@@ -103,11 +116,11 @@ export default class TestProgressPage extends Vue {
   padding-left: 7vw;
 
   .card {
-    width: 50%;
-    background: #f2f2f2;
+    width: 80%;
+    background: #ff7869;
     border-radius: 73px;
-    padding: 100px 50px;
-    height: 60vh;
+    // padding: 100px 50px;
+    height: 80vh;
 
     display: flex;
   }
