@@ -35,7 +35,6 @@ export default class ActivityPanel extends Vue {
   public goToHome() {
     SceneManager.GLOBAL_SCENE.resume()
     this.$router.push("/")
-    this.destroyActivities()
   }
 }
 </script>

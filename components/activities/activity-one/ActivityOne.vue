@@ -1,7 +1,7 @@
 <template>
   <ActivityElement class="activity-one">
     <!-- Aside -->
-    <template class="aside" v-slot:activity-element-aside>
+    <template v-slot:activity-element-aside>
       <div class="aside-container">
         <ProgressBar :step="progressBarStep" :total="3" text-color="white"></ProgressBar>
         <h1 class="main-font bold big-title">{{ activityStore.dataWord.name }}</h1>
@@ -50,12 +50,12 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 export default class ActivityOne extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
-  public progressBarStep: Step = {id: 1, text: 'Allez naravalo !'}
+  public progressBarStep: Step = {id: 1, text: 'Allez narvalo !'}
 
   public blockChoices = [
     {
       url: this.activityStore.dataWord!.activity_data!.object_one,
-      description: this.activityStore.dataWord.activity_data.object_one_description,
+      description: this.activityStore!.dataWord!.activity_data!.object_one_description,
       isSelected: false
     },
     {
@@ -142,7 +142,6 @@ export default class ActivityOne extends Vue {
     .btn-validate {
       margin: 70px auto 0 auto;
     }
-
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <ActivityElement class="activity-two" v-if="canDisplayActivity()">
+  <ActivityElement class="activity-two">
     <template v-slot:activity-element-aside>
       <h1></h1>
     </template>

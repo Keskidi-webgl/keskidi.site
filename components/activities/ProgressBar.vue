@@ -15,7 +15,7 @@ import {Step} from "~/core/types";
 
 @Component
 export default class ProgressBar extends Vue {
-  @Prop({type: Step, required: true}) readonly step!: Step;
+  @Prop({type: Object, required: true}) readonly step!: Step;
   @Prop({type: Number, required: true}) readonly total!: number
   @Prop({type: String, required: true}) readonly textColor!: string
 
