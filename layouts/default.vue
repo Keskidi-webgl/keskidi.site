@@ -3,7 +3,7 @@
     <Loader class="site-loader" :loading-data="loadingProgressions"></Loader>
     <ProgressLevel
       class="progress-level"
-      v-if="level && this.authStore.isAuth"
+      v-if="level"
       :stroke="4"
       :radius="170 / 2"
       :total="words"
@@ -69,7 +69,7 @@ export default class DefaultLayout extends Vue {
 
   async initProgressLevel() {
     const userAchievedWords = await this.globalStore.achievedWords.length;
-    const words = await this.globalStore.userWordData!.length;
+    const words = this.globalStore.userWordData ? await this.globalStore.userWordData!.length : 0;
     ProgressPercentManager.words = words;
     ProgressPercentManager.userAchievedWords = userAchievedWords;
     this.level = ProgressPercentManager.current;

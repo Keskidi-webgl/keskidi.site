@@ -59,7 +59,7 @@ export default class ProgressLevel extends Vue {
   public isReady: boolean = false;
   public progressSize: string = this.radius * 2 * 0.65 - this.stroke + "px";
   public bgSize: string = this.radius * 2 - this.stroke * 2 - 3 + "px";
-  public percent: number = (this.progress * 100) / this.total;
+  public percent: number = this.total == 0 ? 0 : (this.progress * 100) / this.total;
 
   public mounted() {
     this.init();
@@ -73,6 +73,8 @@ export default class ProgressLevel extends Vue {
   }
 
   strokeDashoffset() {
+    console.log(this.progress, this.total)
+    console.log(this.percent, this.circumference)
     console.log("strokeDashoffset", (this.percent / 100) * this.circumference);
     return this.circumference - (this.percent / 100) * this.circumference;
   }
