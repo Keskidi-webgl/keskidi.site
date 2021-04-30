@@ -29,6 +29,7 @@ import {GUI} from "dat.gui";
 import {Object3D} from "three/src/core/Object3D";
 import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 
 /**
  * @description
@@ -56,13 +57,13 @@ export default class SceneManager {
   public static ACTIVITY_3_RESULTS: SceneManager
 
 
-
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
   private _camera: Camera
   private _controls: OrbitControls | null
   private _presetCameraPositions: Array<CameraPosition>
   private _renderer: WebGLRenderer
+  private _composer: EffectComposer | null
   private _clock: Clock
   private _mousePositions: Vector2
   private _scene: Scene
@@ -103,6 +104,7 @@ export default class SceneManager {
     this._clock = options.clock || new Clock()
     this._mousePositions = new Vector2()
     this._renderer = options.renderer
+    this._composer = null
     this._scene = options.scene
     this._rayCaster = new Raycaster()
     this._isPlaying = false
@@ -394,6 +396,12 @@ export default class SceneManager {
     return this
   }
 
+  public enablePostProcessing(callback:(composer:EffectComposer,sceneContext:SceneManager)=>void){
+    this._composer = new EffectComposer(this._renderer)
+    callback(this._composer,this)
+    return this
+  }
+
 
   // - PRIVATE
   /**
@@ -465,7 +473,7 @@ export default class SceneManager {
 
     if (this._isRayCasting) {
       this._rayCaster.setFromCamera(this._mousePositions, this._camera)
-      const intersects = this._rayCaster.intersectObjects(this._scene.children,true)
+      const intersects = this._rayCaster.intersectObjects(this._scene.children, true)
       this._onRayCasterIntersectCallback(this, intersects)
     }
 
@@ -477,7 +485,13 @@ export default class SceneManager {
       mixer.instance.update(this._deltaTime)
     })
 
-    this._renderer.render(this._scene, this._camera)
+
+    if (this._composer){
+      this._composer.render(this._deltaTime)
+    } else {
+      this._renderer.render(this._scene, this._camera)
+    }
+
   }
 
   // - GETTERS
@@ -531,7 +545,7 @@ export default class SceneManager {
   }
 
   // setters
-  set currentIntersect(currentIntersect:any) {
+  set currentIntersect(currentIntersect: any) {
     this._currentIntersect = currentIntersect
   }
 

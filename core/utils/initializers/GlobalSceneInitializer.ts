@@ -30,18 +30,25 @@ import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass.js'
+// @ts-ignore
+// import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
 export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, globalSceneStore: GlobalSceneStore }, void> {
+  public composer!: EffectComposer
 
   init() {
     SceneManager.GLOBAL_SCENE = this._createInstance()
     this._createCanvasBackground()
     this._addGltfGlobalScene()
     this._createPlanesBackground()
+    // this._createPostProcessing()
     this._addGltfTom()
     this._registerPresetPositions()
     this._addLights(true)
@@ -70,6 +77,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     renderer.outputEncoding = sRGBEncoding
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
+    // renderer.shadowMapSo = true;
 
     return new SceneManager({
       canvas: this._data.canvas,
@@ -95,6 +103,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
           this._data.globalSceneStore.updatePositionsInteractivePoint(updateData)
         }
+
+        // this.composer.render(ctx.clock.getDelta());
+
       },
       onResume:(ctx)=> {
         this._addGltfTom()
@@ -111,7 +122,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    })//.enableStats().enableAxesHelpers(1000)
+    }).enablePostProcessing((composer,ctx) => {
+      this._createPostProcessing(composer,ctx)
+    })
+    //.enableStats().enableAxesHelpers(1000)
 
   }
 
@@ -156,6 +170,28 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     })
   }
 
+  private _createPostProcessing(composer:EffectComposer,ctx:SceneManager){
+    // composer = new EffectComposer(SceneManager.GLOBAL_SCENE.renderer)
+    // this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    composer.setSize(ctx.width, ctx.height)
+
+    const renderPass = new RenderPass(ctx.scene,ctx.camera)
+    composer.addPass(renderPass)
+
+    // --->  EFFETS
+    const dotScreenPass = new DotScreenPass()
+    composer.addPass(dotScreenPass)
+
+    // this.composer.addPass(new RenderPass(SceneManager.GLOBAL_SCENE.scene, SceneManager.GLOBAL_SCENE.camera));
+    // this.composer.addPass(new EffectPass(SceneManager.GLOBAL_SCENE.camera, new BloomEffect()));
+
+    // const composer = new EffectComposer(renderer);
+    // composer.addPass(new RenderPass(scene, camera));
+    // composer.addPass(new EffectPass(camera, new BloomEffect()));
+
+    // console.log(SceneManager.GLOBAL_SCENE.scene.getObjectByName('floor'),'flooor zebi')
+  }
+
 
   private _createPlanesBackground(){
 
@@ -169,6 +205,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     });
 
     let floor = new Mesh(planeGeometry,material)
+    floor.name = 'floor'
     floor.position.y = -1
     floor.receiveShadow = true
     globalScene.add(floor)
@@ -183,6 +220,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     light.decay = 1;
     light.distance = 2000;
     light.shadow.radius = 1
+    // light.shadow.bias = -0.01
     // light.power = 50
 
     light.shadow.mapSize.height = 2048;
@@ -208,7 +246,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
     sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
     sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
-    
+
     console.log(globalScene,'global scene')
 
   }
