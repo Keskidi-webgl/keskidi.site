@@ -62,20 +62,6 @@ export default class ObjectPage extends Vue {
     this._setDataWord()
   }
 
-  /**
-   * @deprecated
-   */
-  public displayActivityPanel() {
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
-    gsap.to('.activity-container', {
-      translateY: 0,
-      duration: 1,
-      onComplete: () => {
-        SceneManager.GLOBAL_SCENE.pause()
-      }
-    })
-  }
-
 
   public startActivity() {
     this.activityStore.displayActivityPanel()

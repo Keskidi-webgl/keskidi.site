@@ -1,16 +1,8 @@
 <template>
-  <transition
-    v-on:enter="_onEnter"
-    v-on:leave="_onLeave">
-
-    <div v-if="activityStore.canDisplayActivityPanel" class="activity-panel">
-      <aside>
-
-      </aside>
-      <main></main>
-    </div>
-
-  </transition>
+  <div class="activity-panel">
+    <ActivityOne v-if="activityDisplay.one()"/>
+    <ActivityTwo v-if="activityDisplay.two()"/>
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,51 +10,38 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import GlobalSceneStore from "~/store/globalScene"
 import {SceneManager} from "~/core/managers"
 import ActivityStore from "~/store/activity"
-import gsap from "gsap";
+import ActivityOne from "~/components/activities/activity-one/ActivityOne.vue";
+import {ACTIVITY_TYPE} from "~/core/enums";
+import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
 
 @Component({
+  components: {
+    ActivityOne,
+    ActivityTwo
+  }
 })
-
 export default class ActivityPanel extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
+  public activityDisplay = {
+    one: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_1,
+    two: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_2
+  }
 
-  /**
-   *
-   */
+  public mounted() {
+    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+  }
+
   public goToHome() {
     SceneManager.GLOBAL_SCENE.resume()
     this.$router.push("/")
     this.destroyActivities()
-  }
-
-  /**
-   * Callback when click to cancel cross
-   */
-  public destroyActivities() {
-
-  }
-
-  private _onEnter(el, done) {
-    gsap.to(el, {
-      duration: 1,
-      autoAlpha: 1,
-      onComplete: () => {
-        SceneManager.GLOBAL_SCENE.pause()
-        done()
-      }
-    })
-  }
-
-  private _onLeave(el) {
-    console.log(el)
   }
 }
 </script>
 
 <style scoped lang="scss">
 .activity-panel {
-  background-color: green;
-  opacity: 0;
+  //background-color: #FFF8EE;
 }
 </style>

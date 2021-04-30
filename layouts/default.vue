@@ -2,8 +2,9 @@
   <div>
     <!-- Loader -->
     <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
-
+    <!--
     <button @click="toggleSound">toggle sound</button>
+    -->
     <!-- Progress level -->
     <ProgressLevel
       class="progress-level"
@@ -26,7 +27,7 @@
     <!-- Activity onboarding -->
     <ActivityOnboarding class="activity-onboarding overlay-element"/>
     <!-- Activity panel -->
-    <ActivityPanel class="activity-panel overlay-element"/>
+    <ActivityPanel v-if="activityStore.canDisplayActivityPanel" class="activity-panel overlay-element"/>
   </div>
 </template>
 
@@ -49,6 +50,7 @@ import { ProgressPercentManager } from "~/core/managers";
 import { Level } from "~/core/types";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
+import ActivityStore from "~/store/activity";
 
 @Component({
   components: {
@@ -62,6 +64,7 @@ import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 export default class DefaultLayout extends Vue {
   public globalStore = getModule(GlobalStore, this.$store);
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
+  public activityStore = getModule(ActivityStore, this.$store);
   public isLoaderVisible: boolean = true;
   public loadingProgressions: string = "";
 
@@ -77,8 +80,8 @@ export default class DefaultLayout extends Vue {
   public sound: HTMLAudioElement | null = null
 
   public async mounted() {
-    this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
-    this.audio.play();
+    //this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
+    //this.audio.play();
     await this.initApp();
     if (this.globalStore.isAppInit && this.authStore.isAuth)
       await this.initProgressLevel();
