@@ -1,6 +1,14 @@
 import { AssetsManager, SceneManager } from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import { HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import {
+  HemisphereLight,
+  HemisphereLightHelper,
+  PCFSoftShadowMap,
+  PerspectiveCamera,
+  Scene,
+  sRGBEncoding,
+  WebGLRenderer
+} from "three";
 import { Initializers } from "~/core/defs";
 import { GLTF_ASSET } from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
@@ -17,7 +25,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addGltfGlobalScene()
     this._addGltfTom()
     this._registerPresetPositions()
-    this._addLights(true)
+    //this._addLights(true)
     this._configGUI()
 
     SceneManager.GLOBAL_SCENE.start()
@@ -39,6 +47,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     // Create renderer
     const renderer = this._createRender()
+    renderer.outputEncoding = sRGBEncoding
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
 
     return new SceneManager({
       canvas: this._data.canvas,

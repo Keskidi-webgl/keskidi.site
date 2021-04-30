@@ -1,7 +1,13 @@
 <template>
-  <div class="activity-panel">
+  <transition
+    v-on:enter="_onEnter"
+    v-on:leave="_onLeave">
 
-  </div>
+    <div v-if="activityStore.canDisplayActivityPanel" class="activity-panel">
+      ActivityPanel
+    </div>
+
+  </transition>
 </template>
 
 <script lang="ts">
@@ -31,6 +37,14 @@ export default class ActivityPanel extends Vue {
    */
   public destroyActivities() {
 
+  }
+
+  private _onEnter(el) {
+    console.log(el)
+  }
+
+  private _onLeave(el) {
+    console.log(el)
   }
 }
 </script>
