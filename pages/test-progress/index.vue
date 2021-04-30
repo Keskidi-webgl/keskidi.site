@@ -27,6 +27,7 @@
         {{ currentStep.id }} / {{ totalSteps }} || {{ currentStep.text }} ||
         {{ progress }}
       </p>
+      <ProgressBar v-if="currentStep" :step="currentStep" :total="totalSteps" />
     </div>
   </div>
 </template>
@@ -38,18 +39,13 @@ import {
   ProgressPercentManager
 } from "~/core/managers";
 import { Level, Step } from "~/core/types";
+import ProgressBar from "~/components/activities/ProgressBar.vue";
 
-/**
- * @info
- * Page de debug de la progression par palier
- *
- * 2021-04-24 : première version du ProgressManager. Les données sont en dur et le calcul se fait en nombre de mots.
- * => piste d'amélioration : faire la calcul en pourcentage (cf ProgressManager.ts)
- *
- * 2021-04-25 : deuxième version du ProgressPercentManager. Les données sont calculées en pourcentage.
- */
-
-@Component
+@Component({
+  components: {
+    ProgressBar
+  }
+})
 export default class TestProgressPage extends Vue {
   // Default
   public onProgress: boolean = false;
@@ -135,12 +131,11 @@ export default class TestProgressPage extends Vue {
   padding-left: 7vw;
 
   .card {
-    width: 50%;
-    background: #f2f2f2;
+    width: 70%;
     border-radius: 73px;
     padding: 100px 50px;
-    height: 60vh;
-
+    height: 70vh;
+  background: tomato;
     display: flex;
   }
   .button {
