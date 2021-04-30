@@ -28,7 +28,7 @@ export default class GlobalStore extends VuexModule {
 
   // methode to get all isachieved return nb en prenant toujouts 1 seul paramètre ou un objet
   get achievedWords() {
-    return this._userWordData!.filter(word => word.is_achieved == true);
+    return this._userWordData ? this._userWordData.filter(word => word.is_achieved == true) : [];
   }
 
   get isAppInit() {
