@@ -36,6 +36,13 @@ export default class ActivityElement extends Vue {
     background: linear-gradient(107.28deg, #FF6644 29.48%, #FF9D6F 100%);
     padding: 80px 60px 0 60px;
     box-sizing: border-box;
+    position: relative;
+
+    canvas {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
   }
 
   &-content {

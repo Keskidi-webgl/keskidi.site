@@ -1,11 +1,11 @@
 <template>
   <ActivityElement class="activity-one">
     <!-- Aside -->
-    <template v-slot:activity-element-aside>
+    <template ref="aside" v-slot:activity-element-aside>
       <div class="aside-container">
         <ProgressBar :step="progressBarStep" :total="3" text-color="white"></ProgressBar>
         <h1 class="main-font bold big-title">{{ activityStore.dataWord.name }}</h1>
-        <canvas class="tom-canvas" ref="tom-canvas"></canvas>
+        <canvas class="tom-canvas" ref="tom"></canvas>
       </div>
     </template>
     <!-- Content -->
@@ -39,6 +39,8 @@ import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
 import {Step} from "~/core/types";
 import CustomButton from "~/components/buttons/CustomButton.vue";
+import {TomSceneInitializer} from "~/core/utils/initializers/activities";
+import {SceneManager} from "~/core/managers";
 
 @Component({
   components: {
@@ -66,7 +68,18 @@ export default class ActivityOne extends Vue {
   ];
 
   public async mounted() {
-    console.log('mounted activity one')
+    this._createCanvas()
+  }
+
+  private _createCanvas() {
+    (<HTMLCanvasElement>this.$refs.tom).height = 450;
+    (<HTMLCanvasElement>this.$refs.tom).width = (<HTMLElement>document.querySelector('aside.activity-element-aside'))!.clientWidth;
+
+    new TomSceneInitializer({
+      canvas: this.$refs.tom as HTMLCanvasElement
+    }).init()
+
+    SceneManager.ACTIVITY_1_TOM.enableAxesHelpers().start()
   }
 
 }
