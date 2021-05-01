@@ -24,7 +24,7 @@ import {
   SpotLight,
   FrontSide,
   Color,
-  BoxGeometry, MeshLambertMaterial, sRGBEncoding, PCFSoftShadowMap, SpotLightHelper, BackSide,
+  BoxGeometry, MeshLambertMaterial, sRGBEncoding, PCFSoftShadowMap, SpotLightHelper, BackSide, ShaderMaterial, Vector2,
 } from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
@@ -33,6 +33,14 @@ import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass.js'
+import { HorizontalBlurShader} from "three/examples/jsm/shaders/HorizontalBlurShader";
+import { VerticalBlurShader} from "three/examples/jsm/shaders/VerticalBlurShader";
+import {SSAARenderPass} from "three/examples/jsm/postprocessing/SSAARenderPass";
+import {SAOPass} from "three/examples/jsm/postprocessing/SAOPass";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
+import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
+import {UnrealBloomPass} from "three/examples/jsm/postprocessing/UnrealBloomPass";
+
 // @ts-ignore
 // import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
@@ -42,6 +50,19 @@ import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass.j
  */
 export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, globalSceneStore: GlobalSceneStore }, void> {
   public composer!: EffectComposer
+  public floor!: Mesh
+  public state = {
+    shadow: {
+      blur: 3.5,
+      darkness: 1,
+      opacity: 1,
+    },
+    plane: {
+      color: '#ffffff',
+      opacity: 1,
+    },
+    showWireframe: false,
+  };
 
   init() {
     SceneManager.GLOBAL_SCENE = this._createInstance()
@@ -77,6 +98,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     renderer.outputEncoding = sRGBEncoding
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
+
+    // camera.layers.enable(0)
+    // renderer.toneMappingExposure = 1
+    // renderer.toneMapping.
     // renderer.shadowMapSo = true;
 
     return new SceneManager({
@@ -122,9 +147,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).enablePostProcessing((composer,ctx) => {
-      this._createPostProcessing(composer,ctx)
     })
+      .enablePostProcessing((composer,ctx) => {
+        this._createPostProcessing(composer,ctx)
+      })
     //.enableStats().enableAxesHelpers(1000)
 
   }
@@ -173,23 +199,45 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _createPostProcessing(composer:EffectComposer,ctx:SceneManager){
     // composer = new EffectComposer(SceneManager.GLOBAL_SCENE.renderer)
     // this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    composer.setSize(ctx.width, ctx.height)
+    // composer.setSize(ctx.width, ctx.height)
 
     const renderPass = new RenderPass(ctx.scene,ctx.camera)
+
+    let effectFXAA = new ShaderPass( FXAAShader)
+    effectFXAA.uniforms.resolution.value.set(1 / window.innerWidth, 1 / window.innerHeight )
+
+    let bloomPass = new UnrealBloomPass(new Vector2(window.innerWidth,window.innerHeight),1.5,0.4,0.85)
+    bloomPass.threshold = 0.05
+    bloomPass.strength = 1.2
+    bloomPass.radius = 0.55
+    bloomPass.renderToScreen = true
+    // // composer
+    composer.setSize(window.innerWidth, window.innerHeight)
+
+
     composer.addPass(renderPass)
+    composer.addPass(effectFXAA)
+    composer.addPass(bloomPass)
+
+
+    this.composer = composer
+
+    // ctx.renderer.toneMappingExposure = Math.pow(0.9,4.0)
 
     // --->  EFFETS
-    const dotScreenPass = new DotScreenPass()
-    composer.addPass(dotScreenPass)
+    // const dotScreenPass = new DotScreenPass()
+    // // const eeee = new BloomPass()
+    // composer.addPass(dotScreenPass)
 
-    // this.composer.addPass(new RenderPass(SceneManager.GLOBAL_SCENE.scene, SceneManager.GLOBAL_SCENE.camera));
-    // this.composer.addPass(new EffectPass(SceneManager.GLOBAL_SCENE.camera, new BloomEffect()));
+    // let ssaaRenderPass
 
-    // const composer = new EffectComposer(renderer);
-    // composer.addPass(new RenderPass(scene, camera));
-    // composer.addPass(new EffectPass(camera, new BloomEffect()));
+    // composer.renderToScreen = true
 
-    // console.log(SceneManager.GLOBAL_SCENE.scene.getObjectByName('floor'),'flooor zebi')
+
+
+    // SHADOW FOLDER
+
+
   }
 
 
@@ -197,18 +245,31 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     let globalScene = SceneManager.GLOBAL_SCENE.scene
 
-    const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
-    var material = new ShadowMaterial({
-      depthWrite: false,
-      side: BackSide,
-      opacity: 0.1,
-    });
+    let shadowFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("shadow")
+    shadowFolder.add( this.state.shadow, 'blur', 0, 15, 0.1 ).listen()
+    shadowFolder.add( this.state.shadow, 'darkness', 1, 5, 0.1 ).listen()
 
-    let floor = new Mesh(planeGeometry,material)
-    floor.name = 'floor'
-    floor.position.y = -1
-    floor.receiveShadow = true
-    globalScene.add(floor)
+    const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
+    var material = new MeshPhongMaterial({
+      // depthWrite: false,
+      color: 0xFF0F00,
+      side: DoubleSide,
+      // opacity: 0.1,
+    });
+    // var material = new ShadowMaterial({
+    //   // depthWrite: false,
+    //   side: BackSide,
+    //   opacity: 0.1,
+    // });
+
+    this.floor = new Mesh(planeGeometry,material)
+    this.floor.name = 'floor'
+    this.floor.position.y = -1
+    this.floor.receiveShadow = true
+    this.floor.layers.set(1)
+
+    // this.floor.layers.mask = 2
+    globalScene.add(this.floor)
 
     const light = new SpotLight( 0xD3D3D3);
     const helper = new SpotLightHelper( light );
@@ -219,7 +280,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     light.penumbra = 0.05;
     light.decay = 1;
     light.distance = 2000;
-    light.shadow.radius = 1
+    light.shadow.radius = 8
+    // light.shadow.bias = 0.0001;
     // light.shadow.bias = -0.01
     // light.power = 50
 
@@ -238,9 +300,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
 
     let floorFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Floor")
-    floorFolder.add(floor.position,'x',-1000,1000,0.01).listen()
-    floorFolder.add(floor.position,'y',-1000,1000,0.01).listen()
-    floorFolder.add(floor.position,'z',-1000,1000,0.01).listen()
+    floorFolder.add(this.floor.position,'x',-1000,1000,0.01).listen()
+    floorFolder.add(this.floor.position,'y',-1000,1000,0.01).listen()
+    floorFolder.add(this.floor.position,'z',-1000,1000,0.01).listen()
 
     let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Light")
     sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
@@ -283,6 +345,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
     SceneManager.GLOBAL_SCENE.scene.traverse( child => {
 
+      child.layers.enable(0)
       // child.castShadow = true
       // child.receiveShadow = true
 

@@ -487,7 +487,21 @@ export default class SceneManager {
 
 
     if (this._composer){
+
+
+      this._renderer.autoClear = false
+      this._renderer.clear()
+
+      this._camera.layers.enable(1)
+      this._camera.layers.set(1)
+
       this._composer.render(this._deltaTime)
+
+      // this._renderer.clearDepth()
+      this._camera.layers.enable(0)
+      // this._camera.layers.set(0)
+      // this._renderer.render(this._scene, this._camera)
+
     } else {
       this._renderer.render(this._scene, this._camera)
     }
