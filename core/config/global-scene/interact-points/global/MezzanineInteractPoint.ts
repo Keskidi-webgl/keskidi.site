@@ -1,4 +1,4 @@
-import {SceneManager} from "~/core/managers";
+import GlobalScene from "~/core/scene/GlobalScene";
 import {Vector3} from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
@@ -10,7 +10,7 @@ const MezzanineInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3()
-    SceneManager.GLOBAL_SCENE.scene.getObjectByName('mezzanine')!.getWorldPosition(position)
+    GlobalScene.context.scene.getObjectByName('mezzanine')!.getWorldPosition(position)
 
     return position
   },

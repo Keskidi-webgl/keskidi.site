@@ -100,6 +100,7 @@ import { AuthCredential, FunFactElement } from "~/core/types";
 import AuthStore from "~/store/auth";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
+import GlobalScene from "~/core/scene/GlobalScene";
 
 @Component({
   components: {
@@ -125,8 +126,8 @@ export default class AuthPage extends Vue {
   public displayFunfact: boolean = this.authStore.isAuth;
 
   mounted() {
-    SceneManager.GLOBAL_SCENE.disableParallax();
-    SceneManager.GLOBAL_SCENE.goToPresetPosition("tom", 2, () => {
+    GlobalScene.context.disableParallax();
+    GlobalScene.context.goToPresetPosition("tom", 2, () => {
       this.isReady = true;
     });
 
@@ -145,7 +146,7 @@ export default class AuthPage extends Vue {
   }
 
   beforeDestroy() {
-    SceneManager.GLOBAL_SCENE.enableParallax();
+    GlobalScene.context.enableParallax();
   }
 
   back() {

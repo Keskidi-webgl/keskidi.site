@@ -1,6 +1,6 @@
-import { Initializers } from "~/core/defs";
-import { AssetsManager } from "~/core/managers";
-import { GLTF_ASSET } from "~/core/enums";
+import {Initializers} from "~/core/defs";
+import {AssetsManager} from "~/core/managers";
+import {GLTF_ASSET} from "~/core/enums";
 
 /**
  * @description
@@ -51,6 +51,12 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
         GLTF_ASSET.TOM,
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_idle.fbx",
         "perso_idle.fbx"
-      );
+      )
+
+      .registerFbx(
+        GLTF_ASSET.TOM_MUSCLE,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_good_muscle.fbx",
+        "perso_good_muscle.fbx"
+      )
   }
 }

@@ -1,5 +1,4 @@
 import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
-import {SceneManager} from "~/core/managers";
 
 export default class SceneHelper {
 

@@ -8,11 +8,11 @@
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import GlobalSceneStore from "~/store/globalScene"
-import {SceneManager} from "~/core/managers"
 import ActivityStore from "~/store/activity"
 import ActivityOne from "~/components/activities/activity-one/ActivityOne.vue";
 import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
+import GlobalScene from "~/core/scene/GlobalScene";
 
 @Component({
   components: {
@@ -33,7 +33,7 @@ export default class ActivityPanel extends Vue {
   }
 
   public goToHome() {
-    SceneManager.GLOBAL_SCENE.resume()
+    GlobalScene.context.resume()
     this.$router.push("/")
   }
 }

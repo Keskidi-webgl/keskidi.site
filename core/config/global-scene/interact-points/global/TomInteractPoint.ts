@@ -1,4 +1,4 @@
-import {SceneManager} from "~/core/managers";
+import GlobalScene from "~/core/scene/GlobalScene";
 import {Vector3} from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
@@ -9,7 +9,7 @@ const TomInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3()
-    SceneManager.GLOBAL_SCENE.scene.getObjectByName('tom')!.getWorldPosition(position)
+    GlobalScene.context.scene.getObjectByName('tom')!.getWorldPosition(position)
     position.z = position.z * 0.95
     position.y = (1 + position.y) * 3
     return position
