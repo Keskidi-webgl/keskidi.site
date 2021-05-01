@@ -101,6 +101,7 @@ import AuthStore from "~/store/auth";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
+import TomSceneElement from "~/core/scene/TomSceneElement";
 
 @Component({
   components: {
@@ -127,7 +128,7 @@ export default class AuthPage extends Vue {
 
   mounted() {
     GlobalScene.context.disableParallax();
-    GlobalScene.playTomMuscle()
+    TomSceneElement.playMuscleAnimation(GlobalScene.context)
     GlobalScene.context.goToPresetPosition("tom", 2, () => {
       this.isReady = true;
     });
@@ -148,7 +149,7 @@ export default class AuthPage extends Vue {
 
   beforeDestroy() {
     GlobalScene.context.enableParallax();
-    GlobalScene.playTomIdle()
+    TomSceneElement.playIdleAnimation(GlobalScene.context)
   }
 
   back() {

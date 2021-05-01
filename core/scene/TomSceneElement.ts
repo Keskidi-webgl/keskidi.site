@@ -1,5 +1,7 @@
 import {Group} from "three";
 import {TomAnimation} from "~/core/types";
+import {SceneManager} from "~/core/managers";
+import {GLTF_ASSET} from "~/core/enums";
 
 class TomSceneElement {
   private _sceneElement: Group | null
@@ -22,6 +24,13 @@ class TomSceneElement {
     return this
   }
 
+  public setupForActivityScene() {
+    this._checkIfInit()
+    this._sceneElement!.scale.set(0.2, 0.2, 0.2)
+    this._sceneElement!.position.set(-3, -20, 0)
+    this._sceneElement!.rotation.y = 0
+  }
+
   public setupForGlobalScene() {
     this._checkIfInit()
 
@@ -30,6 +39,26 @@ class TomSceneElement {
     this._sceneElement!.rotation.y = -45
 
     return this
+  }
+
+  public playIdleAnimation(sceneContext: SceneManager) {
+    this._checkIfInit()
+    sceneContext.playAnimation(this._animations!.idle, GLTF_ASSET.TOM)
+  }
+
+  public playMuscleAnimation(sceneContext: SceneManager) {
+    this._checkIfInit()
+    sceneContext.playAnimation(this._animations!.muscle, GLTF_ASSET.TOM)
+  }
+
+  public playHeadAnimation(sceneContext: SceneManager) {
+    this._checkIfInit()
+    sceneContext.playAnimation(this._animations!.head, GLTF_ASSET.TOM)
+  }
+
+  public playPunchAnimation(sceneContext: SceneManager) {
+    this._checkIfInit()
+    sceneContext.playAnimation(this._animations!.punch, GLTF_ASSET.TOM)
   }
 
   private _checkIfInit() {

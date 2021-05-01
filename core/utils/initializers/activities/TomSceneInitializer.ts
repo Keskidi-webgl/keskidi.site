@@ -1,9 +1,9 @@
 import {Initializers} from "~/core/defs";
 import SceneHelper from "~/core/utils/sceneHelper";
-import {AssetsManager, SceneManager} from "~/core/managers";
-import {GLTF_ASSET} from "~/core/enums";
+import {SceneManager} from "~/core/managers";
+import TomSceneElement from "~/core/scene/TomSceneElement";
 
-export default class TomSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement }, void>{
+export default class TomSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement }, void> {
   init(): void {
     SceneManager.ACTIVITY_1_TOM = this._createTomScene()
   }
@@ -17,21 +17,17 @@ export default class TomSceneInitializer extends Initializers<{ canvas: HTMLCanv
       scene,
       renderer,
       defaultRation: 2,
-      activateOrbitControl: true,
-      onRender: (ctx) => {
-      }
+      activateOrbitControl: false,
     })
 
-    const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
-    tomGltf.position.set(0, 0, 0)
-    camera.position.set(0, 0, 50)
+    TomSceneElement.setupForActivityScene()
+    camera.position.set(0, 10, 25)
 
     const light = SceneHelper.createFreshHemisphereLight()
     light.position.z = 10
     sceneContext.scene.add(light)
 
-    sceneContext.scene.add(tomGltf)
-
+    sceneContext.scene.add(TomSceneElement.sceneElement)
     return sceneContext
 
 

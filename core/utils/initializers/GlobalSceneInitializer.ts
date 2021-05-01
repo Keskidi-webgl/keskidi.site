@@ -27,7 +27,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   init() {
     GlobalScene.setSceneContext(this._createSceneContext())
-
     this._addGltfGlobalScene()
     this._addGltfTom()
     this._registerPresetPositions()
@@ -166,7 +165,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.scene.add(TomSceneElement.sceneElement)
     TomSceneElement.setupForGlobalScene()
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.TOM, TomSceneElement.sceneElement)
-    GlobalScene.playTomIdle()
+
+    TomSceneElement.playIdleAnimation(GlobalScene.context)
   }
 
   /**

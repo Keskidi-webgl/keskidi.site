@@ -18,7 +18,7 @@
             class="bold">{{ activityStore.dataWord.name }}</span> ?</p>
 
           <div class="choices-container">
-            <div v-for="choice in blockChoices" class="choice-block">
+            <div @click="onClickChoice" v-for="choice in blockChoices" class="choice-block">
               <img :src="choice.url" alt="">
               <span>{{ choice.description }}</span>
             </div>
@@ -41,6 +41,8 @@ import {Step} from "~/core/types";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {TomSceneInitializer} from "~/core/utils/initializers/activities";
 import {SceneManager} from "~/core/managers";
+import GlobalScene from "~/core/scene/GlobalScene";
+import TomSceneElement from "~/core/scene/TomSceneElement";
 
 @Component({
   components: {
@@ -71,15 +73,18 @@ export default class ActivityOne extends Vue {
     this._createCanvas()
   }
 
+  public onClickChoice() {
+  }
+
   private _createCanvas() {
-    (<HTMLCanvasElement>this.$refs.tom).height = 450;
+    (<HTMLCanvasElement>this.$refs.tom).height = 500;
     (<HTMLCanvasElement>this.$refs.tom).width = (<HTMLElement>document.querySelector('aside.activity-element-aside'))!.clientWidth;
 
     new TomSceneInitializer({
       canvas: this.$refs.tom as HTMLCanvasElement
     }).init()
-
-    SceneManager.ACTIVITY_1_TOM.enableAxesHelpers().start()
+    TomSceneElement.playIdleAnimation(GlobalScene.context)
+    SceneManager.ACTIVITY_1_TOM.start()
   }
 
 }

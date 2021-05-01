@@ -66,5 +66,8 @@ export type ActiveAnimation = {
 
 export type TomAnimation = {
   idle: AnimationClip,
-  muscle: AnimationClip
+  muscle: AnimationClip,
+  head: AnimationClip,
+  down: AnimationClip,
+  punch: AnimationClip,
 }

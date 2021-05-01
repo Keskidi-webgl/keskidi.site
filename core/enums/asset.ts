@@ -22,7 +22,10 @@ export enum GLTF_ASSET {
   ACTIVITY_OBJECT_BEER= 'beerObject',
 
   TOM = 'tom',
-  TOM_MUSCLE = 'tomMuscle'
+  TOM_MUSCLE = 'tomMuscle',
+  TOM_DOWN = 'tomBadDown',
+  TOM_HEAD = 'tomHead',
+  TOM_PUNCH = 'tomPunch',
 }
 
 /**
