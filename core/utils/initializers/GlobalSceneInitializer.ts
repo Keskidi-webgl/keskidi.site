@@ -7,6 +7,7 @@ import {
   MeshBasicMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
+  PointLight, PointLightHelper,
   Scene,
   sRGBEncoding,
   WebGLRenderer
@@ -15,6 +16,7 @@ import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
+import {Object3D} from "three/src/core/Object3D";
 
 /**
  * @description
@@ -194,19 +196,39 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
   private _optimizeScene() {
-    const blacklist = ['chat', 'tom']
+    const objectToExclude: Array<Object3D> = [
+      SceneManager.GLOBAL_SCENE.scene.getObjectByName('tom')!,
+      SceneManager.GLOBAL_SCENE.scene.getObjectByName('chat')!
+    ]
+
+    const namesToExclude: string[] = []
+
+    objectToExclude.forEach(obj => {
+      namesToExclude.push(obj.name)
+      namesToExclude.push(...this._getChildrenNames(obj))
+    })
+
     SceneManager.GLOBAL_SCENE.scene.traverse(child => {
-      if (child instanceof Mesh && !blacklist.includes(child.name) && child.parent) {
-        try {
-          const prevMaterial = child.material
-          const newMaterial = new MeshBasicMaterial()
-          newMaterial.copy(prevMaterial)
+
+      if (child instanceof Mesh && !namesToExclude.includes(child.name)) {
+        const prevMaterial = child.material
+        const newMaterial = new MeshBasicMaterial()
+        newMaterial.copy((prevMaterial as MeshBasicMaterial))
+        if (prevMaterial.map === null && prevMaterial.emissiveMap) {
           newMaterial.map = prevMaterial.emissiveMap
-          newMaterial.map = prevMaterial.emissiveMap
-          child.material = newMaterial
-        } catch (e) {
+
         }
+        child.material = newMaterial
+
       }
     })
+  }
+
+  private _getChildrenNames(object3D: Object3D): string[] {
+    const children: string[] = []
+    object3D.traverse((child) => {
+      children.push(child.name)
+    })
+    return children
   }
 }
