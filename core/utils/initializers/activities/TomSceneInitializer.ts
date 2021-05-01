@@ -22,7 +22,7 @@ export default class TomSceneInitializer extends Initializers<{ canvas: HTMLCanv
       }
     })
 
-    const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data.clone()
+    const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
     tomGltf.position.set(0, 0, 0)
     camera.position.set(0, 0, 50)
 

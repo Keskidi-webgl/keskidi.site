@@ -1,8 +1,9 @@
 import {SceneManager} from "~/core/managers";
-import TomHandler from "~/core/defs/TomHandler";
+import TomSceneElement from "~/core/scene/TomSceneElement";
+import {GLTF_ASSET} from "~/core/enums";
 
-class GlobalScene implements TomHandler{
-  private _context: SceneManager| null
+class GlobalScene {
+  private _context: SceneManager | null
 
   constructor() {
     this._context = null
@@ -10,6 +11,20 @@ class GlobalScene implements TomHandler{
 
   public setSceneContext(sceneContext: SceneManager) {
     this._context = sceneContext
+  }
+
+  public playTomIdle() {
+    if (!this._context) {
+      throw new Error(`You need to set a sceneContext for GlobalScene`)
+    }
+    this._context.playAnimation(TomSceneElement.animations.idle, GLTF_ASSET.TOM)
+  }
+
+  public playTomMuscle() {
+    if (!this._context) {
+      throw new Error(`You need to set a sceneContext for GlobalScene`)
+    }
+    this._context.playAnimation(TomSceneElement.animations.muscle, GLTF_ASSET.TOM)
   }
 
   get context() {

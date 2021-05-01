@@ -17,6 +17,7 @@ import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 import {Object3D} from "three/src/core/Object3D";
 import GlobalScene from "~/core/scene/GlobalScene";
+import TomSceneElement from "~/core/scene/TomSceneElement";
 
 /**
  * @description
@@ -151,7 +152,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
     globalSceneGltf.scene.position.set(0, 0, 0)
-    console.log(globalSceneGltf)
 
 
     GlobalScene.context.scene.add(globalSceneGltf.scene)
@@ -163,16 +163,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
   private _addGltfTom() {
-    const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
-    const tomMuscleAnimation = AssetsManager.getFbx(GLTF_ASSET.TOM_MUSCLE).data
-
-    tomGltf.scale.set(0.8, 0.8, 0.8)
-    tomGltf.position.set(50, 40, 500)
-    tomGltf.rotation.y = -45
-    GlobalScene.context.scene.add(tomGltf)
-
-    GlobalScene.context.createAnimationMixer(GLTF_ASSET.TOM, tomGltf)
-    GlobalScene.context.playAnimation(tomMuscleAnimation.animations[0], GLTF_ASSET.TOM)
+    GlobalScene.context.scene.add(TomSceneElement.sceneElement)
+    TomSceneElement.setupForGlobalScene()
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.TOM, TomSceneElement.sceneElement)
+    GlobalScene.playTomIdle()
   }
 
   /**

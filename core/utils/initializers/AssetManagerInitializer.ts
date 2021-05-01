@@ -52,7 +52,6 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_idle.fbx",
         "perso_idle.fbx"
       )
-
       .registerFbx(
         GLTF_ASSET.TOM_MUSCLE,
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_good_muscle.fbx",

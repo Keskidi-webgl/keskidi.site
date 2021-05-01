@@ -148,7 +148,7 @@ class AssetsManager {
    */
   public getFbx(name: string): FbxAsset {
     const fbx = this._fbxAssets.find(object => object.source.name === name) || null
-    if (!fbx) throw new Error(`Video asset ${name} is not founded`)
+    if (!fbx) throw new Error(`Fbx asset ${name} is not founded`)
 
     return fbx
   }
