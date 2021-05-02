@@ -1,6 +1,9 @@
 <template>
   <div class="activity-panel">
+    <!-- Activity one -->
     <ActivityOne v-if="activityDisplay.one()"/>
+
+    <!-- Activity two -->
     <ActivityTwo v-if="activityDisplay.two()"/>
   </div>
 </template>
@@ -13,11 +16,13 @@ import ActivityOne from "~/components/activities/activity-one/ActivityOne.vue";
 import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
+import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
 
 @Component({
   components: {
     ActivityOne,
-    ActivityTwo
+    ActivityTwo,
+    ActivityOneResult
   }
 })
 export default class ActivityPanel extends Vue {
