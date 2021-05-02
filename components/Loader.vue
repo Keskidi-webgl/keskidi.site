@@ -68,10 +68,12 @@ export default class Loader extends Vue {
         if (this.$route.path === '/') {
           GlobalScene.context.goToPresetPosition('home', 2, () => {
             this.isActive = false
+            this.globalSceneStore.setCanDisplayGlobalUI(true)
           })
         } else {
           this.isActive = false
           this.globalSceneStore.setIsHomePageReady(true)
+          this.globalSceneStore.setCanDisplayGlobalUI(true)
         }
       }
     })

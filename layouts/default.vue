@@ -12,7 +12,7 @@
     <!-- Progress level -->
     <ProgressLevel
       class="progress-level"
-      v-if="level"
+      v-if="level && globalSceneStore.canDisplayGlobalUI"
       :stroke="4"
       :radius="170 / 2"
       :total="words"
@@ -20,13 +20,13 @@
       :level="level.name"
     />
     <!-- Logo -->
-    <LogoMedia class="logo" />
+    <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
     <!-- Global scene -->
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
     <!-- Page Slot -->
     <Nuxt v-if="this.globalStore.isAppInit" />
     <!-- Navigation panel -->
-    <SceneNavigationPanel v-if="this.globalSceneStore.activeRoom || this.globalSceneStore.activeObject"/>
+    <SceneNavigationPanel v-if="(this.globalSceneStore.activeRoom || this.globalSceneStore.activeObject) && globalSceneStore.canDisplayGlobalUI"/>
 
     <!-- Activity onboarding -->
     <ActivityOnboarding class="activity-onboarding overlay-element"/>

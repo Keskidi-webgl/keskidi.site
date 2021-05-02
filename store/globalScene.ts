@@ -35,6 +35,8 @@ export default class GlobalSceneStore extends VuexModule {
 
   private _isHomePageReady: boolean = false
 
+  private _canDisplayGlobalUI: boolean = false
+
   @Mutation
   public setActiveRoom(roomSlug: ROOM_SLUG | null) {
     this._activeRoom = roomSlug ? GlobalSceneHelper.getRoomBySlug(roomSlug) : roomSlug
@@ -89,6 +91,13 @@ export default class GlobalSceneStore extends VuexModule {
     return this
   }
 
+  @Mutation
+  public setCanDisplayGlobalUI(canDisplay: boolean) {
+    this._canDisplayGlobalUI = canDisplay
+
+    return this
+  }
+
   get activeRoom() {
     return this._activeRoom
   }
@@ -107,5 +116,9 @@ export default class GlobalSceneStore extends VuexModule {
 
   get isHomePageReady() {
     return this._isHomePageReady
+  }
+
+  get canDisplayGlobalUI() {
+    return this._canDisplayGlobalUI
   }
 }
