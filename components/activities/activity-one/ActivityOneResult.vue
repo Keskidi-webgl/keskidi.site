@@ -1,7 +1,9 @@
 <template>
   <div class="activity-one-result">
     <img :src="resultData.goodObjectUrl" alt="">
-    <CustomButton arrow-color="#FF6644" color="white" text="Passer à l'activité suivante"></CustomButton>
+    <!-- @TODO Remplacer par l'animation de fond -->
+    <span class="big-title">{{resultData.answerWord.toUpperCase()}}</span>
+    <CustomButton @click.native="nextActivity" arrow-color="#FF6644" color="white" text="Passer à l'activité suivante"></CustomButton>
   </div>
 </template>
 
@@ -11,6 +13,7 @@ import GlobalSceneStore from "~/store/globalScene"
 import ActivityStore from "~/store/activity"
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ActivityOneResultData} from "~/core/types";
+import {ACTIVITY_TYPE} from "~/core/enums";
 
 @Component({
   components: {
@@ -26,6 +29,10 @@ export default class ActivityOneResult extends Vue {
 
   mounted() {
     console.log('mounted activity one result', this.resultData)
+  }
+
+  public nextActivity() {
+    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
   }
 }
 </script>
@@ -49,6 +56,10 @@ export default class ActivityOneResult extends Vue {
   img {
     width: 500px;
     margin-bottom: 60px;
+  }
+
+  span {
+    color: white;
   }
 }
 </style>
