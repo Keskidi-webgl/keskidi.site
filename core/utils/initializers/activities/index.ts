@@ -1,1 +1,1 @@
-export {default as TomSceneInitializer} from './TomSceneInitializer'
+export {default as ActivitySceneInitializer} from './ActivitySceneInitializer'

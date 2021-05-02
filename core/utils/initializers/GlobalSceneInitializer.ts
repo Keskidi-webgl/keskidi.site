@@ -165,7 +165,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.scene.add(TomSceneElement.sceneElement)
     TomSceneElement.setupForGlobalScene()
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.TOM, TomSceneElement.sceneElement)
-
     TomSceneElement.playIdleAnimation(GlobalScene.context)
   }
 

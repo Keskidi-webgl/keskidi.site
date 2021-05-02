@@ -1,6 +1,6 @@
 import {SceneManager} from "~/core/managers";
 
-class GlobalScene {
+class ActivityScene {
   private _context: SceneManager | null
 
   constructor() {
@@ -19,6 +19,6 @@ class GlobalScene {
   }
 }
 
-const instance = new GlobalScene()
+const instance = new ActivityScene()
 
 export default instance

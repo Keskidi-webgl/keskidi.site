@@ -39,10 +39,11 @@ import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
 import {Step} from "~/core/types";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import {TomSceneInitializer} from "~/core/utils/initializers/activities";
+import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import {SceneManager} from "~/core/managers";
 import GlobalScene from "~/core/scene/GlobalScene";
 import TomSceneElement from "~/core/scene/TomSceneElement";
+import ActivityScene from "~/core/scene/ActivityScene";
 
 @Component({
   components: {
@@ -80,11 +81,10 @@ export default class ActivityOne extends Vue {
     (<HTMLCanvasElement>this.$refs.tom).height = 500;
     (<HTMLCanvasElement>this.$refs.tom).width = (<HTMLElement>document.querySelector('aside.activity-element-aside'))!.clientWidth;
 
-    new TomSceneInitializer({
+    new ActivitySceneInitializer({
       canvas: this.$refs.tom as HTMLCanvasElement
     }).init()
-    TomSceneElement.playIdleAnimation(GlobalScene.context)
-    SceneManager.ACTIVITY_1_TOM.start()
+    ActivityScene.context.start()
   }
 
 }

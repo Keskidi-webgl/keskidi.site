@@ -3,6 +3,9 @@ import {TomAnimation} from "~/core/types";
 import {SceneManager} from "~/core/managers";
 import {GLTF_ASSET} from "~/core/enums";
 
+/**
+ * This class is a manager for Tom fbx object. We retrieve one instance of fbx object to use it in different scenes
+ */
 class TomSceneElement {
   private _sceneElement: Group | null
   private _animations: TomAnimation | null
