@@ -5,28 +5,47 @@
     class="point point-0"
     :to="data.url()"
   >
-    <div :class="{isCompleted: isCompleted()}" class="center"></div>
+    <div :class="{ isCompleted: isCompleted() }" class="center">
+      <p class="point-name">{{ data.nameForHuman }}</p>
+      <svg
+        width="23"
+        height="16"
+        viewBox="0 0 23 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M2 6.92308L8.82812 14L21 2"
+          stroke="white"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
   </nuxt-link>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
+import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
-import {InteractionPoint as InteractionPointData} from "~/core/config/global-scene/interact-points/types";
+import { InteractionPoint as InteractionPointData } from "~/core/config/global-scene/interact-points/types";
 
 @Component
 export default class InteractionPoints extends Vue {
-  @Prop({type: Object, required: true})
+  @Prop({ type: Object, required: true })
   readonly data!: InteractionPointData;
   public globalStore: GlobalStore = getModule(GlobalStore, this.$store);
   public authStore: AuthStore = getModule(AuthStore, this.$store);
 
+  mounted() {
+    console.log("DATA", this.data);
+  }
+
   public style() {
     return `
-    transform: translateX(${this.data.transformX}px) translateY(${
-      this.data.transformY
-    }px);
+    transform: translateX(${this.data.transformX}px) translateY(${this.data.transformY}px);
     `;
   }
 
@@ -35,7 +54,7 @@ export default class InteractionPoints extends Vue {
   }
 
   public isCompleted() {
-    return this.data.isCompleted(this.globalStore)
+    return this.data.isCompleted(this.globalStore);
   }
 }
 </script>
@@ -52,20 +71,51 @@ export default class InteractionPoints extends Vue {
   align-items: center;
   background-color: transparent !important;
 
+  &:hover {
+    .point-name {
+      opacity: 1;
+    }
+
+    .center {
+      height: 116px;
+      width: 116px;
+      transform: translate(-34px, -34px);
+
+      svg {
+        display: none !important;
+      }
+
+      &:after {
+        height: 116px;
+        width: 116px;
+        border-width: 3px;
+      }
+    }
+  }
+
+  .point-name {
+    position: absolute;
+    color: white;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    opacity: 0;
+    transition: 0.3s ease all;
+  }
+
   .center {
     height: 48px;
     width: 48px;
-    background-color: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(5px);
+    background-color: rgba(255, 255, 255, 0.4);
+    // backdrop-filter: blur(5px);
     border-radius: 50%;
     border: 0.5px solid $dark-cream;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    &.isCompleted {
-      background-color: rgb(43, 190, 32);
-    }
+    transition: 0.3s ease all;
 
     &:after {
       content: "";
@@ -78,16 +128,30 @@ export default class InteractionPoints extends Vue {
       border-left: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 50%;
       animation: rotate-center 5s linear infinite both;
+
+      transition: 0.3s ease all;
+    }
+
+    svg {
+      display: none;
+    }
+
+    &.isCompleted {
+      svg {
+        display: block;
+      }
+      &:after {
+        display: none;
+      }
     }
 
     &:hover {
       &:before {
         content: "";
-        height: 70px;
-        width: 70px;
+        height: 110px;
+        width: 110px;
         background-color: rgba(255, 255, 255, 0.3);
         position: absolute;
-        border: 1px solid $dark-cream;
         border-radius: 50%;
         animation: ping 0.8s ease-in-out infinite both;
       }

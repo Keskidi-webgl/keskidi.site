@@ -1,19 +1,23 @@
-import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import { URL_OBJECT_IDENTIFIER } from "~/core/enums";
 import GlobalScene from "~/core/scene/GlobalScene";
-import {Vector3} from "three";
+import { Vector3 } from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
-import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
-import {PaperRoomObject} from "~/core/config/global-scene/room-objects";
+import { InteractionPoint } from "~/core/config/global-scene/interact-points/types";
+import { PaperRoomObject } from "~/core/config/global-scene/room-objects";
 
 const PaperInteractPoint: InteractionPoint = {
   name: PaperRoomObject.urlSlug,
 
-  canvasCoords: () => {
-    const position = new Vector3()
-    GlobalScene.context.scene.getObjectByName('papier_anim')!.getWorldPosition(position)
+  nameForHuman: PaperRoomObject.nameForHuman,
 
-    return position
+  canvasCoords: () => {
+    const position = new Vector3();
+    GlobalScene.context.scene
+      .getObjectByName("papier_anim")!
+      .getWorldPosition(position);
+
+    return position;
   },
 
   isCompleted: () => {
@@ -29,6 +33,6 @@ const PaperInteractPoint: InteractionPoint = {
   transformX: 0,
 
   transformY: 0
-}
+};
 
-export default PaperInteractPoint
+export default PaperInteractPoint;
