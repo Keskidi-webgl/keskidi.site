@@ -48,6 +48,9 @@ export default class ActivityElement extends Vue {
   &-content {
     background: #FFF8EE;
     flex: 1;
+    height: 100%;
+    overflow-y: scroll;
+    position: relative;
   }
 }
 </style>
