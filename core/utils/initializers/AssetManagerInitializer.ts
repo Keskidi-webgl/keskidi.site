@@ -11,11 +11,6 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
     AssetsManager
       .enableLocalMode()
       .registerGltf(
-        GLTF_ASSET.GLOBAL_SCENE,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_global_no_bake.gltf",
-        "scene_globale_bake.gltf"
-      )
-      .registerGltf(
         GLTF_ASSET.CLOUD_LITTLE,
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_1.gltf",
         "nuage_1.gltf"
@@ -50,6 +45,12 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
         GLTF_ASSET.TOM_HEAD,
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_bad_1.fbx",
         "perso_bad_1.fbx"
+      )
+
+      .registerGltf(
+        GLTF_ASSET.GLOBAL_SCENE,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale_bake.gltf",
+        "scene_globale_bake.gltf"
       )
   }
 }
