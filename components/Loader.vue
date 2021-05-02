@@ -9,6 +9,11 @@
         <img src="~/assets/img/quote.svg" class="quote quote-top" alt="">
         Tu peux me filer de la moula stp ?
         <img src="~/assets/img/quote.svg" class="quote quote-bot" alt="">
+        <img src="~/assets/img/arrow-draft-one.png" class="doodle bottom-left-arrow" alt="">
+        <img src="~/assets/img/arrow-draft-two.png" class="doodle top-left-arrow" alt="">
+        <img src="~/assets/img/circle-doodle-huge.png" class="doodle circle-doodle" alt="">
+        <img src="~/assets/img/doodle-packed.png" class="doodle packed-doodle" alt="">
+        <img src="~/assets/img/heart-draft.png" class="doodle heart" alt="">
       </p>
 
       <p class="main-font text-common site-loader-container-description">Tu n'as rien compris à cette phrase ? Tu es au bon endroit ! Plonge et part à la
@@ -89,7 +94,7 @@ export default class Loader extends Vue {
   pointer-events: none;
 }
 .site-loader {
-
+  z-index: 200;
   .background-overlay {
     position: absolute;
     top: 0;
@@ -110,6 +115,7 @@ export default class Loader extends Vue {
     margin: 0 auto;
     height: 100%;
     z-index: 90;
+    color: $dark-blue;
 
     &-logo {
       margin-bottom: 130px;
@@ -138,6 +144,35 @@ export default class Loader extends Vue {
         &-bot {
           transform: rotate(-180deg);
           bottom: -20px;
+        }
+      }
+
+      .doodle {
+        position: absolute;
+
+        &.bottom-left-arrow {
+          bottom: -50px;
+          left: 25px;
+        }
+
+        &.top-left-arrow {
+          top: -65px;
+          left: -30px;
+        }
+
+        &.circle-doodle {
+          left: 280px;
+          top: 0px;
+        }
+
+        &.packed-doodle {
+          right: 130px;
+          bottom: -10px;
+        }
+
+        &.heart {
+          right: -60px;
+          top: -30px;
         }
       }
     }

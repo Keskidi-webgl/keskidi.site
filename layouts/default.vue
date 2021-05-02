@@ -197,7 +197,6 @@ canvas {
 }
 
 .site-loader {
-  //background: linear-gradient(180deg, #fceee6 0%, #efdedd 100%);
 }
 
 .activity-onboarding {
