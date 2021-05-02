@@ -1,32 +1,46 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {AnimationClip, HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {
+  HemisphereLight,
+  HemisphereLightHelper,
+  Mesh,
+  MeshBasicMaterial,
+  PCFSoftShadowMap,
+  PerspectiveCamera,
+  Scene,
+  sRGBEncoding,
+  WebGLRenderer
+} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
-import CameraConfig from "~/core/config/camera.config";
-import SceneModule from "~/store/scene";
+import GlobalSceneStore from "~/store/globalScene";
+import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
+import {Object3D} from "three/src/core/Object3D";
+import GlobalScene from "~/core/scene/GlobalScene";
+import TomSceneElement from "~/core/scene/TomSceneElement";
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
-export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, sceneModule: SceneModule }, void> {
+export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, globalSceneStore: GlobalSceneStore }, void> {
 
   init() {
-    SceneManager.GLOBAL_SCENE = this._createInstance()
+    GlobalScene.setSceneContext(this._createSceneContext())
     this._addGltfGlobalScene()
     this._addGltfTom()
     this._registerPresetPositions()
+    //this._optimizeScene()
     this._addLights(true)
-    //this._configGUI()
+    this._configGUI()
 
-    SceneManager.GLOBAL_SCENE.start()
+    GlobalScene.context.start()
   }
 
   /**
    * Create the shell to interact with global scene
    */
-  private _createInstance() {
+  private _createSceneContext() {
     // Set canvas dimensions
     this._data.canvas.width = Helpers.getWindowSizes().width
     this._data.canvas.height = Helpers.getWindowSizes().height
@@ -39,6 +53,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     // Create renderer
     const renderer = this._createRender()
+    renderer.outputEncoding = sRGBEncoding
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
 
     return new SceneManager({
       canvas: this._data.canvas,
@@ -52,19 +69,20 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.updateProjectionMatrix()
         }
-        for (const point of this._data.sceneModule.activeInteractionPoints) {
+        for (const point of this._data.globalSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
-          screenPosition.project(SceneManager.GLOBAL_SCENE.camera)
+          screenPosition.project(GlobalScene.context.camera)
           const updateData = {
             name: point.name,
             transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,
             transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
           }
 
-          this._data.sceneModule.updatePositionsInteractivePoint(updateData)
+          this._data.globalSceneStore.updatePositionsInteractivePoint(updateData)
         }
+
       },
-      onResume:(ctx)=> {
+      onResume: (ctx) => {
         this._addGltfTom()
       },
       onWindowResize: (ctx) => {
@@ -79,7 +97,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
-    }).hideGui()//.enableStats().enableAxesHelpers(1000)
+    })//.hideGui()
+      //.enableStats()
+      .enableParallax()
+      //.enableAxesHelpers(1000)
 
   }
 
@@ -87,10 +108,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    * Create gui
    */
   private _configGUI() {
-    let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'x',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'y',-500,500,0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position,'z',-500,500,0.01).listen()
+    let sceneFolder = GlobalScene.context.gui.addFolder("Scene")
+    sceneFolder.add(GlobalScene.context.scene.position, 'x', -500, 500, 0.01).listen()
+    sceneFolder.add(GlobalScene.context.scene.position, 'y', -500, 500, 0.01).listen()
+    sceneFolder.add(GlobalScene.context.scene.position, 'z', -500, 500, 0.01).listen()
   }
 
   /**
@@ -132,24 +153,19 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     globalSceneGltf.scene.position.set(0, 0, 0)
 
 
-    SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
-    SceneManager.GLOBAL_SCENE.scene.traverse( child => {
+    GlobalScene.context.scene.add(globalSceneGltf.scene)
+    GlobalScene.context.scene.traverse(child => {
       // @ts-ignore
-      if ( child.material ) child.material.metalness = 0;
-    } );
+      if (child.material) child.material.metalness = 0;
+    });
 
   }
 
   private _addGltfTom() {
-    const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
-    console.log(tomGltf)
-    tomGltf.scale.set(0.8, 0.8, 0.8)
-    tomGltf.position.set(50, 40, 500)
-    tomGltf.rotation.y = -45
-    SceneManager.GLOBAL_SCENE.scene.add(tomGltf)
-
-    SceneManager.GLOBAL_SCENE.createAnimationMixer(GLTF_ASSET.TOM, tomGltf)
-    SceneManager.GLOBAL_SCENE.playAnimation(tomGltf.animations[0], GLTF_ASSET.TOM)
+    GlobalScene.context.scene.add(TomSceneElement.sceneElement)
+    TomSceneElement.setupForGlobalScene()
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.TOM, TomSceneElement.sceneElement)
+    TomSceneElement.playIdleAnimation(GlobalScene.context)
   }
 
   /**
@@ -160,18 +176,55 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     //hemisphereLights.position.set(100, 500, 700)
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
-      SceneManager.GLOBAL_SCENE.scene.add(helper);
+      GlobalScene.context.scene.add(helper);
     }
 
-    SceneManager.GLOBAL_SCENE.scene.add(hemisphereLights);
+    GlobalScene.context.scene.add(hemisphereLights);
   }
 
   /**
    * Register preset camera positions
    */
   private _registerPresetPositions() {
-    CameraConfig.presetPositions.forEach(presetPosition => {
-      SceneManager.GLOBAL_SCENE.registerPresetCameraPositions(presetPosition)
+    GlobalSceneConfig.cameraPositions.forEach(presetPosition => {
+      GlobalScene.context.registerPresetCameraPositions(presetPosition)
     })
+  }
+
+  private _optimizeScene() {
+    const objectToExclude: Array<Object3D> = [
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.TOM)!,
+      GlobalScene.context.scene.getObjectByName('chat')!
+    ]
+
+    const namesToExclude: string[] = []
+
+    objectToExclude.forEach(obj => {
+      namesToExclude.push(obj.name)
+      namesToExclude.push(...this._getChildrenNames(obj))
+    })
+
+    GlobalScene.context.scene.traverse(child => {
+
+      if (child instanceof Mesh && !namesToExclude.includes(child.name)) {
+        const prevMaterial = child.material
+        const newMaterial = new MeshBasicMaterial()
+        newMaterial.copy((prevMaterial as MeshBasicMaterial))
+        if (prevMaterial.map === null && prevMaterial.emissiveMap) {
+          newMaterial.map = prevMaterial.emissiveMap
+
+        }
+        child.material = newMaterial
+
+      }
+    })
+  }
+
+  private _getChildrenNames(object3D: Object3D): string[] {
+    const children: string[] = []
+    object3D.traverse((child) => {
+      children.push(child.name)
+    })
+    return children
   }
 }

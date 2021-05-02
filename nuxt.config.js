@@ -54,6 +54,12 @@ export default {
     ]
   },
 
+  watchers: {
+    webpack: {
+      ignored: /node_modules/
+    }
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     analyze: false, // remove automatic rebuild client when --> npm run dev is running

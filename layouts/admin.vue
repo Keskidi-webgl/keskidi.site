@@ -10,7 +10,7 @@
     <section>
       <aside class="admin-left-menu">
         <div class="menu-link-container">
-          <nuxt-link exact v-for="(link, index) in adminModule.adminMenu.links" :key="index" class="menu-link"
+          <nuxt-link exact v-for="(link, index) in adminStore.adminMenu.links" :key="index" class="menu-link"
                      :to="link.to">
             <font-awesome-icon :icon="['fas', link.icon]" :style="{ color: 'white' , fontSize: '20px'}"/>
             <span class="menu-link-text">{{ link.name }}</span>
@@ -27,13 +27,13 @@
 <script lang="ts">
 
 import {Component, getModule, Vue} from "nuxt-property-decorator";
-import AdminModule from "~/store/admin";
+import AdminStore from "~/store/admin";
 import {ApiManager} from "~/core/managers";
 import {BvToast} from "bootstrap-vue";
 
 @Component({})
 export default class AdminLayout extends Vue {
-  public adminModule: AdminModule = getModule(AdminModule, this.$store)
+  public adminStore: AdminStore = getModule(AdminStore, this.$store)
 
   head() {
     return {

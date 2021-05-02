@@ -50,13 +50,13 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from "nuxt-property-decorator";
-import AdminModule from "~/store/admin";
 import {Word} from "~/core/types";
 import {ApiManager} from "~/core/managers";
 import DefinitionWordPanel from "~/components/admin/word/DefinitionWordPanel.vue";
 import HomeScenarioWordPanel from "~/components/admin/word/HomeScenarioWordPanel.vue";
 import ExpressionWordPanel from "~/components/admin/word/ExpressionWordPanel.vue";
 import ActivityDataWordPanel from "~/components/admin/word/ActivityDataWordPanel.vue";
+import AdminStore from "~/store/admin";
 
 @Component({
   components: {
@@ -67,7 +67,7 @@ import ActivityDataWordPanel from "~/components/admin/word/ActivityDataWordPanel
   }
 })
 export default class WordPage extends Vue {
-  public adminModule: AdminModule = getModule(AdminModule, this.$store)
+  public adminStore: AdminStore = getModule(AdminStore, this.$store)
   public wordData: Word | null = null
   public onProgress: boolean = false
 
@@ -91,7 +91,7 @@ export default class WordPage extends Vue {
   }
 
   async mounted() {
-    this.adminModule.setBasicMenu()
+    this.adminStore.setBasicMenu()
   }
 
   async getDataWord() {

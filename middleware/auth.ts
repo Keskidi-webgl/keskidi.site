@@ -1,24 +1,25 @@
-import {getModule} from "nuxt-property-decorator";
-import AuthModule from "~/store/auth";
-import {Context} from "@nuxt/types/app";
-import GlobalModule from "~/store/global";
-import {ApiManager} from "~/core/managers";
-
+import { getModule } from "nuxt-property-decorator";
+import AuthStore from "~/store/auth";
+import { Context } from "@nuxt/types/app";
+import GlobalStore from "~/store/global";
+import { ApiManager } from "~/core/managers";
 
 export default class AuthMiddleware {
-  public static  async handle(ctx: Context) {
-    const authModule = getModule(AuthModule, ctx.store)
-    const globalModule = getModule(GlobalModule, ctx.store)
-    if (!authModule.isAuth) {
-      ctx.redirect('/tom')
+  // TODO accéder aux données utilisateur sur la home (pour la progress bar level notamment)
+
+  public static async handle(ctx: Context) {
+    const authStore = getModule(AuthStore, ctx.store);
+    const globalStore = getModule(GlobalStore, ctx.store);
+    if (!authStore.isAuth) {
+      ctx.redirect("/tom");
     }
 
-    if (authModule.isAuth && !globalModule.userWordData) {
-      const {data} = await ApiManager.request({
-        url: `/users/${authModule.user!.id}/words`
-      })
+    if (authStore.isAuth && !globalStore.userWordData) {
+      const { data } = await ApiManager.request({
+        url: `/users/${authStore.user!.id}/words`
+      });
 
-      globalModule.setUserWordData(data)
+      globalStore.setUserWordData(data);
     }
   }
 }

@@ -1,43 +1,75 @@
 <template>
   <div class="scene-navigation-panel">
-    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button previous-scene"
-               :to="previousSceneLink()">
-      <img src="~/assets/img/next-arrow.svg" alt="">
+    <nuxt-link
+      :class="{ isDisabled: globalSceneStore.isCameraMoving }"
+      v-if="!globalSceneStore.activeObject"
+      class="scene-navigation-panel-button previous-scene"
+      :to="previousSceneLink()"
+    >
+      <p class="room-name main-font">{{ prev }}</p>
+      <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
-    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button back-home" :to="backHomeLink()">
-      <img src="~/assets/img/home.svg" alt="">
+    <nuxt-link
+      v-if="!globalSceneStore.activeObject"
+      :class="{ isDisabled: globalSceneStore.isCameraMoving }"
+      class="scene-navigation-panel-button back-home"
+      :to="backHomeLink()"
+    >
+      <img src="~/assets/img/home.svg" alt="" />
     </nuxt-link>
-    <nuxt-link v-if="!sceneModule.activeObject" class="scene-navigation-panel-button next-scene" :to="nextSceneLink()">
-      <img src="~/assets/img/next-arrow.svg" alt="">
+    <nuxt-link
+      :class="{ isDisabled: globalSceneStore.isCameraMoving }"
+      v-if="!globalSceneStore.activeObject"
+      class="scene-navigation-panel-button next-scene"
+      :to="nextSceneLink()"
+    >
+      <p class="room-name main-font">{{ next }}</p>
+      <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
-    <nuxt-link v-if="sceneModule.activeObject" class="scene-navigation-panel-button object-room" :to="goBackObjectRoom()">
-      <img src="~/assets/img/next-arrow.svg" alt="">
+    <nuxt-link
+      v-if="globalSceneStore.activeObject"
+      :class="{ isDisabled: globalSceneStore.isCameraMoving }"
+      class="scene-navigation-panel-button object-room"
+      :to="goBackObjectRoom()"
+    >
+      <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import SceneModule from "~/store/scene";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
+import { Room } from "~/core/config/global-scene/rooms/types";
+import GlobalSceneStore from "~/store/globalScene";
 
 @Component({})
 export default class SceneNavigationPanel extends Vue {
-  public sceneModule = getModule(SceneModule, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store);
+
+  public next: string | undefined = this.globalSceneStore.activeRoom?.nextRoom()
+    .nameForHuman;
+  public prev:
+    | string
+    | undefined = this.globalSceneStore.activeRoom?.previousRoom().nameForHuman;
 
   public backHomeLink() {
-    return '/'
+    return "/";
   }
 
   public nextSceneLink() {
-    return this.sceneModule.activeRoom?.nextSceneUrl
+    let nextRoom = this.globalSceneStore.activeRoom?.nextRoom();
+    this.next = nextRoom?.nameForHuman;
+    return nextRoom?.name;
   }
 
   public previousSceneLink() {
-    return this.sceneModule.activeRoom?.previousSceneUrl
+    let prevRoom = this.globalSceneStore.activeRoom?.previousRoom();
+    this.prev = prevRoom?.nameForHuman;
+    return prevRoom?.fullUrl;
   }
 
   public goBackObjectRoom() {
-    return this.sceneModule.activeRoom?.fullUrl
+    return this.globalSceneStore.activeObject?.room().fullUrl;
   }
 }
 </script>
@@ -53,8 +85,8 @@ export default class SceneNavigationPanel extends Vue {
   align-items: center;
 
   .scene-navigation-panel-button {
-    width: 48px;
-    height: 48px;
+    width: 35px;
+    height: 35px;
     background-color: white;
     border-radius: 50%;
     display: flex;
@@ -63,24 +95,57 @@ export default class SceneNavigationPanel extends Vue {
     cursor: pointer;
     margin: 10px;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
+    position: relative;
 
-    &.previous-scene {
+    &.previous-scene img {
       transform: rotate(180deg);
     }
 
-    &.next-scene .previous-scene {
+    &.next-scene,
+    &.previous-scene,
+    &.object-room {
+      box-shadow: 0px 4px 25px -1px rgba(0, 0, 0, 0.15);
+
+      .room-name {
+        position: absolute;
+        top: -30px;
+        color: $dark-blue;
+        opacity: 0;
+        transition: 0.2s ease all;
+      }
+
+      &:hover .room-name {
+        opacity: 1;
+      }
+
       img {
         width: 8px;
+      }
+
+      &:before {
+        content: "";
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        border-radius: 50%;
+        height: 48px;
+        width: 48px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+        box-shadow: 0px 4px 25px -1px rgba(190, 190, 190, 0.15);
       }
     }
 
     &.back-home {
-      background-color: $eletric-blue;
+      background-color: $dark-blue;
       width: 52px;
       height: 52px;
+      box-shadow: 0px 2px 9px 3px rgba(0, 6, 72, 0.25);
 
       img {
-        width: 16px;
+        width: 27px;
       }
     }
 
@@ -93,6 +158,10 @@ export default class SceneNavigationPanel extends Vue {
         transform: rotate(90deg);
       }
     }
+  }
+
+  .isDisabled {
+    pointer-events: none;
   }
 }
 </style>

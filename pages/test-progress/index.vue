@@ -1,7 +1,16 @@
 <template>
   <div class="page-container" data-namespace="test-progress">
     <div class="card">
-      <button class="button" @click="increment()">new word</button>
+      <!-- <button class="button" @click="increment()">new word</button>
+
+      <ProgressLevel
+        v-if="level"
+        :stroke="4"
+        :radius="170 / 2"
+        :total="9"
+        :progress="nb"
+        :level="level.name"
+      />
 
       <p>Ton nombre de mots : {{ nb }}</p>
       <p v-if="level">Ton niveau : {{ level.name }}</p>
@@ -18,27 +27,33 @@
           {{ width }}
         </div>
       </div>
-      <div class="bar" id="bar"></div>
+      <div class="bar" id="bar"></div> -->
+
+      <button class="button" @click="nextActivity()">
+        new activity passed
+      </button>
+      <p v-if="currentStep">
+        {{ currentStep.id }} / {{ totalSteps }} || {{ currentStep.text }} ||
+        {{ progress }}
+      </p>
+      <ProgressBar v-if="currentStep" :step="currentStep" :total="totalSteps" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "nuxt-property-decorator";
-import { ProgressPercentManager } from "~/core/managers";
-import { Level } from "~/core/types";
+import {Component, Vue} from "nuxt-property-decorator";
+import {ProgressBarActivityManager, ProgressPercentManager} from "~/core/managers";
+import {Level, Step} from "~/core/types";
+import ProgressLevel from "~/components/activities/ProgressLevel.vue";
+import ProgressBar from "~/components/activities/ProgressBar.vue";
 
-/**
- * @info
- * Page de debug de la progression par palier
- *
- * 2021-04-24 : première version du ProgressManager. Les données sont en dur et le calcul se fait en nombre de mots.
- * => piste d'amélioration : faire la calcul en pourcentage (cf ProgressManager.ts)
- *
- * 2021-04-25 : deuxième version du ProgressPercentManager. Les données sont calculées en pourcentage.
- */
-
-@Component
+@Component({
+  components: {
+    ProgressLevel,
+    ProgressBar
+  }
+})
 export default class TestProgressPage extends Vue {
   // Default
   public onProgress: boolean = false;
@@ -54,22 +69,27 @@ export default class TestProgressPage extends Vue {
   public prevlevel: Level | null = null;
   public prevPosition: number = 0;
 
+  // for ProgressBarActivityManager
+  public totalSteps: number = 0;
+  public currentStep: Step | null = null;
+  public progress: string = "";
+
   mounted() {
-    ProgressPercentManager.init();
-    this.init();
-    this.level = ProgressPercentManager.current;
-    this.width = ProgressPercentManager.percent + "%";
-    this.nextLevel = ProgressPercentManager.next;
-    this.nextSteps = ProgressPercentManager.steps;
-    this.prevlevel = ProgressPercentManager.prev;
-    this.prevPosition = ProgressPercentManager.prevPercent;
+    // ProgressPercentManager.init();
+    // this.init();
+    // this.level = ProgressPercentManager.current;
+    // this.width = ProgressPercentManager.percent + "%";
+    // this.nextLevel = ProgressPercentManager.next;
+    // this.nextSteps = ProgressPercentManager.steps;
+    // this.prevlevel = ProgressPercentManager.prev;
+    // this.prevPosition = ProgressPercentManager.prevPercent;
+
+    this.initActivityBar();
   }
 
   increment() {
     if (this.nb < ProgressPercentManager.words) {
-      ProgressPercentManager.update(() => {
-        console.log("NEW LEVEL !");
-      });
+      ProgressPercentManager.update(() => {});
       this.nb++;
       this.level = ProgressPercentManager.current;
       this.width = ProgressPercentManager.percent + "%";
@@ -81,17 +101,31 @@ export default class TestProgressPage extends Vue {
   }
 
   init() {
-    const bar = document.getElementById("bar");
-    let left = 0;
-    const all = ProgressPercentManager.levels;
-    all.reverse().forEach(level => {
-      left = left + level.rule;
-      let lvl = document.createElement("span");
-      lvl.innerHTML = "| " + level.name;
-      lvl.style.left = left + "%";
-      lvl.style.position = "absolute";
-      bar?.appendChild(lvl);
-    });
+    // const bar = document.getElementById("bar");
+    // let left = 0;
+    // const all = ProgressPercentManager.levels;
+    // all.reverse().forEach(level => {
+    //   left = left + level.rule;
+    //   let lvl = document.createElement("span");
+    //   lvl.innerHTML = "| " + level.name;
+    //   lvl.style.left = left + "%";
+    //   lvl.style.position = "absolute";
+    //   bar?.appendChild(lvl);
+    // });
+  }
+
+  initActivityBar() {
+    ProgressBarActivityManager.init();
+    this.totalSteps = ProgressBarActivityManager.steps.length;
+    this.currentStep = ProgressBarActivityManager.step;
+    this.progress = ProgressBarActivityManager.progress + "%";
+  }
+
+  nextActivity() {
+    ProgressBarActivityManager.next();
+    this.totalSteps = ProgressBarActivityManager.steps.length;
+    this.currentStep = ProgressBarActivityManager.step;
+    this.progress = ProgressBarActivityManager.progress + "%";
   }
 }
 </script>
@@ -104,12 +138,11 @@ export default class TestProgressPage extends Vue {
   padding-left: 7vw;
 
   .card {
-    width: 50%;
-    background: #f2f2f2;
+    width: 80%;
+    background: #ff7869;
     border-radius: 73px;
-    padding: 100px 50px;
-    height: 60vh;
-
+    // padding: 100px 50px;
+    height: 80vh;
     display: flex;
   }
   .button {
