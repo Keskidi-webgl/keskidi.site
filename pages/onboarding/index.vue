@@ -4,27 +4,28 @@
       Tu trouveras 3 activités pour devenir le boss du langage
     </h1>
     <div class="list">
-      <ChoiceCard title="Découvrir" image="onboarding-discover.png"
+      <ChoiceCard
+        title="Découvrir"
+        :image="require('~/assets/img/onboarding-discover.svg')"
         >En premier lieu, tu devras deviner entre
         <strong>2 objets</strong> celui qui correspond au mot.</ChoiceCard
       >
-      <ChoiceCard title="Informer" image="onboarding-info.png"
+      <ChoiceCard
+        title="Informer"
+        :image="require('~/assets/img/onboarding-info.svg')"
         >On a bien fait notre traval comme Alain Rey en te concoctant un
         <strong>mélange de connaissances</strong>.</ChoiceCard
       >
-      <ChoiceCard title="Pratiquer" image="onboarding-practice.png"
+      <ChoiceCard
+        title="Pratiquer"
+        :image="require('~/assets/img/onboarding-practice.svg')"
         >Ce n'est pas tout de connaître le mot, on va aussi t'apprendre à bien
         <strong>le prononcer</strong> et comment
         <strong>l'utiliser</strong>.</ChoiceCard
       >
     </div>
     <div class="action-container w-100">
-      <CustomButton
-        @click.native="hop()"
-        arrow-color="white"
-        color="#000648"
-        text="Et zéé parti !"
-      />
+      <CustomButton arrow-color="white" color="#000648" text="Et zéé parti !" />
     </div>
   </div>
 </template>
