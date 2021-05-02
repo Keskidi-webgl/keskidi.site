@@ -73,9 +73,6 @@ export default class ProgressLevel extends Vue {
   }
 
   strokeDashoffset() {
-    console.log(this.progress, this.total)
-    console.log(this.percent, this.circumference)
-    console.log("strokeDashoffset", (this.percent / 100) * this.circumference);
     return this.circumference - (this.percent / 100) * this.circumference;
   }
 }

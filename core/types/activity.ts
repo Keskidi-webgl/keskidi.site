@@ -1,7 +1,15 @@
-export type UserObjectSelection = {
-  name: string;
-  description: string;
-};
+export type UserSelection = {
+  url: string,
+  description: string,
+  isSelected: boolean
+}
+
+export type ActivityOneResultData = {
+  answerWord: string,
+  goodObjectUrl: string,
+  goodObjectName: string
+}
+
 
 export type VoiceRecognitionResult = {
   distance: number;
