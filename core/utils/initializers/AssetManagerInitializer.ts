@@ -15,6 +15,16 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_global_no_bake.gltf",
         "scene_globale_bake.gltf"
       )
+      .registerGltf(
+        GLTF_ASSET.CLOUD_LITTLE,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_1.gltf",
+        "nuage_1.gltf"
+      )
+      .registerGltf(
+        GLTF_ASSET.CLOUD_BIG,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_2.gltf",
+        "nuage_2.gltf"
+      )
 
       .registerFbx(
         GLTF_ASSET.TOM,

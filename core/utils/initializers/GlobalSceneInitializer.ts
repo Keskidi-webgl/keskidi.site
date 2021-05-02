@@ -18,6 +18,7 @@ import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 import {Object3D} from "three/src/core/Object3D";
 import GlobalScene from "~/core/scene/GlobalScene";
 import TomSceneElement from "~/core/scene/TomSceneElement";
+import CloudsConfig from "~/core/config/global-scene/clouds/CloudsConfig";
 
 /**
  * @description
@@ -29,8 +30,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.setSceneContext(this._createSceneContext())
     this._addGltfGlobalScene()
     this._addGltfTom()
+    this._addClouds()
     this._registerPresetPositions()
-    this._optimizeScene()
+    //this._optimizeScene()
     this._addLights(true)
     this._configGUI()
 
@@ -63,7 +65,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: false,
+      activateOrbitControl: true,
       onRender: (ctx) => {
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
@@ -188,6 +190,17 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _registerPresetPositions() {
     GlobalSceneConfig.cameraPositions.forEach(presetPosition => {
       GlobalScene.context.registerPresetCameraPositions(presetPosition)
+    })
+  }
+
+  private _addClouds() {
+
+    CloudsConfig.forEach(cloudConfig => {
+      const cloud = AssetsManager.getGltf(cloudConfig.type).data.scene.clone()
+      cloud.position.set(cloudConfig.x, cloudConfig.y, cloudConfig.z)
+      cloud.rotation.y = cloudConfig.rotationY
+      console.log('cloud : ', cloud)
+      GlobalScene.context.scene.add(cloud)
     })
   }
 
