@@ -103,7 +103,6 @@ export default class ActivityOne extends Vue {
       goodObjectName: goodAnswer ? this.userSelection!.description : this.blockChoices.find(choice => !choice.isSelected)!.description
     }
     this.displayActivityResult = true
-    console.log(this.displayActivityResult)
   }
 
   private _createCanvas() {

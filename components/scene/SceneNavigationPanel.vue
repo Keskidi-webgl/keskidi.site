@@ -52,10 +52,6 @@ export default class SceneNavigationPanel extends Vue {
     | string
     | undefined = this.globalSceneStore.activeRoom?.previousRoom().nameForHuman;
 
-  mounted() {
-    console.log(this.next);
-  }
-
   public backHomeLink() {
     return "/";
   }

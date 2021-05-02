@@ -185,7 +185,6 @@ class AssetsManager {
           break
       }
     } catch (error) {
-      console.log(error)
       this._onErrorCallback()
     }
   }

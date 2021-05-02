@@ -27,10 +27,6 @@ export default class ActivityOneResult extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
 
-  mounted() {
-    console.log('mounted activity one result', this.resultData)
-  }
-
   public nextActivity() {
     this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
   }
