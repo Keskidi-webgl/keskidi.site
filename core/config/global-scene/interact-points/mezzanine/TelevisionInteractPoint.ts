@@ -1,19 +1,21 @@
-import {URL_OBJECT_IDENTIFIER} from "~/core/enums";
+import { URL_OBJECT_IDENTIFIER } from "~/core/enums";
 import GlobalScene from "~/core/scene/GlobalScene";
-import {Vector3} from "three";
+import { Vector3 } from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
-import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
-import {TelevisionRoomObject} from "~/core/config/global-scene/room-objects";
+import { InteractionPoint } from "~/core/config/global-scene/interact-points/types";
+import { TelevisionRoomObject } from "~/core/config/global-scene/room-objects";
 
 const TelevisionInteractPoint: InteractionPoint = {
   name: TelevisionRoomObject.urlSlug,
 
-  canvasCoords: () => {
-    const position = new Vector3()
-    GlobalScene.context.scene.getObjectByName('tv')!.getWorldPosition(position)
+  nameForHuman: TelevisionRoomObject.nameForHuman,
 
-    return position
+  canvasCoords: () => {
+    const position = new Vector3();
+    GlobalScene.context.scene.getObjectByName("tv")!.getWorldPosition(position);
+
+    return position;
   },
 
   isCompleted: () => {
@@ -29,6 +31,6 @@ const TelevisionInteractPoint: InteractionPoint = {
   transformX: 0,
 
   transformY: 0
-}
+};
 
-export default TelevisionInteractPoint
+export default TelevisionInteractPoint;

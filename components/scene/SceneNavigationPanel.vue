@@ -106,7 +106,8 @@ export default class SceneNavigationPanel extends Vue {
     }
 
     &.next-scene,
-    &.previous-scene {
+    &.previous-scene,
+    &.object-room {
       box-shadow: 0px 4px 25px -1px rgba(0, 0, 0, 0.15);
 
       .room-name {
