@@ -19,7 +19,14 @@
       <!-- Content -->
       <template class="content" v-slot:activity-element-content>
         <div class="content-container">
-          <h1>Content activity Two</h1>
+          <h2 class="content-title">{{ activityStore.dataWord.name }}</h2>
+
+          <div class="content-wordInfo">
+            <span class="content-phonetic">{{ activityStore.dataWord.definition.phonetic }}</span>
+            <span class="content-gender">{{ activityStore.dataWord.definition.gender }}</span>
+          </div>
+
+
         </div>
       </template>
     </ActivityElement>
@@ -94,13 +101,31 @@ export default class ActivityTwo extends Vue {
       }
     }
 
-    .content-container {
+    .content{
+      &-container {
       height: 100%;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      max-width: 800px;
+      margin: auto;
+      padding-top: 90px;
+      flex-direction: column;
+      overflow-y: scroll;
+      color: $dark-blue;
 
-    }
+      }
+      &-wordInfo{
+        font-family: $secondary_font;
+        font-size: 30px;
+      }
+      &-title{
+        font-size: $title-activity;
+        font-family: $main_font;
+        font-weight: bold;
+      }
+      &-phonetic{
+        font-weight: bold;
+      }
+  }
   }
 }
 </style>
