@@ -1,5 +1,5 @@
 import {Vector3} from "three";
-import {SceneManager} from "~/core/managers";
+import GlobalScene from "~/core/scene/GlobalScene";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 
 const TomCameraPosition: CameraPosition = {
@@ -7,7 +7,7 @@ const TomCameraPosition: CameraPosition = {
   coords: () => {
     const lookAtPosition = new Vector3()
 
-    SceneManager.GLOBAL_SCENE.scene.getObjectByName('tom')!.getWorldPosition(lookAtPosition)
+    GlobalScene.context.scene.getObjectByName('tom')!.getWorldPosition(lookAtPosition)
     lookAtPosition.z = lookAtPosition.z * 0.88
     lookAtPosition.y = lookAtPosition.y * 4
 

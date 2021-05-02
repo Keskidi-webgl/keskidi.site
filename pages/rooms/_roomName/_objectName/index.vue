@@ -14,18 +14,16 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
-import {ACTIVITY_TYPE} from "~/core/enums";
-import gsap from 'gsap'
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
-import {SceneManager} from "~/core/managers";
 import GlobalStore from "~/store/global";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
 import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
+import GlobalScene from "~/core/scene/GlobalScene";
 
 @Component({
   components: {
@@ -56,7 +54,7 @@ export default class ObjectPage extends Vue {
     this.globalSceneStore.setActiveObject(roomObjectSlug)
 
     this.globalSceneStore.setIsCameraMoving(true)
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomObjectSlug, 1, () => {
+    GlobalScene.context.goToPresetPosition(roomObjectSlug, 1, () => {
       this.globalSceneStore.setIsCameraMoving(false)
     })
     this._setDataWord()

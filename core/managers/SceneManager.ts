@@ -14,6 +14,7 @@ import {
   WebGLRenderer
 } from "three";
 import {
+  ActiveAnimation,
   AnimationMixerElement,
   DefaultSceneManagerCallback,
   MouseMoveCanvasCallback,
@@ -35,27 +36,7 @@ import Helpers from "~/core/utils/helpers";
  * This manager is responsible for creating a scene 3D and a context to interact with it
  */
 export default class SceneManager {
-
-  /**
-   * Static accessors for scenes instances
-   */
-  public static GLOBAL_SCENE: SceneManager
-  public static ACTIVITY_SCENE: SceneManager
-
-  // Activity 1 Accessors
-  public static ACTIVITY_1_OBJECTS: SceneManager
   public static ACTIVITY_1_TOM: SceneManager
-  public static ACTIVITY_1_RESULTS: SceneManager
-
-  // Activity 2 Accessors
-  public static ACTIVITY_2_OBJECTS: SceneManager
-
-  // Activity 3 Accessors
-  public static ACTIVITY_3_OBJECTS: SceneManager
-  public static ACTIVITY_3_TOM: SceneManager
-  public static ACTIVITY_3_RESULTS: SceneManager
-
-
 
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
@@ -71,8 +52,13 @@ export default class SceneManager {
   private _stats: Stats | null
   private _defaultRatio: number
   private _currentIntersect: null
-  private _animationMixers: Array<AnimationMixerElement>
+
+  // Parallax
   private _globalSceneRotation: { x: number, y: number }
+
+  // Animations
+  private _animationMixers: Array<AnimationMixerElement>
+  private _activeActions: Array<ActiveAnimation>
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -115,6 +101,7 @@ export default class SceneManager {
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
+    this._activeActions = []
     this._globalSceneRotation = {x: 0, y: 0}
 
     this._isPlaying = false
@@ -264,8 +251,6 @@ export default class SceneManager {
         this._camera.quaternion.set(updateQuaternion.x, updateQuaternion.y, updateQuaternion.z, updateQuaternion.w)
       }
     })
-
-
   }
 
   /**
@@ -415,7 +400,21 @@ export default class SceneManager {
   public playAnimation(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
     const mixer = this.getAnimationMixer(mixerName)
     const animationToPlay = mixer.instance.clipAction(animationClip)
+    animationToPlay.reset()
 
+    const activeAnimation = this._activeActions.find(animation => animation.mixerName === mixer.name)
+
+    if (activeAnimation) {
+      activeAnimation.animation.fadeOut(1)
+      activeAnimation.animation = animationToPlay
+    } else {
+      this._activeActions.push({
+        mixerName: mixer.name,
+        animation: animationToPlay
+      })
+    }
+
+    animationToPlay.fadeIn(1)
     animationToPlay.play()
   }
 

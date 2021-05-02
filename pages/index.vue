@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import {SceneManager} from "~/core/managers";
+import GlobalScene from "~/core/scene/GlobalScene";
 import GlobalSceneStore from "~/store/globalScene";
 import {
   BedroomInteractPoint,
@@ -21,7 +21,7 @@ export default class HomePage extends Vue {
 
   mounted() {
     this.globalSceneStore.clearActiveRoom()
-    SceneManager.GLOBAL_SCENE.goToPresetPosition('home', 2, () => {
+    GlobalScene.context.goToPresetPosition('home', 2, () => {
       this.addInteractionPoints()
     })
   }

@@ -8,10 +8,10 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
-import {SceneManager} from "~/core/managers";
 import GlobalSceneStore from "~/store/globalScene";
 import AuthMiddleware from "~/middleware/auth";
 import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
+import GlobalScene from "~/core/scene/GlobalScene";
 
 @Component({})
 export default class RoomPage extends Vue {
@@ -31,7 +31,7 @@ export default class RoomPage extends Vue {
   mounted() {
     const roomSlug = <ROOM_SLUG>this.$route.params.roomName
     this.globalSceneStore.setIsCameraMoving(true)
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomSlug, 2, () => {
+    GlobalScene.context.goToPresetPosition(roomSlug, 2, () => {
       this.globalSceneStore.setActiveRoom(roomSlug)
       this.addInteractionPoints()
       this.globalSceneStore.setIsCameraMoving(false)

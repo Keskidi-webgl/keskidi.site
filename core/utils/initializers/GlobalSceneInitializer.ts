@@ -7,7 +7,6 @@ import {
   MeshBasicMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
-  PointLight, PointLightHelper,
   Scene,
   sRGBEncoding,
   WebGLRenderer
@@ -17,6 +16,8 @@ import {GLTF_ASSET} from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 import {Object3D} from "three/src/core/Object3D";
+import GlobalScene from "~/core/scene/GlobalScene";
+import TomSceneElement from "~/core/scene/TomSceneElement";
 
 /**
  * @description
@@ -25,7 +26,7 @@ import {Object3D} from "three/src/core/Object3D";
 export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, globalSceneStore: GlobalSceneStore }, void> {
 
   init() {
-    SceneManager.GLOBAL_SCENE = this._createInstance()
+    GlobalScene.setSceneContext(this._createSceneContext())
     this._addGltfGlobalScene()
     this._addGltfTom()
     this._registerPresetPositions()
@@ -33,13 +34,13 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addLights(true)
     this._configGUI()
 
-    SceneManager.GLOBAL_SCENE.start()
+    GlobalScene.context.start()
   }
 
   /**
    * Create the shell to interact with global scene
    */
-  private _createInstance() {
+  private _createSceneContext() {
     // Set canvas dimensions
     this._data.canvas.width = Helpers.getWindowSizes().width
     this._data.canvas.height = Helpers.getWindowSizes().height
@@ -70,7 +71,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         }
         for (const point of this._data.globalSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
-          screenPosition.project(SceneManager.GLOBAL_SCENE.camera)
+          screenPosition.project(GlobalScene.context.camera)
           const updateData = {
             name: point.name,
             transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,
@@ -107,10 +108,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    * Create gui
    */
   private _configGUI() {
-    let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'x', -500, 500, 0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'y', -500, 500, 0.01).listen()
-    sceneFolder.add(SceneManager.GLOBAL_SCENE.scene.position, 'z', -500, 500, 0.01).listen()
+    let sceneFolder = GlobalScene.context.gui.addFolder("Scene")
+    sceneFolder.add(GlobalScene.context.scene.position, 'x', -500, 500, 0.01).listen()
+    sceneFolder.add(GlobalScene.context.scene.position, 'y', -500, 500, 0.01).listen()
+    sceneFolder.add(GlobalScene.context.scene.position, 'z', -500, 500, 0.01).listen()
   }
 
   /**
@@ -150,11 +151,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
     globalSceneGltf.scene.position.set(0, 0, 0)
-    console.log(globalSceneGltf)
 
 
-    SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
-    SceneManager.GLOBAL_SCENE.scene.traverse(child => {
+    GlobalScene.context.scene.add(globalSceneGltf.scene)
+    GlobalScene.context.scene.traverse(child => {
       // @ts-ignore
       if (child.material) child.material.metalness = 0;
     });
@@ -162,14 +162,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
   private _addGltfTom() {
-    const tomGltf = AssetsManager.getFbx(GLTF_ASSET.TOM).data
-    tomGltf.scale.set(0.8, 0.8, 0.8)
-    tomGltf.position.set(50, 40, 500)
-    tomGltf.rotation.y = -45
-    SceneManager.GLOBAL_SCENE.scene.add(tomGltf)
-
-    SceneManager.GLOBAL_SCENE.createAnimationMixer(GLTF_ASSET.TOM, tomGltf)
-    SceneManager.GLOBAL_SCENE.playAnimation(tomGltf.animations[0], GLTF_ASSET.TOM)
+    GlobalScene.context.scene.add(TomSceneElement.sceneElement)
+    TomSceneElement.setupForGlobalScene()
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.TOM, TomSceneElement.sceneElement)
+    TomSceneElement.playIdleAnimation(GlobalScene.context)
   }
 
   /**
@@ -180,10 +176,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     //hemisphereLights.position.set(100, 500, 700)
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
-      SceneManager.GLOBAL_SCENE.scene.add(helper);
+      GlobalScene.context.scene.add(helper);
     }
 
-    SceneManager.GLOBAL_SCENE.scene.add(hemisphereLights);
+    GlobalScene.context.scene.add(hemisphereLights);
   }
 
   /**
@@ -191,14 +187,14 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _registerPresetPositions() {
     GlobalSceneConfig.cameraPositions.forEach(presetPosition => {
-      SceneManager.GLOBAL_SCENE.registerPresetCameraPositions(presetPosition)
+      GlobalScene.context.registerPresetCameraPositions(presetPosition)
     })
   }
 
   private _optimizeScene() {
     const objectToExclude: Array<Object3D> = [
-      SceneManager.GLOBAL_SCENE.scene.getObjectByName('tom')!,
-      SceneManager.GLOBAL_SCENE.scene.getObjectByName('chat')!
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.TOM)!,
+      GlobalScene.context.scene.getObjectByName('chat')!
     ]
 
     const namesToExclude: string[] = []
@@ -208,7 +204,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       namesToExclude.push(...this._getChildrenNames(obj))
     })
 
-    SceneManager.GLOBAL_SCENE.scene.traverse(child => {
+    GlobalScene.context.scene.traverse(child => {
 
       if (child instanceof Mesh && !namesToExclude.includes(child.name)) {
         const prevMaterial = child.material
