@@ -8,7 +8,8 @@ import {GLTF_ASSET} from "~/core/enums";
  */
 export default class AssetManagerInitializer extends Initializers<null, void> {
   init(): void {
-    AssetsManager.enableLocalMode()
+    AssetsManager
+      .enableLocalMode()
       .registerGltf(
         GLTF_ASSET.GLOBAL_SCENE,
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_global_no_bake.gltf",

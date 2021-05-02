@@ -4,7 +4,12 @@
     <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
     <!--
     <button @click="toggleSound">toggle sound</button>
+
     -->
+
+    <audio ref="sound" class="ambient-sound" src="drill.mp3" autoplay style="display: none"></audio>
+
+    <sound @click.native="toggleSound"></sound>
     <!-- Progress level -->
     <ProgressLevel
       class="progress-level"
@@ -51,9 +56,11 @@ import { Level } from "~/core/types";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
+import Sound from "~/components/sound/sound.vue";
 
 @Component({
   components: {
+    Sound,
     SceneNavigationPanel,
     LogoMedia,
     ProgressLevel,
@@ -77,11 +84,17 @@ export default class DefaultLayout extends Vue {
   public level: Level | null = null;
   public words: number = 0;
 
-  public sound: HTMLAudioElement | null = null
+  public sound: HTMLAudioElement | null  = null
 
   public async mounted() {
     //this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
-    //this.audio.play();
+    console.log(this.globalStore.isSoundEnabled)
+
+    if (this.globalStore.isSoundEnabled === false){
+      let audio = this.$refs.sound as HTMLAudioElement
+      audio.pause()
+    }
+
     await this.initApp();
     if (this.globalStore.isAppInit && this.authStore.isAuth)
       await this.initProgressLevel();
@@ -102,7 +115,21 @@ export default class DefaultLayout extends Vue {
     // if play alor spause
     // if pause alors play
 
-    // this.globalStore.setUserAudioPreferences()
+    let audio = this.$refs.sound as HTMLAudioElement
+
+    if (audio.paused){
+      audio.play()
+      this.globalStore.setUserAudioPreferences(true)
+    }else {
+      audio.pause()
+      this.globalStore.setUserAudioPreferences(false)
+    }
+
+    console.log(this.globalStore.isSoundEnabled)
+
+
+    console.log("soun clique zebi")
+    // this.globalStore.setUserAudioPreferences(true)
   }
 
   /**
