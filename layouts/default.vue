@@ -4,7 +4,6 @@
     <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
     <!--
     <button @click="toggleSound">toggle sound</button>
-
     -->
 
     <audio ref="sound" class="ambient-sound" src="drill.mp3" autoplay style="display: none"></audio>
@@ -91,8 +90,12 @@ export default class DefaultLayout extends Vue {
     console.log(this.globalStore.isSoundEnabled)
 
     if (this.globalStore.isSoundEnabled === false){
+      let bars = document.querySelectorAll('.sound-bar')
       let audio = this.$refs.sound as HTMLAudioElement
       audio.pause()
+      bars.forEach((item)=>{
+        item.classList.remove('sound-barActive')
+      })
     }
 
     await this.initApp();
@@ -112,24 +115,22 @@ export default class DefaultLayout extends Vue {
   }
 
   toggleSound() {
-    // if play alor spause
-    // if pause alors play
-
+    // TODO --> refacto
     let audio = this.$refs.sound as HTMLAudioElement
-
+    let bars = document.querySelectorAll('.sound-bar')
     if (audio.paused){
       audio.play()
       this.globalStore.setUserAudioPreferences(true)
+      bars.forEach((item)=>{
+        item.classList.add('sound-barActive')
+      })
     }else {
       audio.pause()
       this.globalStore.setUserAudioPreferences(false)
+      bars.forEach((item)=>{
+        item.classList.remove('sound-barActive')
+      })
     }
-
-    console.log(this.globalStore.isSoundEnabled)
-
-
-    console.log("soun clique zebi")
-    // this.globalStore.setUserAudioPreferences(true)
   }
 
   /**

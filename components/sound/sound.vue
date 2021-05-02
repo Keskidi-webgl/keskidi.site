@@ -12,19 +12,8 @@
 
 <script lang="ts">
 import {Component, getModule, Prop, Vue} from 'nuxt-property-decorator'
-import GlobalStore from "~/store/global";
-
 @Component
 export default class sound extends Vue {
-  public globalStore = getModule(GlobalStore, this.$store);
-
-
-  public mounted() {
-    console.log("sound")
-  }
-
-
-
 
 }
 </script>
@@ -38,11 +27,9 @@ $duration-base: .8;
   display: flex;
   cursor: pointer;
   position: absolute;
-  bottom: 35px;
+  bottom: 25px;
   z-index: 99;
-  left: 35px;
-
-
+  left: 25px;
   &-bar{
     width: $size;
     height: $size;
