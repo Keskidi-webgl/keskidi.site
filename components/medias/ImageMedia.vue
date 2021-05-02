@@ -2,7 +2,7 @@
 
   <div class="activity-item--mediasImg">
     <img class="activity-item--img" :src="mediaUrl" alt="">
-    <p class="activity-item--imgCaption main-font">{{caption}}</p>
+    <p class="activity-item--imgCaption">{{caption}}</p>
   </div>
 
 </template>
