@@ -4,7 +4,7 @@ import {
   HemisphereLight,
   HemisphereLightHelper,
   Mesh,
-  MeshBasicMaterial,
+  MeshBasicMaterial, MeshToonMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
   Scene,
@@ -35,6 +35,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     //this._optimizeScene()
     this._addLights(true)
     this._configGUI()
+    console.log(GlobalScene.context)
 
     GlobalScene.context.start()
   }
@@ -180,7 +181,22 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
       GlobalScene.context.scene.add(helper);
     }
+    /*
+    const spotLight = new SpotLight( 0xffffff );
+    spotLight.position.set( -200, 1000, 200 );
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
+    spotLight.shadow.camera.near = 500;
+    spotLight.shadow.camera.far = 4000;
+    spotLight.shadow.camera.fov = 30;
 
+    if (withHelper) {
+      const helper = new SpotLightHelper(spotLight, 5);
+      GlobalScene.context.scene.add(helper);
+    }
+
+     */
     GlobalScene.context.scene.add(hemisphereLights);
   }
 
@@ -199,7 +215,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       const cloud = AssetsManager.getGltf(cloudConfig.type).data.scene.clone()
       cloud.position.set(cloudConfig.x, cloudConfig.y, cloudConfig.z)
       cloud.rotation.y = cloudConfig.rotationY
-      console.log('cloud : ', cloud)
+      cloud.name = ``
       GlobalScene.context.scene.add(cloud)
     })
   }
@@ -221,7 +237,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
       if (child instanceof Mesh && !namesToExclude.includes(child.name)) {
         const prevMaterial = child.material
-        const newMaterial = new MeshBasicMaterial()
+        const newMaterial = new MeshToonMaterial()
         newMaterial.copy((prevMaterial as MeshBasicMaterial))
         if (prevMaterial.map === null && prevMaterial.emissiveMap) {
           newMaterial.map = prevMaterial.emissiveMap
