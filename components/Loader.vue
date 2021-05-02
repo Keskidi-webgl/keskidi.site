@@ -61,7 +61,7 @@ export default class Loader extends Vue {
       autoAlpha: 0,
       onComplete: () => {
         if (this.$route.path === '/') {
-          GlobalScene.context.goToPresetPosition('home', 4, () => {
+          GlobalScene.context.goToPresetPosition('home', 2, () => {
             this.isActive = false
           })
         } else {

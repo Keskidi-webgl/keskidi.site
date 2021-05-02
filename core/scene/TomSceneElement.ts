@@ -64,6 +64,11 @@ class TomSceneElement {
     sceneContext.playAnimation(this._animations!.punch, GLTF_ASSET.TOM)
   }
 
+  public playHelloAnimation(sceneContext: SceneManager) {
+    this._checkIfInit()
+    sceneContext.playAnimation(this._animations!.hello, GLTF_ASSET.TOM)
+  }
+
   private _checkIfInit() {
     if (!this._sceneElement) {
       throw Error('You need to set sceneElement')

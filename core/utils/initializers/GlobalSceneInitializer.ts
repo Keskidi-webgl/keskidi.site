@@ -8,7 +8,7 @@ import {
   PCFSoftShadowMap,
   PerspectiveCamera,
   Scene,
-  sRGBEncoding,
+  sRGBEncoding, Vector3,
   WebGLRenderer
 } from "three";
 import {Initializers} from "~/core/defs";
@@ -101,7 +101,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     })//.hideGui()
-      .enableStats()
+      //.enableStats()
       .enableParallax()
       //.enableAxesHelpers(1000)
 
@@ -121,12 +121,16 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    * Create perspective camera
    */
   private _createCamera() {
-    return new PerspectiveCamera(
+    const camera = new PerspectiveCamera(
       50,
       this._data.canvas.width / this._data.canvas.height,
       1,
       10000
     )
+    camera.position.set(0, 1000, 1000)
+    camera.lookAt(new Vector3())
+
+    return camera
   }
 
   /**
@@ -168,7 +172,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.scene.add(TomSceneElement.sceneElement)
     TomSceneElement.setupForGlobalScene()
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.TOM, TomSceneElement.sceneElement)
-    TomSceneElement.playIdleAnimation(GlobalScene.context)
+    TomSceneElement.playHelloAnimation(GlobalScene.context)
   }
 
   /**

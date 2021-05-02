@@ -21,6 +21,7 @@ export enum GLTF_ASSET {
   TOM_DOWN = 'tomBadDown',
   TOM_HEAD = 'tomHead',
   TOM_PUNCH = 'tomPunch',
+  TOM_HELLO= 'tomHello',
 }
 
 /**
