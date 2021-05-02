@@ -234,7 +234,7 @@ export default class SceneManager {
       // ease: "sine.inOut",
       onUpdate: () => {
         if (this._camera instanceof PerspectiveCamera) {
-          this._camera.updateProjectionMatrix()
+          //this._camera.updateProjectionMatrix()
           //this.camera.lookAt(lookAtPosition)
         }
       },
@@ -242,13 +242,22 @@ export default class SceneManager {
         successCallBack(this)
       }
     });
-    gsap.to(o, {
+    gsap.to(this._camera.rotation, {
       duration,
-      t: 1,
-      ease: "sin.out",
+      x: destinationRotation.x,
+      y: destinationRotation.y,
+      z: destinationRotation.z,
+      //ease: "sin.out",
       onUpdate: () => {
+        if (this._camera instanceof PerspectiveCamera) {
+          //this._camera.updateProjectionMatrix()
+          //this.camera.lookAt(lookAtPosition)
+        }
+        /*
         updateQuaternion.slerpQuaternions(originQuaternion, destinationQuaternion, o.t)
         this._camera.quaternion.set(updateQuaternion.x, updateQuaternion.y, updateQuaternion.z, updateQuaternion.w)
+
+         */
       }
     })
   }

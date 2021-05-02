@@ -33,6 +33,8 @@ export default class GlobalSceneStore extends VuexModule {
    */
   private _isCameraMoving: boolean = false
 
+  private _isHomePageReady: boolean = false
+
   @Mutation
   public setActiveRoom(roomSlug: ROOM_SLUG | null) {
     this._activeRoom = roomSlug ? GlobalSceneHelper.getRoomBySlug(roomSlug) : roomSlug
@@ -80,6 +82,13 @@ export default class GlobalSceneStore extends VuexModule {
     return this
   }
 
+  @Mutation
+  public setIsHomePageReady(isReady: boolean) {
+    this._isHomePageReady = isReady
+
+    return this
+  }
+
   get activeRoom() {
     return this._activeRoom
   }
@@ -94,5 +103,9 @@ export default class GlobalSceneStore extends VuexModule {
 
   get isCameraMoving() {
     return this._isCameraMoving
+  }
+
+  get isHomePageReady() {
+    return this._isHomePageReady
   }
 }

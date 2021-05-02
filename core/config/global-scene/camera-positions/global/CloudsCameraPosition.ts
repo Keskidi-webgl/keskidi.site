@@ -1,16 +1,18 @@
 import GlobalScene from "~/core/scene/GlobalScene";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
-import {Bedroom} from "~/core/config/global-scene/rooms";
+import {Vector3} from "three";
 
 const BedroomCameraPosition: CameraPosition = {
-  name: Bedroom.urlSlug,
+  name: 'cloud',
 
   coords: () => {
-    const lookAtPosition = GlobalScene.context.scene.getObjectByName('chambre')!.position
+    const lookAtPosition = new Vector3()
+    GlobalScene.context.scene.getObjectByName('cloud6')!.getWorldPosition(lookAtPosition)
+
     const cameraPos = lookAtPosition.clone()
-    cameraPos.x = 250
-    cameraPos.y = 130
-    cameraPos.z = 500
+    cameraPos.y = cameraPos.y * 0.9
+    //cameraPos.x = cameraPos.x * 6
+    cameraPos.z = 400
 
     return { cameraPos, lookAtPosition }
   }

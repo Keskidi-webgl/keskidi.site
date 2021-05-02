@@ -51,6 +51,13 @@ const CloudsConfig: Array<Cloud> = [
     rotationY: 80,
     type: GLTF_ASSET.CLOUD_LITTLE
   },
+  {
+    x: -300,
+    y: 1000,
+    z: 10,
+    rotationY: 80,
+    type: GLTF_ASSET.CLOUD_LITTLE
+  },
 ]
 
 export default CloudsConfig

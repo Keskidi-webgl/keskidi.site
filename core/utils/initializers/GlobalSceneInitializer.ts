@@ -32,7 +32,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addGltfTom()
     this._addClouds()
     this._registerPresetPositions()
-    //this._optimizeScene()
+    this._optimizeScene()
     this._addLights(true)
     this._configGUI()
     console.log(GlobalScene.context)
@@ -66,7 +66,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: true,
+      activateOrbitControl: false,
       onRender: (ctx) => {
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
@@ -101,7 +101,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     })//.hideGui()
-      //.enableStats()
+      .enableStats()
       .enableParallax()
       //.enableAxesHelpers(1000)
 
@@ -211,11 +211,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addClouds() {
 
-    CloudsConfig.forEach(cloudConfig => {
+    CloudsConfig.forEach((cloudConfig, index) => {
       const cloud = AssetsManager.getGltf(cloudConfig.type).data.scene.clone()
       cloud.position.set(cloudConfig.x, cloudConfig.y, cloudConfig.z)
       cloud.rotation.y = cloudConfig.rotationY
-      cloud.name = ``
+      cloud.name = `cloud${index}`
       GlobalScene.context.scene.add(cloud)
     })
   }
@@ -223,7 +223,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _optimizeScene() {
     const objectToExclude: Array<Object3D> = [
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.TOM)!,
+      /*
+
       GlobalScene.context.scene.getObjectByName('chat')!
+
+       */
     ]
 
     const namesToExclude: string[] = []
