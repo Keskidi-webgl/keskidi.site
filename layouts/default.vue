@@ -105,7 +105,6 @@ export default class DefaultLayout extends Vue {
 
   public async mounted() {
     //this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
-    console.log(this.globalStore.isSoundEnabled);
 
     if (this.globalStore.isSoundEnabled === false) {
       let bars = document.querySelectorAll(".sound-bar");

@@ -68,7 +68,7 @@ export default class SceneManager {
   private _onResumeCallback: DefaultSceneManagerCallback
   private _onPauseCallback: DefaultSceneManagerCallback
   private _onDestroyCallback: DefaultSceneManagerCallback
-  private _onRenderCallback: DefaultSceneManagerCallback
+  private _onRenderCallback: Array<DefaultSceneManagerCallback>
   private _onRayCasterIntersectCallback: RayCasterIntersectCallBack
   private _onMouseMoveCanvasCallback: MouseMoveCanvasCallback
   private _onWindowResizeCallback: WindowResizeCallback
@@ -116,8 +116,9 @@ export default class SceneManager {
 
     this._onDestroyCallback = options.onDestroy || function () {
     }
-    this._onRenderCallback = options.onRender || function () {
-    }
+    this._onRenderCallback = []
+    if (options.onRender) this._onRenderCallback.push(options.onRender)
+
     this._onRayCasterIntersectCallback = options.onRayCasterIntersect || function () {
     }
     this._bindExternEvents = options.bindEvents || function () {
@@ -178,6 +179,15 @@ export default class SceneManager {
     this._isPlaying = true
     this._onResumeCallback(this)
     this._tick()
+  }
+
+  /**
+   * Add renderCallback
+   */
+  public onRender(renderCallback: DefaultSceneManagerCallback) {
+    this._onRenderCallback.push(renderCallback)
+
+    return this
   }
 
   /**
@@ -461,7 +471,9 @@ export default class SceneManager {
     this._deltaTime = elapsedTime - this._previousTime
     this._previousTime = elapsedTime
 
-    this._onRenderCallback(this)
+    this._onRenderCallback.forEach(renderCallback => {
+      renderCallback(this)
+    })
 
     if (this._controls) {
       this._controls.update()

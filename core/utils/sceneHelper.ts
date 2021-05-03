@@ -58,7 +58,6 @@ export default class SceneHelper {
 
   public static replaceByBasicMaterial(objectList: Array<Object3D>, sceneContext: SceneManager) {
     const names: Array<string> = []
-    console.log(objectList)
     objectList.forEach(obj => {
       names.push(obj.name)
       names.push(...SceneHelper.getChildrenNames(obj))
