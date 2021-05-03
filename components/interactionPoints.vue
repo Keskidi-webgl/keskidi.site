@@ -39,8 +39,7 @@ export default class InteractionPoints extends Vue {
   public globalStore: GlobalStore = getModule(GlobalStore, this.$store);
   public authStore: AuthStore = getModule(AuthStore, this.$store);
 
-  mounted() {
-  }
+  mounted() {}
 
   public style() {
     return `
@@ -76,17 +75,17 @@ export default class InteractionPoints extends Vue {
     }
 
     .center {
-      height: 116px;
-      width: 116px;
-      transform: translate(-34px, -34px);
+      height: 78px;
+      width: 78px;
+      transform: translate(-15px, -15px);
 
       svg {
         display: none !important;
       }
 
       &:after {
-        height: 116px;
-        width: 116px;
+        height: 78px;
+        width: 78px;
         border-width: 3px;
       }
     }
