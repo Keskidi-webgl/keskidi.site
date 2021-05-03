@@ -39,7 +39,6 @@
 
 <script lang="ts">
 import { Component, getModule, Vue } from "nuxt-property-decorator";
-import { Room } from "~/core/config/global-scene/rooms/types";
 import GlobalSceneStore from "~/store/globalScene";
 
 @Component({})

@@ -17,6 +17,8 @@ import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
+import Helpers from "~/core/utils/helpers";
+import GlobalStore from "~/store/global";
 
 @Component({
   components: {
@@ -27,6 +29,7 @@ import ActivityOneResult from "~/components/activities/activity-one/ActivityOneR
 })
 export default class ActivityPanel extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
   public activityDisplay = {
     one: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_1,
@@ -34,7 +37,8 @@ export default class ActivityPanel extends Vue {
   }
 
   public mounted() {
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
+    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord, this.globalStore.achievedWords)
+    this.activityStore.setCurrentActivity(isWordAchieved ? ACTIVITY_TYPE.ACTIVITY_1 : ACTIVITY_TYPE.ACTIVITY_1)
   }
 
   public goToHome() {
