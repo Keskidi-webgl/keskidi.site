@@ -10,9 +10,9 @@ const MezzanineCameraPosition: CameraPosition = {
     const lookAtPosition = new Vector3()
     GlobalScene.context.scene.getObjectByName('tv')!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
-    cameraPos.x = -500
-    cameraPos.y = 400
-    cameraPos.z = -90
+    cameraPos.x = -400
+    cameraPos.y = 380
+    cameraPos.z = 160
 
     return { cameraPos, lookAtPosition }
   }
