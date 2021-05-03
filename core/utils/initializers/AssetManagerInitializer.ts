@@ -9,7 +9,17 @@ import {GLTF_ASSET} from "~/core/enums";
 export default class AssetManagerInitializer extends Initializers<null, void> {
   init(): void {
     AssetsManager
-      //.enableLocalMode()
+      .enableLocalMode()
+      .registerGltf(
+        GLTF_ASSET.CLOUD_LITTLE,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_1.gltf",
+        "nuage_1.gltf"
+      )
+      .registerGltf(
+        GLTF_ASSET.CLOUD_BIG,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_2.gltf",
+        "nuage_2.gltf"
+      )
 
       .registerFbx(
         GLTF_ASSET.TOM,
@@ -35,6 +45,11 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
         GLTF_ASSET.TOM_HEAD,
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_bad_1.fbx",
         "perso_bad_1.fbx"
+      )
+      .registerFbx(
+        GLTF_ASSET.TOM_HELLO,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_salut.fbx",
+        "perso_salut.fbx"
       )
 
       .registerGltf(

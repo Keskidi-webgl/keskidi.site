@@ -70,4 +70,5 @@ export type TomAnimation = {
   head: AnimationClip,
   down: AnimationClip,
   punch: AnimationClip,
+  hello: AnimationClip,
 }

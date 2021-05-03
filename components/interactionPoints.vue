@@ -40,7 +40,6 @@ export default class InteractionPoints extends Vue {
   public authStore: AuthStore = getModule(AuthStore, this.$store);
 
   mounted() {
-    console.log("DATA", this.data);
   }
 
   public style() {

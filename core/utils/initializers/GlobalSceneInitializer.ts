@@ -4,11 +4,11 @@ import {
   HemisphereLight,
   HemisphereLightHelper,
   Mesh,
-  MeshBasicMaterial,
+  MeshBasicMaterial, MeshToonMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
   Scene,
-  sRGBEncoding,
+  sRGBEncoding, Vector3,
   WebGLRenderer
 } from "three";
 import {Initializers} from "~/core/defs";
@@ -18,6 +18,7 @@ import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 import {Object3D} from "three/src/core/Object3D";
 import GlobalScene from "~/core/scene/GlobalScene";
 import TomSceneElement from "~/core/scene/TomSceneElement";
+import CloudsConfig from "~/core/config/global-scene/clouds/CloudsConfig";
 
 /**
  * @description
@@ -29,10 +30,12 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.setSceneContext(this._createSceneContext())
     this._addGltfGlobalScene()
     this._addGltfTom()
+    this._addClouds()
     this._registerPresetPositions()
-    //this._optimizeScene()
+    this._optimizeScene()
     this._addLights(true)
     this._configGUI()
+    console.log(GlobalScene.context)
 
     GlobalScene.context.start()
   }
@@ -118,12 +121,16 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    * Create perspective camera
    */
   private _createCamera() {
-    return new PerspectiveCamera(
+    const camera = new PerspectiveCamera(
       50,
       this._data.canvas.width / this._data.canvas.height,
       1,
       10000
     )
+    camera.position.set(0, 1000, 1000)
+    camera.lookAt(new Vector3())
+
+    return camera
   }
 
   /**
@@ -165,7 +172,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.scene.add(TomSceneElement.sceneElement)
     TomSceneElement.setupForGlobalScene()
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.TOM, TomSceneElement.sceneElement)
-    TomSceneElement.playIdleAnimation(GlobalScene.context)
+    TomSceneElement.playHelloAnimation(GlobalScene.context)
   }
 
   /**
@@ -178,7 +185,22 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
       GlobalScene.context.scene.add(helper);
     }
+    /*
+    const spotLight = new SpotLight( 0xffffff );
+    spotLight.position.set( -200, 1000, 200 );
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
+    spotLight.shadow.camera.near = 500;
+    spotLight.shadow.camera.far = 4000;
+    spotLight.shadow.camera.fov = 30;
 
+    if (withHelper) {
+      const helper = new SpotLightHelper(spotLight, 5);
+      GlobalScene.context.scene.add(helper);
+    }
+
+     */
     GlobalScene.context.scene.add(hemisphereLights);
   }
 
@@ -191,10 +213,25 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     })
   }
 
+  private _addClouds() {
+
+    CloudsConfig.forEach((cloudConfig, index) => {
+      const cloud = AssetsManager.getGltf(cloudConfig.type).data.scene.clone()
+      cloud.position.set(cloudConfig.x, cloudConfig.y, cloudConfig.z)
+      cloud.rotation.y = cloudConfig.rotationY
+      cloud.name = `cloud${index}`
+      GlobalScene.context.scene.add(cloud)
+    })
+  }
+
   private _optimizeScene() {
     const objectToExclude: Array<Object3D> = [
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.TOM)!,
+      /*
+
       GlobalScene.context.scene.getObjectByName('chat')!
+
+       */
     ]
 
     const namesToExclude: string[] = []
@@ -208,7 +245,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
       if (child instanceof Mesh && !namesToExclude.includes(child.name)) {
         const prevMaterial = child.material
-        const newMaterial = new MeshBasicMaterial()
+        const newMaterial = new MeshToonMaterial()
         newMaterial.copy((prevMaterial as MeshBasicMaterial))
         if (prevMaterial.map === null && prevMaterial.emissiveMap) {
           newMaterial.map = prevMaterial.emissiveMap

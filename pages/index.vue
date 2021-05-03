@@ -21,7 +21,11 @@ export default class HomePage extends Vue {
 
   mounted() {
     this.globalSceneStore.clearActiveRoom()
-    GlobalScene.context.goToPresetPosition('home', 2, () => {
+    const destination = this.globalSceneStore.isHomePageReady ? 'home' : 'cloud'
+    const duration = this.globalSceneStore.isHomePageReady ? 2 : 0
+
+    GlobalScene.context.goToPresetPosition(destination, duration, () => {
+      this.globalSceneStore.setIsHomePageReady(true)
       this.addInteractionPoints()
     })
   }
@@ -48,7 +52,6 @@ export default class HomePage extends Vue {
 
 <style lang="scss" scoped>
 .link-container {
-  background-color: white;
   position: absolute;
   z-index: 20;
   top: 40%;

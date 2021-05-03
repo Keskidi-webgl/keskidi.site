@@ -14,6 +14,7 @@ export default class TomSceneElementInitializer extends Initializers<null, void>
         head: AssetsManager.getFbx(GLTF_ASSET.TOM_HEAD).data.animations[0],
         down: AssetsManager.getFbx(GLTF_ASSET.TOM_DOWN).data.animations[0],
         punch: AssetsManager.getFbx(GLTF_ASSET.TOM_PUNCH).data.animations[0],
+        hello: AssetsManager.getFbx(GLTF_ASSET.TOM_HELLO).data.animations[0]
       })
   }
 }
