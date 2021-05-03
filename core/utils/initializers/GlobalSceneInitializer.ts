@@ -1,6 +1,16 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
-import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {
+  BackSide,
+  CanvasTexture, DirectionalLight,
+  HemisphereLight,
+  HemisphereLightHelper, LoopOnce, Mesh,
+  PCFSoftShadowMap,
+  PerspectiveCamera, PlaneBufferGeometry,
+  Scene, ShadowMaterial, SpotLight, SpotLightHelper,
+  sRGBEncoding, Vector3,
+  WebGLRenderer
+} from "three";
 import {Initializers} from "~/core/defs";
 import {GLTF_ASSET} from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
@@ -159,7 +169,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _createPlanesBackground(){
 
-    let globalScene = SceneManager.GLOBAL_SCENE.scene
+    let globalScene = GlobalScene.context.scene
 
 
     const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
@@ -197,12 +207,12 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     globalScene.add( helper );
 
 
-    let floorFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Floor")
+    let floorFolder = GlobalScene.context.gui.addFolder("Floor")
     floorFolder.add(this.floor.position,'x',-1000,1000,0.01).listen()
     floorFolder.add(this.floor.position,'y',-1000,1000,0.01).listen()
     floorFolder.add(this.floor.position,'z',-1000,1000,0.01).listen()
 
-    let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Light")
+    let sceneFolder = GlobalScene.context.gui.addFolder("Light")
     sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
     sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
     sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
@@ -219,14 +229,15 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     var my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
     my_gradient.addColorStop(0, "#FCE9E1");
-    // my_gradient.addColorStop(0.5, "#FDF0E9");
-    my_gradient.addColorStop(1, "#FF0000");
+    my_gradient.addColorStop(0.5, "#FDF0E9");
+    // my_gradient.addColorStop(1, "#FF0000");
     ctx!.fillStyle = my_gradient;
-    ctx!.fillRect(0, 0, SceneManager.GLOBAL_SCENE.width, SceneManager.GLOBAL_SCENE.height);
+    ctx!.fillRect(0, 0, GlobalScene.context.width, GlobalScene.context.height);
+
 
     var texture = new CanvasTexture(canvas);
 
-    SceneManager.GLOBAL_SCENE.scene.background = texture
+    GlobalScene.context.scene.background = texture
 
 
   }
@@ -239,8 +250,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
     globalSceneGltf.scene.position.set(0, 0, 0)
 
-    SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
-    SceneManager.GLOBAL_SCENE.scene.traverse( child => {
+    GlobalScene.context.scene.add(globalSceneGltf.scene)
+    GlobalScene.context.scene.traverse( child => {
 
       if(child instanceof Mesh){
         child.receiveShadow = true

@@ -29,6 +29,7 @@ import {Object3D} from "three/src/core/Object3D";
 import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 import Helpers from "~/core/utils/helpers";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 
 /**
  * @description
