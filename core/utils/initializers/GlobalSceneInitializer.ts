@@ -194,7 +194,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     if (withHelper) {
       const helper = new SpotLightHelper(spotLight, 5);
-      GlobalScene.context.scene.add(helper);
+      //GlobalScene.context.scene.add(helper);
     }
     GlobalScene.context.scene.add(spotLight)
     GlobalScene.context.scene.add(hemisphereLights);
