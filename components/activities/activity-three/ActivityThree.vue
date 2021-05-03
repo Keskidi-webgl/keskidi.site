@@ -57,7 +57,7 @@
           <audio style="display: none" ref="audioElement" :src='activeExpression.audio.url'></audio>
 
 
-          <CustomButton @click.native="ekip" v-bind:class="countExpressionSuccess<=2? 'btn-disabled': '' " class="btn-validate" arrow-color="#FFF8EE" color="#000648"
+          <CustomButton @click.native="goToResult" v-bind:class="countExpressionSuccess<=2? 'btn-disabled': '' " class="btn-validate" arrow-color="#FFF8EE" color="#000648"
                         text="Continuer"></CustomButton>
           <img class="content-img" :src="activityStore.dataWord.activity_data.good_object" alt="">
         </div>
@@ -78,6 +78,7 @@ import {VoiceRecognitionManager} from "~/core/managers";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
+import {ACTIVITY_TYPE} from "~/core/enums";
 @Component({
   components: {
     ActivityElement,
@@ -94,10 +95,8 @@ export default class ActivityThree extends Vue {
 
   public mounted() {
     this.activeExpression = this.activityStore.dataWord!.expressions[0]
-    // this._initCanvasScenes()
     this._createCanvas()
     this._initVoiceRecognitionManager()
-    // console.log(this.activityRecord)
   }
 
   /**
@@ -106,7 +105,6 @@ export default class ActivityThree extends Vue {
   public startRecordVoice(expression: WordExpression) {
 
     this.$refs.activityRecord[this.countExpressionSuccess].classList.add('isRecording')
-    // console.log(el)
     VoiceRecognitionManager.setTextToRecognize(expression.content!)
     VoiceRecognitionManager.start()
     VoiceRecognitionManager.onEnd(()=>{
@@ -122,13 +120,11 @@ export default class ActivityThree extends Vue {
   /**
    * Computed value for activity success condition
    */
-  public activityIsSucceed() {
-    return this.countExpressionSuccess >= 3
+  goToResult(){
+    console.log('ekipafond')
+    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT)
   }
 
-  ekip(){
-    console.log('ekipafond')
-  }
   /**
    * Init voice recognition manager callbacks
    */

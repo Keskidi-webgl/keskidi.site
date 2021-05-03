@@ -1,6 +1,7 @@
 <template>
   <div class="activities-result">
 
+    <h1>result</h1>
   </div>
 </template>
 

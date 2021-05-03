@@ -158,6 +158,8 @@ export default class ActivityOne extends Vue {
     }).init();
     ActivityScene.context.start();
   }
+
+  // TODO --> add destroy method for canvas
 }
 </script>
 

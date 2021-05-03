@@ -6,7 +6,11 @@
     <!-- Activity two -->
     <ActivityTwo v-if="activityDisplay.two()"/>
 
+    <!-- Acitivity three   -->
     <ActivityThree v-if="activityDisplay.three()"/>
+
+    <!-- Activities result -->
+    <ActivitiesResult v-if="activityDisplay.result()"/>
   </div>
 </template>
 
@@ -20,13 +24,15 @@ import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
 import ActivityThree from "~/components/activities/activity-three/ActivityThree.vue";
+import ActivitiesResult from "~/components/activities/activities-result/ActivitiesResult.vue";
 
 @Component({
   components: {
     ActivityThree,
     ActivityOne,
     ActivityTwo,
-    ActivityOneResult
+    ActivityOneResult,
+    ActivitiesResult
   }
 })
 export default class ActivityPanel extends Vue {
@@ -35,7 +41,8 @@ export default class ActivityPanel extends Vue {
   public activityDisplay = {
     one: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_1,
     two: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_2,
-    three: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_3
+    three: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_3,
+    result: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_RESULT
   }
 
   public mounted() {
