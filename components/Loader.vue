@@ -108,7 +108,7 @@ export default class Loader extends Vue {
     bottom: 0;
     width: 100%;
     height: 100%;
-    //background: linear-gradient(180deg, #fceee6 0%, #efdedd 100%);
+    background: linear-gradient(180deg, #fceee6 0%, #efdedd 100%);
     z-index: 0;
   }
   &-container {

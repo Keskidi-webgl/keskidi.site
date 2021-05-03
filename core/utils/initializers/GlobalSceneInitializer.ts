@@ -214,7 +214,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
 
     globalScene.add( light );
-    globalScene.add( helper );
+    //globalScene.add( helper );
 
 
     let floorFolder = GlobalScene.context.gui.addFolder("Floor")
@@ -366,6 +366,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // https://stemkoski.github.io/Three.js/Video.html
     const video = AssetsManager.getVideo(VIDEO_ASSET.TV_SCREEN).data!
     video.loop = true
+    video.muted = true
     const videoCanvas = document.createElement('canvas');
 
     videoCanvas.width = 480;
