@@ -1,55 +1,71 @@
 <template>
   <div>
-    <!-- Loader -->
-    <Loader
-      class="site-loader overlay-element"
-      :loading-data="loadingProgressions"
-    ></Loader>
-    <!--
+    <div v-if="!isChrome" class="browser-check">
+      <h1 class="main-font">
+        Cette expérience ne fonctionne pas avec ce navigateur. <br />
+        Merci d'utiliser Chrome.
+      </h1>
+    </div>
+
+    <div v-if="isMobile" class="browser-check">
+      <h1 class="main-font">
+        Cette expérience ne fonctionne pas sur mobile. <br />
+        Merci d'utiliser un ordinateur.
+      </h1>
+    </div>
+
+    <div v-if="isChrome && !isMobile">
+      <!-- Loader -->
+      <Loader
+        class="site-loader overlay-element"
+        :loading-data="loadingProgressions"
+      ></Loader>
+      <!--
     <button @click="toggleSound">toggle sound</button>
     -->
 
-    <audio
-      ref="sound"
-      class="ambient-sound"
-      src="drill.mp3"
-      autoplay
-      style="display: none"
-    ></audio>
+      <audio
+        ref="sound"
+        class="ambient-sound"
+        src="drill.mp3"
+        autoplay
+        style="display: none"
+      ></audio>
 
-    <sound @click.native="toggleSound"></sound>
-    <!-- Progress level -->
-    <ProgressLevel
-      class="progress-level"
-      v-if="level && globalSceneStore.canDisplayGlobalUI"
-      :stroke="2"
-      :radius="94 / 2"
-      :total="words"
-      :progress="progress"
-      :level="level.name"
-    />
-    <!-- Logo -->
-    <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
-    <!-- Global scene -->
-    <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
-    <!-- Page Slot -->
-    <Nuxt v-if="this.globalStore.isAppInit" />
-    <!-- Navigation panel -->
-    <SceneNavigationPanel
-      v-if="
-        (this.globalSceneStore.activeRoom ||
-          this.globalSceneStore.activeObject) &&
-          globalSceneStore.canDisplayGlobalUI
-      "
-    />
+      <sound @click.native="toggleSound"></sound>
+      <!-- Progress level -->
+      <ProgressLevel
+        class="progress-level"
+        v-if="level && globalSceneStore.canDisplayGlobalUI"
+        :stroke="2"
+        :radius="94 / 2"
+        :total="words"
+        :progress="progress"
+        :level="level.name"
+      />
+      <!-- Logo -->
+      <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
+      <!-- Global scene -->
+      <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
+      <!-- Page Slot -->
+      <Nuxt v-if="this.globalStore.isAppInit" />
+      <!-- Navigation panel -->
+      <SceneNavigationPanel
+        v-if="
+          (this.globalSceneStore.activeRoom ||
+            this.globalSceneStore.activeObject) &&
+            globalSceneStore.canDisplayGlobalUI
+        "
+      />
 
-    <!-- Activity onboarding -->
-    <ActivityOnboarding class="activity-onboarding overlay-element" />
-    <!-- Activity panel -->
-    <ActivityPanel
-      v-if="activityStore.canDisplayActivityPanel"
-      class="activity-panel overlay-element"
-    />
+      <!-- Activity onboarding -->
+      <ActivityOnboarding class="activity-onboarding overlay-element" />
+      <!-- Activity panel -->
+      <ActivityPanel
+        v-if="activityStore.canDisplayActivityPanel"
+        class="activity-panel overlay-element"
+      />
+    </div>
   </div>
 </template>
 
@@ -103,22 +119,28 @@ export default class DefaultLayout extends Vue {
 
   public sound: HTMLAudioElement | null = null;
 
+  public isChrome: boolean = navigator.userAgent.indexOf("Chrome") != -1;
+  public isMobile: boolean =
+    window.innerWidth <= 600 && window.innerHeight <= 800;
+
   public async mounted() {
-    //this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
-    console.log(this.globalStore.isSoundEnabled);
+    if (this.isChrome && !this.isMobile) {
+      //this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
+      console.log(this.globalStore.isSoundEnabled);
 
-    if (this.globalStore.isSoundEnabled === false) {
-      let bars = document.querySelectorAll(".sound-bar");
-      let audio = this.$refs.sound as HTMLAudioElement;
-      audio.pause();
-      bars.forEach(item => {
-        item.classList.remove("sound-barActive");
-      });
+      if (this.globalStore.isSoundEnabled === false) {
+        let bars = document.querySelectorAll(".sound-bar");
+        let audio = this.$refs.sound as HTMLAudioElement;
+        audio.pause();
+        bars.forEach(item => {
+          item.classList.remove("sound-barActive");
+        });
+      }
+
+      await this.initApp();
+      if (this.globalStore.isAppInit && this.authStore.isAuth)
+        await this.initProgressLevel();
     }
-
-    await this.initApp();
-    if (this.globalStore.isAppInit && this.authStore.isAuth)
-      await this.initProgressLevel();
   }
 
   async initProgressLevel() {
@@ -178,6 +200,23 @@ export default class DefaultLayout extends Vue {
 </script>
 
 <style scoped lang="scss">
+.browser-check {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background: linear-gradient(107.28deg, #ff6644 29.48%, #ff9d6f 100%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    color: $dark-blue;
+    text-align: center;
+  }
+}
+
 .progress-level {
   margin: 24px;
   position: absolute;
