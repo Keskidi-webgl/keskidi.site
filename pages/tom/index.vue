@@ -149,9 +149,9 @@ export default class AuthPage extends Vue {
 
   beforeDestroy() {
     GlobalScene.context.enableParallax();
-    this.autModule.isAuth
-      ? TomSceneElement.playIdleAnimation(GlobalScene.context)
-      : TomSceneElement.playHelloAnimation(GlobalScene.context)
+    if (!this.autModule.isAuth) {
+      TomSceneElement.playHelloAnimation(GlobalScene.context)
+    }
   }
 
   back() {

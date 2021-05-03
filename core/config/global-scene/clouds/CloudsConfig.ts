@@ -7,7 +7,7 @@ const CloudsConfig: Array<Cloud> = [
     y: 400,
     z: 80,
     rotationY: 80,
-    type: GLTF_ASSET.CLOUD_LITTLE
+    type: GLTF_ASSET.CLOUD_BIG
   },
   {
     x: -400,
@@ -35,7 +35,7 @@ const CloudsConfig: Array<Cloud> = [
     y: 780,
     z: -200,
     rotationY: 80,
-    type: GLTF_ASSET.CLOUD_LITTLE
+    type: GLTF_ASSET.CLOUD_BIG
   },
   {
     x: 100,
