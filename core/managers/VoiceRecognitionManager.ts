@@ -1,16 +1,16 @@
-import stringSimilarity from 'string-similarity';
-import {VoiceRecognitionResult} from "~/core/types";
+import stringSimilarity from "string-similarity";
+import { VoiceRecognitionResult } from "~/core/types";
 
 class VoiceRecognitionManager {
-  private _textToRecognize: string = ''
-  private _recognition!: SpeechRecognition
+  private _textToRecognize: string = "";
+  private _recognition!: SpeechRecognition;
 
   constructor() {
-    this._recognition = this._initApiRecognition()
+    this._recognition = this._initApiRecognition();
   }
 
   public setTextToRecognize(text: string) {
-    this._textToRecognize = text
+    this._textToRecognize = text;
   }
 
   /**
@@ -27,11 +27,11 @@ class VoiceRecognitionManager {
       const result: VoiceRecognitionResult = {
         distance,
         recognitionResult,
-        textToRecognize: this._textToRecognize,
-      }
+        textToRecognize: this._textToRecognize
+      };
 
       callable(result);
-    }
+    };
 
     return this;
   }
@@ -48,11 +48,13 @@ class VoiceRecognitionManager {
    */
   public start() {
     if (!this._recognition) {
-      throw new Error('Recognition property is not initialized');
+      throw new Error("Recognition property is not initialized");
     }
 
     if (!this._recognition) {
-      throw new Error('You need to set a word to compare before start recognition !');
+      throw new Error(
+        "You need to set a word to compare before start recognition !"
+      );
     }
 
     this._recognition.start();
@@ -63,7 +65,7 @@ class VoiceRecognitionManager {
    */
   stop() {
     if (!this._recognition) {
-      throw new Error('Recognition property is not initialized');
+      throw new Error("Recognition property is not initialized");
     }
 
     this._recognition.stop();
@@ -85,10 +87,12 @@ class VoiceRecognitionManager {
    * Format text for comparison
    */
   private _formatForComparison(text: string) {
-    return text.toLowerCase().replace('/\s/g', '')
+    return text.toLowerCase().replace("/s/g", "");
   }
 }
 
-const instance = new VoiceRecognitionManager()
+let isChrome = navigator.userAgent.indexOf("Chrome") != -1;
+
+const instance = isChrome ? new VoiceRecognitionManager() : null;
 
 export default instance;
