@@ -31,45 +31,19 @@ import {GLTF_ASSET} from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
-import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass.js'
-import { HorizontalBlurShader} from "three/examples/jsm/shaders/HorizontalBlurShader";
-import { VerticalBlurShader} from "three/examples/jsm/shaders/VerticalBlurShader";
-import {SSAARenderPass} from "three/examples/jsm/postprocessing/SSAARenderPass";
-import {SAOPass} from "three/examples/jsm/postprocessing/SAOPass";
-import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
-import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
-import {UnrealBloomPass} from "three/examples/jsm/postprocessing/UnrealBloomPass";
-
-// @ts-ignore
-// import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
 /**
  * @description
  * This initializer is responsible for creating the global scene of the application
  */
 export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, globalSceneStore: GlobalSceneStore }, void> {
-  public composer!: EffectComposer
   public floor!: Mesh
-  public state = {
-    shadow: {
-      blur: 3.5,
-      darkness: 1,
-      opacity: 1,
-    },
-    plane: {
-      color: '#ffffff',
-      opacity: 1,
-    },
-    showWireframe: false,
-  };
 
   init() {
     SceneManager.GLOBAL_SCENE = this._createInstance()
     this._createCanvasBackground()
     this._addGltfGlobalScene()
     this._createPlanesBackground()
-    // this._createPostProcessing()
     this._addGltfTom()
     this._registerPresetPositions()
     this._addLights(true)
@@ -99,10 +73,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
 
-    // camera.layers.enable(0)
-    // renderer.toneMappingExposure = 1
-    // renderer.toneMapping.
-    // renderer.shadowMapSo = true;
 
     return new SceneManager({
       canvas: this._data.canvas,
@@ -110,7 +80,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: true,
+      activateOrbitControl: false,
       onRender: (ctx) => {
 
         // Add interactions points tracking
@@ -129,7 +99,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
           this._data.globalSceneStore.updatePositionsInteractivePoint(updateData)
         }
 
-        // this.composer.render(ctx.clock.getDelta());
 
       },
       onResume:(ctx)=> {
@@ -148,9 +117,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     })
-      .enablePostProcessing((composer,ctx) => {
-        this._createPostProcessing(composer,ctx)
-      })
     //.enableStats().enableAxesHelpers(1000)
 
   }
@@ -196,77 +162,22 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     })
   }
 
-  private _createPostProcessing(composer:EffectComposer,ctx:SceneManager){
-    // composer = new EffectComposer(SceneManager.GLOBAL_SCENE.renderer)
-    // this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    // composer.setSize(ctx.width, ctx.height)
-
-    const renderPass = new RenderPass(ctx.scene,ctx.camera)
-
-    let effectFXAA = new ShaderPass( FXAAShader)
-    effectFXAA.uniforms.resolution.value.set(1 / window.innerWidth, 1 / window.innerHeight )
-
-    let bloomPass = new UnrealBloomPass(new Vector2(window.innerWidth,window.innerHeight),1.5,0.4,0.85)
-    bloomPass.threshold = 0.05
-    bloomPass.strength = 1.2
-    bloomPass.radius = 0.55
-    bloomPass.renderToScreen = true
-    // // composer
-    composer.setSize(window.innerWidth, window.innerHeight)
-
-
-    composer.addPass(renderPass)
-    composer.addPass(effectFXAA)
-    composer.addPass(bloomPass)
-
-
-    this.composer = composer
-
-    // ctx.renderer.toneMappingExposure = Math.pow(0.9,4.0)
-
-    // --->  EFFETS
-    // const dotScreenPass = new DotScreenPass()
-    // // const eeee = new BloomPass()
-    // composer.addPass(dotScreenPass)
-
-    // let ssaaRenderPass
-
-    // composer.renderToScreen = true
-
-
-
-    // SHADOW FOLDER
-
-
-  }
-
-
   private _createPlanesBackground(){
 
     let globalScene = SceneManager.GLOBAL_SCENE.scene
 
-    let shadowFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("shadow")
-    shadowFolder.add( this.state.shadow, 'blur', 0, 15, 0.1 ).listen()
-    shadowFolder.add( this.state.shadow, 'darkness', 1, 5, 0.1 ).listen()
 
     const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
-    var material = new MeshPhongMaterial({
+    var material = new ShadowMaterial({
       // depthWrite: false,
-      color: 0xFF0F00,
-      side: DoubleSide,
-      // opacity: 0.1,
+      side: BackSide,
+      opacity: 0.1,
     });
-    // var material = new ShadowMaterial({
-    //   // depthWrite: false,
-    //   side: BackSide,
-    //   opacity: 0.1,
-    // });
 
     this.floor = new Mesh(planeGeometry,material)
     this.floor.name = 'floor'
     this.floor.position.y = -1
     this.floor.receiveShadow = true
-    this.floor.layers.set(1)
 
     // this.floor.layers.mask = 2
     globalScene.add(this.floor)
@@ -281,19 +192,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     light.decay = 1;
     light.distance = 2000;
     light.shadow.radius = 8
-    // light.shadow.bias = 0.0001;
-    // light.shadow.bias = -0.01
-    // light.power = 50
 
     light.shadow.mapSize.height = 2048;
     light.shadow.mapSize.width = 2048;
     light.castShadow = true
 
-    //
-    // light.shadow.camera.left = -100;
-    // light.shadow.camera.right = 100;
-    // light.shadow.camera.top = 100;
-    // light.shadow.camera.bottom = -100;
 
     globalScene.add( light );
     globalScene.add( helper );
@@ -330,7 +233,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
     SceneManager.GLOBAL_SCENE.scene.background = texture
 
-    console.log(canvas)
 
   }
 
@@ -345,16 +247,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     SceneManager.GLOBAL_SCENE.scene.add(globalSceneGltf.scene)
     SceneManager.GLOBAL_SCENE.scene.traverse( child => {
 
-      child.layers.enable(0)
-      // child.castShadow = true
-      // child.receiveShadow = true
-
       if(child instanceof Mesh){
         child.receiveShadow = true
         child.castShadow = true
-        // child.material = new MeshPhongMaterial({
-        //   color:0xFF0000
-        // })
       }
 
       // @ts-ignore
@@ -364,70 +259,12 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
         child.castShadow = true
         child.receiveShadow = true
-        // let transparentSocle =  child.clone()
-        // transparentSocle.name = "cloned_socle"
-        // transparentSocle.position.y = -20
-        // const material = new MeshBasicMaterial( { color: 0xffff00 } );
 
-        /** first version **/
         let socle = child.getObjectByName('socle_2')
         socle!.castShadow = true
         socle!.receiveShadow = true
 
-        //
-        // let __socle = child.getObjectByName('socle_1')
-        // __socle!.castShadow = true
-        // __socle!.receiveShadow = true
-        //
-        // const geometry = new CylinderGeometry( 100, 100, 20, 32 );
-        // const material = new MeshPhongMaterial({
-        //   specular: 0x000000,
-        //   shininess: 100
-        // });
-        // material.opacity = 0.5
-        // const circle = new Mesh( geometry, material );
-        // circle.position.set(420,-208,44)
-        // circle.scale.set(3.5,3.5,3.5)
-        // circle.receiveShadow = true
-        // // circle.rotation.x = Math.PI / 2;
-        //
-        // child.add(circle)
-        //
-        // const color = 0xFFFFFF;
-        // const intensity = 1;
-        // const light = new DirectionalLight(color, intensity);
-        // light.position.set(0, 10, 5);
-        // light.castShadow = true;
-        // child.add(light);
-
-        // child.add(light.target);
-        // let material = new ShadowMaterial()
-        // material.opacity= 0.5
-        // transparentSocle = new Mesh()
-        // child.parent?.add(transparentSocle)
-
-
-        // let sceneFolder = SceneManager.GLOBAL_SCENE.gui.addFolder("Scene")
-        // sceneFolder.add(circle.position,'x',-500,500,0.01).listen()
-        // sceneFolder.add(circle.position,'y',-500,500,0.01).listen()
-        // sceneFolder.add(circle.position,'z',-500,500,0.01).listen()
-        // sceneFolder.add(light.position,'x',-500,500,0.01).listen()
-        // sceneFolder.add(light.position,'y',-500,500,0.01).listen()
-        // sceneFolder.add(light.position,'z',-500,500,0.01).listen()
-
-
-
         console.log(child)
-
-        // var material = new ShadowMaterial();
-        // material.opacity = 0.5;
-
-        // ch
-
-        // var mesh = new Mesh( geometry, material );
-        // mesh.receiveShadow = true;
-        // scene.add( mesh );
-
 
       }
 
