@@ -128,7 +128,7 @@ export default class AuthPage extends Vue {
 
   mounted() {
     GlobalScene.context.disableParallax();
-    TomSceneElement.playIdleAnimation(GlobalScene.context)
+    TomSceneElement.playAnimation('idle', GlobalScene.context)
     GlobalScene.context.goToPresetPosition("tom", 2, () => {
       this.isReady = true;
     });
@@ -150,7 +150,7 @@ export default class AuthPage extends Vue {
   beforeDestroy() {
     GlobalScene.context.enableParallax();
     if (!this.autModule.isAuth) {
-      TomSceneElement.playHelloAnimation(GlobalScene.context)
+      TomSceneElement.playAnimation('hello', GlobalScene.context)
     }
   }
 

@@ -6,7 +6,6 @@ import {
   Clock,
   Euler,
   PerspectiveCamera,
-  Quaternion,
   Raycaster,
   Scene,
   Vector2,
@@ -14,7 +13,6 @@ import {
   WebGLRenderer
 } from "three";
 import {
-  ActiveAnimation,
   AnimationMixerElement,
   DefaultSceneManagerCallback,
   MouseMoveCanvasCallback,
@@ -36,8 +34,6 @@ import Helpers from "~/core/utils/helpers";
  * This manager is responsible for creating a scene 3D and a context to interact with it
  */
 export default class SceneManager {
-  public static ACTIVITY_1_TOM: SceneManager
-
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
   private _camera: Camera
@@ -58,7 +54,6 @@ export default class SceneManager {
 
   // Animations
   private _animationMixers: Array<AnimationMixerElement>
-  private _activeActions: Array<ActiveAnimation>
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -101,7 +96,6 @@ export default class SceneManager {
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
-    this._activeActions = []
     this._globalSceneRotation = {x: 0, y: 0}
 
     this._isPlaying = false
@@ -221,23 +215,12 @@ export default class SceneManager {
     this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
     this._camera.rotation.set(originRotation.x, originRotation.y, originRotation.z);
 
-    const originQuaternion = new Quaternion().copy(this._camera.quaternion);
-    const destinationQuaternion = new Quaternion().setFromEuler(destinationRotation);
-    const updateQuaternion = new Quaternion();
-    const o = { t: 0 };
-
     gsap.to(this._camera.position, {
       duration,
       x: newCameraPosition.x,
       y: newCameraPosition.y,
       z: newCameraPosition.z,
       // ease: "sine.inOut",
-      onUpdate: () => {
-        if (this._camera instanceof PerspectiveCamera) {
-          //this._camera.updateProjectionMatrix()
-          //this.camera.lookAt(lookAtPosition)
-        }
-      },
       onComplete: () => {
         successCallBack(this)
       }
@@ -248,17 +231,6 @@ export default class SceneManager {
       y: destinationRotation.y,
       z: destinationRotation.z,
       //ease: "sin.out",
-      onUpdate: () => {
-        if (this._camera instanceof PerspectiveCamera) {
-          //this._camera.updateProjectionMatrix()
-          //this.camera.lookAt(lookAtPosition)
-        }
-        /*
-        updateQuaternion.slerpQuaternions(originQuaternion, destinationQuaternion, o.t)
-        this._camera.quaternion.set(updateQuaternion.x, updateQuaternion.y, updateQuaternion.z, updateQuaternion.w)
-
-         */
-      }
     })
   }
 
@@ -406,25 +378,9 @@ export default class SceneManager {
   /**
    * Play animation of specific object and animation mixer
    */
-  public playAnimation(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
+  public generateAnimationAction(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
     const mixer = this.getAnimationMixer(mixerName)
-    const animationToPlay = mixer.instance.clipAction(animationClip)
-    animationToPlay.reset()
-
-    const activeAnimation = this._activeActions.find(animation => animation.mixerName === mixer.name)
-
-    if (activeAnimation) {
-      activeAnimation.animation.fadeOut(1)
-      activeAnimation.animation = animationToPlay
-    } else {
-      this._activeActions.push({
-        mixerName: mixer.name,
-        animation: animationToPlay
-      })
-    }
-
-    animationToPlay.fadeIn(1)
-    animationToPlay.play()
+    return mixer.instance.clipAction(animationClip)
   }
 
   public hideGui() {
@@ -446,7 +402,6 @@ export default class SceneManager {
 
     this._checkConfig()
   }
-
 
   /**
    * Init renderer

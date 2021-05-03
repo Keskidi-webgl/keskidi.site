@@ -16,6 +16,7 @@ export enum GLTF_ASSET {
   CLOUD_LITTLE = 'cloudLittle',
   CLOUD_BIG = 'cloudBig',
   OUTSIDE = 'outside',
+  PAPER = 'paper',
 
   TOM = 'tom',
   TOM_MUSCLE = 'tomMuscle',

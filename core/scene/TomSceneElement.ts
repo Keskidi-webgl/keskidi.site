@@ -1,5 +1,5 @@
-import {Group} from "three";
-import {TomAnimation} from "~/core/types";
+import {AnimationAction, AnimationClip, Group} from "three";
+import {TomAnimation, TomAnimationName} from "~/core/types";
 import {SceneManager} from "~/core/managers";
 import {GLTF_ASSET} from "~/core/enums";
 
@@ -9,10 +9,12 @@ import {GLTF_ASSET} from "~/core/enums";
 class TomSceneElement {
   private _sceneElement: Group | null
   private _animations: TomAnimation | null
+  private _activeAnimationAction: AnimationAction | null
 
   constructor() {
     this._sceneElement = null
     this._animations = null
+    this._activeAnimationAction = null
   }
 
   public setSceneElement(sceneElement: Group) {
@@ -44,29 +46,40 @@ class TomSceneElement {
     return this
   }
 
-  public playIdleAnimation(sceneContext: SceneManager) {
-    this._checkIfInit()
-    sceneContext.playAnimation(this._animations!.idle, GLTF_ASSET.TOM)
-  }
+  public playAnimation(animationName: TomAnimationName, sceneContext: SceneManager) {
+    let animationClip: AnimationClip | null = null
 
-  public playMuscleAnimation(sceneContext: SceneManager) {
-    this._checkIfInit()
-    sceneContext.playAnimation(this._animations!.muscle, GLTF_ASSET.TOM)
-  }
+    switch (animationName) {
+      case "idle":
+        animationClip = this.animations.idle
+        break;
+      case "muscle":
+        animationClip = this.animations.muscle
+        break;
+      case "head":
+        animationClip = this.animations.head
+        break;
+      case "down":
+        animationClip = this.animations.down
+        break;
+      case "punch":
+        animationClip = this.animations.punch
+        break;
+      case "hello":
+        animationClip = this.animations.hello
+        break;
+    }
 
-  public playHeadAnimation(sceneContext: SceneManager) {
-    this._checkIfInit()
-    sceneContext.playAnimation(this._animations!.head, GLTF_ASSET.TOM)
-  }
+    const animationActionToPlay = sceneContext.generateAnimationAction(animationClip, GLTF_ASSET.TOM)
+    animationActionToPlay.reset()
 
-  public playPunchAnimation(sceneContext: SceneManager) {
-    this._checkIfInit()
-    sceneContext.playAnimation(this._animations!.punch, GLTF_ASSET.TOM)
-  }
+    if (this._activeAnimationAction) {
+      this._activeAnimationAction.fadeOut(1)
+    }
+    this._activeAnimationAction = animationActionToPlay
 
-  public playHelloAnimation(sceneContext: SceneManager) {
-    this._checkIfInit()
-    sceneContext.playAnimation(this._animations!.hello, GLTF_ASSET.TOM)
+    animationActionToPlay.fadeIn(1)
+    animationActionToPlay.play()
   }
 
   private _checkIfInit() {

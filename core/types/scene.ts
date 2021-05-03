@@ -72,3 +72,5 @@ export type TomAnimation = {
   punch: AnimationClip,
   hello: AnimationClip,
 }
+
+export type TomAnimationName = 'idle'|'muscle'|'head'|'down'|'punch'|'hello'
