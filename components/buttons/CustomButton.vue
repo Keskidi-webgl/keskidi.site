@@ -3,7 +3,6 @@
     <span class="btn-text text-infos main-font" :style="textStyle()">{{
       text
     }}</span>
-    <div class="overlay"></div>
     <div :style="arrowContainerStyle()" class="arrow-container">
       <svg
         width="27"
@@ -114,25 +113,18 @@ export default class CustomButton extends Vue {
     z-index: 10;
   }
 
-  .overlay {
+  &::after {
+    content: "";
     width: 100%;
     height: 100%;
     background-color: $dark-blue;
     position: absolute;
-
-    left: -100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    // overflow: hidden;
-
+    z-index: -1;
     transition: 0.5s ease all;
 
     border-radius: 40px;
 
-    transform: translateZ(0);
+    transform: translateX(-100%);
   }
 
   .arrow-container {
@@ -160,8 +152,8 @@ export default class CustomButton extends Vue {
   }
 
   &:hover {
-    .overlay {
-      left: 0;
+    &::after {
+      transform: translateX(0);
       border-radius: 0;
     }
     .btn-text {
