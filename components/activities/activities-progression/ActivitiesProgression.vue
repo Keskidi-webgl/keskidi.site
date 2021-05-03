@@ -1,0 +1,74 @@
+<template>
+  <div class="activities-progression">
+
+    <h1>Bravo t'as progressé</h1>
+
+    <CustomButton
+      @click.native="nextActivity"
+      arrow-color="#FF6644"
+      color="white"
+      text="Continuer"
+    ></CustomButton>
+
+  </div>
+</template>
+
+<script lang="ts">
+import {Component, getModule, Vue} from 'nuxt-property-decorator'
+import GlobalSceneStore from "~/store/globalScene"
+import ActivityStore from "~/store/activity"
+import CustomButton from "~/components/buttons/CustomButton.vue";
+
+@Component({
+  components:{
+    CustomButton
+  }
+})
+export default class ActivitiesProgression extends Vue {
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
+  public index:number = 10
+
+  nextActivity(){
+    console.log('next')
+  }
+
+  mounted(){
+    console.log('mount')
+  }
+
+
+}
+</script>
+
+<style scoped lang="scss">
+.activities-progression {
+  background: linear-gradient(107.28deg, #ff6644 29.48%, #ff9d6f 100%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#confetti{
+  position: absolute;
+  top: 0;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+</style>

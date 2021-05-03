@@ -11,6 +11,10 @@
 
     <!-- Activities result -->
     <ActivitiesResult v-if="activityDisplay.result()"/>
+
+    <!-- Activities progression -->
+    <ActivitiesProgression v-if="activityDisplay.progression()"/>
+
   </div>
 </template>
 
@@ -25,6 +29,7 @@ import GlobalScene from "~/core/scene/GlobalScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
 import ActivityThree from "~/components/activities/activity-three/ActivityThree.vue";
 import ActivitiesResult from "~/components/activities/activities-result/ActivitiesResult.vue";
+import ActivitiesProgression from "~/components/activities/activities-progression/ActivitiesProgression.vue";
 
 @Component({
   components: {
@@ -32,7 +37,8 @@ import ActivitiesResult from "~/components/activities/activities-result/Activiti
     ActivityOne,
     ActivityTwo,
     ActivityOneResult,
-    ActivitiesResult
+    ActivitiesResult,
+    ActivitiesProgression
   }
 })
 export default class ActivityPanel extends Vue {
@@ -42,7 +48,8 @@ export default class ActivityPanel extends Vue {
     one: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_1,
     two: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_2,
     three: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_3,
-    result: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_RESULT
+    result: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_RESULT,
+    progression: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_PROGRESSION
   }
 
   public mounted() {

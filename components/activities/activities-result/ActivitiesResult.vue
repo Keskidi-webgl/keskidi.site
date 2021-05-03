@@ -23,6 +23,7 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import GlobalSceneStore from "~/store/globalScene"
 import ActivityStore from "~/store/activity"
 import CustomButton from "~/components/buttons/CustomButton.vue";
+import {ACTIVITY_TYPE} from "~/core/enums";
 
 @Component({
   components:{
@@ -35,8 +36,7 @@ export default class ActivitiesResult extends Vue {
   public index:number = 10
 
   nextActivity(){
-    console.log('ekip')
-    this.createConfetti.prototype.destroyConfetti()
+    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_PROGRESSION)
   }
 
   mounted(){
@@ -44,6 +44,9 @@ export default class ActivitiesResult extends Vue {
   }
 
   createConfetti(){
+
+    // TODO --> update confetti code & add destroy method
+
     const AMOUNT = 150;
     const INTERVAL = 50;
     const COLORS = ['#4579FF', '#29EAFC', '#FAB1C0', '#50E3C2', '#FFFC9D', '#1A04B3', '#F81C4D'];
@@ -131,7 +134,7 @@ export default class ActivitiesResult extends Vue {
 
       drawConfetti();
     }
-    
+
     renderConfetti();
   }
 

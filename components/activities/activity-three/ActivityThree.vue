@@ -121,7 +121,6 @@ export default class ActivityThree extends Vue {
    * Computed value for activity success condition
    */
   goToResult(){
-    console.log('ekipafond')
     this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT)
   }
 
