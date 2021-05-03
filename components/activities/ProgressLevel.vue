@@ -5,7 +5,7 @@
       :style="{
         height: bgSize,
         width: bgSize,
-        border: `${this.stroke}px solid rgba(255, 248, 238, 0.2)`
+        border: `${this.stroke}px solid rgba(0, 6, 72, 0.2)`
       }"
     ></div>
     <svg
@@ -32,7 +32,8 @@
         width: progressSize
       }"
     >
-      <p>{{ progress }}/{{ total }}<br />mots</p>
+      <p>{{ progress }}</p>
+      <p>{{ total }}</p>
     </div>
     <div class="progress-title">
       <p>{{ level }}</p>
@@ -58,8 +59,10 @@ export default class ProgressLevel extends Vue {
   public normalizedRadius: number = 0;
   public isReady: boolean = false;
   public progressSize: string = this.radius * 2 * 0.65 - this.stroke + "px";
-  public bgSize: string = this.radius * 2 - this.stroke * 2 - 3 + "px";
-  public percent: number = this.total == 0 ? 0 : (this.progress * 100) / this.total;
+  public bgSize: string =
+    this.radius * 2 - this.stroke * 2 - this.stroke + "px";
+  public percent: number =
+    this.total == 0 ? 0 : (this.progress * 100) / this.total;
 
   public mounted() {
     this.init();
@@ -109,6 +112,8 @@ export default class ProgressLevel extends Vue {
 
     height: 100%;
     width: 100%;
+
+    stroke: $dark-blue;
   }
 
   .progress-number {
@@ -116,10 +121,11 @@ export default class ProgressLevel extends Vue {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(255, 248, 238, 0.2);
+    background-color: $dark-blue;
     border-radius: 50%;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
@@ -128,6 +134,11 @@ export default class ProgressLevel extends Vue {
       margin: 0;
       color: white;
       text-align: center;
+      width: 50%;
+
+      &:last-child {
+        border-top: 1px solid white;
+      }
     }
   }
 
@@ -137,7 +148,8 @@ export default class ProgressLevel extends Vue {
 
     p {
       text-align: center;
-      color: white;
+      color: $dark-blue;
+      font-weight: 700;
     }
   }
 }
