@@ -57,5 +57,11 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale_bake.gltf",
         "scene_globale_bake.gltf"
       )
+
+      .registerGltf(
+        GLTF_ASSET.OUTSIDE,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale_bake.gltf",
+        "outside.gltf"
+      )
   }
 }

@@ -2,15 +2,15 @@ import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
   Color,
-  DoubleSide,
+  DirectionalLight,
+  DirectionalLightHelper,
   HemisphereLight,
-  HemisphereLightHelper,
   Mesh,
-  MeshBasicMaterial, MeshPhongMaterial, MeshToonMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
-  Scene, SpotLight, SpotLightHelper,
-  sRGBEncoding, Vector3,
+  Scene,
+  sRGBEncoding,
+  Vector3,
   WebGLRenderer
 } from "three";
 import {Initializers} from "~/core/defs";
@@ -20,7 +20,7 @@ import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 import {Object3D} from "three/src/core/Object3D";
 import GlobalScene from "~/core/scene/GlobalScene";
 import TomSceneElement from "~/core/scene/TomSceneElement";
-import CloudsConfig from "~/core/config/global-scene/clouds/CloudsConfig";
+import SceneHelper from "~/core/utils/sceneHelper";
 
 /**
  * @description
@@ -30,13 +30,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   init() {
     GlobalScene.setSceneContext(this._createSceneContext())
-    this._addGltfGlobalScene()
-    this._addGltfTom()
-    this._addClouds()
+    this._addSceneElements()
+    this._addLights(true)
     this._registerPresetPositions()
     this._optimizeScene()
-    this._prepareFloor()
-    this._addLights(true)
+    //this._prepareFloor()
     this._configGUI()
     console.log(GlobalScene.context)
 
@@ -155,6 +153,12 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     })
   }
 
+  private _addSceneElements() {
+    this._addGltfGlobalScene()
+    this._addGltfTom()
+    this._addGltfOutside()
+  }
+
   /**
    * Retrieve gltf global scene and inject it into Global scene instance
    */
@@ -172,11 +176,19 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     TomSceneElement.playHelloAnimation(GlobalScene.context)
   }
 
+  private _addGltfOutside() {
+    const outside = AssetsManager.getGltf(GLTF_ASSET.OUTSIDE).data
+    GlobalScene.context.scene.add(outside.scene)
+  }
+
   /**
    * Add lights to the global scene
    */
   private _addLights(withHelper: boolean = false) {
-    const hemisphereLights = new HemisphereLight(0xdff9fb, 0x080820, 1);
+    /*
+    const hemisphereLights = new HemisphereLight( 0xffffff, 0xffffff, 0.6);
+    hemisphereLights.color.setHSL( 0.6, 0.75, 0.5 );
+    hemisphereLights.groundColor.setHSL( 0.095, 0.5, 0.5 );
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
       GlobalScene.context.scene.add(helper);
@@ -196,8 +208,24 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       const helper = new SpotLightHelper(spotLight, 5);
       //GlobalScene.context.scene.add(helper);
     }
-    GlobalScene.context.scene.add(spotLight)
+    //GlobalScene.context.scene.add(spotLight)
     GlobalScene.context.scene.add(hemisphereLights);
+
+     */
+    const dirLight = new DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(200, 1000, 200);
+    dirLight.position.multiplyScalar(50);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
+    dirLight.shadow.camera.near = 500;
+    dirLight.shadow.camera.far = 4000;
+
+    GlobalScene.context.scene.add(dirLight);
+
+    dirLight.castShadow = true;
+    const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.6);
+    GlobalScene.context.scene.add(hemiLight);
   }
 
   /**
@@ -209,65 +237,15 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     })
   }
 
-  private _addClouds() {
-
-    CloudsConfig.forEach((cloudConfig, index) => {
-      const cloud = AssetsManager.getGltf(cloudConfig.type).data.scene.clone()
-      cloud.position.set(cloudConfig.x, cloudConfig.y, cloudConfig.z)
-      cloud.rotation.y = cloudConfig.rotationY
-      cloud.name = `cloud${index}`
-      GlobalScene.context.scene.add(cloud)
-    })
-  }
-
   private _optimizeScene() {
-    const objectToExclude: Array<Object3D> = [
-      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.TOM)!,
-      /*
-
-      GlobalScene.context.scene.getObjectByName('chat')!
-
-       */
+    const objects: Array<Object3D> = [
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.OUTSIDE)!,
+      GlobalScene.context.scene.getObjectByName('socle')!,
     ]
-
-    const namesToExclude: string[] = []
-
-    objectToExclude.forEach(obj => {
-      namesToExclude.push(obj.name)
-      namesToExclude.push(...this._getChildrenNames(obj))
-    })
-
-    GlobalScene.context.scene.traverse(child => {
-
-      if (child instanceof Mesh && !namesToExclude.includes(child.name)) {
-        const prevMaterial = child.material
-        const newMaterial = new MeshToonMaterial()
-        newMaterial.copy((prevMaterial as MeshBasicMaterial))
-        if (prevMaterial.map === null && prevMaterial.emissiveMap) {
-          newMaterial.map = prevMaterial.emissiveMap
-
-        }
-        child.material = newMaterial
-
-      }
-    })
-  }
-
-  private _getChildrenNames(object3D: Object3D): string[] {
-    const children: string[] = []
-    object3D.traverse((child) => {
-      children.push(child.name)
-    })
-    return children
+    SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context)
   }
 
   private _prepareFloor() {
-    const floor = GlobalScene.context.scene.getObjectByName('socle')!
 
-    const upFloor = GlobalScene.context.scene.getObjectByName('socle_1')!
-    if (upFloor instanceof Mesh) {
-      upFloor.material.color.set(new Color(222, 209, 213))
-
-    }
   }
 }

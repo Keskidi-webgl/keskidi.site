@@ -71,9 +71,9 @@ export default class ObjectPage extends Vue {
   }
 
   public getButtonWord() {
-    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord, this.globalStore.achievedWords)
+    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
     const verb = isWordAchieved ? 'Voir' : 'Découvrir'
-    return `${verb} le mot ${this.activityStore.dataWord.name}`
+    return `${verb} le mot ${this.activityStore.dataWord!.name}`
   }
 
   /**

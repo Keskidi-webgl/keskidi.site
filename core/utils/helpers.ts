@@ -51,8 +51,8 @@ export default class Helpers {
     return (1 - value) * start + value * end;
   }
 
-  public static isActivityWordAchieved(userWordData: UserWordData, achievedWords: Array<Word>) {
-    return achievedWords.find(word => word.id === userWordData!.id)
+  public static isActivityWordAchieved(word: Word, achievedWords: Array<UserWordData>) {
+    return achievedWords.find(word => word.id === word!.id)
   }
 
 }

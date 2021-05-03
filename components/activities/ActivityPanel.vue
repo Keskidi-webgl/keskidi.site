@@ -37,7 +37,7 @@ export default class ActivityPanel extends Vue {
   }
 
   public mounted() {
-    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord, this.globalStore.achievedWords)
+    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
     this.activityStore.setCurrentActivity(isWordAchieved ? ACTIVITY_TYPE.ACTIVITY_1 : ACTIVITY_TYPE.ACTIVITY_1)
   }
 
