@@ -7,7 +7,14 @@
       </h1>
     </div>
 
-    <div v-if="isChrome">
+    <div v-if="isMobile" class="browser-check">
+      <h1 class="main-font">
+        Cette expérience ne fonctionne pas sur mobile. <br />
+        Merci d'utiliser un ordinateur.
+      </h1>
+    </div>
+
+    <div v-if="isChrome && !isMobile">
       <!-- Loader -->
       <Loader
         class="site-loader overlay-element"
@@ -113,9 +120,11 @@ export default class DefaultLayout extends Vue {
   public sound: HTMLAudioElement | null = null;
 
   public isChrome: boolean = navigator.userAgent.indexOf("Chrome") != -1;
+  public isMobile: boolean =
+    window.innerWidth <= 600 && window.innerHeight <= 800;
 
   public async mounted() {
-    if (this.isChrome) {
+    if (this.isChrome && !this.isMobile) {
       //this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
       console.log(this.globalStore.isSoundEnabled);
 
