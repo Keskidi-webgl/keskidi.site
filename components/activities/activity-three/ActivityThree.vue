@@ -21,7 +21,6 @@
 
         <h2 class="content-title main-font">Comme dirait la prof d'anglais, repeat after me :</h2>
 
-
         <div class="content-expressionsWrapper" v-if="activeExpression">
 
           <div class="content-expressions">
@@ -48,6 +47,10 @@
                   <path d="M6.98663 38.4083H21.0126" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </g>
               </svg>
+              <svg class="content-expressions--recordValidated" width="36" height="23" viewBox="0 0 36 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.63647 9.466L13.3978 21.2274L34.3637 1.28418" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
             </button>
           </div>
 
@@ -133,6 +136,11 @@ export default class ActivityThree extends Vue {
     VoiceRecognitionManager.onResult((result => {
       if (result.distance > 0.5) {
         // this.activityRecord[this.countExpressionSuccess].classList.add('active')
+        console.log(this.$refs.activityRecord[this.countExpressionSuccess])
+        this.$refs.activityRecord[this.countExpressionSuccess].classList.add('validateRecord')
+        console.log(this.$refs.activityRecord[this.countExpressionSuccess])
+
+
         this.countExpressionSuccess++
         if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
           this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
@@ -152,13 +160,14 @@ export default class ActivityThree extends Vue {
       height: 100%;
       display: flex;
       flex-direction: column;
-      padding: 130px 40px 0px 40px;
+      padding: 130px 40px 0px 80px;
       color: $dark-blue;
     }
     &-title{
       font-size: 40px;
       max-width: 600px;
       line-height: 1.3;
+      margin-bottom: 70px;
     }
     &-expressionsWrapper{
       display: flex;
@@ -166,6 +175,7 @@ export default class ActivityThree extends Vue {
     }
     &-recordWrapper{
       display: flex;
+      margin-bottom: 50px;
     }
     &-img{
       position: absolute;
@@ -254,6 +264,9 @@ export default class ActivityThree extends Vue {
           stroke: white;
         }
       }
+      &--recordValidated{
+        display:none;
+      }
 
     }
   }
@@ -268,13 +281,25 @@ export default class ActivityThree extends Vue {
   opacity: 0.4;
   pointer-events: none;
 }
-
+.validateRecord{
+  background: $dark-blue!important;
+  .content-expressions--recordValidated{
+    display: block;
+    path{
+      stroke: white!important;
+    }
+  }
+  .content-expressions--recordActive{
+    display: none;
+  }
+}
 .isRecording{
   &:after {
+    opacity: 1!important;
     border-top: 2px solid $orange!important;
     border-right: 2px solid $orange !important;
-    border-bottom: 2px solid gray !important;// rgba(255, 255, 255, 0.2);
-    border-left: 2px solid gray  !important;//rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid rgba(255,157,111,0.4) !important;// rgba(255, 255, 255, 0.2);
+    border-left: 2px solid rgba(255,157,111,0.4)  !important;//rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     animation: rotate-center 5s linear infinite both !important;
 
