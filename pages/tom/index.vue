@@ -6,9 +6,25 @@
       background-color="white"
       width="610"
     >
-      <img class="doodle" src="~/assets/img/orange-doodles.svg" alt="" />
       <div v-if="step == 1" class="w-100 step">
-        <h1 class="big-title main-font w-100 tom-title">Wesh alors !</h1>
+        <h1 class="big-title main-font w-100 tom-title">
+          Wesh alors !
+          <img
+            src="~/assets/img/arrow-draft-one.png"
+            class="doodle bottom-left-arrow"
+            alt=""
+          />
+          <img
+            src="~/assets/img/arrow-draft-two.png"
+            class="doodle top-left-arrow"
+            alt=""
+          />
+          <img
+            src="~/assets/img/doodle-packed.png"
+            class="doodle packed-doodle"
+            alt=""
+          />
+        </h1>
         <p class="sub-title text-common secondary-font w-100">
           Bienvenue chez mes parents. Mi casa es tu Casa.
         </p>
@@ -31,7 +47,14 @@
       <div v-if="step == 2" class="w-100 step step-2">
         <p class="w-100 main-font">
           Pour continuer, j'ai besoin de ton <strong>adresse mail</strong> pour
-          que tu puisses garder ta <strong>progression</strong>.
+          que tu puisses garder ta
+          <strong class="progression"
+            >progression
+            <img
+              src="~/assets/img/circle-doodle-two.png"
+              class="doodle circle-doodle"
+              alt=""/></strong
+          >.
           <span>
             <img
               class="rgpd"
@@ -40,10 +63,15 @@
               @click="rgpd()"
             />
           </span>
+          <img
+            src="~/assets/img/doodle-line.png"
+            class="doodle line-doodle"
+            alt=""
+          />
         </p>
         <p class="w-100 main-font">
           Et puis mes darons ne souhaitent pas laisser rentrer n'importe qui
-          chez nous...
+          chez nous. 😉
         </p>
         <input
           type="text"
@@ -128,7 +156,7 @@ export default class AuthPage extends Vue {
 
   mounted() {
     GlobalScene.context.disableParallax();
-    TomSceneElement.playAnimation('idle', GlobalScene.context)
+    TomSceneElement.playAnimation("idle", GlobalScene.context);
     GlobalScene.context.goToPresetPosition("tom", 2, () => {
       this.isReady = true;
     });
@@ -150,7 +178,7 @@ export default class AuthPage extends Vue {
   beforeDestroy() {
     GlobalScene.context.enableParallax();
     if (!this.autModule.isAuth) {
-      TomSceneElement.playAnimation('hello', GlobalScene.context)
+      TomSceneElement.playAnimation("hello", GlobalScene.context);
     }
   }
 
@@ -194,17 +222,31 @@ export default class AuthPage extends Vue {
 
     .tom-title {
       margin-top: 120px;
+      position: relative;
+
+      .doodle {
+        position: absolute;
+        z-index: -1;
+
+        &.bottom-left-arrow {
+          bottom: -25px;
+          left: 25px;
+        }
+
+        &.top-left-arrow {
+          top: -25px;
+          left: -30px;
+        }
+
+        &.packed-doodle {
+          right: 125px;
+          bottom: -10px;
+        }
+      }
     }
   }
 
   // General
-  .doodle {
-    position: absolute;
-    top: 100px;
-    right: 50px;
-    z-index: 1;
-  }
-
   .leave-activity {
     width: 76px;
     height: 76px;
@@ -228,10 +270,35 @@ export default class AuthPage extends Vue {
   .action {
     float: left;
   }
+
+  p {
+    font-size: 24px;
+  }
 }
 .auth-container {
   .step-2 {
     margin-top: 160px;
+
+    .progression,
+    p {
+      position: relative;
+      // z-index: 5;
+    }
+
+    .doodle {
+      position: absolute;
+      z-index: -1;
+
+      &.line-doodle {
+        left: 30px;
+        top: 30px;
+      }
+
+      &.circle-doodle {
+        left: 0;
+        bottom: -5px;
+      }
+    }
 
     .rgpd {
       cursor: pointer;

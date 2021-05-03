@@ -1,7 +1,28 @@
 <template>
   <div class="page-container" data-namespace="onboarding">
     <h1 class="main-font">
-      Tu trouveras 3 activités pour devenir le boss du langage
+      Tu trouveras <strong>3 activités</strong> pour devenir le
+      <strong>boss du langage</strong>
+      <img
+        src="~/assets/img/arrow-draft-one.png"
+        class="doodle bottom-left-arrow"
+        alt=""
+      />
+      <img
+        src="~/assets/img/arrow-draft-two.png"
+        class="doodle top-left-arrow"
+        alt=""
+      />
+      <img
+        src="~/assets/img/circle-doodle-huge.png"
+        class="doodle circle-doodle"
+        alt=""
+      />
+      <img
+        src="~/assets/img/doodle-line.png"
+        class="doodle line-doodle"
+        alt=""
+      />
     </h1>
     <div class="list">
       <ChoiceCard
@@ -59,6 +80,32 @@ export default class Onboarding extends Vue {}
 
   h1 {
     color: $dark-blue;
+    position: relative;
+
+    .doodle {
+      position: absolute;
+      z-index: -1;
+
+      &.bottom-left-arrow {
+        bottom: -50px;
+        left: 25px;
+      }
+
+      &.top-left-arrow {
+        top: -65px;
+        left: -30px;
+      }
+
+      &.circle-doodle {
+        left: 280px;
+        top: 0px;
+      }
+
+      &.line-doodle {
+        right: 0;
+        bottom: -10px;
+      }
+    }
   }
 
   .list {

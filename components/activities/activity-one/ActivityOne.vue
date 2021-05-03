@@ -20,15 +20,26 @@
         <div class="content-container">
           <div class="exercise-block">
             <p class="instruction text-common">
+              Alors, alors... A ton avis, lequel de ces objets représente le mot
+              <span class="bold current-word"
+                >{{ activityStore.dataWord.name }}
+                <img
+                  src="~/assets/img/circle-doodle-huge.png"
+                  class="doodle circle-doodle"
+                  alt=""
+              /></span>
+              ?
               <img
-                class="doodle"
-                src="~/assets/img/orange-doodles.svg"
+                src="~/assets/img/arrow-draft-one.png"
+                class="doodle bottom-left-arrow"
                 alt=""
               />
-              Alors, alors... A ton avis, lequel de ces objets représente le mot
-              <span class="bold">{{ activityStore.dataWord.name }}</span> ?
+              <img
+                src="~/assets/img/arrow-draft-two.png"
+                class="doodle top-left-arrow"
+                alt=""
+              />
             </p>
-
             <div class="choices-container">
               <ChoiceCard
                 v-for="(choice, index) in blockChoices"
@@ -190,11 +201,28 @@ export default class ActivityOne extends Vue {
           position: relative;
           z-index: 0;
 
+          .current-word {
+            position: relative;
+          }
+
           .doodle {
             position: absolute;
-            left: -80px;
-            top: -40px;
             z-index: -1;
+
+            &.bottom-left-arrow {
+              bottom: -50px;
+              left: 25px;
+            }
+
+            &.top-left-arrow {
+              top: -45px;
+              left: -30px;
+            }
+
+            &.circle-doodle {
+              left: 0px;
+              top: -15px;
+            }
           }
         }
       }
