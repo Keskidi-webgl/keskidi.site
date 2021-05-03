@@ -60,7 +60,7 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
 
       .registerGltf(
         GLTF_ASSET.OUTSIDE,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale_bake.gltf",
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/outside.gltf",
         "outside.gltf"
       )
       .registerGltf(
