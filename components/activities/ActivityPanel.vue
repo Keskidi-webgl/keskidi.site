@@ -46,7 +46,7 @@ export default class ActivityPanel extends Vue {
   }
 
   public mounted() {
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_3)
+    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT)
   }
 
   public goToHome() {
