@@ -57,7 +57,7 @@
           <audio style="display: none" ref="audioElement" :src='activeExpression.audio.url'></audio>
 
 
-          <CustomButton @click.native="ekip" v-bind:class="countExpressionSuccess<=3? 'btn-disabled': '' " class="btn-validate" arrow-color="#FFF8EE" color="#000648"
+          <CustomButton @click.native="ekip" v-bind:class="countExpressionSuccess<=2? 'btn-disabled': '' " class="btn-validate" arrow-color="#FFF8EE" color="#000648"
                         text="Continuer"></CustomButton>
           <img class="content-img" :src="activityStore.dataWord.activity_data.good_object" alt="">
         </div>
@@ -76,6 +76,8 @@ import ProgressBar from "~/components/activities/ProgressBar.vue";
 import {Step, WordExpression} from "~/core/types";
 import {VoiceRecognitionManager} from "~/core/managers";
 import CustomButton from "~/components/buttons/CustomButton.vue";
+import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
+import ActivityScene from "~/core/scene/ActivityScene";
 @Component({
   components: {
     ActivityElement,
@@ -93,6 +95,7 @@ export default class ActivityThree extends Vue {
   public mounted() {
     this.activeExpression = this.activityStore.dataWord!.expressions[0]
     // this._initCanvasScenes()
+    this._createCanvas()
     this._initVoiceRecognitionManager()
     // console.log(this.activityRecord)
   }
@@ -103,14 +106,11 @@ export default class ActivityThree extends Vue {
   public startRecordVoice(expression: WordExpression) {
 
     this.$refs.activityRecord[this.countExpressionSuccess].classList.add('isRecording')
-
     // console.log(el)
     VoiceRecognitionManager.setTextToRecognize(expression.content!)
     VoiceRecognitionManager.start()
     VoiceRecognitionManager.onEnd(()=>{
-      console.log("enddddddd enregistrement")
       this.$refs.activityRecord[this.countExpressionSuccess].classList.remove('isRecording')
-
     })
   }
   /**
@@ -135,18 +135,28 @@ export default class ActivityThree extends Vue {
   private _initVoiceRecognitionManager() {
     VoiceRecognitionManager.onResult((result => {
       if (result.distance > 0.5) {
-        // this.activityRecord[this.countExpressionSuccess].classList.add('active')
-        console.log(this.$refs.activityRecord[this.countExpressionSuccess])
         this.$refs.activityRecord[this.countExpressionSuccess].classList.add('validateRecord')
-        console.log(this.$refs.activityRecord[this.countExpressionSuccess])
-
-
+        if ( this.countExpressionSuccess >= 2){
+          this.$refs.activityRecord[this.countExpressionSuccess].classList.remove('isRecording')
+          this.$refs.activityRecord[this.countExpressionSuccess].disabled = true
+        }
         this.countExpressionSuccess++
         if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
           this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
         }
       }
     }))
+  }
+  private _createCanvas() {
+    (<HTMLCanvasElement>this.$refs.tom).height = 500;
+    (<HTMLCanvasElement>this.$refs.tom).width = (<HTMLElement>(
+      document.querySelector("aside.activity-element-aside")
+    ))!.clientWidth;
+
+    new ActivitySceneInitializer({
+      canvas: this.$refs.tom as HTMLCanvasElement
+    }).init();
+    ActivityScene.context.start();
   }
 }
 </script>
@@ -291,6 +301,11 @@ export default class ActivityThree extends Vue {
   }
   .content-expressions--recordActive{
     display: none;
+  }
+}
+.clearButton{
+  &:after{
+    content: unset;
   }
 }
 .isRecording{
