@@ -87,22 +87,22 @@ export default class ChoiceCard extends Vue {
  */
 @-webkit-keyframes slide-top {
   0% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
+    -webkit-transform: translateY(0) rotate(-1.5deg);
+    transform: translateY(0) rotate(-1.5deg);
   }
   100% {
-    -webkit-transform: translateY(-10px);
-    transform: translateY(-10px);
+    -webkit-transform: translateY(-15px) rotate(1.5deg);
+    transform: translateY(-15px) rotate(1.5deg);
   }
 }
 @keyframes slide-top {
   0% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
+    -webkit-transform: translateY(0) rotate(-1.5deg);
+    transform: translateY(0) rotate(-1.5deg);
   }
   100% {
-    -webkit-transform: translateY(-10px);
-    transform: translateY(-10px);
+    -webkit-transform: translateY(-15px) rotate(1.5deg);
+    transform: translateY(-15px) rotate(1.5deg);
   }
 }
 </style>
