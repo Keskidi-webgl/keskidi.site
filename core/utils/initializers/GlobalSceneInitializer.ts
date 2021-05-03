@@ -2,17 +2,28 @@ import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
   BackSide,
-  CanvasTexture, DirectionalLight,
+  CanvasTexture,
+  DirectionalLight,
+  DoubleSide,
   HemisphereLight,
-  HemisphereLightHelper, LoopOnce, Mesh,
+  LinearFilter,
+  LoopOnce,
+  Mesh,
+  MeshBasicMaterial,
   PCFSoftShadowMap,
-  PerspectiveCamera, PlaneBufferGeometry,
-  Scene, ShadowMaterial, SpotLight, SpotLightHelper,
-  sRGBEncoding, Vector3,
+  PerspectiveCamera,
+  PlaneBufferGeometry,
+  Scene,
+  ShadowMaterial,
+  SpotLight,
+  SpotLightHelper,
+  sRGBEncoding,
+  Texture,
+  Vector3,
   WebGLRenderer
 } from "three";
 import {Initializers} from "~/core/defs";
-import {GLTF_ASSET} from "~/core/enums";
+import {GLTF_ASSET, VIDEO_ASSET} from "~/core/enums";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalSceneConfig from "~/core/config/global-scene/global-scene.config";
 import {Object3D} from "three/src/core/Object3D";
@@ -135,7 +146,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       1,
       10000
     )
-    camera.position.set(0, 1000, 1000)
+    camera.position.set(0, 1200, 1300)
     camera.lookAt(new Vector3())
 
     return camera
@@ -165,12 +176,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addGltfTom()
     this._addGltfOutside()
     //this._addAnimateElements()
+    this._prepareTelevision()
   }
 
   private _createPlanesBackground(){
-
     let globalScene = GlobalScene.context.scene
-
 
     const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
     var material = new ShadowMaterial({
@@ -204,7 +214,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
 
     globalScene.add( light );
-    globalScene.add( helper );
+    //globalScene.add( helper );
 
 
     let floorFolder = GlobalScene.context.gui.addFolder("Floor")
@@ -217,29 +227,19 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
     sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
 
-    console.log(globalScene,'global scene')
-
   }
 
   private _createCanvasBackground(){
-
-
-    var canvas = document.createElement('canvas');
+    const canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
-
-    var my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
+    const my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
     my_gradient.addColorStop(0, "#FCE9E1");
     my_gradient.addColorStop(0.5, "#FDF0E9");
     // my_gradient.addColorStop(1, "#FF0000");
     ctx!.fillStyle = my_gradient;
     ctx!.fillRect(0, 0, GlobalScene.context.width, GlobalScene.context.height);
-
-
-    var texture = new CanvasTexture(canvas);
-
+    const texture = new CanvasTexture(canvas);
     GlobalScene.context.scene.background = texture
-
-
   }
 
 
@@ -269,15 +269,9 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         let socle = child.getObjectByName('socle_2')
         socle!.castShadow = true
         socle!.receiveShadow = true
-
-        console.log(child)
-
       }
 
     } );
-
-    console.log(globalSceneGltf)
-
     GlobalScene.context.scene.add(globalSceneGltf.scene)
   }
 
@@ -295,7 +289,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addAnimateElements() {
     const skateSticker = AssetsManager.getGltf(GLTF_ASSET.PAPER).data
-    console.log(skateSticker)
     skateSticker.scene.position.set(0, 500, 100)
     GlobalScene.context.scene.add(skateSticker.scene)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.PAPER, skateSticker.scene)
@@ -369,7 +362,38 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context)
   }
 
-  private _prepareFloor() {
+  private _prepareTelevision() {
+    // https://stemkoski.github.io/Three.js/Video.html
+    const video = AssetsManager.getVideo(VIDEO_ASSET.TV_SCREEN).data!
+    video.loop = true
+    video.muted = true
+    const videoCanvas = document.createElement('canvas');
 
+    videoCanvas.width = 480;
+    videoCanvas.height = 270;
+
+    const videoCanvasCtx = videoCanvas.getContext('2d')!;
+    videoCanvasCtx.fillStyle = "#000000"
+    videoCanvasCtx.fillRect(0, 0, 480, 270)
+
+    const videoTexture = new Texture(videoCanvas);
+    videoTexture.minFilter = LinearFilter
+    videoTexture.magFilter = LinearFilter
+
+    // @ts-ignore
+    const videoMaterial = new MeshBasicMaterial({map: videoTexture, side: DoubleSide, overdraw: 0.5});
+
+    const televisionObject = GlobalScene.context.scene.getObjectByName('tv_1')
+    if (televisionObject instanceof Mesh) {
+      televisionObject.material = videoMaterial
+      GlobalScene.context.onRender((context) => {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          videoCanvasCtx.drawImage(video, 0, 0, 480, 270)
+          if (videoTexture) {
+            videoTexture.needsUpdate = true
+          }
+        }
+      })
+    }
   }
 }

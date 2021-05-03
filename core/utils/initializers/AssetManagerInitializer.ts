@@ -1,6 +1,6 @@
 import {Initializers} from "~/core/defs";
 import {AssetsManager} from "~/core/managers";
-import {GLTF_ASSET} from "~/core/enums";
+import {GLTF_ASSET, VIDEO_ASSET} from "~/core/enums";
 
 /**
  * @description
@@ -10,6 +10,10 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
   init(): void {
     AssetsManager
       .enableLocalMode()
+      .registerVideo(
+        VIDEO_ASSET.TV_SCREEN,
+        'https://keskidi.s3.eu-west-3.amazonaws.com/medias/fortnite.mp4', 'fortnite.mp4'
+      )
       .registerGltf(
         GLTF_ASSET.CLOUD_LITTLE,
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_1.gltf",

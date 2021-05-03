@@ -137,7 +137,7 @@ class AssetsManager {
    * Retrieve video asset loaded
    */
   public getVideo(name: string): VideoAsset {
-    const video = this._videoAssets.find(gltf => gltf.source.name === name) || null
+    const video = this._videoAssets.find(video => video.source.name === name) || null
     if (!video) throw new Error(`Video asset ${name} is not founded`)
 
     return video
@@ -219,8 +219,9 @@ class AssetsManager {
    */
   private async _loadVideoAsset(source: AssetSource) {
     const response = await fetch(source.url)
-    const video = new HTMLVideoElement()
-    video.src = URL.createObjectURL(response.blob())
+    const video = document.createElement('video')
+    const videoData = await response.blob()
+    video.src = URL.createObjectURL(videoData)
     this._videoAssets.push({source, data: video})
   }
 

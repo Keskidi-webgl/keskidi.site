@@ -67,14 +67,14 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
-import { ActivityOneResultData, Step, UserSelection } from "~/core/types";
+import {ActivityOneResultData, Step, UserSelection} from "~/core/types";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import { ActivitySceneInitializer } from "~/core/utils/initializers/activities";
+import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
 import ChoiceCard from "~/components/cards/ChoiceCard.vue";
@@ -122,14 +122,9 @@ export default class ActivityOne extends Vue {
 
   public onClickChoice(choice: UserSelection) {
     this.userSelection = choice;
-
-    console.log("click", this.userSelection);
-
     this.blockChoices.forEach(blockChoice => {
       blockChoice.isSelected = blockChoice.description === choice.description;
     });
-
-    console.log("choices", this.blockChoices);
   }
 
   public validateActivity() {

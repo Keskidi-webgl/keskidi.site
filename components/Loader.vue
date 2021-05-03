@@ -35,6 +35,8 @@ import LogoMedia from "~/components/medias/LogoMedia.vue";
 import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalScene from "~/core/scene/GlobalScene";
+import {AssetsManager} from "~/core/managers";
+import {VIDEO_ASSET} from "~/core/enums";
 
 
 @Component({
@@ -75,6 +77,7 @@ export default class Loader extends Vue {
           this.globalSceneStore.setIsHomePageReady(true)
           this.globalSceneStore.setCanDisplayGlobalUI(true)
         }
+        AssetsManager.getVideo(VIDEO_ASSET.TV_SCREEN).data.play()
       }
     })
   }
