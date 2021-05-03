@@ -1,20 +1,29 @@
 <template>
   <div>
     <!-- Loader -->
-    <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
+    <Loader
+      class="site-loader overlay-element"
+      :loading-data="loadingProgressions"
+    ></Loader>
     <!--
     <button @click="toggleSound">toggle sound</button>
     -->
 
-    <audio ref="sound" class="ambient-sound" src="drill.mp3" autoplay style="display: none"></audio>
+    <audio
+      ref="sound"
+      class="ambient-sound"
+      src="drill.mp3"
+      autoplay
+      style="display: none"
+    ></audio>
 
     <sound @click.native="toggleSound"></sound>
     <!-- Progress level -->
     <ProgressLevel
       class="progress-level"
       v-if="level && globalSceneStore.canDisplayGlobalUI"
-      :stroke="4"
-      :radius="170 / 2"
+      :stroke="2"
+      :radius="94 / 2"
       :total="words"
       :progress="progress"
       :level="level.name"
@@ -26,12 +35,21 @@
     <!-- Page Slot -->
     <Nuxt v-if="this.globalStore.isAppInit" />
     <!-- Navigation panel -->
-    <SceneNavigationPanel v-if="(this.globalSceneStore.activeRoom || this.globalSceneStore.activeObject) && globalSceneStore.canDisplayGlobalUI"/>
+    <SceneNavigationPanel
+      v-if="
+        (this.globalSceneStore.activeRoom ||
+          this.globalSceneStore.activeObject) &&
+          globalSceneStore.canDisplayGlobalUI
+      "
+    />
 
     <!-- Activity onboarding -->
-    <ActivityOnboarding class="activity-onboarding overlay-element"/>
+    <ActivityOnboarding class="activity-onboarding overlay-element" />
     <!-- Activity panel -->
-    <ActivityPanel v-if="activityStore.canDisplayActivityPanel" class="activity-panel overlay-element"/>
+    <ActivityPanel
+      v-if="activityStore.canDisplayActivityPanel"
+      class="activity-panel overlay-element"
+    />
   </div>
 </template>
 
@@ -83,19 +101,19 @@ export default class DefaultLayout extends Vue {
   public level: Level | null = null;
   public words: number = 0;
 
-  public sound: HTMLAudioElement | null  = null
+  public sound: HTMLAudioElement | null = null;
 
   public async mounted() {
     //this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
-    console.log(this.globalStore.isSoundEnabled)
+    console.log(this.globalStore.isSoundEnabled);
 
-    if (this.globalStore.isSoundEnabled === false){
-      let bars = document.querySelectorAll('.sound-bar')
-      let audio = this.$refs.sound as HTMLAudioElement
-      audio.pause()
-      bars.forEach((item)=>{
-        item.classList.remove('sound-barActive')
-      })
+    if (this.globalStore.isSoundEnabled === false) {
+      let bars = document.querySelectorAll(".sound-bar");
+      let audio = this.$refs.sound as HTMLAudioElement;
+      audio.pause();
+      bars.forEach(item => {
+        item.classList.remove("sound-barActive");
+      });
     }
 
     await this.initApp();
@@ -105,7 +123,9 @@ export default class DefaultLayout extends Vue {
 
   async initProgressLevel() {
     const userAchievedWords = await this.globalStore.achievedWords.length;
-    const words = this.globalStore.userWordData ? await this.globalStore.userWordData!.length : 0;
+    const words = this.globalStore.userWordData
+      ? await this.globalStore.userWordData!.length
+      : 0;
     ProgressPercentManager.words = words;
     ProgressPercentManager.userAchievedWords = userAchievedWords;
     this.level = ProgressPercentManager.current;
@@ -116,20 +136,20 @@ export default class DefaultLayout extends Vue {
 
   toggleSound() {
     // TODO --> refacto
-    let audio = this.$refs.sound as HTMLAudioElement
-    let bars = document.querySelectorAll('.sound-bar')
-    if (audio.paused){
-      audio.play()
-      this.globalStore.setUserAudioPreferences(true)
-      bars.forEach((item)=>{
-        item.classList.add('sound-barActive')
-      })
-    }else {
-      audio.pause()
-      this.globalStore.setUserAudioPreferences(false)
-      bars.forEach((item)=>{
-        item.classList.remove('sound-barActive')
-      })
+    let audio = this.$refs.sound as HTMLAudioElement;
+    let bars = document.querySelectorAll(".sound-bar");
+    if (audio.paused) {
+      audio.play();
+      this.globalStore.setUserAudioPreferences(true);
+      bars.forEach(item => {
+        item.classList.add("sound-barActive");
+      });
+    } else {
+      audio.pause();
+      this.globalStore.setUserAudioPreferences(false);
+      bars.forEach(item => {
+        item.classList.remove("sound-barActive");
+      });
     }
   }
 
@@ -159,11 +179,9 @@ export default class DefaultLayout extends Vue {
 
 <style scoped lang="scss">
 .progress-level {
-  margin: 10px;
+  margin: 24px;
   position: absolute;
   z-index: 40;
-  background: linear-gradient(107.28deg, #ff6644 29.48%, #ff9d6f 100%);
-  border-radius: 50%;
 }
 .logo {
   width: 100px;
@@ -200,10 +218,8 @@ canvas {
 }
 
 .activity-onboarding {
-
 }
 
 .activity-panel {
-
 }
 </style>

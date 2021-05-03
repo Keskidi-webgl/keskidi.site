@@ -7,16 +7,16 @@
     {
         "name": "Frais",
         "order": 1,
-        "rule": 20
+        "rule": 33.333333333
     },
     {
         "name": "Badass",
         "order": 2,
-        "rule": 30
+        "rule": 33.333333333
     },
     {
         "name": "Le crack",
         "order": 3,
-        "rule": 50
+        "rule": 33.333333333
     }
 ]
