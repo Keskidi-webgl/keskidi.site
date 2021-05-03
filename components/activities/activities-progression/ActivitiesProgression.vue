@@ -4,7 +4,7 @@
     <h1>Bravo t'as progressé</h1>
 
     <CustomButton
-      @click.native="nextActivity"
+      @click.native="hideActivityPanel"
       arrow-color="#FF6644"
       color="white"
       text="Continuer"
@@ -18,6 +18,7 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import GlobalSceneStore from "~/store/globalScene"
 import ActivityStore from "~/store/activity"
 import CustomButton from "~/components/buttons/CustomButton.vue";
+import GlobalScene from "~/core/scene/GlobalScene";
 
 @Component({
   components:{
@@ -27,10 +28,10 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 export default class ActivitiesProgression extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
-  public index:number = 10
 
-  nextActivity(){
-    console.log('next')
+  hideActivityPanel(){
+    GlobalScene.context.resume()
+    this.activityStore.setCurrentActivity(null)
   }
 
   mounted(){
