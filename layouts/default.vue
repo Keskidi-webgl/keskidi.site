@@ -2,7 +2,7 @@
   <div>
     <div v-if="!isChrome" class="browser-check">
       <h1 class="main-font">
-        Cette expérience ne fonctionne pas sous ce navigateur. <br />
+        Cette expérience ne fonctionne pas avec ce navigateur. <br />
         Merci d'utiliser Chrome.
       </h1>
     </div>
