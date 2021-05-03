@@ -37,6 +37,8 @@
             />
           </h2>
 
+          </h2>
+
           <div class="content-wordInfo">
             <span class="content-phonetic">{{
               activityStore.dataWord.definition.phonetic
@@ -265,7 +267,7 @@ export default class ActivityTwo extends Vue {
       }
       &-scrollIndicator {
         position: absolute;
-        top: 90px;
+        top: 90vh;
         right: -50px;
       }
       &-goTop {
