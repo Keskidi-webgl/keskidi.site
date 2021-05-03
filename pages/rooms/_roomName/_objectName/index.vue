@@ -4,12 +4,9 @@
       <span v-if="this.activityStore.dataWord.home_scenario" class="scenario-container-text text-common">
         {{ this.activityStore.dataWord.home_scenario.content }}
       </span>
-      <CustomButton class="btn-discover" @click.native="canDisplayActivityPanel = true" arrow-color="white" color="#000648"
-                    :text="`Découvrir le mot ${activityStore.dataWord.name}`"></CustomButton>
+      <CustomButton class="btn-discover" @click.native="startActivity" arrow-color="white" color="#000648"
+                    :text="getButtonWord()"></CustomButton>
     </CustomCard>
-    <transition v-on:enter="displayActivityPanel">
-      <ActivityPanel v-if="canDisplayActivityPanel" ref="activityPanel"></ActivityPanel>
-    </transition>
   </div>
 </template>
 
@@ -17,18 +14,17 @@
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import {Context} from "@nuxt/types";
 import {RouteValidator} from "~/core/validators";
-import {ACTIVITY_TYPE} from "~/core/enums";
-import gsap from 'gsap'
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import AuthMiddleware from "~/middleware/auth";
-import {SceneManager} from "~/core/managers";
 import GlobalStore from "~/store/global";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
 import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
+import GlobalScene from "~/core/scene/GlobalScene";
+import Helpers from "~/core/utils/helpers";
 
 @Component({
   components: {
@@ -58,23 +54,26 @@ export default class ObjectPage extends Vue {
     const roomObjectSlug = <ROOM_OBJECT_SLUG>this.$route.params.objectName
     this.globalSceneStore.setActiveObject(roomObjectSlug)
 
-    SceneManager.GLOBAL_SCENE.goToPresetPosition(roomObjectSlug, 1)
+    this.globalSceneStore.setIsCameraMoving(true)
+    GlobalScene.context.goToPresetPosition(roomObjectSlug, 1, () => {
+      this.globalSceneStore.setIsCameraMoving(false)
+    })
     this._setDataWord()
   }
 
-  public displayActivityPanel() {
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
-    gsap.to('.activity-container', {
-      translateY: 0,
-      duration: 1,
-      onComplete: () => {
-        SceneManager.GLOBAL_SCENE.pause()
-      }
-    })
+
+  public startActivity() {
+    this.activityStore.displayActivityPanel()
   }
 
   public beforeDestroy() {
     this.globalSceneStore.setActiveObject(null)
+  }
+
+  public getButtonWord() {
+    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
+    const verb = isWordAchieved ? 'Voir' : 'Découvrir'
+    return `${verb} le mot ${this.activityStore.dataWord!.name}`
   }
 
   /**

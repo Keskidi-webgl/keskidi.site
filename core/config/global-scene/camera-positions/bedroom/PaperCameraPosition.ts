@@ -1,6 +1,6 @@
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 import {Vector3} from "three";
-import {SceneManager} from "~/core/managers";
+import GlobalScene from "~/core/scene/GlobalScene";
 import {PaperRoomObject} from "~/core/config/global-scene/room-objects";
 
 const PaperCameraPosition: CameraPosition = {
@@ -8,7 +8,7 @@ const PaperCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    SceneManager.GLOBAL_SCENE.scene.getObjectByName('papier_anim')!.getWorldPosition(lookAtPosition)
+    GlobalScene.context.scene.getObjectByName('papier_anim')!.getWorldPosition(lookAtPosition)
     lookAtPosition.x = lookAtPosition.x * 0.95
     lookAtPosition.z = lookAtPosition.z * 1.1
 

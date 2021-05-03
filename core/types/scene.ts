@@ -1,4 +1,13 @@
-import {AnimationMixer, Clock, Intersection, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {
+  AnimationAction,
+  AnimationClip,
+  AnimationMixer,
+  Clock,
+  Intersection,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer
+} from "three";
 import SceneManager from "~/core/managers/SceneManager";
 
 /**
@@ -49,3 +58,19 @@ export type AnimationMixerElement = {
   name: string
   instance: AnimationMixer
 }
+
+export type ActiveAnimation = {
+  mixerName: string
+  animation: AnimationAction
+}
+
+export type TomAnimation = {
+  idle: AnimationClip,
+  muscle: AnimationClip,
+  head: AnimationClip,
+  down: AnimationClip,
+  punch: AnimationClip,
+  hello: AnimationClip,
+}
+
+export type TomAnimationName = 'idle'|'muscle'|'head'|'down'|'punch'|'hello'

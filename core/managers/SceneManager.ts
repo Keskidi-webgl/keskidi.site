@@ -6,7 +6,6 @@ import {
   Clock,
   Euler,
   PerspectiveCamera,
-  Quaternion,
   Raycaster,
   Scene, sRGBEncoding,
   Vector2,
@@ -29,34 +28,13 @@ import {GUI} from "dat.gui";
 import {Object3D} from "three/src/core/Object3D";
 import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
-import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
+import Helpers from "~/core/utils/helpers";
 
 /**
  * @description
  * This manager is responsible for creating a scene 3D and a context to interact with it
  */
 export default class SceneManager {
-
-  /**
-   * Static accessors for scenes instances
-   */
-  public static GLOBAL_SCENE: SceneManager
-  public static ACTIVITY_SCENE: SceneManager
-
-  // Activity 1 Accessors
-  public static ACTIVITY_1_OBJECTS: SceneManager
-  public static ACTIVITY_1_TOM: SceneManager
-  public static ACTIVITY_1_RESULTS: SceneManager
-
-  // Activity 2 Accessors
-  public static ACTIVITY_2_OBJECTS: SceneManager
-
-  // Activity 3 Accessors
-  public static ACTIVITY_3_OBJECTS: SceneManager
-  public static ACTIVITY_3_TOM: SceneManager
-  public static ACTIVITY_3_RESULTS: SceneManager
-
-
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
   private _camera: Camera
@@ -72,6 +50,11 @@ export default class SceneManager {
   private _stats: Stats | null
   private _defaultRatio: number
   private _currentIntersect: null
+
+  // Parallax
+  private _globalSceneRotation: { x: number, y: number }
+
+  // Animations
   private _animationMixers: Array<AnimationMixerElement>
 
   // -- Clock infos
@@ -95,6 +78,7 @@ export default class SceneManager {
   private _isPlaying: boolean
   private _isRayCasting: boolean
   private _isStatsActive: boolean
+  private _isParallaxActive: boolean
 
   // - CONSTRUCTOR
   constructor(options: SceneManagerOptions) {
@@ -107,9 +91,6 @@ export default class SceneManager {
     this._composer = null
     this._scene = options.scene
     this._rayCaster = new Raycaster()
-    this._isPlaying = false
-    this._isRayCasting = false
-    this._isStatsActive = false
     this._controls = null
     this._deltaTime = 0
     this._previousTime = 0
@@ -118,6 +99,12 @@ export default class SceneManager {
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
+    this._globalSceneRotation = {x: 0, y: 0}
+
+    this._isPlaying = false
+    this._isRayCasting = false
+    this._isStatsActive = false
+    this._isParallaxActive = false
 
     this._onStartCallback = options.onStart || function () {
     }
@@ -219,7 +206,7 @@ export default class SceneManager {
       return
     }
 
-    const {cameraPos: newCameraPosition, lookAtPosition} = presetCameraPosition.coords()
+    const { cameraPos: newCameraPosition, lookAtPosition } = presetCameraPosition.coords()
 
     const originPosition = new Vector3().copy(this._camera.position);
     const originRotation = new Euler().copy(this._camera.rotation);
@@ -231,38 +218,23 @@ export default class SceneManager {
     this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
     this._camera.rotation.set(originRotation.x, originRotation.y, originRotation.z);
 
-    const originQuaternion = new Quaternion().copy(this._camera.quaternion);
-    const destinationQuaternion = new Quaternion().setFromEuler(destinationRotation);
-    const updateQuaternion = new Quaternion();
-    const o = {t: 0};
-
-
     gsap.to(this._camera.position, {
       duration,
       x: newCameraPosition.x,
       y: newCameraPosition.y,
       z: newCameraPosition.z,
-      onUpdate: () => {
-        if (this._camera instanceof PerspectiveCamera) {
-          this._camera.updateProjectionMatrix()
-          //this.camera.lookAt(lookAtPosition)
-        }
-
-      },
+      // ease: "sine.inOut",
       onComplete: () => {
         successCallBack(this)
       }
     });
-    gsap.to(o, {
+    gsap.to(this._camera.rotation, {
       duration,
-      t: 1,
-      onUpdate: () => {
-        updateQuaternion.slerpQuaternions(originQuaternion, destinationQuaternion, o.t)
-        this._camera.quaternion.set(updateQuaternion.x, updateQuaternion.y, updateQuaternion.z, updateQuaternion.w)
-      }
+      x: destinationRotation.x,
+      y: destinationRotation.y,
+      z: destinationRotation.z,
+      //ease: "sin.out",
     })
-
-
   }
 
   /**
@@ -331,15 +303,41 @@ export default class SceneManager {
   }
 
   /**
+   * Enable parallax camera on mouse move
+   */
+  public enableParallax() {
+    this._isParallaxActive = true
+
+    return this
+  }
+
+  /**
+   * Disable parallax camera on mouse move
+   */
+  public disableParallax() {
+    this._isParallaxActive = false
+
+    return this
+  }
+
+  /**
    * Init intern mandatory events
    */
   public _bindEvents() {
     this._bindExternEvents(this)
 
     this._canvas.addEventListener('mousemove', event => {
-      this._mousePositions.x = event.clientX / this._canvas.width * 2 - 1
-      this._mousePositions.y = -(event.clientY / this._canvas.height) * 2 + 1
+      this._mousePositions.x = event.clientX / this._canvas.width / 2
+      this._mousePositions.y = event.clientY / this._canvas.height / 2
       this._onMouseMoveCanvasCallback(this, event)
+
+      if (this._isParallaxActive) {
+        this._globalSceneRotation.x = Helpers.lerp(this._globalSceneRotation.x, this._mousePositions.x, 0.1)
+        this._globalSceneRotation.y = Helpers.lerp(this._globalSceneRotation.y, this._mousePositions.y, 0.1)
+
+        this._scene.rotation.x = - this._globalSceneRotation.y * 0.015
+        this._scene.rotation.y = - this._globalSceneRotation.x * 0.25
+      }
     })
 
     window.addEventListener('resize', event => {
@@ -361,7 +359,7 @@ export default class SceneManager {
    */
   public createAnimationMixer(name: string, object: Object3D | AnimationObjectGroup) {
     const mixer = new AnimationMixer(object)
-    this._animationMixers.push({name, instance: mixer})
+    this._animationMixers.push({ name, instance: mixer })
   }
 
   /**
@@ -383,11 +381,9 @@ export default class SceneManager {
   /**
    * Play animation of specific object and animation mixer
    */
-  public playAnimation(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
+  public generateAnimationAction(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
     const mixer = this.getAnimationMixer(mixerName)
-    const animationToPlay = mixer.instance.clipAction(animationClip)
-
-    animationToPlay.play()
+    return mixer.instance.clipAction(animationClip)
   }
 
   public hideGui() {
@@ -415,7 +411,6 @@ export default class SceneManager {
 
     this._checkConfig()
   }
-
 
   /**
    * Init renderer
@@ -519,7 +514,6 @@ export default class SceneManager {
     return this._currentIntersect
   }
 
-
   get mousePositions(): Vector2 {
     return this._mousePositions
   }
@@ -544,9 +538,12 @@ export default class SceneManager {
     return this._defaultRatio
   }
 
+  get globalSceneRotation() {
+    return this._globalSceneRotation
+  }
+
   // setters
   set currentIntersect(currentIntersect: any) {
     this._currentIntersect = currentIntersect
   }
-
 }

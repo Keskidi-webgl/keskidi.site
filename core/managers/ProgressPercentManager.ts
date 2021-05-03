@@ -14,8 +14,8 @@ import { Level } from "../types";
  */
 class ProgressPercentManager {
   // User data
-  public userAchievedWords: number = 0;
-  public words: number = 0;
+  private _userAchievedWords: number = 0;
+  private _words: number = 0;
   private levelsArray: Array<Level> = require("../datas/levels.json");
 
   // >> PROPERTIES
@@ -34,10 +34,7 @@ class ProgressPercentManager {
   // - units (in percent)
   private oneWordRule: number = 0;
 
-  constructor(words: number, userAchievedWords: number) {
-    this.userAchievedWords = userAchievedWords;
-    this.words = words;
-  }
+  constructor() {}
 
   init() {
     this._initLevels();
@@ -57,7 +54,7 @@ class ProgressPercentManager {
       onNewLevelPassed();
     }
 
-    this.userAchievedWords++;
+    this._userAchievedWords++;
     this._setProgress();
   }
 
@@ -75,8 +72,8 @@ class ProgressPercentManager {
    * Get the current percent from the words number given and set it to the property
    */
   private _setPercent() {
-    this.percentLevel = (this.userAchievedWords * 100) / this.words;
-    this.oneWordRule = 100 / this.words;
+    this.percentLevel = (this._userAchievedWords * 100) / this._words;
+    this.oneWordRule = 100 / this._words;
   }
 
   /**
@@ -200,9 +197,17 @@ class ProgressPercentManager {
   get levels(): Array<Level> {
     return this.levelsArray;
   }
+
+  // - SETTERS
+  set userAchievedWords(nbWords: number) {
+    this._userAchievedWords = nbWords;
+  }
+
+  set words(totalWords: number) {
+    this._words = totalWords;
+  }
 }
 
-// TODO get API user data
-const instance = new ProgressPercentManager(9, 0);
+const instance = new ProgressPercentManager();
 
 export default instance;

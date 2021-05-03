@@ -1,12 +1,17 @@
-import {Room} from "~/core/config/global-scene/rooms/types";
-import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
-import {Lounge, Mezzanine} from "~/core/config/global-scene/rooms";
-import {PaperRoomObject, SkateRoomObject} from "~/core/config/global-scene/room-objects";
+import { Room } from "~/core/config/global-scene/rooms/types";
+import { ROOM_SLUG } from "~/core/config/global-scene/rooms/enums";
+import { Lounge, Mezzanine } from "~/core/config/global-scene/rooms";
+import {
+  PaperRoomObject,
+  SkateRoomObject
+} from "~/core/config/global-scene/room-objects";
 
 const Bedroom: Room = {
   urlSlug: ROOM_SLUG.BEDROOM,
 
-  name: 'bedroom',
+  name: "bedroom",
+
+  nameForHuman: "Chambre",
 
   nextRoom: () => Mezzanine,
 
@@ -15,6 +20,6 @@ const Bedroom: Room = {
   fullUrl: `/rooms/${ROOM_SLUG.BEDROOM}`,
 
   objects: () => [SkateRoomObject, PaperRoomObject]
-}
+};
 
-export default Bedroom
+export default Bedroom;

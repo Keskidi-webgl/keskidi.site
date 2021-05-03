@@ -1,5 +1,5 @@
 import {Vector3} from "three";
-import {SceneManager} from "~/core/managers";
+import GlobalScene from "~/core/scene/GlobalScene";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 import {Mezzanine} from "~/core/config/global-scene/rooms";
 
@@ -8,11 +8,11 @@ const MezzanineCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    SceneManager.GLOBAL_SCENE.scene.getObjectByName('tv')!.getWorldPosition(lookAtPosition)
+    GlobalScene.context.scene.getObjectByName('tv')!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
-    cameraPos.x = -500
-    cameraPos.y = 400
-    cameraPos.z = -90
+    cameraPos.x = -400
+    cameraPos.y = 380
+    cameraPos.z = 160
 
     return { cameraPos, lookAtPosition }
   }

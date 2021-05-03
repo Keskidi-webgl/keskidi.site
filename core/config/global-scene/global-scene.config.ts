@@ -30,6 +30,7 @@ import {
   TelevisionRoomObject,
   VinylRoomObject
 } from "~/core/config/global-scene/room-objects";
+import CloudsCameraPosition from "~/core/config/global-scene/camera-positions/global/CloudsCameraPosition";
 
 const GlobalSceneConfig = {
   // ROOMS
@@ -58,6 +59,7 @@ const GlobalSceneConfig = {
     LoungeCameraPosition,
     MezzanineCameraPosition,
     TomCameraPosition,
+    CloudsCameraPosition,
     /* Bedroom */
     PaperCameraPosition,
     SkateCameraPosition,

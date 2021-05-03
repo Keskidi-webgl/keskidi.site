@@ -1,5 +1,5 @@
-import {MEDIA_TYPE, URL_OBJECT_IDENTIFIER} from "~/core/enums";
-import {WORD_ID} from "~/core/enums/word";
+import {MEDIA_TYPE} from "~/core/enums";
+import {UserWordData, Word} from "~/core/types";
 
 export default class Helpers {
 
@@ -44,30 +44,15 @@ export default class Helpers {
   }
 
   /**
-   *
-   * @param objectIdentifier
+   * Interpolation method
+   * https://en.wikipedia.org/wiki/Linear_interpolation
    */
-  public static wordIdFromObject(objectIdentifier: URL_OBJECT_IDENTIFIER) {
-    switch (objectIdentifier) {
-      case URL_OBJECT_IDENTIFIER.TELEVISION:
-        return WORD_ID.NOOB
-      case URL_OBJECT_IDENTIFIER.NEON:
-        return WORD_ID.CHILL
-      case URL_OBJECT_IDENTIFIER.MEZZA_POSTER:
-        return WORD_ID.TISE
-      case URL_OBJECT_IDENTIFIER.LOUNGE_POSTER:
-        return WORD_ID.ENJAILLER
-      case URL_OBJECT_IDENTIFIER.VINYL:
-        return WORD_ID.MOULAGA
-      case URL_OBJECT_IDENTIFIER.MAGAZINE:
-        return WORD_ID.GHOSTER
-      case URL_OBJECT_IDENTIFIER.T_SHIRT:
-        return WORD_ID.GAMOS
-      case URL_OBJECT_IDENTIFIER.PAPER:
-        return WORD_ID.CRUSH
-      case URL_OBJECT_IDENTIFIER.SKATE:
-        return WORD_ID.HENDEK
-    }
+  public static lerp(start: number, end: number, value: number) {
+    return (1 - value) * start + value * end;
+  }
+
+  public static isActivityWordAchieved(word: Word, achievedWords: Array<UserWordData>) {
+    return achievedWords.find(word => word.id === word!.id)
   }
 
 }

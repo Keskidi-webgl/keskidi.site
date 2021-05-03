@@ -1,4 +1,15 @@
-import {HemisphereLight, HemisphereLightHelper, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {
+  HemisphereLight,
+  HemisphereLightHelper,
+  Material,
+  Mesh, MeshBasicMaterial,
+  MeshToonMaterial,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer
+} from "three";
+import {Object3D} from "three/src/core/Object3D";
+import GlobalScene from "~/core/scene/GlobalScene";
 import {SceneManager} from "~/core/managers";
 
 export default class SceneHelper {
@@ -43,5 +54,35 @@ export default class SceneHelper {
       scene,
       renderer
     }
+  }
+
+  public static replaceByBasicMaterial(objectList: Array<Object3D>, sceneContext: SceneManager) {
+    const names: Array<string> = []
+    console.log(objectList)
+    objectList.forEach(obj => {
+      names.push(obj.name)
+      names.push(...SceneHelper.getChildrenNames(obj))
+    })
+
+    sceneContext.scene.traverse(child => {
+      if (child instanceof Mesh && names.includes(child.name)) {
+        const prevMaterial = child.material
+        const newMaterial = new MeshBasicMaterial()
+        newMaterial.copy((prevMaterial))
+        if (prevMaterial.map === null && prevMaterial.emissiveMap) {
+          newMaterial.map = prevMaterial.emissiveMap
+        }
+
+        child.material = newMaterial
+      }
+    })
+  }
+
+  private static getChildrenNames(object3D: Object3D): string[] {
+    const children: string[] = []
+    object3D.traverse((child) => {
+      children.push(child.name)
+    })
+    return children
   }
 }

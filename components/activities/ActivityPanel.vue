@@ -1,133 +1,55 @@
 <template>
-  <div class="activity-container">
-    <!-- composant progress-bar    -->
-    <ActivityOne v-if="activityStore.currentActivity === 0"></ActivityOne>
-    <ActivityTwo v-if="activityStore.currentActivity === 1"></ActivityTwo>
-    <ActivityThree v-if="activityStore.currentActivity === 2"></ActivityThree>
-    <!--    overlay transition -->
-    <span class="leave-activity" @click="goToHome">
-      <img src="~/assets/img/cross.svg" alt="">
-    </span>
-    <!--  components  conclusion progression -->
+  <div class="activity-panel">
+    <!-- Activity one -->
+    <ActivityOne v-if="activityDisplay.one()"/>
 
-    <!--
-    <section class="activity-page">
-      <aside class="activity-page-aside">
-
-      </aside>
-      <main class="activity-page-content">
-
-      </main>
-    </section>
-    -->
+    <!-- Activity two -->
+    <ActivityTwo v-if="activityDisplay.two()"/>
   </div>
 </template>
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import GlobalSceneStore from "~/store/globalScene"
-import {SceneManager} from "~/core/managers"
 import ActivityStore from "~/store/activity"
-import ActivityOne from "~/components/activities/activityOne/ActivityOne.vue"
-import ActivityTwo from "~/components/activities/activityTwo/ActivityTwo.vue"
-import ActivityThree from "~/components/activities/activityThree/ActivityThree.vue"
+import ActivityOne from "~/components/activities/activity-one/ActivityOne.vue";
+import {ACTIVITY_TYPE} from "~/core/enums";
+import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
+import GlobalScene from "~/core/scene/GlobalScene";
+import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
+import Helpers from "~/core/utils/helpers";
+import GlobalStore from "~/store/global";
 
 @Component({
   components: {
     ActivityOne,
     ActivityTwo,
-    ActivityThree
+    ActivityOneResult
   }
 })
-
 export default class ActivityPanel extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
-
-  /**
-   *
-   */
-  public goToHome() {
-    SceneManager.GLOBAL_SCENE.resume()
-    this.$router.push("/")
-    this.destroyActivities()
+  public activityDisplay = {
+    one: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_1,
+    two: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_2
   }
 
-  /**
-   * Callback when click to cancel cross
-   */
-  public destroyActivities() {
-    SceneManager.ACTIVITY_1_OBJECTS?.destroy()
-    SceneManager.ACTIVITY_1_TOM?.destroy()
-    SceneManager.ACTIVITY_2_OBJECTS?.destroy()
-    SceneManager.ACTIVITY_3_OBJECTS?.destroy()
-    SceneManager.ACTIVITY_3_TOM?.destroy()
-    this.activityStore.setCurrentActivity(null)
+  public mounted() {
+    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
+    this.activityStore.setCurrentActivity(isWordAchieved ? ACTIVITY_TYPE.ACTIVITY_1 : ACTIVITY_TYPE.ACTIVITY_1)
+  }
+
+  public goToHome() {
+    GlobalScene.context.resume()
+    this.$router.push("/")
   }
 }
 </script>
 
-<style lang="scss">
-.activity-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
-  background-color: #FFF8EE;
-  transform: translateY(100%);
-
-  .leave-activity {
-    width: 76px;
-    height: 76px;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-  }
-
-  .activity-page {
-    display: flex;
-    align-items: stretch;
-    height: 100%;
-
-    &-aside {
-      width: 30%;
-      max-width: 440px;
-      background: linear-gradient(107.28deg, #FF6644 29.48%, #FF9D6F 100%);
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-
-      .word-title {
-        font-size: $title-activity;
-        color: white;
-        text-align: center;
-        font-weight: bold;
-      }
-
-      .tom-canvas {
-        //width: 100% !important;
-        //height: 55% !important;
-        //max-height: 520px;
-        position: absolute;
-      }
-    }
-
-    &-content {
-      overflow-y: scroll;
-      flex: 1;
-    }
-  }
-}
-.common-text {
-  color: #000648;
-  font-size: 32px;
-  line-height: 48px;
-  font-weight: 500;
+<style scoped lang="scss">
+.activity-panel {
+  //background-color: #FFF8EE;
 }
 </style>

@@ -28,6 +28,14 @@ export default class GlobalSceneStore extends VuexModule {
    * Interaction points display on the global scene
    */
   private _activeInteractionPoints: Array<InteractionPoint> = []
+  /**
+   * When camera is moving, we set this property true
+   */
+  private _isCameraMoving: boolean = false
+
+  private _isHomePageReady: boolean = false
+
+  private _canDisplayGlobalUI: boolean = false
 
   @Mutation
   public setActiveRoom(roomSlug: ROOM_SLUG | null) {
@@ -35,7 +43,7 @@ export default class GlobalSceneStore extends VuexModule {
   }
 
   @Mutation
-  public setActiveObject(roomObjectSlug: ROOM_OBJECT_SLUG| null) {
+  public setActiveObject(roomObjectSlug: ROOM_OBJECT_SLUG | null) {
     this._activeObject = roomObjectSlug ? GlobalSceneHelper.getRoomObjectBySlug(roomObjectSlug) : roomObjectSlug
   }
 
@@ -60,13 +68,34 @@ export default class GlobalSceneStore extends VuexModule {
   }
 
   @Mutation
-  public updatePositionsInteractivePoint(data: {name: string, transformX: number, transformY: number}) {
+  public updatePositionsInteractivePoint(data: { name: string, transformX: number, transformY: number }) {
     const point = this._activeInteractionPoints.find(interactPoint => interactPoint.name === data.name)
 
     if (point) {
       point.transformX = data.transformX
       point.transformY = data.transformY
     }
+  }
+
+  @Mutation
+  public setIsCameraMoving(isMoving: boolean) {
+    this._isCameraMoving = isMoving
+
+    return this
+  }
+
+  @Mutation
+  public setIsHomePageReady(isReady: boolean) {
+    this._isHomePageReady = isReady
+
+    return this
+  }
+
+  @Mutation
+  public setCanDisplayGlobalUI(canDisplay: boolean) {
+    this._canDisplayGlobalUI = canDisplay
+
+    return this
   }
 
   get activeRoom() {
@@ -79,5 +108,17 @@ export default class GlobalSceneStore extends VuexModule {
 
   get activeObject() {
     return this._activeObject
+  }
+
+  get isCameraMoving() {
+    return this._isCameraMoving
+  }
+
+  get isHomePageReady() {
+    return this._isHomePageReady
+  }
+
+  get canDisplayGlobalUI() {
+    return this._canDisplayGlobalUI
   }
 }
