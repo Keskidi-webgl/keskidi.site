@@ -98,8 +98,17 @@ export default class ActivityThree extends Vue {
    * Start voice recognition for current expression
    */
   public startRecordVoice(expression: WordExpression) {
+
+    this.$refs.activityRecord[this.countExpressionSuccess].classList.add('isRecording')
+
+    // console.log(el)
     VoiceRecognitionManager.setTextToRecognize(expression.content!)
     VoiceRecognitionManager.start()
+    VoiceRecognitionManager.onEnd(()=>{
+      console.log("enddddddd enregistrement")
+      this.$refs.activityRecord[this.countExpressionSuccess].classList.remove('isRecording')
+
+    })
   }
   /**
    * Play audio of the current expression
@@ -218,14 +227,15 @@ export default class ActivityThree extends Vue {
         border: unset;
         position: relative;
         margin-right: 80px;
-        &::after{
+        &:after {
           content: "";
-          width: 90px;
-          height: 90px;
-          border: 3px solid $orange;
+          height: 108px;
+          width: 108px;
           position: absolute;
-          border-radius: 100%;
-          transform: scale(1.2);
+          border: 2px solid $orange;
+          opacity: 0.4;
+          border-radius: 50%;
+          transition: 0.3s ease all;
         }
         &:disabled{
           //opacity: 0.4;
@@ -258,4 +268,38 @@ export default class ActivityThree extends Vue {
   opacity: 0.4;
   pointer-events: none;
 }
+
+.isRecording{
+  &:after {
+    border-top: 2px solid $orange!important;
+    border-right: 2px solid $orange !important;
+    border-bottom: 2px solid gray !important;// rgba(255, 255, 255, 0.2);
+    border-left: 2px solid gray  !important;//rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: rotate-center 5s linear infinite both !important;
+
+    transition: 0.3s ease all;
+  }
+}
+@-webkit-keyframes rotate-center {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate-center {
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 </style>
