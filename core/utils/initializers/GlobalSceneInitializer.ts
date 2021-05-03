@@ -1,13 +1,14 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
-  DirectionalLight,
-  HemisphereLight, LoopOnce,
+  BackSide,
+  CanvasTexture, DirectionalLight,
+  HemisphereLight,
+  HemisphereLightHelper, LoopOnce, Mesh,
   PCFSoftShadowMap,
-  PerspectiveCamera,
-  Scene,
-  sRGBEncoding,
-  Vector3,
+  PerspectiveCamera, PlaneBufferGeometry,
+  Scene, ShadowMaterial, SpotLight, SpotLightHelper,
+  sRGBEncoding, Vector3,
   WebGLRenderer
 } from "three";
 import {Initializers} from "~/core/defs";
@@ -24,11 +25,14 @@ import SceneHelper from "~/core/utils/sceneHelper";
  * This initializer is responsible for creating the global scene of the application
  */
 export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, globalSceneStore: GlobalSceneStore }, void> {
+  public floor!: Mesh
 
   init() {
     GlobalScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     this._addLights(true)
+    this._createCanvasBackground()
+    this._createPlanesBackground()
     this._registerPresetPositions()
     this._optimizeScene()
     //this._prepareFloor()
@@ -58,6 +62,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
 
+    renderer.outputEncoding = sRGBEncoding
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
+
+
     return new SceneManager({
       canvas: this._data.canvas,
       camera: camera,
@@ -66,6 +75,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       defaultRation: 2,
       activateOrbitControl: false,
       onRender: (ctx) => {
+
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.updateProjectionMatrix()
@@ -157,12 +167,116 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     //this._addAnimateElements()
   }
 
+  private _createPlanesBackground(){
+
+    let globalScene = GlobalScene.context.scene
+
+
+    const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
+    var material = new ShadowMaterial({
+      // depthWrite: false,
+      side: BackSide,
+      opacity: 0.1,
+    });
+
+    this.floor = new Mesh(planeGeometry,material)
+    this.floor.name = 'floor'
+    this.floor.position.y = -1
+    this.floor.receiveShadow = true
+
+    // this.floor.layers.mask = 2
+    globalScene.add(this.floor)
+
+    const light = new SpotLight( 0xD3D3D3);
+    const helper = new SpotLightHelper( light );
+    light.position.set(332,1664,332)
+
+
+    light.angle = 0.4;
+    light.penumbra = 0.05;
+    light.decay = 1;
+    light.distance = 2000;
+    light.shadow.radius = 8
+
+    light.shadow.mapSize.height = 2048;
+    light.shadow.mapSize.width = 2048;
+    light.castShadow = true
+
+
+    globalScene.add( light );
+    globalScene.add( helper );
+
+
+    let floorFolder = GlobalScene.context.gui.addFolder("Floor")
+    floorFolder.add(this.floor.position,'x',-1000,1000,0.01).listen()
+    floorFolder.add(this.floor.position,'y',-1000,1000,0.01).listen()
+    floorFolder.add(this.floor.position,'z',-1000,1000,0.01).listen()
+
+    let sceneFolder = GlobalScene.context.gui.addFolder("Light")
+    sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
+    sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
+    sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
+
+    console.log(globalScene,'global scene')
+
+  }
+
+  private _createCanvasBackground(){
+
+
+    var canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+
+    var my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
+    my_gradient.addColorStop(0, "#FCE9E1");
+    my_gradient.addColorStop(0.5, "#FDF0E9");
+    // my_gradient.addColorStop(1, "#FF0000");
+    ctx!.fillStyle = my_gradient;
+    ctx!.fillRect(0, 0, GlobalScene.context.width, GlobalScene.context.height);
+
+
+    var texture = new CanvasTexture(canvas);
+
+    GlobalScene.context.scene.background = texture
+
+
+  }
+
+
   /**
    * Retrieve gltf global scene and inject it into Global scene instance
    */
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
     globalSceneGltf.scene.position.set(0, 0, 0)
+
+    GlobalScene.context.scene.add(globalSceneGltf.scene)
+    GlobalScene.context.scene.traverse( child => {
+
+      if(child instanceof Mesh){
+        child.receiveShadow = true
+        child.castShadow = true
+      }
+
+      // @ts-ignore
+      if ( child.material ) child.material.metalness = 0;
+
+      if (child.name ==='socle'){
+
+        child.castShadow = true
+        child.receiveShadow = true
+
+        let socle = child.getObjectByName('socle_2')
+        socle!.castShadow = true
+        socle!.receiveShadow = true
+
+        console.log(child)
+
+      }
+
+    } );
+
+    console.log(globalSceneGltf)
 
     GlobalScene.context.scene.add(globalSceneGltf.scene)
   }
