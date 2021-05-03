@@ -1,13 +1,15 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
+  Color,
+  DoubleSide,
   HemisphereLight,
   HemisphereLightHelper,
   Mesh,
-  MeshBasicMaterial, MeshToonMaterial,
+  MeshBasicMaterial, MeshPhongMaterial, MeshToonMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
-  Scene,
+  Scene, SpotLight, SpotLightHelper,
   sRGBEncoding, Vector3,
   WebGLRenderer
 } from "three";
@@ -33,6 +35,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addClouds()
     this._registerPresetPositions()
     this._optimizeScene()
+    this._prepareFloor()
     this._addLights(true)
     this._configGUI()
     console.log(GlobalScene.context)
@@ -159,13 +162,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
     globalSceneGltf.scene.position.set(0, 0, 0)
 
-
     GlobalScene.context.scene.add(globalSceneGltf.scene)
-    GlobalScene.context.scene.traverse(child => {
-      // @ts-ignore
-      if (child.material) child.material.metalness = 0;
-    });
-
   }
 
   private _addGltfTom() {
@@ -180,27 +177,26 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _addLights(withHelper: boolean = false) {
     const hemisphereLights = new HemisphereLight(0xdff9fb, 0x080820, 1);
-    //hemisphereLights.position.set(100, 500, 700)
     if (withHelper) {
       const helper = new HemisphereLightHelper(hemisphereLights, 5);
       GlobalScene.context.scene.add(helper);
     }
-    /*
-    const spotLight = new SpotLight( 0xffffff );
-    spotLight.position.set( -200, 1000, 200 );
+
+    const spotLight = new SpotLight(0xffffff, 0.3);
+    spotLight.position.set(200,1000,200);
     spotLight.castShadow = true;
     spotLight.shadow.mapSize.width = 1024;
     spotLight.shadow.mapSize.height = 1024;
     spotLight.shadow.camera.near = 500;
     spotLight.shadow.camera.far = 4000;
     spotLight.shadow.camera.fov = 30;
+    spotLight.castShadow = true
 
     if (withHelper) {
       const helper = new SpotLightHelper(spotLight, 5);
       GlobalScene.context.scene.add(helper);
     }
-
-     */
+    GlobalScene.context.scene.add(spotLight)
     GlobalScene.context.scene.add(hemisphereLights);
   }
 
@@ -263,5 +259,15 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       children.push(child.name)
     })
     return children
+  }
+
+  private _prepareFloor() {
+    const floor = GlobalScene.context.scene.getObjectByName('socle')!
+
+    const upFloor = GlobalScene.context.scene.getObjectByName('socle_1')!
+    if (upFloor instanceof Mesh) {
+      upFloor.material.color.set(new Color(222, 209, 213))
+
+    }
   }
 }
