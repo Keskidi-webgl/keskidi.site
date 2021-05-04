@@ -34,9 +34,13 @@ export default class ActivitiesResult extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
   public index:number = 10
+  public instance
+  public pause:boolean = false
 
   nextActivity(){
     this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_PROGRESSION)
+    this.instance.destroyConfettis()
+
   }
 
   mounted(){
@@ -45,27 +49,7 @@ export default class ActivitiesResult extends Vue {
 
   createConfetti(){
 
-    // TODO --> update confetti code & add destroy method
-
-    const AMOUNT = 150;
-    const INTERVAL = 50;
-    const COLORS = ['#000648', '#256DFF', '#FFFFFF', '#FF9D6F'];
-    const canvas :HTMLCanvasElement = document.getElementById('confetti') as HTMLCanvasElement;
-    const ctx = canvas!.getContext('2d');
-    const wW = window.innerWidth;
-    const wH = window.innerHeight;
-
-    const random = (min:number, max:number) => {
-      return Math.random() * (max - min) + min;
-    };
-
-    const randomInt = (min:number, max:number) => {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min;
-    };
-    const confetties:Array<Confetti> = [];
-
+    let that = this
     class Confetti {
       public width:number
       public height:number
@@ -75,7 +59,7 @@ export default class ActivitiesResult extends Vue {
       public y:number
       public rotation:number
       public confetti!:Confetti
-      constructor(width:number, height:number, color:string, speed:number, x:number, y:number, rotation:number) {
+      constructor(width:number|null, height:number|null, color:string|null, speed:number|null, x:number|null, y:number|null, rotation:number|null) {
         this.width = width;
         this.height = height;
         this.color = color;
@@ -104,7 +88,33 @@ export default class ActivitiesResult extends Vue {
         ctx!.restore();
       }
 
+      destroyConfettis(){
+        that.pause = true
+      }
+
     }
+    this.instance = new Confetti()
+
+    const AMOUNT = 150;
+    const INTERVAL = 50;
+    const COLORS = ['#000648', '#256DFF', '#FFFFFF', '#FF9D6F'];
+    const canvas :HTMLCanvasElement = document.getElementById('confetti') as HTMLCanvasElement;
+    const ctx = canvas!.getContext('2d');
+    const wW = window.innerWidth;
+    const wH = window.innerHeight;
+
+    const random = (min:number, max:number) => {
+      return Math.random() * (max - min) + min;
+    };
+
+    const randomInt = (min:number, max:number) => {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    };
+    const confetties:Array<Confetti> = [];
+
+
 
     canvas!.width = wW;
     canvas!.height = wH;
@@ -116,10 +126,12 @@ export default class ActivitiesResult extends Vue {
         conf.update();
       });
 
+      if (that.pause){
+        return
+      }
       requestAnimationFrame(drawConfetti);
+
     }
-
-
 
     const renderConfetti = () => {
       let count = 0;
@@ -130,7 +142,7 @@ export default class ActivitiesResult extends Vue {
           const width = 24 / speed;
           const height = 48 / speed;
           const color = COLORS[randomInt(0, COLORS.length)];
-          let confetti:Confetti  = new Confetti(width, height, color, speed, x, -20, 0);
+          let confetti  = new Confetti(width, height, color, speed, x, -20, 0);
           confetties.push(confetti);
         }
         else {
