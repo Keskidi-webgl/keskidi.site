@@ -17,6 +17,7 @@
     <p class="activities-description">Il te reste <strong>{{this.getSteps()}} mots</strong> à découvrir pour passer au niveau {{this.getNext()}}</p>
 
 
+    <p class="activities-moreInfos" v-if="getProgress() === 0">Tu peux aussi retrouver tes mots sur l'application Keskidico</p>
     <CustomButton
       @click.native="hideActivityPanel"
       arrow-color="#FF6644"
@@ -111,6 +112,7 @@ export default class ActivitiesProgression extends Vue {
   }
   &-description{
     position: relative;
+    color: white;
   }
   &-cross{
     position: absolute;
