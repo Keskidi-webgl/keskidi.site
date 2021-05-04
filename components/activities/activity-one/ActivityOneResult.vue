@@ -13,6 +13,7 @@
       arrow-color="#FF6644"
       color="white"
       text="Passer à l'activité suivante"
+      hoverText="#FF6644"
     ></CustomButton>
   </div>
 </template>
