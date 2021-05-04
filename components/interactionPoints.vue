@@ -72,11 +72,15 @@ export default class InteractionPoints extends Vue {
   &:hover {
     .point-name {
       opacity: 1;
+      color: $dark-blue;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
     }
 
     .center {
-      height: 78px;
-      width: 78px;
+      height: 116px;
+      width: 116px;
       transform: translate(-15px, -15px);
 
       svg {
@@ -84,8 +88,8 @@ export default class InteractionPoints extends Vue {
       }
 
       &:after {
-        height: 78px;
-        width: 78px;
+        // height: 116px;
+        // width: 116px;
         border-width: 3px;
       }
     }
@@ -104,8 +108,8 @@ export default class InteractionPoints extends Vue {
   }
 
   .center {
-    height: 48px;
-    width: 48px;
+    height: 71px;
+    width: 71px;
     background-color: rgba(255, 255, 255, 0.4);
     // backdrop-filter: blur(5px);
     border-radius: 50%;
@@ -117,8 +121,8 @@ export default class InteractionPoints extends Vue {
 
     &:after {
       content: "";
-      height: 78px;
-      width: 78px;
+      height: 116px;
+      width: 116px;
       position: absolute;
       border-top: 2px solid $dark-cream;
       border-right: 2px solid $dark-cream;
