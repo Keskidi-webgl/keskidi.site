@@ -10,7 +10,7 @@ export default class AuthMiddleware {
   public static async handle(ctx: Context) {
     const authStore = getModule(AuthStore, ctx.store);
     const globalStore = getModule(GlobalStore, ctx.store);
-    if (!authStore.isAuth) {
+    if (!authStore.isAuth && ctx.route.path !== '/') {
       ctx.redirect("/tom");
     }
 

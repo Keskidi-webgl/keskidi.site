@@ -37,7 +37,7 @@
 
       <p class="main-font text-common site-loader-container-description">
         Tu n'as rien compris à cette phrase ? Tu es au bon endroit ! Plonge et
-        part à la découverte de la culture des jeunes d'aujourd'hui.
+        part à la découverte du langage des jeunes d'aujourd'hui.
       </p>
 
       <CustomButton
@@ -52,13 +52,13 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import gsap from "gsap";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
-import { InteractionPoint } from "~/core/config/global-scene/interact-points/types";
+import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalScene from "~/core/scene/GlobalScene";
 import {AssetsManager} from "~/core/managers";

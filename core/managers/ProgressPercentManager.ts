@@ -198,6 +198,14 @@ class ProgressPercentManager {
     return this.levelsArray;
   }
 
+  get words() {
+    return this._words
+  }
+
+  get userAchievedWords() {
+    return this._userAchievedWords
+  }
+
   // - SETTERS
   set userAchievedWords(nbWords: number) {
     this._userAchievedWords = nbWords;

@@ -20,9 +20,6 @@
         class="site-loader overlay-element"
         :loading-data="loadingProgressions"
       ></Loader>
-      <!--
-    <button @click="toggleSound">toggle sound</button>
-    -->
 
       <audio
         ref="sound"
@@ -34,15 +31,8 @@
 
       <sound @click.native="toggleSound"></sound>
       <!-- Progress level -->
-      <ProgressLevel
-        class="progress-level"
-        v-if="level && globalSceneStore.canDisplayGlobalUI"
-        :stroke="2"
-        :radius="94 / 2"
-        :total="words"
-        :progress="progress"
-        :level="level.name"
-      />
+      <SceneProgressLevel class="progress-level"
+                          v-if="authStore.isAuth && globalSceneStore.canDisplayGlobalUI"></SceneProgressLevel>
       <!-- Logo -->
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
       <!-- Global scene -->
@@ -80,21 +70,21 @@ import GlobalSceneStore from "~/store/globalScene";
 import AuthStore from "~/store/auth";
 
 // Progress Level
-import ProgressLevel from "~/components/activities/ProgressLevel.vue";
 import {Level} from "~/core/types";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
 import Sound from "~/components/sound/sound.vue";
+import SceneProgressLevel from "~/components/scene/SceneProgressLevel.vue";
 
 @Component({
   components: {
     Sound,
     SceneNavigationPanel,
     LogoMedia,
-    ProgressLevel,
     ActivityOnboarding,
-    ActivityPanel
+    ActivityPanel,
+    SceneProgressLevel
   }
 })
 export default class DefaultLayout extends Vue {
@@ -121,10 +111,8 @@ export default class DefaultLayout extends Vue {
 
   public async mounted() {
     if (this.isChrome && !this.isMobile) {
-      //this.audio = new Audio('https://keskidi.s3.eu-west-3.amazonaws.com/medias/d7d119f1-5397-4f8b-860a-fa358ebba962.mp3');
-      console.log(this.globalStore.isSoundEnabled);
 
-      if (this.globalStore.isSoundEnabled === false) {
+      if (!this.globalStore.isSoundEnabled) {
         let bars = document.querySelectorAll(".sound-bar");
         let audio = this.$refs.sound as HTMLAudioElement;
         audio.pause();
@@ -132,17 +120,14 @@ export default class DefaultLayout extends Vue {
           item.classList.remove("sound-barActive");
         });
       }
-
       await this.initApp();
-      if (this.globalStore.isAppInit && this.authStore.isAuth)
-        await this.initProgressLevel();
     }
   }
 
   async initProgressLevel() {
-    const userAchievedWords = await this.globalStore.achievedWords.length;
+    const userAchievedWords = this.globalStore.achievedWords.length;
     const words = this.globalStore.userWordData
-      ? await this.globalStore.userWordData!.length
+      ? this.globalStore.userWordData!.length
       : 0;
     ProgressPercentManager.words = words;
     ProgressPercentManager.userAchievedWords = userAchievedWords;
