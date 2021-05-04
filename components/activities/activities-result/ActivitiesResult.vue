@@ -50,25 +50,32 @@ export default class ActivitiesResult extends Vue {
     const AMOUNT = 150;
     const INTERVAL = 50;
     const COLORS = ['#000648', '#256DFF', '#FFFFFF', '#FF9D6F'];
-    const canvas = document.getElementById('confetti');
-    const ctx = canvas.getContext('2d');
+    const canvas :HTMLCanvasElement = document.getElementById('confetti') as HTMLCanvasElement;
+    const ctx = canvas!.getContext('2d');
     const wW = window.innerWidth;
     const wH = window.innerHeight;
 
-    const random = (min, max) => {
+    const random = (min:number, max:number) => {
       return Math.random() * (max - min) + min;
     };
 
-    const randomInt = (min, max) => {
+    const randomInt = (min:number, max:number) => {
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min)) + min;
     };
-
-    const confetties = [];
+    const confetties:Array<Confetti> = [];
 
     class Confetti {
-      constructor(width, height, color, speed, x, y, rotation) {
+      public width:number
+      public height:number
+      public color:string
+      public speed:number
+      public x:number
+      public y:number
+      public rotation:number
+      public confetti!:Confetti
+      constructor(width:number, height:number, color:string, speed:number, x:number, y:number, rotation:number) {
         this.width = width;
         this.height = height;
         this.color = color;
@@ -83,30 +90,30 @@ export default class ActivitiesResult extends Vue {
         const x = this.x + Math.sin(this.y * (this.speed/100));
         this.x = x > wW ? 0 : x;
         this.y = y;
-        ctx.fillStyle = this.color;
-        ctx.save();
-        ctx.translate(x + (this.width/2), y + (this.height/2) );
-        ctx.rotate((y*this.speed) * Math.PI/180);
-        ctx.scale(Math.cos(y/10), 1);
-        ctx.fillRect(
+        ctx!.fillStyle = this.color;
+        ctx!.save();
+        ctx!.translate(x + (this.width/2), y + (this.height/2) );
+        ctx!.rotate((y*this.speed) * Math.PI/180);
+        ctx!.scale(Math.cos(y/10), 1);
+        ctx!.fillRect(
           -this.width/2,
           -this.height/2,
           this.width,
           this.height
         );
-        ctx.restore();
+        ctx!.restore();
       }
 
     }
 
-    canvas.width = wW;
-    canvas.height = wH;
+    canvas!.width = wW;
+    canvas!.height = wH;
 
     const drawConfetti = () => {
-      ctx.clearRect(0, 0, wW, wH);
+      ctx!.clearRect(0, 0, wW, wH);
 
-      confetties.forEach(confetti => {
-        confetti.update();
+      confetties.forEach((conf:Confetti) => {
+        conf.update();
       });
 
       requestAnimationFrame(drawConfetti);
@@ -123,7 +130,7 @@ export default class ActivitiesResult extends Vue {
           const width = 24 / speed;
           const height = 48 / speed;
           const color = COLORS[randomInt(0, COLORS.length)];
-          const confetti = new Confetti(width, height, color, speed, x, -20, 0);
+          let confetti:Confetti  = new Confetti(width, height, color, speed, x, -20, 0);
           confetties.push(confetti);
         }
         else {
