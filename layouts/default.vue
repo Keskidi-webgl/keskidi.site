@@ -57,9 +57,6 @@
             globalSceneStore.canDisplayGlobalUI
         "
       />
-
-      <!-- Activity onboarding -->
-      <ActivityOnboarding class="activity-onboarding overlay-element" />
       <!-- Activity panel -->
       <ActivityPanel
         v-if="activityStore.canDisplayActivityPanel"
@@ -70,12 +67,12 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import { AssetsManager } from "~/core/managers";
-import { AssetManagerInitializer } from "~/core/utils/initializers";
+import {AssetsManager, ProgressPercentManager} from "~/core/managers";
+import {AssetManagerInitializer} from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 import GlobalSceneStore from "~/store/globalScene";
 
@@ -84,8 +81,7 @@ import AuthStore from "~/store/auth";
 
 // Progress Level
 import ProgressLevel from "~/components/activities/ProgressLevel.vue";
-import { ProgressPercentManager } from "~/core/managers";
-import { Level } from "~/core/types";
+import {Level} from "~/core/types";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";

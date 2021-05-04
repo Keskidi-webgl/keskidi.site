@@ -15,6 +15,9 @@
     <!-- Activities progression -->
     <ActivitiesProgression v-if="activityDisplay.progression()"/>
 
+    <!-- Activity onboarding -->
+    <ActivityOnboarding v-if="activityDisplay.onBoarding()" class="activity-onboarding overlay-element" />
+
   </div>
 </template>
 
@@ -32,6 +35,7 @@ import GlobalStore from "~/store/global";
 import ActivityThree from "~/components/activities/activity-three/ActivityThree.vue";
 import ActivitiesResult from "~/components/activities/activities-result/ActivitiesResult.vue";
 import ActivitiesProgression from "~/components/activities/activities-progression/ActivitiesProgression.vue";
+import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 
 @Component({
   components: {
@@ -40,7 +44,8 @@ import ActivitiesProgression from "~/components/activities/activities-progressio
     ActivityTwo,
     ActivityOneResult,
     ActivitiesResult,
-    ActivitiesProgression
+    ActivitiesProgression,
+    ActivityOnboarding
   }
 })
 export default class ActivityPanel extends Vue {
@@ -52,12 +57,20 @@ export default class ActivityPanel extends Vue {
     two: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_2,
     three: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_3,
     result: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_RESULT,
-    progression: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_PROGRESSION
+    progression: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_PROGRESSION,
+    onBoarding: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_ONBOARDING
   }
 
   public mounted() {
     const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
-    this.activityStore.setCurrentActivity(isWordAchieved ? ACTIVITY_TYPE.ACTIVITY_1 : ACTIVITY_TYPE.ACTIVITY_1)
+    if (isWordAchieved) {
+      this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
+    } else {
+      this.activityStore.setCurrentActivity(this.globalStore.achievedWords.length
+        ? ACTIVITY_TYPE.ACTIVITY_1
+        :  ACTIVITY_TYPE.ACTIVITY_ONBOARDING
+      )
+    }
   }
 
   public goToHome() {
