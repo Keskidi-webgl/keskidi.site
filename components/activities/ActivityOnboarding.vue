@@ -1,7 +1,7 @@
 <template>
   <div class="onboarding">
     <div class="onboarding-container">
-      <h1 class="main-font">
+      <h1 class="main-font onboarding-title">
         Tu trouveras <strong>3 activités</strong> pour devenir le
         <strong>boss du langage</strong>
         <img
@@ -27,6 +27,7 @@
       </h1>
       <div class="list">
         <ChoiceCard
+          class="onboarding-card"
           title="Découvrir"
           :image="require('~/assets/img/onboarding-discover.svg')"
         >En premier lieu, tu devras deviner entre
@@ -34,6 +35,7 @@
         </ChoiceCard
         >
         <ChoiceCard
+          class="onboarding-card"
           title="Informer"
           :image="require('~/assets/img/onboarding-info.svg')"
         >On a bien fait notre travail comme Alain Rey en te concoctant un
@@ -41,6 +43,7 @@
         </ChoiceCard
         >
         <ChoiceCard
+          class="onboarding-card"
           title="Pratiquer"
           :image="require('~/assets/img/onboarding-practice.svg')"
         >Ce n'est pas tout de connaître le mot, on va aussi t'apprendre à bien
@@ -50,7 +53,12 @@
         >
       </div>
       <div class="action-container w-100">
-        <CustomButton @click.native="goActivityOne" arrow-color="white" color="#000648" text="Et zéé parti !"/>
+        <CustomButton
+          class="onboarding-btn-next"
+          @click.native="goActivityOne"
+          arrow-color="white"
+          color="#000648"
+          text="Et zéé parti !"/>
       </div>
     </div>
   </div>
@@ -61,7 +69,6 @@ import {Component, getModule, Vue} from "nuxt-property-decorator";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import ChoiceCard from "~/components/cards/ChoiceCard.vue";
 import ActivityStore from "~/store/activity";
-import {ACTIVITY_TYPE} from "~/core/enums";
 
 @Component({
   components: {
@@ -72,8 +79,12 @@ import {ACTIVITY_TYPE} from "~/core/enums";
 export default class ActivityOnboarding extends Vue {
   public activityStore = getModule(ActivityStore, this.$store)
 
+  mounted() {
+    console.log('mounted onboarding')
+  }
+
   goActivityOne() {
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+    this.activityStore.setCurrentActivity(null)
   }
 }
 </script>

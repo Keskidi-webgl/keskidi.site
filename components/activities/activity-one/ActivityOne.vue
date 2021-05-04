@@ -9,7 +9,7 @@
             :total="3"
             text-color="white"
           ></ProgressBar>
-          <h1 class="main-font bold big-title">
+          <h1 class="word-name main-font bold big-title">
             {{ activityStore.dataWord.name }}
           </h1>
           <canvas class="tom-canvas" ref="tom"></canvas>

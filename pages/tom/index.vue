@@ -26,15 +26,15 @@
           />
         </h1>
         <p class="sub-title text-common secondary-font w-100">
-          Bienvenue chez mes parents. Mi casa es tu Casa.
-        </p>
-        <p class="w-100 main-font">
           Moi, c'est Tom, j'ai 18 ans !
         </p>
         <p class="w-100 main-font">
-          Tu trouveras différents mots que j'utilise au quotidien, dissimulés
-          dans différentes pièces de ma maison.
+          Bienvenue chez mes parents.
         </p>
+        <p class="w-100 main-font">
+          Je te propose un jeu pour découvrir un langage que notre génération utilise au quotidien et que tu peines parfois à comprendre !
+        </p>
+        <p class="w-100 main-font">Des mots sont dissimulés dans chaque pièce de ma maison. <strong>Clique</strong> sur l'une d'entre elle pour commencer l'aventure...</p>
         <div class="w-100 action-container">
           <CustomButton
             @click.native="next()"
@@ -46,7 +46,7 @@
       </div>
       <div v-if="step == 2" class="w-100 step step-2">
         <p class="w-100 main-font">
-          Pour continuer, j'ai besoin de ton <strong>adresse mail</strong> pour
+          Pour continuer, j'ai besoin de ton <strong>adresse mail</strong> afin
           que tu puisses garder ta
           <strong class="progression"
             >progression
@@ -70,7 +70,7 @@
           />
         </p>
         <p class="w-100 main-font">
-          Et puis mes darons ne souhaitent pas laisser rentrer n'importe qui
+          Et puis ... mes darons ne souhaitent pas laisser rentrer n'importe qui
           chez nous. 😉
         </p>
         <input
@@ -122,9 +122,8 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
-import { SceneManager } from "~/core/managers";
-import { AuthCredential, FunFactElement } from "~/core/types";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
+import {AuthCredential, FunFactElement} from "~/core/types";
 import AuthStore from "~/store/auth";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
@@ -221,7 +220,7 @@ export default class AuthPage extends Vue {
     z-index: 5;
 
     .tom-title {
-      margin-top: 120px;
+      margin: 30px 0;
       position: relative;
 
       .doodle {
@@ -277,7 +276,7 @@ export default class AuthPage extends Vue {
 }
 .auth-container {
   .step-2 {
-    margin-top: 160px;
+    margin-top: 70px;
 
     .progression,
     p {
