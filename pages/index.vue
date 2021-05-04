@@ -14,10 +14,16 @@ import {
   MezzanineInteractPoint,
   TomInteractPoint
 } from "~/core/config/global-scene/interact-points";
+import {Context} from "@nuxt/types";
+import AuthMiddleware from "~/middleware/auth";
 
 @Component
 export default class HomePage extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+
+  middleware(context: Context) {
+    AuthMiddleware.handle(context)
+  }
 
   mounted() {
     this.globalSceneStore.clearActiveRoom()

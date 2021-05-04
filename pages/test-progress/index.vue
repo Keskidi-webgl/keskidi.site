@@ -45,7 +45,7 @@
 import {Component, Vue} from "nuxt-property-decorator";
 import {ProgressBarActivityManager, ProgressPercentManager} from "~/core/managers";
 import {Level, Step} from "~/core/types";
-import ProgressLevel from "~/components/activities/ProgressLevel.vue";
+import ProgressLevel from "~/components/global/ProgressLevel.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
 
 @Component({

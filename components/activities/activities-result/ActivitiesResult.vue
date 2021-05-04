@@ -49,7 +49,7 @@ export default class ActivitiesResult extends Vue {
 
     const AMOUNT = 150;
     const INTERVAL = 50;
-    const COLORS = ['#4579FF', '#29EAFC', '#FAB1C0', '#50E3C2', '#FFFC9D', '#1A04B3', '#F81C4D'];
+    const COLORS = ['#000648', '#256DFF', '#FFFFFF', '#FF9D6F'];
     const canvas = document.getElementById('confetti');
     const ctx = canvas.getContext('2d');
     const wW = window.innerWidth;

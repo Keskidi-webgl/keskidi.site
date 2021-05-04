@@ -32,13 +32,9 @@ export default class ActivitiesProgression extends Vue {
   hideActivityPanel(){
     GlobalScene.context.resume()
     this.activityStore.setCurrentActivity(null)
+    this.activityStore.hideActivityPanel()
+    this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl)
   }
-
-  mounted(){
-    console.log('mount')
-  }
-
-
 }
 </script>
 

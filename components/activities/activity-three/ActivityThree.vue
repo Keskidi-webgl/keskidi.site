@@ -69,16 +69,18 @@
 
 <script lang="ts">
 import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import GlobalSceneStore from "~/store/globalScene"
 import ActivityStore from "~/store/activity"
 import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
 import {Step, WordExpression} from "~/core/types";
-import {VoiceRecognitionManager} from "~/core/managers";
+import {ApiManager, VoiceRecognitionManager} from "~/core/managers";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
 import {ACTIVITY_TYPE} from "~/core/enums";
+import AuthStore from "~/store/auth";
+import GlobalStore from "~/store/global";
+
 @Component({
   components: {
     ActivityElement,
@@ -87,7 +89,8 @@ import {ACTIVITY_TYPE} from "~/core/enums";
   }
 })
 export default class ActivityThree extends Vue {
-  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public authStore = getModule(AuthStore, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
   public progressBarStep: Step = { id: 3, text: "T'es un ouf !" };
   public activeExpression: WordExpression | null = null
@@ -103,24 +106,26 @@ export default class ActivityThree extends Vue {
    * Start voice recognition for current expression
    */
   public startRecordVoice(expression: WordExpression) {
-
-    this.$refs.activityRecord[this.countExpressionSuccess].classList.add('isRecording')
-    VoiceRecognitionManager.setTextToRecognize(expression.content!)
-    VoiceRecognitionManager.start()
-    VoiceRecognitionManager.onEnd(()=>{
-      this.$refs.activityRecord[this.countExpressionSuccess].classList.remove('isRecording')
+    (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add('isRecording');
+    VoiceRecognitionManager!.setTextToRecognize(expression.content!)
+    VoiceRecognitionManager!.start()
+    VoiceRecognitionManager!.onEnd(() => {
+      (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.remove('isRecording');
     })
   }
+
   /**
    * Play audio of the current expression
    */
   public playExpressionAudio() {
     (<HTMLAudioElement>this.$refs.audioElement).play()
   }
+
   /**
    * Computed value for activity success condition
    */
-  goToResult(){
+  async goToResult() {
+    await this._achievedWord()
     this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT)
   }
 
@@ -128,12 +133,12 @@ export default class ActivityThree extends Vue {
    * Init voice recognition manager callbacks
    */
   private _initVoiceRecognitionManager() {
-    VoiceRecognitionManager.onResult((result => {
+    VoiceRecognitionManager!.onResult((result => {
       if (result.distance > 0.5) {
-        this.$refs.activityRecord[this.countExpressionSuccess].classList.add('validateRecord')
-        if ( this.countExpressionSuccess >= 2){
-          this.$refs.activityRecord[this.countExpressionSuccess].classList.remove('isRecording')
-          this.$refs.activityRecord[this.countExpressionSuccess].disabled = true
+        (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add('validateRecord');
+        if (this.countExpressionSuccess >= 2) {
+          (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.remove('isRecording');
+          (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].disabled = true
         }
         this.countExpressionSuccess++
         if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
@@ -152,6 +157,17 @@ export default class ActivityThree extends Vue {
       canvas: this.$refs.tom as HTMLCanvasElement
     }).init();
     ActivityScene.context.start();
+  }
+
+  private async _achievedWord() {
+    await ApiManager.request({
+      url: `/users/${this.authStore.user!.id}/words/${this.activityStore.dataWord!.id}/validate`,
+      method: 'POST'
+    })
+    const { data } = await ApiManager.request({
+      url: `/users/${this.authStore.user!.id}/words`
+    });
+    this.globalStore.setUserWordData(data);
   }
 }
 </script>

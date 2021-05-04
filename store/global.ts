@@ -9,7 +9,7 @@ import { UserWordData, Word } from "~/core/types";
 export default class GlobalStore extends VuexModule {
   private _isAppInit: boolean = false;
   private _userWordData: Array<UserWordData> | null = null;
-  private _dataWord: Array<Word> | null = null;
+  private _dataWord: Array<Word> = [];
   private _userAudioPreferences: string = localStorage.getItem("isSoundEnabled") || 'true'
 
   @Mutation
@@ -23,7 +23,7 @@ export default class GlobalStore extends VuexModule {
   }
 
   @Mutation
-  public setDataWord(dataWord: Array<Word> | null) {
+  public setDataWord(dataWord: Array<Word>) {
     this._dataWord = dataWord;
   }
 
