@@ -31,8 +31,10 @@
 
       <sound @click.native="toggleSound"></sound>
       <!-- Progress level -->
-      <SceneProgressLevel class="progress-level"
-                          v-if="authStore.isAuth && globalSceneStore.canDisplayGlobalUI"></SceneProgressLevel>
+      <SceneProgressLevel
+        class="progress-level"
+        v-if="authStore.isAuth && globalSceneStore.canDisplayGlobalUI"
+      ></SceneProgressLevel>
       <!-- Logo -->
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
       <!-- Global scene -->
@@ -52,25 +54,31 @@
         v-if="activityStore.canDisplayActivityPanel"
         class="activity-panel overlay-element"
       />
+
+      <PreviewScene class="preview" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from "nuxt-property-decorator";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import {AssetsManager, ProgressPercentManager} from "~/core/managers";
-import {AssetManagerInitializer} from "~/core/utils/initializers";
+import { AssetsManager, ProgressPercentManager } from "~/core/managers";
+import { AssetManagerInitializer } from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
+
+// Scene
+import PreviewScene from "~/components/global/PreviewScene.vue";
 import GlobalSceneStore from "~/store/globalScene";
 
 // Auth
 import AuthStore from "~/store/auth";
 
 // Progress Level
-import {Level} from "~/core/types";
+import { Level } from "~/core/types";
+import { Room } from "~/core/config/global-scene/rooms/types";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
@@ -84,7 +92,8 @@ import SceneProgressLevel from "~/components/scene/SceneProgressLevel.vue";
     LogoMedia,
     ActivityOnboarding,
     ActivityPanel,
-    SceneProgressLevel
+    SceneProgressLevel,
+    PreviewScene
   }
 })
 export default class DefaultLayout extends Vue {
@@ -103,15 +112,16 @@ export default class DefaultLayout extends Vue {
   public level: Level | null = null;
   public words: number = 0;
 
+  // Sound
   public sound: HTMLAudioElement | null = null;
 
+  // Warnings
   public isChrome: boolean = navigator.userAgent.indexOf("Chrome") != -1;
   public isMobile: boolean =
     window.innerWidth <= 600 && window.innerHeight <= 800;
 
   public async mounted() {
     if (this.isChrome && !this.isMobile) {
-
       if (!this.globalStore.isSoundEnabled) {
         let bars = document.querySelectorAll(".sound-bar");
         let audio = this.$refs.sound as HTMLAudioElement;
@@ -241,5 +251,13 @@ canvas {
 }
 
 .activity-panel {
+}
+
+.preview {
+  z-index: 40;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 25px;
 }
 </style>
