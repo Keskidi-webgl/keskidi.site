@@ -43,6 +43,7 @@ import ActivitiesProgression from "~/components/activities/activities-progressio
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import gsap from "gsap";
 import CustomEase from 'gsap/CustomEase'
+import {OnboardingActivityAnimation} from "~/core/animations/activities";
 
 gsap.registerPlugin(CustomEase)
 
@@ -87,52 +88,17 @@ export default class ActivityPanel extends Vue {
     this.$router.push("/")
   }
 
-  public animationEnterOnboarding(el: HTMLElement, done: Function) {
-    const tl = gsap.timeline()
-    tl.from(document.querySelectorAll('.onboarding-card'), {
-      y: 500,
-      duration: 1,
-      autoAlpha: 0,
-      stagger: 0.2,
-      ease: 'power3'
-    }, 0.3)
-      .from(document.querySelector('.onboarding-title'), {
-        duration: 1,
-        autoAlpha: 0,
-        y: -150,
-        onComplete: () => {
-          done()
-        }
-      }, 0.3)
+  public animationEnterOnboarding(el: HTMLCollection, done: Function) {
+    OnboardingActivityAnimation.enter(el, () => {
+      done()
+    })
   }
 
-  public animationLeaveOnBoarding(el: HTMLElement, done: Function) {
-    const tl = gsap.timeline({
-      onComplete: () => {
-        console.log('onComplete')
-        done()
-        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
-      }
+  public animationLeaveOnBoarding(el: HTMLCollection, done: Function) {
+    OnboardingActivityAnimation.leave(el, () => {
+      done()
+      this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     })
-    tl.to(document.querySelectorAll('.onboarding-card'), {
-      y: 500,
-      duration: 1,
-      autoAlpha: 0,
-      stagger: 0.2,
-      ease: 'power3'
-    }, 0.2)
-    tl.to(document.querySelector('.onboarding-btn-next'), {
-      y: 500,
-      duration: 1,
-      autoAlpha: 0,
-      stagger: 0.2,
-      ease: 'power3'
-    }, 0.2)
-      .to(document.querySelector('.onboarding-title'), {
-        duration: 0.8,
-        autoAlpha: 0,
-        y: -60,
-      }, 0.2)
   }
 
   public animationEnterActivityOne(el: HTMLElement, done: Function) {
