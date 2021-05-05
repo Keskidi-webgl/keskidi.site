@@ -43,7 +43,7 @@ import ActivitiesProgression from "~/components/activities/activities-progressio
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import gsap from "gsap";
 import CustomEase from 'gsap/CustomEase'
-import {OnboardingActivityAnimation} from "~/core/animations/activities";
+import {ActivityOneAnimation, OnboardingActivityAnimation} from "~/core/animations/activities";
 
 gsap.registerPlugin(CustomEase)
 
@@ -72,7 +72,8 @@ export default class ActivityPanel extends Vue {
   }
 
   public animationElements = {
-    onboarding: new OnboardingActivityAnimation()
+    onboarding: new OnboardingActivityAnimation(),
+    activityOne: new ActivityOneAnimation()
   }
 
   public mounted() {
@@ -105,39 +106,11 @@ export default class ActivityPanel extends Vue {
     })
   }
 
-  public animationEnterActivityOne(el: HTMLElement, done: Function) {
-    CustomEase.create('aside', "M0,0,C0.126,0.382,0.282,0.674,0.44,0.822,0.632,1.002,0.818,1.001,1,1")
-    const tl = gsap.timeline()
-    tl.from(el, {
-      autoAlpha: 0
-    }, .3)
-      .from('.activity-element-aside', {
-        duration: 2,
-        x: -480,
-        ease: 'aside'
-      }, 0.6)
-      .from('canvas', {
-        autoAlpha: 0,
-        y: 500
-      }, 2)
-      .from('.word-name', {
-        autoAlpha: 0,
-        y: 100,
-      }, 2)
-      .from('.instruction', {
-        autoAlpha: 0,
-        y: -60
-      }, 2)
-      .from('.interrogation', {
-        autoAlpha: 0,
-      }, 2.5)
-      .from(document.querySelectorAll('.choice-card'), {
-        y: 100,
-        duration: 1,
-        autoAlpha: 0,
-        stagger: 0.3,
-        ease: 'power3'
-      }, 2)
+  public animationEnterActivityOne(el: HTMLCollection, done: Function) {
+    this.animationElements.activityOne.enter(el, () => {
+      done()
+    })
+
 
   }
 }

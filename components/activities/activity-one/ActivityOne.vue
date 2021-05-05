@@ -238,7 +238,7 @@ export default class ActivityOne extends Vue {
 
         .card {
           filter: grayscale(1);
-          transition: 0.2s ease all;
+          transition: 0.2s ease filter;
           cursor: pointer;
 
           &:hover,

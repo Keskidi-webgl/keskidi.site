@@ -24,9 +24,9 @@ export default class OnboardingActivityAnimation extends AnimationElement {
       y: 750,
       duration: 0.6,
       autoAlpha: 0,
-      stagger: 0.25,
+      stagger: 0.15,
       ease: 'cards'
-    }, 0)
+    }, 0.3)
     tl.to(document.querySelector('.onboarding-btn-next'), {
       y: 200,
       duration: 0.5,
