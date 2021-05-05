@@ -26,17 +26,24 @@ import GlobalScene from "~/core/scene/GlobalScene";
 export default class ActivityLeave extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
+  public leaveContainer!:HTMLElement
 
+
+  mounted(){
+    this.leaveContainer = this.$refs.leave as HTMLElement
+  }
 
   hideActivityPanel(){
     GlobalScene.context.resume()
     this.activityStore.setCurrentActivity(null)
     this.activityStore.hideActivityPanel()
-    this.$refs.leave.classList.add('hide')
+    this.leaveContainer.classList.add('hide')
+
+    //this.$refs.leave.classList.add('hide')
   }
 
   resumeActivity(){
-    this.$refs.leave.classList.add('hide')
+      this.leaveContainer.classList.add('hide')
   }
 
 }

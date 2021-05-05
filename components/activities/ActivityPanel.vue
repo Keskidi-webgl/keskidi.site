@@ -25,7 +25,7 @@
       </svg>
     </div>
 
-    <ActivityLeave ref="leave"/>
+    <ActivityLeave ref="leaveActivity"/>
   </div>
 </template>
 
@@ -85,7 +85,8 @@ export default class ActivityPanel extends Vue {
   }
 
   leaveActivity(){
-    this.$refs.leave.$el.classList.remove('hide')
+    //@ts-ignore
+    this.$refs.leaveActivity.$el.classList.remove('hide')
   }
 
   public goToHome() {

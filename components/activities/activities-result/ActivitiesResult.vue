@@ -34,7 +34,7 @@ export default class ActivitiesResult extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
   public index:number = 10
-  public instance
+  public instance:any
   public pause:boolean = false
 
   nextActivity(){
@@ -60,13 +60,13 @@ export default class ActivitiesResult extends Vue {
       public rotation:number
       public confetti!:Confetti
       constructor(width:number|null, height:number|null, color:string|null, speed:number|null, x:number|null, y:number|null, rotation:number|null) {
-        this.width = width;
-        this.height = height;
-        this.color = color;
-        this.speed = speed;
-        this.x = x;
-        this.y = y;
-        this.rotation = rotation;
+        this.width = width as number;
+        this.height = height as number;
+        this.color = color as string;
+        this.speed = speed as number;
+        this.x = x as number;
+        this.y = y as number;
+        this.rotation = rotation as number;
       }
 
       update() {
@@ -93,7 +93,7 @@ export default class ActivitiesResult extends Vue {
       }
 
     }
-    this.instance = new Confetti()
+    this.instance = new Confetti(null,null,null,null,null,null,null)
 
     const AMOUNT = 150;
     const INTERVAL = 50;
