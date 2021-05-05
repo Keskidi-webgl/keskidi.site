@@ -22,9 +22,9 @@ export default class OnboardingActivityAnimation extends AnimationElement {
     const tl = this._getFreshTimeline(onComplete)
     tl.to(document.querySelectorAll('.onboarding-card'), {
       y: 750,
-      duration: 0.6,
+      duration: 0.7,
       autoAlpha: 0,
-      stagger: 0.15,
+      stagger: 0.2,
       ease: 'cards'
     }, 0.3)
     tl.to(document.querySelector('.onboarding-btn-next'), {

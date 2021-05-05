@@ -53,9 +53,9 @@ export default class ActivityOneAnimation extends AnimationElement {
         y: 300,
         duration: 1,
         autoAlpha: 0,
-        stagger: 0.2,
+        stagger: 0.5,
         ease: 'cards'
-      }, 2)
+      }, 2.3)
       // Progress bar container
       .from(document.querySelectorAll('.progress-bar-container'), {
         width: 0,
@@ -63,26 +63,26 @@ export default class ActivityOneAnimation extends AnimationElement {
         autoAlpha: 0,
         x: -12,
         ease: 'progressBar'
-      }, 2)
+      }, 2.2)
       // Progress bar width
       .from(document.querySelectorAll('.progress-bar-width'), {
         duration: 0.6,
         autoAlpha: 0,
         ease: 'progressBar'
-      }, 2)
+      }, 2.3)
       // Interrogation
       .from('.interrogation', {
         duration: 1,
         autoAlpha: 0,
         ease: 'interrogation'
-      }, 2.2)
+      }, 2.7)
       // Button validate
       .from('.btn-validate', {
         y: 80,
         duration: 1,
         autoAlpha: 0,
         ease: 'interrogation'
-      }, 2)
+      }, 2.7)
   }
 
   leave(el: HTMLCollection, onComplete: () => void): void {
