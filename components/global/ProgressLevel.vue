@@ -1,7 +1,7 @@
 <template>
   <div class="progress-level">
     <div class="circle">
-      <span
+      <span class="main-font"
         ><strong class="number">{{ progress }}</strong> <br />
         {{ progress > 1 ? "MOTS" : "MOT" }}</span
       >
@@ -14,11 +14,11 @@
             class="doodle"
             alt=""
           />
-          <span> {{ total }} </span>
+          <span class="main-font"> {{ total }} </span>
         </div>
       </div>
       <div
-        class="item"
+        class="item main-font"
         v-for="(level, index) in levels"
         :key="index"
         :style="{ left: `${level.position}%` }"
@@ -174,7 +174,7 @@ export default class ProgressLevel extends Vue {
     top: 50%;
     transform: translate(calc(85px - (85px / 3)), -50%);
     z-index: -5;
-    padding: 8px;
+    padding: 7px;
 
     .item {
       position: absolute;
@@ -211,8 +211,12 @@ export default class ProgressLevel extends Vue {
 
       .star {
         position: absolute;
-        right: 8px;
+        right: 10px;
         width: fit-content;
+        height: 23px;
+        width: 22px;
+        top: 50%;
+        transform: translateY(-50%);
 
         span {
           position: absolute;
@@ -226,7 +230,7 @@ export default class ProgressLevel extends Vue {
           line-height: 18px;
           text-align: center;
 
-          color: rgba(255, 255, 255, 0.2);
+          color: white;
         }
       }
     }
