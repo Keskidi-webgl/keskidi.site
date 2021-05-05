@@ -101,9 +101,15 @@
       background-color="white"
       width="610"
     >
-      <img class="doodle" src="~/assets/img/orange-doodles.svg" alt="" />
       <div class="w-100 step">
-        <h1 class="big-title main-font w-100 tom-title">Fun fact !</h1>
+        <h1 class="big-title main-font w-100 tom-title">
+          Fun fact !
+          <img
+            src="~/assets/img/doodle-packed-large.png"
+            class="doodle packed-doodle-large"
+            alt=""
+          />
+        </h1>
         <p class="w-100">{{ currentFact.content }}</p>
         <span class="leave-activity" @click="back()">
           <img src="~/assets/img/cross.svg" alt="" />
@@ -222,6 +228,7 @@ export default class AuthPage extends Vue {
     .tom-title {
       margin: 30px 0;
       position: relative;
+      width: fit-content;
 
       .doodle {
         position: absolute;
@@ -240,6 +247,11 @@ export default class AuthPage extends Vue {
         &.packed-doodle {
           right: 125px;
           bottom: -10px;
+        }
+
+        &.packed-doodle-large {
+          right: 0;
+          top: 0;
         }
       }
     }
