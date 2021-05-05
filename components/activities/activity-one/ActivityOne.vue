@@ -139,9 +139,7 @@ export default class ActivityOne extends Vue {
   }
 
   public validateActivity() {
-    const goodAnswer =
-      this.userSelection!.url ===
-      this.activityStore.dataWord!.activity_data!.good_object;
+    const goodAnswer = this.userSelection!.url === this.activityStore.dataWord!.activity_data!.good_object;
 
     this.activityResultData = {
       goodObjectUrl: this.activityStore.dataWord!.activity_data!.good_object,

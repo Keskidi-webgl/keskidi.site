@@ -71,6 +71,10 @@ export default class ActivityPanel extends Vue {
     onBoarding: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_ONBOARDING
   }
 
+  public animationElements = {
+    onboarding: new OnboardingActivityAnimation()
+  }
+
   public mounted() {
     const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
     if (isWordAchieved) {
@@ -89,13 +93,13 @@ export default class ActivityPanel extends Vue {
   }
 
   public animationEnterOnboarding(el: HTMLCollection, done: Function) {
-    OnboardingActivityAnimation.enter(el, () => {
+    this.animationElements.onboarding.enter(el, () => {
       done()
     })
   }
 
   public animationLeaveOnBoarding(el: HTMLCollection, done: Function) {
-    OnboardingActivityAnimation.leave(el, () => {
+    this.animationElements.onboarding.leave(el, () => {
       done()
       this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
     })
