@@ -1,6 +1,7 @@
 import AnimationElement from "~/core/animations/AnimationElement";
 import gsap from 'gsap'
 import CustomEase from 'gsap/CustomEase'
+import {AnimationElementOptions} from "~/core/animations/types";
 
 export default class OnboardingActivityAnimation extends AnimationElement {
   constructor() {
@@ -10,16 +11,16 @@ export default class OnboardingActivityAnimation extends AnimationElement {
     CustomEase.create('title', 'M0,0 C0.88,0 0.49,1 1,1 ')
   }
 
-  enter(el: HTMLCollection, onComplete: () => void): void {
-    gsap.from(el, {
+  enter(options: AnimationElementOptions): void {
+    gsap.from(options.el, {
       duration: 1,
       autoAlpha: 0,
       ease: 'title'
     })
   }
 
-  leave(el: HTMLCollection, onComplete: () => void): void {
-    const tl = this._getFreshTimeline(onComplete)
+  leave(options: AnimationElementOptions): void {
+    const tl = this._getFreshTimeline(options.onComplete, options.onStart)
     tl.to(document.querySelectorAll('.onboarding-card'), {
       y: 750,
       duration: 0.7,

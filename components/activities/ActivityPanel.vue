@@ -44,6 +44,8 @@ import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import gsap from "gsap";
 import CustomEase from 'gsap/CustomEase'
 import {ActivityOneAnimation, OnboardingActivityAnimation} from "~/core/animations/activities";
+import TomSceneElement from "~/core/scene/TomSceneElement";
+import ActivityScene from "~/core/scene/ActivityScene";
 
 gsap.registerPlugin(CustomEase)
 
@@ -94,24 +96,34 @@ export default class ActivityPanel extends Vue {
   }
 
   public animationEnterOnboarding(el: HTMLCollection, done: Function) {
-    this.animationElements.onboarding.enter(el, () => {
-      done()
+    this.animationElements.onboarding.enter({
+      el,
+      onStart: () => {},
+      onComplete: () => {}
     })
   }
 
   public animationLeaveOnBoarding(el: HTMLCollection, done: Function) {
-    this.animationElements.onboarding.leave(el, () => {
-      done()
-      this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+    this.animationElements.onboarding.leave({
+      el,
+      onStart: () => {
+
+      },
+      onComplete: () => {
+        done()
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+      }
     })
   }
 
   public animationEnterActivityOne(el: HTMLCollection, done: Function) {
-    this.animationElements.activityOne.enter(el, () => {
-      done()
+    this.animationElements.activityOne.enter({
+      el,
+      onStart: () => {},
+      onComplete: () => {
+        done()
+      }
     })
-
-
   }
 }
 </script>

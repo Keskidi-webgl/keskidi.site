@@ -1,14 +1,18 @@
 <template>
   <div class="activity-one-result">
-    <img :src="resultData.goodObjectUrl" alt="" />
+    <img class="result-img-good-word" :src="resultData.goodObjectUrl" alt="" />
     <!-- TODO Remplacer par l'animation de fond -->
-    <div class="bg-anim">
-      <span v-for="index in 20" :key="index" class="big-title">{{
-        resultData.answerWord.toUpperCase()
-      }}</span>
+    <div class="bg-anim-container">
+      <div class="bg-anim">
+      <span v-for="index in 40" :key="index" class="big-title">{{
+          resultData.answerWord.toUpperCase()
+        }}</span>
+      </div>
     </div>
 
+
     <CustomButton
+      class="btn-activity-two"
       @click.native="nextActivity"
       arrow-color="#FF6644"
       color="white"
@@ -56,26 +60,31 @@ export default class ActivityOneResult extends Vue {
   right: 0;
   bottom: 0;
   flex-direction: column;
+  overflow: hidden;
   justify-content: center;
   align-items: center;
   z-index: 30;
 
-  .bg-anim {
-    display: flex;
+  .bg-anim-container {
     position: absolute;
-    animation: slide-left 40s ease-in-out infinite alternate both;
+    width: 100%;
+    .bg-anim {
+      display: flex;
+      animation: slide-left 10s ease-in-out infinite alternate both;
 
-    span {
-      color: white;
-      margin: 0 50px;
+      span {
+        color: white;
+        margin: 0 50px;
+      }
     }
   }
+
 
   img {
     width: 500px;
     margin-bottom: 60px;
     z-index: 10;
-    animation: slide-top 3s ease-in-out infinite alternate both;
+    //animation: slide-top 3s ease-in-out infinite alternate both;
   }
 }
 

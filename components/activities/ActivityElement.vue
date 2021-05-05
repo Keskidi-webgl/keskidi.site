@@ -32,7 +32,7 @@ export default class ActivityElement extends Vue {
 
   &-aside {
     width: 480px;
-    max-width: 30%;
+    //max-width: 30%;
     background: linear-gradient(107.28deg, #FF6644 29.48%, #FF9D6F 100%);
     padding: 80px 60px 0 60px;
     box-sizing: border-box;
@@ -51,6 +51,7 @@ export default class ActivityElement extends Vue {
     height: 100%;
     overflow-y: scroll;
     position: relative;
+    overflow-x: hidden;
   }
 }
 </style>

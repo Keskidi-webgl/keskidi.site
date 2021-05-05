@@ -1,6 +1,8 @@
 import AnimationElement from "~/core/animations/AnimationElement";
 import gsap from 'gsap'
 import CustomEase from 'gsap/CustomEase'
+import TomSceneElement from "~/core/scene/TomSceneElement";
+import {AnimationElementOptions} from "~/core/animations/types";
 
 export default class ActivityOneAnimation extends AnimationElement {
   constructor() {
@@ -14,10 +16,10 @@ export default class ActivityOneAnimation extends AnimationElement {
     CustomEase.create('button', 'M0,0 C1,0 0.67,1 1,1')
   }
 
-  enter(el: HTMLCollection, onComplete: () => void): void {
-    const tl = this._getFreshTimeline(onComplete)
+  enter(options: AnimationElementOptions): void {
+    const tl = this._getFreshTimeline(options.onComplete, options.onStart)
     // Main element
-    tl.from(el, {
+    tl.from(options.el, {
       autoAlpha: 0,
       duration: 0.5
     }, 0)
@@ -53,7 +55,7 @@ export default class ActivityOneAnimation extends AnimationElement {
         y: 300,
         duration: 1,
         autoAlpha: 0,
-        stagger: 0.5,
+        stagger: 0.2,
         ease: 'cards'
       }, 2.3)
       // Progress bar container
@@ -66,10 +68,11 @@ export default class ActivityOneAnimation extends AnimationElement {
       }, 2.2)
       // Progress bar width
       .from(document.querySelectorAll('.progress-bar-width'), {
-        duration: 0.6,
+        duration: 0.3,
+        width: 0,
         autoAlpha: 0,
         ease: 'progressBar'
-      }, 2.3)
+      }, 2.2)
       // Interrogation
       .from('.interrogation', {
         duration: 1,
@@ -82,11 +85,13 @@ export default class ActivityOneAnimation extends AnimationElement {
         duration: 1,
         autoAlpha: 0,
         ease: 'interrogation'
-      }, 2.7)
+      }, 2.3)
   }
 
-  leave(el: HTMLCollection, onComplete: () => void): void {
-    const tl = this._getFreshTimeline(onComplete)
-
+  leave(options: AnimationElementOptions): void {
+    const tl = this._getFreshTimeline(options.onComplete, options.onStart)
+    tl.to(options.el, {
+      duration: 2
+    })
   }
 }
