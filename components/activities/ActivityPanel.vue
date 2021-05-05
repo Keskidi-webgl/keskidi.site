@@ -18,6 +18,14 @@
     <!-- Activity onboarding -->
     <ActivityOnboarding v-if="activityDisplay.onBoarding()" class="activity-onboarding overlay-element" />
 
+    <div @click="leaveActivity" class="activity-panel--cross">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 2L22 21.9997" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 22L22 2.00027" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <ActivityLeave ref="leave"/>
   </div>
 </template>
 
@@ -36,6 +44,8 @@ import ActivityThree from "~/components/activities/activity-three/ActivityThree.
 import ActivitiesResult from "~/components/activities/activities-result/ActivitiesResult.vue";
 import ActivitiesProgression from "~/components/activities/activities-progression/ActivitiesProgression.vue";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
+import ActivityLeave from "~/components/activities/ActivityLeave.vue";
+
 
 @Component({
   components: {
@@ -45,7 +55,8 @@ import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
     ActivityOneResult,
     ActivitiesResult,
     ActivitiesProgression,
-    ActivityOnboarding
+    ActivityOnboarding,
+    ActivityLeave
   }
 })
 export default class ActivityPanel extends Vue {
@@ -73,6 +84,10 @@ export default class ActivityPanel extends Vue {
     }
   }
 
+  leaveActivity(){
+    this.$refs.leave.$el.classList.remove('hide')
+  }
+
   public goToHome() {
     GlobalScene.context.resume()
     this.$router.push("/")
@@ -83,5 +98,20 @@ export default class ActivityPanel extends Vue {
 <style scoped lang="scss">
 .activity-panel {
   //background-color: #FFF8EE;
+  &--cross{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: linear-gradient(146.31deg, rgba(255, 255, 255, 0.4) 7.41%, rgba(255, 255, 255, 0.1) 94.07%);
+    box-shadow: 0px 4px 25px -1px rgba(190, 190, 190, 0.15);
+    backdrop-filter: blur(20px);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    cursor: pointer;
+  }
 }
 </style>
