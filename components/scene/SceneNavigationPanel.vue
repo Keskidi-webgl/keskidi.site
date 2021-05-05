@@ -3,10 +3,10 @@
     <nuxt-link
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
       v-if="!globalSceneStore.activeObject"
-      class="scene-navigation-panel-button previous-scene"
+      class="scene-navigation-panel-button scene-btn previous-scene"
       :to="previousSceneLink()"
     >
-      <p class="room-name main-font">{{ prev }}</p>
+      <p ref="room" class="room-name js-split-char main-font">{{ prev }}</p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
     <nuxt-link
@@ -20,12 +20,13 @@
     <nuxt-link
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
       v-if="!globalSceneStore.activeObject"
-      class="scene-navigation-panel-button next-scene"
+      class="scene-navigation-panel-button scene-btn next-scene"
       :to="nextSceneLink()"
     >
-      <p class="room-name main-font">{{ next }}</p>
+      <p ref="room" class="room-name js-split-char main-font">{{ next }}</p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
+
     <nuxt-link
       v-if="globalSceneStore.activeObject"
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
@@ -40,16 +41,18 @@
 <script lang="ts">
 import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
+import gsap from "gsap";
 
 @Component({})
 export default class SceneNavigationPanel extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
-
   public next: string | undefined = this.globalSceneStore.activeRoom?.nextRoom()
     .nameForHuman;
   public prev:
     | string
     | undefined = this.globalSceneStore.activeRoom?.previousRoom().nameForHuman;
+
+  public words:any
 
   public backHomeLink() {
     return "/";
@@ -70,6 +73,68 @@ export default class SceneNavigationPanel extends Vue {
   public goBackObjectRoom() {
     return this.globalSceneStore.activeObject?.room().fullUrl;
   }
+
+  // TODO --> ADD CUSTOM EVENT WHEN we leave current page
+  mounted(){
+    this.words = document.querySelectorAll('.js-split-char')
+    this.launchSplitText()
+    this.splitText()
+  }
+
+  launchSplitText(){
+    let words = document.querySelectorAll('.js-split-char')
+    let sceneBtn = document.querySelectorAll('.scene-btn')
+
+    sceneBtn.forEach((el:any,index:number)=>{
+      el.addEventListener('mouseenter',()=>{
+        //@ts-ignore
+        this.splitAnimation(words[index])
+      })
+    })
+  }
+
+  splitText(){
+    console.log("split INIIT",this.words)
+    this.words.forEach((el:any)=>{
+        let txtSpan = ''
+        let txt = el.textContent
+        txt!.split('').forEach((content:any) =>{
+          txtSpan += `<span>${content}</span>`
+        })
+        el.innerHTML = txtSpan
+      })
+    }
+
+  splitAnimation(el:HTMLElement){
+    let letters = el.querySelectorAll( 'span')
+
+    console.log("lauch animation split")
+    for (let i = letters.length - 1; i>= 0; i--){
+      let $el = letters[i]
+      let delay = 0.02 * i
+
+      gsap.to($el,{
+        duration:0.2,
+        ease: 'power1.in',
+        delay: delay,
+        yPercent:'-50',
+        opacity: 1,
+        onComplete:function (){
+          gsap.set($el, {
+            yPercent: '50'
+          });
+          console.log("ekip")
+          gsap.to($el,  {
+            duration: 0.3,
+            ease: 'power1.out',
+            opacity: 1,
+            yPercent: '0',
+          });
+        }})
+
+    }
+  }
+
 }
 </script>
 
@@ -161,6 +226,17 @@ export default class SceneNavigationPanel extends Vue {
 
   .isDisabled {
     pointer-events: none;
+  }
+  .js-split-char {
+    display: block;
+    overflow: hidden;
+    width: 130px;
+    span , path {
+      display: inline-block;
+      vertical-align: middle;
+      min-width: 0.25em;
+      line-height:1;
+    }
   }
 }
 </style>
