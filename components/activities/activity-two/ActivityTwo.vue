@@ -20,7 +20,6 @@
               alt=""
             />
           </div>
-
           <div @click="goToNextActivity" class="aside-container-footer">
             <span>Passer à l'activité suivante ></span>
           </div>
