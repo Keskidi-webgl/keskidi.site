@@ -5,7 +5,7 @@
         {{ this.activityStore.dataWord.home_scenario.content }}
       </span>
       <CustomButton class="btn-discover" @click.native="startActivity" arrow-color="white" color="#000648"
-                    :text="`Découvrir le mot ${activityStore.dataWord.name}`"></CustomButton>
+                    :text="getButtonWord()"></CustomButton>
     </CustomCard>
   </div>
 </template>
@@ -24,6 +24,7 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
 import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 import GlobalScene from "~/core/scene/GlobalScene";
+import Helpers from "~/core/utils/helpers";
 
 @Component({
   components: {
@@ -52,6 +53,7 @@ export default class ObjectPage extends Vue {
   async mounted() {
     const roomObjectSlug = <ROOM_OBJECT_SLUG>this.$route.params.objectName
     this.globalSceneStore.setActiveObject(roomObjectSlug)
+    console.log(this.globalSceneStore.activeObject)
 
     this.globalSceneStore.setIsCameraMoving(true)
     GlobalScene.context.goToPresetPosition(roomObjectSlug, 1, () => {
@@ -67,6 +69,12 @@ export default class ObjectPage extends Vue {
 
   public beforeDestroy() {
     this.globalSceneStore.setActiveObject(null)
+  }
+
+  public getButtonWord() {
+    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
+    const verb = isWordAchieved ? 'Voir' : 'Découvrir'
+    return `${verb} le mot ${this.activityStore.dataWord!.name}`
   }
 
   /**

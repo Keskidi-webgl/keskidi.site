@@ -6,15 +6,14 @@ import {
   Clock,
   Euler,
   PerspectiveCamera,
-  Quaternion,
   Raycaster,
-  Scene,
+  Scene, sRGBEncoding,
   Vector2,
   Vector3,
-  WebGLRenderer
+  WebGLRenderer,
+  PCFSoftShadowMap
 } from "three";
 import {
-  ActiveAnimation,
   AnimationMixerElement,
   DefaultSceneManagerCallback,
   MouseMoveCanvasCallback,
@@ -30,20 +29,20 @@ import {Object3D} from "three/src/core/Object3D";
 import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 import Helpers from "~/core/utils/helpers";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 
 /**
  * @description
  * This manager is responsible for creating a scene 3D and a context to interact with it
  */
 export default class SceneManager {
-  public static ACTIVITY_1_TOM: SceneManager
-
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
   private _camera: Camera
   private _controls: OrbitControls | null
   private _presetCameraPositions: Array<CameraPosition>
   private _renderer: WebGLRenderer
+  private _composer: EffectComposer | null
   private _clock: Clock
   private _mousePositions: Vector2
   private _scene: Scene
@@ -58,7 +57,6 @@ export default class SceneManager {
 
   // Animations
   private _animationMixers: Array<AnimationMixerElement>
-  private _activeActions: Array<ActiveAnimation>
 
   // -- Clock infos
   private _requestId: undefined | number
@@ -70,7 +68,7 @@ export default class SceneManager {
   private _onResumeCallback: DefaultSceneManagerCallback
   private _onPauseCallback: DefaultSceneManagerCallback
   private _onDestroyCallback: DefaultSceneManagerCallback
-  private _onRenderCallback: DefaultSceneManagerCallback
+  private _onRenderCallback: Array<DefaultSceneManagerCallback>
   private _onRayCasterIntersectCallback: RayCasterIntersectCallBack
   private _onMouseMoveCanvasCallback: MouseMoveCanvasCallback
   private _onWindowResizeCallback: WindowResizeCallback
@@ -91,6 +89,7 @@ export default class SceneManager {
     this._clock = options.clock || new Clock()
     this._mousePositions = new Vector2()
     this._renderer = options.renderer
+    this._composer = null
     this._scene = options.scene
     this._rayCaster = new Raycaster()
     this._controls = null
@@ -101,7 +100,6 @@ export default class SceneManager {
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
-    this._activeActions = []
     this._globalSceneRotation = {x: 0, y: 0}
 
     this._isPlaying = false
@@ -118,8 +116,9 @@ export default class SceneManager {
 
     this._onDestroyCallback = options.onDestroy || function () {
     }
-    this._onRenderCallback = options.onRender || function () {
-    }
+    this._onRenderCallback = []
+    if (options.onRender) this._onRenderCallback.push(options.onRender)
+
     this._onRayCasterIntersectCallback = options.onRayCasterIntersect || function () {
     }
     this._bindExternEvents = options.bindEvents || function () {
@@ -183,6 +182,15 @@ export default class SceneManager {
   }
 
   /**
+   * Add renderCallback
+   */
+  public onRender(renderCallback: DefaultSceneManagerCallback) {
+    this._onRenderCallback.push(renderCallback)
+
+    return this
+  }
+
+  /**
    * Register preset camera positions
    */
   public registerPresetCameraPositions(position: CameraPosition): SceneManager {
@@ -221,35 +229,22 @@ export default class SceneManager {
     this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
     this._camera.rotation.set(originRotation.x, originRotation.y, originRotation.z);
 
-    const originQuaternion = new Quaternion().copy(this._camera.quaternion);
-    const destinationQuaternion = new Quaternion().setFromEuler(destinationRotation);
-    const updateQuaternion = new Quaternion();
-    const o = { t: 0 };
-
     gsap.to(this._camera.position, {
       duration,
       x: newCameraPosition.x,
       y: newCameraPosition.y,
       z: newCameraPosition.z,
       // ease: "sine.inOut",
-      onUpdate: () => {
-        if (this._camera instanceof PerspectiveCamera) {
-          this._camera.updateProjectionMatrix()
-          //this.camera.lookAt(lookAtPosition)
-        }
-      },
       onComplete: () => {
         successCallBack(this)
       }
     });
-    gsap.to(o, {
+    gsap.to(this._camera.rotation, {
       duration,
-      t: 1,
-      ease: "sin.out",
-      onUpdate: () => {
-        updateQuaternion.slerpQuaternions(originQuaternion, destinationQuaternion, o.t)
-        this._camera.quaternion.set(updateQuaternion.x, updateQuaternion.y, updateQuaternion.z, updateQuaternion.w)
-      }
+      x: destinationRotation.x,
+      y: destinationRotation.y,
+      z: destinationRotation.z,
+      //ease: "sin.out",
     })
   }
 
@@ -397,30 +392,20 @@ export default class SceneManager {
   /**
    * Play animation of specific object and animation mixer
    */
-  public playAnimation(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
+  public generateAnimationAction(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
     const mixer = this.getAnimationMixer(mixerName)
-    const animationToPlay = mixer.instance.clipAction(animationClip)
-    animationToPlay.reset()
-
-    const activeAnimation = this._activeActions.find(animation => animation.mixerName === mixer.name)
-
-    if (activeAnimation) {
-      activeAnimation.animation.fadeOut(1)
-      activeAnimation.animation = animationToPlay
-    } else {
-      this._activeActions.push({
-        mixerName: mixer.name,
-        animation: animationToPlay
-      })
-    }
-
-    animationToPlay.fadeIn(1)
-    animationToPlay.play()
+    return mixer.instance.clipAction(animationClip)
   }
 
   public hideGui() {
     this._gui.hide()
 
+    return this
+  }
+
+  public enablePostProcessing(callback:(composer:EffectComposer,sceneContext:SceneManager)=>void){
+    this._composer = new EffectComposer(this._renderer)
+    callback(this._composer,this)
     return this
   }
 
@@ -437,7 +422,6 @@ export default class SceneManager {
 
     this._checkConfig()
   }
-
 
   /**
    * Init renderer
@@ -487,7 +471,9 @@ export default class SceneManager {
     this._deltaTime = elapsedTime - this._previousTime
     this._previousTime = elapsedTime
 
-    this._onRenderCallback(this)
+    this._onRenderCallback.forEach(renderCallback => {
+      renderCallback(this)
+    })
 
     if (this._controls) {
       this._controls.update()
@@ -507,7 +493,13 @@ export default class SceneManager {
       mixer.instance.update(this._deltaTime)
     })
 
-    this._renderer.render(this._scene, this._camera)
+
+    if (this._composer){
+      this._composer.render(this._deltaTime)
+    } else {
+      this._renderer.render(this._scene, this._camera)
+    }
+
   }
 
   // - GETTERS

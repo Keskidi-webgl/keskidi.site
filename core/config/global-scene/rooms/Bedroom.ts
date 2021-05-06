@@ -19,7 +19,10 @@ const Bedroom: Room = {
 
   fullUrl: `/rooms/${ROOM_SLUG.BEDROOM}`,
 
-  objects: () => [SkateRoomObject, PaperRoomObject]
+  objects: () => [
+    SkateRoomObject,
+    //PaperRoomObject
+  ]
 };
 
 export default Bedroom;

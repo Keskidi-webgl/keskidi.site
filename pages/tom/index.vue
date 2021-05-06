@@ -6,19 +6,35 @@
       background-color="white"
       width="610"
     >
-      <img class="doodle" src="~/assets/img/orange-doodles.svg" alt="" />
       <div v-if="step == 1" class="w-100 step">
-        <h1 class="big-title main-font w-100 tom-title">Wesh alors !</h1>
+        <h1 class="big-title main-font w-100 tom-title">
+          Wesh alors !
+          <img
+            src="~/assets/img/arrow-draft-one.png"
+            class="doodle bottom-left-arrow"
+            alt=""
+          />
+          <img
+            src="~/assets/img/arrow-draft-two.png"
+            class="doodle top-left-arrow"
+            alt=""
+          />
+          <img
+            src="~/assets/img/doodle-packed.png"
+            class="doodle packed-doodle"
+            alt=""
+          />
+        </h1>
         <p class="sub-title text-common secondary-font w-100">
-          Bienvenue chez mes parents. Mi casa es tu Casa.
-        </p>
-        <p class="w-100 main-font">
           Moi, c'est Tom, j'ai 18 ans !
         </p>
         <p class="w-100 main-font">
-          Tu trouveras différents mots que j'utilise au quotidien, dissimulés
-          dans différentes pièces de ma maison.
+          Bienvenue chez mes parents.
         </p>
+        <p class="w-100 main-font">
+          Je te propose un jeu pour découvrir un langage que notre génération utilise au quotidien et que tu peines parfois à comprendre !
+        </p>
+        <p class="w-100 main-font">Des mots sont dissimulés dans chaque pièce de ma maison. <strong>Clique</strong> sur l'une d'entre elle pour commencer l'aventure...</p>
         <div class="w-100 action-container">
           <CustomButton
             @click.native="next()"
@@ -30,8 +46,15 @@
       </div>
       <div v-if="step == 2" class="w-100 step step-2">
         <p class="w-100 main-font">
-          Pour continuer, j'ai besoin de ton <strong>adresse mail</strong> pour
-          que tu puisses garder ta <strong>progression</strong>.
+          Pour continuer, j'ai besoin de ton <strong>adresse mail</strong> afin
+          que tu puisses garder ta
+          <strong class="progression"
+            >progression
+            <img
+              src="~/assets/img/circle-doodle-two.png"
+              class="doodle circle-doodle"
+              alt=""/></strong
+          >.
           <span>
             <img
               class="rgpd"
@@ -40,10 +63,15 @@
               @click="rgpd()"
             />
           </span>
+          <img
+            src="~/assets/img/doodle-line.png"
+            class="doodle line-doodle"
+            alt=""
+          />
         </p>
         <p class="w-100 main-font">
-          Et puis mes darons ne souhaitent pas laisser rentrer n'importe qui
-          chez nous...
+          Et puis ... mes darons ne souhaitent pas laisser rentrer n'importe qui
+          chez nous. 😉
         </p>
         <input
           type="text"
@@ -73,9 +101,15 @@
       background-color="white"
       width="610"
     >
-      <img class="doodle" src="~/assets/img/orange-doodles.svg" alt="" />
       <div class="w-100 step">
-        <h1 class="big-title main-font w-100 tom-title">Fun fact !</h1>
+        <h1 class="big-title main-font w-100 tom-title">
+          Fun fact !
+          <img
+            src="~/assets/img/doodle-packed-large.png"
+            class="doodle packed-doodle-large"
+            alt=""
+          />
+        </h1>
         <p class="w-100">{{ currentFact.content }}</p>
         <span class="leave-activity" @click="back()">
           <img src="~/assets/img/cross.svg" alt="" />
@@ -94,9 +128,8 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
-import { SceneManager } from "~/core/managers";
-import { AuthCredential, FunFactElement } from "~/core/types";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
+import {AuthCredential, FunFactElement} from "~/core/types";
 import AuthStore from "~/store/auth";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
@@ -128,7 +161,7 @@ export default class AuthPage extends Vue {
 
   mounted() {
     GlobalScene.context.disableParallax();
-    TomSceneElement.playMuscleAnimation(GlobalScene.context)
+    TomSceneElement.playAnimation("idle", GlobalScene.context);
     GlobalScene.context.goToPresetPosition("tom", 2, () => {
       this.isReady = true;
     });
@@ -149,7 +182,9 @@ export default class AuthPage extends Vue {
 
   beforeDestroy() {
     GlobalScene.context.enableParallax();
-    TomSceneElement.playIdleAnimation(GlobalScene.context)
+    if (!this.autModule.isAuth) {
+      TomSceneElement.playAnimation("hello", GlobalScene.context);
+    }
   }
 
   back() {
@@ -191,18 +226,38 @@ export default class AuthPage extends Vue {
     z-index: 5;
 
     .tom-title {
-      margin-top: 120px;
+      margin: 30px 0;
+      position: relative;
+      width: fit-content;
+
+      .doodle {
+        position: absolute;
+        z-index: -1;
+
+        &.bottom-left-arrow {
+          bottom: -25px;
+          left: 25px;
+        }
+
+        &.top-left-arrow {
+          top: -25px;
+          left: -30px;
+        }
+
+        &.packed-doodle {
+          right: 125px;
+          bottom: -10px;
+        }
+
+        &.packed-doodle-large {
+          right: 0;
+          top: 0;
+        }
+      }
     }
   }
 
   // General
-  .doodle {
-    position: absolute;
-    top: 100px;
-    right: 50px;
-    z-index: 1;
-  }
-
   .leave-activity {
     width: 76px;
     height: 76px;
@@ -226,10 +281,35 @@ export default class AuthPage extends Vue {
   .action {
     float: left;
   }
+
+  p {
+    font-size: 24px;
+  }
 }
 .auth-container {
   .step-2 {
-    margin-top: 160px;
+    margin-top: 70px;
+
+    .progression,
+    p {
+      position: relative;
+      // z-index: 5;
+    }
+
+    .doodle {
+      position: absolute;
+      z-index: -1;
+
+      &.line-doodle {
+        left: 30px;
+        top: 30px;
+      }
+
+      &.circle-doodle {
+        left: 0;
+        bottom: -5px;
+      }
+    }
 
     .rgpd {
       cursor: pointer;

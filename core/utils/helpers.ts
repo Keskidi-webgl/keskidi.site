@@ -1,4 +1,5 @@
 import {MEDIA_TYPE} from "~/core/enums";
+import {UserWordData, Word} from "~/core/types";
 
 export default class Helpers {
 
@@ -48,6 +49,10 @@ export default class Helpers {
    */
   public static lerp(start: number, end: number, value: number) {
     return (1 - value) * start + value * end;
+  }
+
+  public static isActivityWordAchieved(word: Word, achievedWords: Array<UserWordData>) {
+    return achievedWords.find(word => word.id === word!.id)
   }
 
 }

@@ -1,11 +1,15 @@
 <template>
   <div class="page-container" data-namespace="home">
-    <InteractionPoints :data="point" v-for="(point, index) in globalSceneStore.activeInteractionPoints" :key="index"/>
+    <InteractionPoints
+      :data="point"
+      v-for="(point, index) in globalSceneStore.activeInteractionPoints"
+      :key="index"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from 'nuxt-property-decorator'
+import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalScene from "~/core/scene/GlobalScene";
 import GlobalSceneStore from "~/store/globalScene";
 import {
@@ -14,41 +18,52 @@ import {
   MezzanineInteractPoint,
   TomInteractPoint
 } from "~/core/config/global-scene/interact-points";
+import { Context } from "@nuxt/types";
+import AuthMiddleware from "~/middleware/auth";
 
 @Component
 export default class HomePage extends Vue {
-  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store);
+
+  middleware(context: Context) {
+    AuthMiddleware.handle(context);
+  }
 
   mounted() {
-    this.globalSceneStore.clearActiveRoom()
-    GlobalScene.context.goToPresetPosition('home', 2, () => {
-      this.addInteractionPoints()
-    })
+    this.globalSceneStore.clearActiveRoom();
+    const destination = this.globalSceneStore.isHomePageReady
+      ? "home"
+      : "cloud";
+    const duration = this.globalSceneStore.isHomePageReady ? 2 : 0;
+
+    GlobalScene.context.goToPresetPosition(destination, duration, () => {
+      this.globalSceneStore.setIsHomePageReady(true);
+      this.addInteractionPoints();
+    });
   }
 
   beforeDestroy() {
-    this.removeInteractionPoints()
+    this.removeInteractionPoints();
   }
 
   addInteractionPoints() {
-    this.globalSceneStore.addInteractivePoint(BedroomInteractPoint.name)
-    this.globalSceneStore.addInteractivePoint(LoungeInteractPoint.name)
-    this.globalSceneStore.addInteractivePoint(MezzanineInteractPoint.name)
-    this.globalSceneStore.addInteractivePoint(TomInteractPoint.name)
+    this.globalSceneStore.addInteractivePoint(BedroomInteractPoint.name);
+    this.globalSceneStore.addInteractivePoint(LoungeInteractPoint.name);
+    this.globalSceneStore.addInteractivePoint(MezzanineInteractPoint.name);
+    this.globalSceneStore.addInteractivePoint(TomInteractPoint.name);
   }
 
   removeInteractionPoints() {
-    this.globalSceneStore.removeInteractivePoint(BedroomInteractPoint.name)
-    this.globalSceneStore.removeInteractivePoint(LoungeInteractPoint.name)
-    this.globalSceneStore.removeInteractivePoint(MezzanineInteractPoint.name)
-    this.globalSceneStore.removeInteractivePoint(TomInteractPoint.name)
+    this.globalSceneStore.removeInteractivePoint(BedroomInteractPoint.name);
+    this.globalSceneStore.removeInteractivePoint(LoungeInteractPoint.name);
+    this.globalSceneStore.removeInteractivePoint(MezzanineInteractPoint.name);
+    this.globalSceneStore.removeInteractivePoint(TomInteractPoint.name);
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .link-container {
-  background-color: white;
   position: absolute;
   z-index: 20;
   top: 40%;

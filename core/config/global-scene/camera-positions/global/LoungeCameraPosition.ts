@@ -11,9 +11,9 @@ const LoungeCameraPosition: CameraPosition = {
     GlobalScene.context.scene.getObjectByName('salon')!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
 
-    cameraPos.x = -400
-    cameraPos.y = 130
-    cameraPos.z = 300
+    cameraPos.x = -500
+    cameraPos.y = 200
+    cameraPos.z = 360
 
     return { cameraPos, lookAtPosition }
   }

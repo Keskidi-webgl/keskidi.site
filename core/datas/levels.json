@@ -2,21 +2,25 @@
     {
         "name": "Noob",
         "order": 0,
-        "rule": 0
+        "rule": 0,
+        "position": 0
     },
     {
         "name": "Frais",
         "order": 1,
-        "rule": 20
+        "rule": 33.333333333,
+        "position": 33.333333333
     },
     {
         "name": "Badass",
         "order": 2,
-        "rule": 30
+        "rule": 33.333333333,
+        "position": 66.666666666
     },
     {
         "name": "Le crack",
         "order": 3,
-        "rule": 50
+        "rule": 33.333333333,
+        "position": 99.999999999
     }
 ]

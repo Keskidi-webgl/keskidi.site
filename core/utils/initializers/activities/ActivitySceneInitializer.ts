@@ -33,7 +33,7 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
     TomSceneElement.setupForActivityScene()
     ActivityScene.context.scene.add(TomSceneElement.sceneElement)
     ActivityScene.context.createAnimationMixer(GLTF_ASSET.TOM, TomSceneElement.sceneElement)
-    TomSceneElement.playIdleAnimation(ActivityScene.context)
+    TomSceneElement.playAnimation('idle', ActivityScene.context)
   }
 
   private _addLights() {

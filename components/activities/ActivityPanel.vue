@@ -1,10 +1,38 @@
 <template>
   <div class="activity-panel">
     <!-- Activity one -->
-    <ActivityOne v-if="activityDisplay.one()"/>
+    <transition v-on:enter="animationEnterActivityOne">
+      <ActivityOne v-if="activityDisplay.one()"/>
+    </transition>
 
     <!-- Activity two -->
-    <ActivityTwo v-if="activityDisplay.two()"/>
+    <transition v-on:enter="animationEnterActivityTwo">
+      <ActivityTwo v-if="activityDisplay.two()"/>
+    </transition>
+
+    <!-- Acitivity three   -->
+    <ActivityThree v-if="activityDisplay.three()"/>
+
+    <!-- Activities result -->
+    <ActivitiesResult v-if="activityDisplay.result()"/>
+
+    <!-- Activities progression -->
+    <ActivitiesProgression v-if="activityDisplay.progression()"/>
+
+
+    <!-- Activity onboarding -->
+    <transition v-on:enter="animationEnterOnboarding" v-on:leave="animationLeaveOnBoarding">
+      <ActivityOnboarding v-if="activityDisplay.onBoarding()" class="activity-onboarding overlay-element"/>
+    </transition>
+
+    <div @click="leaveActivity" class="activity-panel--cross">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 2L22 21.9997" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 22L22 2.00027" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <ActivityLeave ref="leaveActivity"/>
   </div>
 </template>
 
@@ -17,35 +45,136 @@ import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
+import Helpers from "~/core/utils/helpers";
+import GlobalStore from "~/store/global";
+import ActivityThree from "~/components/activities/activity-three/ActivityThree.vue";
+import ActivitiesResult from "~/components/activities/activities-result/ActivitiesResult.vue";
+import ActivitiesProgression from "~/components/activities/activities-progression/ActivitiesProgression.vue";
+import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
+import gsap from "gsap";
+import CustomEase from 'gsap/CustomEase'
+import {ActivityOneAnimation, OnboardingActivityAnimation} from "~/core/animations/activities";
+import ActivityTwoAnimation from "~/core/animations/activities/ActivityTwoAnimation";
+gsap.registerPlugin(CustomEase)
+import ActivityLeave from "~/components/activities/ActivityLeave.vue";
 
 @Component({
   components: {
+    ActivityThree,
     ActivityOne,
     ActivityTwo,
-    ActivityOneResult
+    ActivityOneResult,
+    ActivitiesResult,
+    ActivitiesProgression,
+    ActivityOnboarding,
+    ActivityLeave
   }
 })
 export default class ActivityPanel extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
   public activityStore = getModule(ActivityStore, this.$store)
   public activityDisplay = {
     one: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_1,
-    two: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_2
+    two: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_2,
+    three: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_3,
+    result: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_RESULT,
+    progression: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITIES_PROGRESSION,
+    onBoarding: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_ONBOARDING
+  }
+
+  public animationElements = {
+    onboarding: new OnboardingActivityAnimation(),
+    activityOne: new ActivityOneAnimation(),
+    activityTwo: new ActivityTwoAnimation()
   }
 
   public mounted() {
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+    GlobalScene.context.pause()
+    const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
+    if (isWordAchieved) {
+      this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
+    } else {
+      this.activityStore.setCurrentActivity(this.globalStore.achievedWords.length
+        ? ACTIVITY_TYPE.ACTIVITY_1
+        : ACTIVITY_TYPE.ACTIVITY_ONBOARDING
+      )
+    }
+  }
+
+  leaveActivity(){
+    //@ts-ignore
+    this.$refs.leaveActivity.$el.classList.remove('hide')
   }
 
   public goToHome() {
     GlobalScene.context.resume()
     this.$router.push("/")
   }
+
+  public animationEnterOnboarding(el: Element, done: Function) {
+    this.animationElements.onboarding.enter({
+      el,
+      onStart: () => {},
+      onComplete: () => {}
+    })
+  }
+
+  public animationLeaveOnBoarding(el: Element, done: Function) {
+    this.animationElements.onboarding.leave({
+      el,
+      onStart: () => {
+
+      },
+      onComplete: () => {
+        done()
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+      }
+    })
+  }
+
+  public animationEnterActivityOne(el: Element, done: Function) {
+    this.animationElements.activityOne.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityTwo(el: Element, done: Function) {
+    this.animationElements.activityTwo.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
 }
 </script>
 
 <style scoped lang="scss">
 .activity-panel {
-  //background-color: #FFF8EE;
+  background-color: #fff8ee;
+
+  &--cross{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: linear-gradient(146.31deg, rgba(255, 255, 255, 0.4) 7.41%, rgba(255, 255, 255, 0.1) 94.07%);
+    box-shadow: 0px 4px 25px -1px rgba(190, 190, 190, 0.15);
+    backdrop-filter: blur(20px);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    cursor: pointer;
+  }
 }
 </style>

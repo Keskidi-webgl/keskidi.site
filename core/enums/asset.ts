@@ -13,19 +13,21 @@ export enum ASSET_TYPE {
  */
 export enum GLTF_ASSET {
   GLOBAL_SCENE= 'globalScene',
-  ACTIVITY_OBJECT_MOULA= 'moulaObject',
-  ACTIVITY_OBJECT_NOOB= 'noobObject',
-  ACTIVITY_OBJECT_CRUSH= 'crushObject',
-  ACTIVITY_OBJECT_WATCH= 'watchObject',
-  ACTIVITY_OBJECT_BOOK= 'bookObject',
-  ACTIVITY_OBJECT_CHICKEN= 'chickenObject',
-  ACTIVITY_OBJECT_BEER= 'beerObject',
+  CLOUD_LITTLE = 'cloudLittle',
+  CLOUD_BIG = 'cloudBig',
+  OUTSIDE = 'outside',
+  PAPER = 'paper',
 
   TOM = 'tom',
   TOM_MUSCLE = 'tomMuscle',
   TOM_DOWN = 'tomBadDown',
   TOM_HEAD = 'tomHead',
   TOM_PUNCH = 'tomPunch',
+  TOM_HELLO= 'tomHello',
+}
+
+export enum VIDEO_ASSET {
+  TV_SCREEN = 'tvScreen'
 }
 
 /**
