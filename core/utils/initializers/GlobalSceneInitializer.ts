@@ -268,19 +268,17 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     const skateSticker = AssetsManager.getGltf(GLTF_ASSET.SKATE_STICKER).data
     skateSticker.scene.position.set(26.5, 123, 215)
     skateSticker.scene.rotation.y = Helpers.degreeToRadiant(-90)
-    //skateSticker.scene.rotation.z = Helpers.degreeToRadiant(-90)
     GlobalScene.context.scene.add(skateSticker.scene)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.SKATE_STICKER, skateSticker.scene)
-    const animationCLip = GlobalScene.context.generateAnimationAction(skateSticker.animations[0], GLTF_ASSET.SKATE_STICKER)
-    animationCLip.play()
-    animationCLip.paused = true
+    const animationClip = GlobalScene.context.generateAnimationAction(skateSticker.animations[0], GLTF_ASSET.SKATE_STICKER)
+    animationClip.play()
+    animationClip.paused = true
   }
 
   private _addNotebook() {
     const notebook = AssetsManager.getGltf(GLTF_ASSET.NOTEBOOK).data
     notebook.scene.position.set(0, 500, 200)
     GlobalScene.context.scene.add(notebook.scene)
-
   }
 
   /**

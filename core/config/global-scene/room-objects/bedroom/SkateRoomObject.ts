@@ -20,9 +20,9 @@ const SkateRoomObject: RoomObject = {
     const gltfObject = AssetsManager.getGltf(GLTF_ASSET.SKATE_STICKER).data!
     const animationClip = GlobalScene.context.generateAnimationAction(gltfObject.animations[0], GLTF_ASSET.SKATE_STICKER)
     animationClip.paused = false
+    animationClip.clampWhenFinished = true
     animationClip.setLoop(LoopOnce, 1)
     animationClip.play()
-    animationClip.fadeOut(1)
   }
 };
 
