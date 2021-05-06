@@ -1,91 +1,122 @@
 <template>
   <div class="activities-progression main-font">
     <div class="activities-level">
-      <span>{{this.getProgress() }}</span>
-      <span>{{this.getTotal() }}</span>
+      <span class="main-font"
+        ><strong class="number">{{ this.getProgress() }}</strong> <br />
+        {{ this.getProgress() > 1 ? "MOTS" : "MOT" }}</span
+      >
+      <!-- <span>{{this.getTotal() }}</span> -->
     </div>
 
-    <p class="activities-currentLevel">{{this.getLevel()}}</p>
+    <!-- <p class="activities-currentLevel">{{ this.getLevel() }}</p> -->
 
-    <h1 class="activities-title">Bravo t'as progressé
-      <img class="activities-doodle" src="~/assets/img/gribouillis_2_blanc.png" alt="">
-      <img class="activities-heart" src="~/assets/img/gribouillis_coeur_blanc.png" alt="">
-      <img class="activities-cross" src="~/assets/img/gribouillis_croix_blanc.png" alt="">
+    <h1 class="activities-title">
+      Bravo t'as progressé !
+      <img
+        class="activities-doodle"
+        src="~/assets/img/gribouillis_2_blanc.png"
+        alt=""
+      />
+      <img
+        class="activities-heart"
+        src="~/assets/img/gribouillis_coeur_blanc.png"
+        alt=""
+      />
+      <img
+        class="activities-cross"
+        src="~/assets/img/gribouillis_croix_blanc.png"
+        alt=""
+      />
     </h1>
 
+    <p class="activities-description">
+      Il te reste <strong>{{ this.getSteps() }} mots</strong> à découvrir pour
+      passer au niveau {{ this.getNext() }}
+    </p>
 
-    <p class="activities-description">Il te reste <strong>{{this.getSteps()}} mots</strong> à découvrir pour passer au niveau {{this.getNext()}}</p>
+    <!-- <p class="activities-moreInfos" v-if="getProgress() === 0">
+      Tu peux aussi retrouver tes mots sur l'application Keskidico
+    </p> -->
 
-
-    <p class="activities-moreInfos" v-if="getProgress() === 0">Tu peux aussi retrouver tes mots sur l'application Keskidico</p>
     <CustomButton
       @click.native="hideActivityPanel"
       arrow-color="#FF6644"
       color="white"
       text="Continuer"
+      hoverText="#FF6644"
     ></CustomButton>
 
+    <!-- <CustomButton
+      @click.native="keskidikoView"
+      arrow-color="#FF6644"
+      color="white"
+      text="Continuer"
+      hoverText="#FF6644"
+      v-if="getProgress() === 0"
+    ></CustomButton> -->
   </div>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import GlobalSceneStore from "~/store/globalScene"
-import ActivityStore from "~/store/activity"
+import { Component, getModule, Vue } from "nuxt-property-decorator";
+import GlobalSceneStore from "~/store/globalScene";
+import ActivityStore from "~/store/activity";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import GlobalStore from "~/store/global";
-import {ProgressPercentManager} from "~/core/managers";
+import { ProgressPercentManager } from "~/core/managers";
 
 @Component({
-  components:{
+  components: {
     CustomButton
   }
 })
 export default class ActivitiesProgression extends Vue {
-  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
-  public activityStore = getModule(ActivityStore, this.$store)
-  public globalStore = getModule(GlobalStore, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store);
+  public activityStore = getModule(ActivityStore, this.$store);
+  public globalStore = getModule(GlobalStore, this.$store);
 
-  hideActivityPanel(){
-    GlobalScene.context.resume()
-    this.activityStore.setCurrentActivity(null)
-    this.activityStore.hideActivityPanel()
-    this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl)
+  hideActivityPanel() {
+    GlobalScene.context.resume();
+    this.activityStore.setCurrentActivity(null);
+    this.activityStore.hideActivityPanel();
+    this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl);
   }
 
-  mounted(){
-    this._initProgressManager()
+  keskidikoView() {
+    console.log("keskidico");
+  }
+
+  mounted() {
+    this._initProgressManager();
   }
 
   private _initProgressManager() {
-    ProgressPercentManager.words = this.globalStore.dataWord.length
-    ProgressPercentManager.userAchievedWords = this.globalStore.achievedWords.length
-
+    ProgressPercentManager.words = this.globalStore.dataWord.length;
+    ProgressPercentManager.userAchievedWords = this.globalStore.achievedWords.length;
   }
 
   public getLevel() {
-    return ProgressPercentManager.current!.name
+    return ProgressPercentManager.current!.name;
   }
 
   public getProgress() {
-    ProgressPercentManager.init()
-    return this.globalStore.achievedWords.length
+    ProgressPercentManager.init();
+    return this.globalStore.achievedWords.length;
   }
 
   public getTotal() {
-    ProgressPercentManager.init()
-    return this.globalStore.dataWord.length
+    ProgressPercentManager.init();
+    return this.globalStore.dataWord.length;
   }
 
   public getNext() {
-    return ProgressPercentManager.next?.name
+    return ProgressPercentManager.next?.name;
   }
 
-  public getSteps(){
-    return Math.round(ProgressPercentManager.steps)
+  public getSteps() {
+    return Math.round(ProgressPercentManager.steps);
   }
-
 }
 </script>
 
@@ -104,60 +135,84 @@ export default class ActivitiesProgression extends Vue {
   justify-content: center;
   align-items: center;
 }
-.activities{
-  &-title{
+.activities {
+  &-title {
     font-size: 40px;
     color: white;
     position: relative;
+    margin-bottom: 20px;
   }
-  &-description{
+  &-description {
     position: relative;
     color: white;
+    margin-bottom: 83px;
   }
-  &-cross{
+  &-cross {
     position: absolute;
     top: -30px;
     left: -20px;
   }
-  &-heart{
+  &-heart {
     position: absolute;
     top: -20px;
-    right: -30px;
+    right: -40px;
   }
-  &-doodle{
+  &-doodle {
     position: absolute;
     bottom: -10px;
     left: 0;
   }
-  &-level{
+  &-level {
     width: 150px;
     height: 150px;
-    background: white;
+    background: linear-gradient(
+      144.61deg,
+      rgba(255, 255, 255, 0.4) 6.83%,
+      rgba(252, 231, 220, 0.2) 30.99%,
+      rgba(247, 202, 176, 0.2) 61.41%,
+      rgba(243, 173, 133, 0.3) 90.75%
+    );
     border-radius: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    span{
+    position: relative;
+
+    margin-bottom: 56px;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      border-right: 1px solid rgba(252, 231, 220, 0.2);
+      border-bottom: 1px solid rgba(247, 202, 176, 0.2);
+      border-left: 1px solid rgba(243, 173, 133, 0.3);
+    }
+
+    span {
+      text-align: center;
       font-size: 30px;
-      font-weight: bold;
-      color: $orange;
-      display: block;
-      position: relative;
-      &:first-of-type{
-        &:after{
-          content: "";
-          display: block;
-          width: 100%;
-          height: 3px;
-          background: $orange;
-        }
+      color: white;
+      line-height: 130%;
+
+      .number {
+        font-weight: bold;
+        position: relative;
+        font-size: 50px;
       }
     }
   }
 }
 
-#confetti{
+#confetti {
   position: absolute;
   top: 0;
 }
@@ -170,5 +225,4 @@ export default class ActivitiesProgression extends Vue {
     transform: translateX(-100%);
   }
 }
-
 </style>
