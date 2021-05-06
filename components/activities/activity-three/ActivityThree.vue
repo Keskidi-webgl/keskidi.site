@@ -203,7 +203,6 @@ export default class ActivityThree extends Vue {
       bottom: 20px;
       right: 30px;
       width: 400px;
-      height: 400px;
     }
     &-expressions{
       display: flex;

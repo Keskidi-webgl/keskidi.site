@@ -61,8 +61,7 @@
         v-if="activityStore.canDisplayActivityPanel"
         class="activity-panel overlay-element"
       />
-      <!-- Preview element -->
-      <PreviewScene class="preview" />
+      <PreviewScene v-if="globalSceneStore.canDisplayGlobalUI" class="preview" />
     </div>
   </div>
 </template>

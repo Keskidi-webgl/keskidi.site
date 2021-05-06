@@ -1,10 +1,14 @@
 <template>
   <div class="activity-panel">
     <!-- Activity one -->
-    <ActivityOne v-if="activityDisplay.one()"/>
+    <transition v-on:enter="animationEnterActivityOne">
+      <ActivityOne v-if="activityDisplay.one()"/>
+    </transition>
 
     <!-- Activity two -->
-    <ActivityTwo v-if="activityDisplay.two()"/>
+    <transition v-on:enter="animationEnterActivityTwo">
+      <ActivityTwo v-if="activityDisplay.two()"/>
+    </transition>
 
     <!-- Acitivity three   -->
     <ActivityThree v-if="activityDisplay.three()"/>
@@ -15,8 +19,11 @@
     <!-- Activities progression -->
     <ActivitiesProgression v-if="activityDisplay.progression()"/>
 
+
     <!-- Activity onboarding -->
-    <ActivityOnboarding v-if="activityDisplay.onBoarding()" class="activity-onboarding overlay-element" />
+    <transition v-on:enter="animationEnterOnboarding" v-on:leave="animationLeaveOnBoarding">
+      <ActivityOnboarding v-if="activityDisplay.onBoarding()" class="activity-onboarding overlay-element"/>
+    </transition>
 
     <div @click="leaveActivity" class="activity-panel--cross">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,8 +51,12 @@ import ActivityThree from "~/components/activities/activity-three/ActivityThree.
 import ActivitiesResult from "~/components/activities/activities-result/ActivitiesResult.vue";
 import ActivitiesProgression from "~/components/activities/activities-progression/ActivitiesProgression.vue";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
+import gsap from "gsap";
+import CustomEase from 'gsap/CustomEase'
+import {ActivityOneAnimation, OnboardingActivityAnimation} from "~/core/animations/activities";
+import ActivityTwoAnimation from "~/core/animations/activities/ActivityTwoAnimation";
+gsap.registerPlugin(CustomEase)
 import ActivityLeave from "~/components/activities/ActivityLeave.vue";
-
 
 @Component({
   components: {
@@ -72,14 +83,21 @@ export default class ActivityPanel extends Vue {
     onBoarding: () => this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_ONBOARDING
   }
 
+  public animationElements = {
+    onboarding: new OnboardingActivityAnimation(),
+    activityOne: new ActivityOneAnimation(),
+    activityTwo: new ActivityTwoAnimation()
+  }
+
   public mounted() {
+    GlobalScene.context.pause()
     const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
     if (isWordAchieved) {
       this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
     } else {
       this.activityStore.setCurrentActivity(this.globalStore.achievedWords.length
         ? ACTIVITY_TYPE.ACTIVITY_1
-        :  ACTIVITY_TYPE.ACTIVITY_ONBOARDING
+        : ACTIVITY_TYPE.ACTIVITY_ONBOARDING
       )
     }
   }
@@ -93,12 +111,56 @@ export default class ActivityPanel extends Vue {
     GlobalScene.context.resume()
     this.$router.push("/")
   }
+
+  public animationEnterOnboarding(el: Element, done: Function) {
+    this.animationElements.onboarding.enter({
+      el,
+      onStart: () => {},
+      onComplete: () => {}
+    })
+  }
+
+  public animationLeaveOnBoarding(el: Element, done: Function) {
+    this.animationElements.onboarding.leave({
+      el,
+      onStart: () => {
+
+      },
+      onComplete: () => {
+        done()
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_1)
+      }
+    })
+  }
+
+  public animationEnterActivityOne(el: Element, done: Function) {
+    this.animationElements.activityOne.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityTwo(el: Element, done: Function) {
+    this.animationElements.activityTwo.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
 }
 </script>
 
 <style scoped lang="scss">
 .activity-panel {
-  //background-color: #FFF8EE;
+  background-color: #fff8ee;
+
   &--cross{
     position: absolute;
     top: 30px;
