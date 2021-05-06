@@ -46,7 +46,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._createPlanesBackground()
     this._registerPresetPositions()
     this._optimizeScene()
-    //this._prepareFloor()
     this._configGUI()
     console.log(GlobalScene.context)
 

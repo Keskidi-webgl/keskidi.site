@@ -9,7 +9,7 @@
             :total="3"
             text-color="white"
           ></ProgressBar>
-          <h1 class="main-font bold big-title">
+          <h1 class="word-name main-font bold big-title">
             {{ activityStore.dataWord.name }}
           </h1>
           <canvas class="tom-canvas" ref="tom"></canvas>
@@ -70,10 +70,14 @@
         </div>
       </template>
     </ActivityElement>
-    <ActivityOneResult
-      v-if="displayActivityResult"
-      :result-data="activityResultData"
-    />
+
+    <transition v-on:enter="enterResultAnimation">
+      <ActivityOneResult
+        v-if="displayActivityResult"
+        :result-data="activityResultData"
+      />
+    </transition>
+
   </div>
 </template>
 
@@ -89,6 +93,10 @@ import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
 import ChoiceCard from "~/components/cards/ChoiceCard.vue";
+import {ActivityOneResultAnimation} from "~/core/animations/activities";
+import TomSceneElement from "~/core/scene/TomSceneElement";
+import gsap from 'gsap'
+import CustomEase from "gsap/CustomEase";
 
 @Component({
   components: {
@@ -102,13 +110,17 @@ import ChoiceCard from "~/components/cards/ChoiceCard.vue";
 export default class ActivityOne extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
-  public progressBarStep: Step = { id: 1, text: "Allez narvalo !" };
+  public progressBarStep: Step = {id: 1, text: "Allez narvalo !"};
   public displayActivityResult: boolean = false;
   public activityResultData: ActivityOneResultData = {
     answerWord: "",
     goodObjectUrl: "",
     goodObjectName: ""
   };
+
+  public animations = {
+    resultEnter: new ActivityOneResultAnimation()
+  }
 
   public blockChoices: Array<UserSelection> = [
     {
@@ -139,9 +151,7 @@ export default class ActivityOne extends Vue {
   }
 
   public validateActivity() {
-    const goodAnswer =
-      this.userSelection!.url ===
-      this.activityStore.dataWord!.activity_data!.good_object;
+    const goodAnswer = this.userSelection!.url === this.activityStore.dataWord!.activity_data!.good_object;
 
     this.activityResultData = {
       goodObjectUrl: this.activityStore.dataWord!.activity_data!.good_object,
@@ -150,7 +160,45 @@ export default class ActivityOne extends Vue {
         ? this.userSelection!.description
         : this.blockChoices.find(choice => !choice.isSelected)!.description
     };
-    this.displayActivityResult = true;
+
+    goodAnswer
+      ? TomSceneElement.playAnimation('punch', ActivityScene.context)
+      : TomSceneElement.playAnimation('down', ActivityScene.context)
+    this.beforeEnterResultAnimation()
+  }
+
+  public beforeEnterResultAnimation() {
+    CustomEase.create("asideExtend", "M0,0 C0.61,0 0.44,1 1,1 ")
+    const hiddenElements = [
+      document.querySelector('.aside-container'),
+      document.querySelector('.word-name'),
+      document.querySelector('.exercise-block'),
+    ]
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.displayActivityResult = true;
+      }
+    })
+    tl.to(hiddenElements, {
+      duration: 1,
+      autoAlpha: 0
+    }, 1)
+      .to('.activity-element-aside', {
+        width: window.innerWidth,
+        duration: 1,
+        ease: 'asideExtend',
+      }, 2)
+  }
+
+  public enterResultAnimation(el: HTMLCollection, done: Function) {
+    this.animations.resultEnter.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
   }
 
   private _createCanvas() {
@@ -240,7 +288,7 @@ export default class ActivityOne extends Vue {
 
         .card {
           filter: grayscale(1);
-          transition: 0.2s ease all;
+          transition: 0.2s ease filter;
           cursor: pointer;
 
           &:hover,
