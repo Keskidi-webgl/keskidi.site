@@ -13,6 +13,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/composition-api": "^0.23.4",
     "@nuxtjs/fontawesome": "^1.1.2",
     "@types/string-similarity": "^4.0.0",
     "bootstrap": "^4.6.0",

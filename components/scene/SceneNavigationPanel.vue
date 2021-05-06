@@ -6,7 +6,7 @@
       class="scene-navigation-panel-button scene-btn previous-scene"
       :to="previousSceneLink()"
     >
-      <p ref="room" class="room-name js-split-char main-font">{{ prev }}</p>
+      <p ref="room" class="room-name js-split-char main-font">{{ formatedRooms[1]  }}</p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
     <nuxt-link
@@ -23,7 +23,7 @@
       class="scene-navigation-panel-button scene-btn next-scene"
       :to="nextSceneLink()"
     >
-      <p ref="room" class="room-name js-split-char main-font">{{ next }}</p>
+      <p ref="room" class="room-name js-split-char main-font">{{   formatedRooms[0]  }}</p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
 
@@ -42,6 +42,7 @@
 import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import gsap from "gsap";
+import { defineComponent, useContext,onUpdated } from '@nuxtjs/composition-api'
 
 @Component({})
 export default class SceneNavigationPanel extends Vue {
@@ -52,7 +53,11 @@ export default class SceneNavigationPanel extends Vue {
     | string
     | undefined = this.globalSceneStore.activeRoom?.previousRoom().nameForHuman;
 
+  public roomsName:Array[string] = [this.next,this.prev]
+  public formatedRooms:Array[string] = []
   public words:any
+
+  public nextRoom:string
 
   public backHomeLink() {
     return "/";
@@ -74,11 +79,43 @@ export default class SceneNavigationPanel extends Vue {
     return this.globalSceneStore.activeObject?.room().fullUrl;
   }
 
+  updated(){
+    // let obj = document.querySelector('.object-room')
+    // obj?.addEventListener('click',()=>{
+      // this.words = document.querySelectorAll('.js-split-char')
+      // console.log(this.roomsName,'rooooooms UPDATED')
+
+    // onUpdated(())
+
+    // })
+
+    console.log(this.prev,this.next,'rooooooms UPDATED')
+
+    this.roomsName[0] = this.next
+    this.roomsName[1] = this.prev
+
+    console.log(this.roomsName,'UPDATEEEEEEEEEEEEEE')
+    // this.splitText()
+
+    onUpdated(()=>{
+      console.log('🚨🚨🚨🚨🚨🚨🚨🚨🚨')
+    })
+
+
+  }
+
+
   // TODO --> ADD CUSTOM EVENT WHEN we leave current page
   mounted(){
     this.words = document.querySelectorAll('.js-split-char')
-    this.launchSplitText()
+    
+    // this.roomsName[0] = this.next
+    // this.roomsName[1] = this.prev
     this.splitText()
+    this.launchSplitText()
+    console.log(this.roomsName,'array list room')
+    console.log(this.formatedRooms,'MOUNTED')
+
   }
 
   launchSplitText(){
@@ -95,13 +132,18 @@ export default class SceneNavigationPanel extends Vue {
 
   splitText(){
     console.log("split INIIT",this.words)
-    this.words.forEach((el:any)=>{
+    this.formatedRooms = []
+    this.roomsName.forEach((el:any,index:number)=>{
         let txtSpan = ''
-        let txt = el.textContent
-        txt!.split('').forEach((content:any) =>{
+        // let txt = el.textContent
+        el.split('').forEach((content:any) =>{
           txtSpan += `<span>${content}</span>`
         })
-        el.innerHTML = txtSpan
+        // el.innerHTML = txtSpan
+      console.log(txtSpan,el)
+      this.formatedRooms.push(txtSpan)
+      // console.log(el.innerHTML)
+      console.log(this.formatedRooms,'next room on split text method')
       })
     }
 
