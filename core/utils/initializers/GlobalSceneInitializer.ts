@@ -1,6 +1,7 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
+  AmbientLight,
   BackSide,
   CanvasTexture,
   DirectionalLight,
@@ -10,7 +11,6 @@ import {
   LoopOnce,
   Mesh,
   MeshBasicMaterial,
-  PCFSoftShadowMap,
   PerspectiveCamera,
   PlaneBufferGeometry,
   Scene,
@@ -42,11 +42,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     this._addLights(true)
-    this._createCanvasBackground()
+    //this._createCanvasBackground()
     //this._createPlanesBackground()
     this._registerPresetPositions()
     this._optimizeScene()
-    this._configGUI()
+    //this._configGUI()
     console.log(GlobalScene.context)
 
     GlobalScene.context.start()
@@ -69,12 +69,14 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // Create renderer
     const renderer = this._createRender()
     renderer.outputEncoding = sRGBEncoding
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = PCFSoftShadowMap;
+    renderer.shadowMap.autoUpdate = false
+    renderer.shadowMap.needsUpdate = true
 
+    /*
     renderer.outputEncoding = sRGBEncoding
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
+     */
 
 
     return new SceneManager({
@@ -118,7 +120,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     }).hideGui()
-      //.enableStats()
+      .enableStats()
       .enableParallax()
       //.enableAxesHelpers(1000)
 
@@ -142,7 +144,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       50,
       this._data.canvas.width / this._data.canvas.height,
       1,
-      10000
+      2000
     )
     camera.position.set(0, 1200, 1300)
     camera.lookAt(new Vector3())
@@ -210,10 +212,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     light.shadow.mapSize.width = 2048;
     light.castShadow = true
 
-
     globalScene.add( light );
-    //globalScene.add( helper );
-
 
     let floorFolder = GlobalScene.context.gui.addFolder("Floor")
     floorFolder.add(this.floor.position,'x',-1000,1000,0.01).listen()
@@ -233,7 +232,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     const my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
     my_gradient.addColorStop(0, "#FCE9E1");
     my_gradient.addColorStop(0.5, "#FDF0E9");
-    // my_gradient.addColorStop(1, "#FF0000");
     ctx!.fillStyle = my_gradient;
     ctx!.fillRect(0, 0, GlobalScene.context.width, GlobalScene.context.height);
     const texture = new CanvasTexture(canvas);
@@ -252,17 +250,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.scene.add(globalSceneGltf.scene)
     GlobalScene.context.scene.traverse( child => {
 
-      if(child instanceof Mesh){
-        child.receiveShadow = true
-        child.castShadow = true
-      }
-
-      // @ts-ignore
-      if (child.material) child.material.metalness = 1;
-
       if (child.name ==='socle'){
-
-        child.castShadow = true
         child.receiveShadow = true
       }
 
@@ -323,7 +311,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     //GlobalScene.context.scene.add(spotLight)
     GlobalScene.context.scene.add(hemisphereLights);
 
-     */
+
     const dirLight = new DirectionalLight(0xffffff, 1.2);
     dirLight.position.set(200, 1000, 200);
     dirLight.position.multiplyScalar(50);
@@ -331,13 +319,19 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     dirLight.shadow.mapSize.width = 1024;
     dirLight.shadow.mapSize.height = 1024;
     dirLight.shadow.camera.near = 500;
-    dirLight.shadow.camera.far = 4000;
-
-    GlobalScene.context.scene.add(dirLight);
-
+    dirLight.shadow.camera.far = 2000;
     dirLight.castShadow = true;
-    const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.6);
-    GlobalScene.context.scene.add(hemiLight);
+     */
+    const ambientLight = new AmbientLight(0xffffff, 0.8)
+    GlobalScene.context.scene.add(ambientLight);
+
+    const pointLight = new DirectionalLight(0xffffff, 0.2)
+    pointLight.position.set(0, 200, 550)
+    GlobalScene.context.scene.add(pointLight)
+
+
+    const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.3);
+    //GlobalScene.context.scene.add(hemiLight);
   }
 
   /**
@@ -355,6 +349,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName('tom')!,
       GlobalScene.context.scene.getObjectByName('enceintes')!,
       GlobalScene.context.scene.getObjectByName('tourne_disque')!,
+      GlobalScene.context.scene.getObjectByName('lampe_bureau')!,
+      GlobalScene.context.scene.getObjectByName('guirlande')!,
     ]
     SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context, true)
   }
