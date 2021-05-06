@@ -176,7 +176,6 @@ export default class ActivitiesResult extends Vue {
   align-items: center;
   &--img{
     width: 540px;
-    height: 540px;
     z-index: 4;
   }
   &--marquee{
