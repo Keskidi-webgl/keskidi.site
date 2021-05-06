@@ -1,10 +1,8 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
-  AmbientLight,
   BackSide,
   CanvasTexture,
-  DirectionalLight,
   DoubleSide,
   HemisphereLight,
   LinearFilter,
@@ -13,6 +11,7 @@ import {
   MeshBasicMaterial,
   PerspectiveCamera,
   PlaneBufferGeometry,
+  PointLight,
   Scene,
   ShadowMaterial,
   SpotLight,
@@ -122,7 +121,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     }).hideGui()
       .enableStats()
       .enableParallax()
-      //.enableAxesHelpers(1000)
 
   }
 
@@ -285,53 +283,13 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    * Add lights to the global scene
    */
   private _addLights(withHelper: boolean = false) {
-    /*
-    const hemisphereLights = new HemisphereLight( 0xffffff, 0xffffff, 0.6);
-    hemisphereLights.color.setHSL( 0.6, 0.75, 0.5 );
-    hemisphereLights.groundColor.setHSL( 0.095, 0.5, 0.5 );
-    if (withHelper) {
-      const helper = new HemisphereLightHelper(hemisphereLights, 5);
-      GlobalScene.context.scene.add(helper);
-    }
-
-    const spotLight = new SpotLight(0xffffff, 0.3);
-    spotLight.position.set(200,1000,200);
-    spotLight.castShadow = true;
-    spotLight.shadow.mapSize.width = 1024;
-    spotLight.shadow.mapSize.height = 1024;
-    spotLight.shadow.camera.near = 500;
-    spotLight.shadow.camera.far = 4000;
-    spotLight.shadow.camera.fov = 30;
-    spotLight.castShadow = true
-
-    if (withHelper) {
-      const helper = new SpotLightHelper(spotLight, 5);
-      //GlobalScene.context.scene.add(helper);
-    }
-    //GlobalScene.context.scene.add(spotLight)
-    GlobalScene.context.scene.add(hemisphereLights);
-
-
-    const dirLight = new DirectionalLight(0xffffff, 1.2);
-    dirLight.position.set(200, 1000, 200);
-    dirLight.position.multiplyScalar(50);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 1024;
-    dirLight.shadow.mapSize.height = 1024;
-    dirLight.shadow.camera.near = 500;
-    dirLight.shadow.camera.far = 2000;
-    dirLight.castShadow = true;
-     */
-    const ambientLight = new AmbientLight(0xffffff, 0.8)
-    GlobalScene.context.scene.add(ambientLight);
-
-    const pointLight = new DirectionalLight(0xffffff, 0.2)
-    pointLight.position.set(0, 200, 550)
+    const pointLight = new PointLight(0xffffff, 0.5)
+    pointLight.shadow.bias = -0.005;
+    pointLight.position.set(100, 150, 550)
     GlobalScene.context.scene.add(pointLight)
 
-
-    const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.3);
-    //GlobalScene.context.scene.add(hemiLight);
+    const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.7);
+    GlobalScene.context.scene.add(hemiLight);
   }
 
   /**

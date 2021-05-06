@@ -9,11 +9,11 @@ const TomCameraPosition: CameraPosition = {
 
     GlobalScene.context.scene.getObjectByName('tom')!.getWorldPosition(lookAtPosition)
     lookAtPosition.z = lookAtPosition.z * 0.88
-    lookAtPosition.y = lookAtPosition.y * 4
+    lookAtPosition.y = lookAtPosition.y * 3.3
 
     const cameraPos = lookAtPosition.clone()
-    cameraPos.z = cameraPos.z * 1.25
-    cameraPos.x = -100
+    cameraPos.z = cameraPos.z * 1.4
+    cameraPos.x = -40
     cameraPos.y = cameraPos.y * 1.6
 
     return { cameraPos, lookAtPosition }

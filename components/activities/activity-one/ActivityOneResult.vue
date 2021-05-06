@@ -22,14 +22,12 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import { ActivityOneResultData } from "~/core/types";
-import { ACTIVITY_TYPE } from "~/core/enums";
-import gsap from 'gsap'
-import CustomEase from "gsap/CustomEase";
+import {ActivityOneResultData} from "~/core/types";
+import {ACTIVITY_TYPE} from "~/core/enums";
 import {ActivityOneResultAnimation} from "~/core/animations/activities";
 
 @Component({

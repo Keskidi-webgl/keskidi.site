@@ -111,7 +111,7 @@ export default class CustomButton extends Vue {
   // justify-content: space-between;
   border-radius: 40px;
   cursor: pointer;
-  border: 3px solid;
+  border: 2px solid;
   box-sizing: border-box;
   height: 60px;
   align-items: center;
