@@ -1,12 +1,12 @@
 <template>
   <div>
+    <!-- Warnings -->
     <div v-if="!isChrome" class="browser-check">
       <h1 class="main-font">
         Cette expérience ne fonctionne pas avec ce navigateur. <br />
         Merci d'utiliser Chrome.
       </h1>
     </div>
-
     <div v-if="isMobile" class="browser-check">
       <h1 class="main-font">
         Cette expérience ne fonctionne pas sur mobile. <br />
@@ -37,6 +37,13 @@
       ></SceneProgressLevel>
       <!-- Logo -->
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
+      <!-- About page -->
+      <nuxt-link to="/about" class="about-btn">
+        <div>
+          <p class="point-name main-font">A propos</p>
+        </div>
+      </nuxt-link>
+
       <!-- Global scene -->
       <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
       <!-- Page Slot -->
@@ -54,7 +61,7 @@
         v-if="activityStore.canDisplayActivityPanel"
         class="activity-panel overlay-element"
       />
-
+      <!-- Preview element -->
       <PreviewScene class="preview" />
     </div>
   </div>
@@ -72,6 +79,7 @@ import LogoMedia from "~/components/medias/LogoMedia.vue";
 // Scene
 import PreviewScene from "~/components/global/PreviewScene.vue";
 import GlobalSceneStore from "~/store/globalScene";
+import CustomButton from "~/components/buttons/CustomButton.vue";
 
 // Auth
 import AuthStore from "~/store/auth";
@@ -93,7 +101,8 @@ import SceneProgressLevel from "~/components/scene/SceneProgressLevel.vue";
     ActivityOnboarding,
     ActivityPanel,
     SceneProgressLevel,
-    PreviewScene
+    PreviewScene,
+    CustomButton
   }
 })
 export default class DefaultLayout extends Vue {
@@ -211,7 +220,7 @@ export default class DefaultLayout extends Vue {
 .progress-level {
   margin: 24px;
   position: absolute;
-  z-index: 40;
+  z-index: 35;
 }
 .logo {
   width: 100px;
@@ -220,6 +229,32 @@ export default class DefaultLayout extends Vue {
   z-index: 40;
   left: 50%;
   transform: translate(-50%, 0px);
+}
+.about-btn {
+  margin: 24px;
+  position: absolute;
+  z-index: 35;
+  right: 0;
+  cursor: pointer;
+
+  p {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 132%;
+    text-align: center;
+    font-feature-settings: "liga" off;
+    color: $dark-blue;
+    transition: 0.1s ease all;
+  }
+
+  &:hover {
+    text-decoration: none;
+
+    p {
+      color: $orange;
+    }
+  }
 }
 canvas {
   position: fixed;
@@ -254,7 +289,7 @@ canvas {
 }
 
 .preview {
-  z-index: 40;
+  z-index: 35;
   position: absolute;
   bottom: 0;
   right: 0;

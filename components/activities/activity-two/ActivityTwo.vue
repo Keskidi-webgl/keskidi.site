@@ -21,7 +21,7 @@
           </div>
 
           <div class="aside-container-footer">
-            <span>Passer à l'activité suivante ></span>
+            <span @click.native="goToNextActivity">Passer à l'activité suivante ></span>
           </div>
         </div>
       </template>
