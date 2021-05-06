@@ -82,5 +82,10 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf",
         "carnet.gltf"
       )
+      .registerGltf(
+        GLTF_ASSET.CAT,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf",
+        "chat.gltf"
+      )
   }
 }

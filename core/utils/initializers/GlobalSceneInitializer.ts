@@ -6,7 +6,6 @@ import {
   DoubleSide,
   HemisphereLight,
   LinearFilter,
-  LoopOnce,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
@@ -84,7 +83,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: false,
+      activateOrbitControl: true,
       onRender: (ctx) => {
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
@@ -177,6 +176,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._prepareTelevision()
     this._addStickersSkate()
     this._addNotebook()
+    this._addCat()
   }
 
   private _createPlanesBackground(){
@@ -223,7 +223,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
     sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
     sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
-
   }
 
   private _createCanvasBackground(){
@@ -281,6 +280,17 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.scene.add(notebook.scene)
   }
 
+  private _addCat() {
+    const cat = AssetsManager.getGltf(GLTF_ASSET.CAT).data
+    cat.scene.position.set(-250, 53, 260)
+    cat.scene.rotation.y = Helpers.degreeToRadiant(-45)
+    GlobalScene.context.scene.add(cat.scene)
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.CAT, cat.scene)
+    const animationClip = GlobalScene.context.generateAnimationAction(cat.animations[0], GLTF_ASSET.CAT)
+    console.log(cat)
+    animationClip.play()
+  }
+
   /**
    * Add lights to the global scene
    */
@@ -311,6 +321,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName('tourne_disque')!,
       GlobalScene.context.scene.getObjectByName('lampe_bureau')!,
       GlobalScene.context.scene.getObjectByName('guirlande')!,
+      GlobalScene.context.scene.getObjectByName('cat')!,
     ]
     SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context, true)
   }
