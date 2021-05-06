@@ -6,7 +6,7 @@ export default abstract class AnimationElement {
 
   public abstract leave(options: AnimationElementOptions): void;
 
-  protected _getFreshTimeline(onComplete: () => void, onStart: () => void) {
+  protected _getFreshTimeline(onStart: () => void, onComplete: () => void) {
     return gsap.timeline({onComplete, onStart})
   }
 }

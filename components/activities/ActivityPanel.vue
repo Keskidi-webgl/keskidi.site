@@ -6,7 +6,9 @@
     </transition>
 
     <!-- Activity two -->
-    <ActivityTwo v-if="activityDisplay.two()"/>
+    <transition v-on:enter="animationEnterActivityTwo">
+      <ActivityTwo v-if="activityDisplay.two()"/>
+    </transition>
 
     <!-- Acitivity three   -->
     <ActivityThree v-if="activityDisplay.three()"/>
@@ -44,8 +46,7 @@ import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import gsap from "gsap";
 import CustomEase from 'gsap/CustomEase'
 import {ActivityOneAnimation, OnboardingActivityAnimation} from "~/core/animations/activities";
-import TomSceneElement from "~/core/scene/TomSceneElement";
-import ActivityScene from "~/core/scene/ActivityScene";
+import ActivityTwoAnimation from "~/core/animations/activities/ActivityTwoAnimation";
 
 gsap.registerPlugin(CustomEase)
 
@@ -75,7 +76,8 @@ export default class ActivityPanel extends Vue {
 
   public animationElements = {
     onboarding: new OnboardingActivityAnimation(),
-    activityOne: new ActivityOneAnimation()
+    activityOne: new ActivityOneAnimation(),
+    activityTwo: new ActivityTwoAnimation()
   }
 
   public mounted() {
@@ -119,7 +121,19 @@ export default class ActivityPanel extends Vue {
   public animationEnterActivityOne(el: HTMLCollection, done: Function) {
     this.animationElements.activityOne.enter({
       el,
-      onStart: () => {},
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityTwo(el: HTMLCollection, done: Function) {
+    this.animationElements.activityTwo.enter({
+      el,
+      onStart: () => {
+      },
       onComplete: () => {
         done()
       }

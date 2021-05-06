@@ -11,10 +11,11 @@
           ></ProgressBar>
 
           <div class="word-container">
-            <h1 class="main-font bold big-title">
+            <h1 class="main-font bold big-title word-name">
               {{ activityStore.dataWord.name }}
             </h1>
             <img
+               class="img-word"
               :src="activityStore.dataWord.activity_data.good_object"
               alt=""
             />
@@ -37,7 +38,6 @@
             />
           </h2>
 
-          </h2>
 
           <div class="content-wordInfo">
             <span class="content-phonetic">{{

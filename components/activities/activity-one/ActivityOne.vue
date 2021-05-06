@@ -185,7 +185,7 @@ export default class ActivityOne extends Vue {
     }, 1)
       .to('.activity-element-aside', {
         width: window.innerWidth,
-        duration: 1.1,
+        duration: 1,
         ease: 'asideExtend',
       }, 2)
   }

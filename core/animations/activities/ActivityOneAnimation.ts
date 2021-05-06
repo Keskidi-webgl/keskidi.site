@@ -17,7 +17,7 @@ export default class ActivityOneAnimation extends AnimationElement {
   }
 
   enter(options: AnimationElementOptions): void {
-    const tl = this._getFreshTimeline(options.onComplete, options.onStart)
+    const tl = this._getFreshTimeline(options.onStart, options.onComplete)
     // Main element
     tl.from(options.el, {
       autoAlpha: 0,
@@ -89,7 +89,7 @@ export default class ActivityOneAnimation extends AnimationElement {
   }
 
   leave(options: AnimationElementOptions): void {
-    const tl = this._getFreshTimeline(options.onComplete, options.onStart)
+    const tl = this._getFreshTimeline(options.onStart, options.onComplete)
     tl.to(options.el, {
       duration: 2
     })

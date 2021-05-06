@@ -1,7 +1,6 @@
 <template>
   <div class="activity-one-result">
     <img class="result-img-good-word" :src="resultData.goodObjectUrl" alt="" />
-    <!-- TODO Remplacer par l'animation de fond -->
     <div class="bg-anim-container">
       <div class="bg-anim">
       <span v-for="index in 40" :key="index" class="big-title">{{
@@ -29,6 +28,9 @@ import ActivityStore from "~/store/activity";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import { ActivityOneResultData } from "~/core/types";
 import { ACTIVITY_TYPE } from "~/core/enums";
+import gsap from 'gsap'
+import CustomEase from "gsap/CustomEase";
+import {ActivityOneResultAnimation} from "~/core/animations/activities";
 
 @Component({
   components: {
@@ -43,7 +45,18 @@ export default class ActivityOneResult extends Vue {
   public activityStore = getModule(ActivityStore, this.$store);
 
   public nextActivity() {
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2);
+    this.beforeLeaveAnimation()
+  }
+
+  public beforeLeaveAnimation() {
+    const el = document.querySelector('.activity-one-result')
+    new ActivityOneResultAnimation().leave({
+      el,
+      onStart: () => {},
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2);
+      }
+    })
   }
 }
 </script>
@@ -68,6 +81,8 @@ export default class ActivityOneResult extends Vue {
   .bg-anim-container {
     position: absolute;
     width: 100%;
+    overflow: hidden;
+    
     .bg-anim {
       display: flex;
       animation: slide-left 10s ease-in-out infinite alternate both;

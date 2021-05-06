@@ -20,7 +20,7 @@ export default class OnboardingActivityAnimation extends AnimationElement {
   }
 
   leave(options: AnimationElementOptions): void {
-    const tl = this._getFreshTimeline(options.onComplete, options.onStart)
+    const tl = this._getFreshTimeline(options.onStart, options.onComplete)
     tl.to(document.querySelectorAll('.onboarding-card'), {
       y: 750,
       duration: 0.7,
