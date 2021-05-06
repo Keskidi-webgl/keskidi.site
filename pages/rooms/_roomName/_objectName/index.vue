@@ -25,6 +25,7 @@ import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
 import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 import GlobalScene from "~/core/scene/GlobalScene";
 import Helpers from "~/core/utils/helpers";
+import GlobalSceneHelper from "~/core/config/global-scene/GlobalSceneHelper";
 
 @Component({
   components: {
@@ -53,11 +54,14 @@ export default class ObjectPage extends Vue {
   async mounted() {
     const roomObjectSlug = <ROOM_OBJECT_SLUG>this.$route.params.objectName
     this.globalSceneStore.setActiveObject(roomObjectSlug)
-    console.log(this.globalSceneStore.activeObject)
 
     this.globalSceneStore.setIsCameraMoving(true)
     GlobalScene.context.goToPresetPosition(roomObjectSlug, 1, () => {
       this.globalSceneStore.setIsCameraMoving(false)
+      const object = GlobalSceneHelper.getRoomObjectBySlug(roomObjectSlug)
+      if (object.animation) {
+        object.animation()
+      }
     })
     this._setDataWord()
   }

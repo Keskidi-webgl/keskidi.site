@@ -9,4 +9,5 @@ export type RoomObject = {
   room: () => Room;
   fullUrl: string;
   wordId: WORD_ID;
+  animation?: () => void
 };

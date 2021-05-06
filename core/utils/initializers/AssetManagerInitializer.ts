@@ -72,5 +72,15 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
         "https://keskidi.s3.eu-west-3.amazonaws.com/medias/papier.gltf",
         "papier.gltf"
       )
+      .registerGltf(
+        GLTF_ASSET.SKATE_STICKER,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf",
+        "sticker.gltf"
+      )
+      .registerGltf(
+        GLTF_ASSET.NOTEBOOK,
+        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf",
+        "carnet.gltf"
+      )
   }
 }

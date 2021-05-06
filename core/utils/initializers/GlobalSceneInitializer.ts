@@ -175,6 +175,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     //this._addGltfOutside()
     //this._addAnimateElements()
     this._prepareTelevision()
+    this._addStickersSkate()
+    this._addNotebook()
   }
 
   private _createPlanesBackground(){
@@ -242,7 +244,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
-    console.log(globalSceneGltf)
     globalSceneGltf.scene.position.set(0, 0, 0)
 
     GlobalScene.context.scene.add(globalSceneGltf.scene)
@@ -263,20 +264,23 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     TomSceneElement.playAnimation('hello', GlobalScene.context)
   }
 
-  private _addGltfOutside() {
-    const outside = AssetsManager.getGltf(GLTF_ASSET.OUTSIDE).data
-    GlobalScene.context.scene.add(outside.scene)
+  private _addStickersSkate() {
+    const skateSticker = AssetsManager.getGltf(GLTF_ASSET.SKATE_STICKER).data
+    skateSticker.scene.position.set(26.5, 123, 215)
+    skateSticker.scene.rotation.y = Helpers.degreeToRadiant(-90)
+    //skateSticker.scene.rotation.z = Helpers.degreeToRadiant(-90)
+    GlobalScene.context.scene.add(skateSticker.scene)
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.SKATE_STICKER, skateSticker.scene)
+    const animationCLip = GlobalScene.context.generateAnimationAction(skateSticker.animations[0], GLTF_ASSET.SKATE_STICKER)
+    animationCLip.play()
+    animationCLip.paused = true
   }
 
-  private _addAnimateElements() {
-    const skateSticker = AssetsManager.getGltf(GLTF_ASSET.PAPER).data
-    skateSticker.scene.position.set(0, 500, 100)
-    GlobalScene.context.scene.add(skateSticker.scene)
-    GlobalScene.context.createAnimationMixer(GLTF_ASSET.PAPER, skateSticker.scene)
-    const animationClip = GlobalScene.context.generateAnimationAction(skateSticker.animations[0], GLTF_ASSET.PAPER)
-    animationClip.clampWhenFinished = true
-    animationClip.setLoop(LoopOnce, 1)
-    animationClip.play()
+  private _addNotebook() {
+    const notebook = AssetsManager.getGltf(GLTF_ASSET.NOTEBOOK).data
+    notebook.scene.position.set(0, 500, 200)
+    GlobalScene.context.scene.add(notebook.scene)
+
   }
 
   /**
