@@ -43,7 +43,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addSceneElements()
     this._addLights(true)
     this._createCanvasBackground()
-    this._createPlanesBackground()
+    //this._createPlanesBackground()
     this._registerPresetPositions()
     this._optimizeScene()
     this._configGUI()
@@ -85,7 +85,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       defaultRation: 2,
       activateOrbitControl: false,
       onRender: (ctx) => {
-
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.updateProjectionMatrix()
@@ -173,7 +172,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addSceneElements() {
     this._addGltfGlobalScene()
     this._addGltfTom()
-    this._addGltfOutside()
+    //this._addGltfOutside()
     //this._addAnimateElements()
     this._prepareTelevision()
   }
@@ -247,6 +246,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
+    console.log(globalSceneGltf)
     globalSceneGltf.scene.position.set(0, 0, 0)
 
     GlobalScene.context.scene.add(globalSceneGltf.scene)
@@ -258,16 +258,12 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       }
 
       // @ts-ignore
-      if ( child.material ) child.material.metalness = 0;
+      if (child.material) child.material.metalness = 1;
 
       if (child.name ==='socle'){
 
         child.castShadow = true
         child.receiveShadow = true
-
-        let socle = child.getObjectByName('socle_2')
-        socle!.castShadow = true
-        socle!.receiveShadow = true
       }
 
     } );
@@ -355,10 +351,12 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _optimizeScene() {
     const objects: Array<Object3D> = [
-      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.OUTSIDE)!,
-      GlobalScene.context.scene.getObjectByName('socle')!,
+      // GlobalScene.context.scene.getObjectByName(GLTF_ASSET.OUTSIDE)!,
+      GlobalScene.context.scene.getObjectByName('tom')!,
+      GlobalScene.context.scene.getObjectByName('enceintes')!,
+      GlobalScene.context.scene.getObjectByName('tourne_disque')!,
     ]
-    SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context)
+    SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context, true)
   }
 
   private _prepareTelevision() {
@@ -382,7 +380,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // @ts-ignore
     const videoMaterial = new MeshBasicMaterial({map: videoTexture, side: DoubleSide, overdraw: 0.5});
 
-    const televisionObject = GlobalScene.context.scene.getObjectByName('tv_1')
+    const televisionObject = GlobalScene.context.scene.getObjectByName('screen_tv-NEON_1')
     if (televisionObject instanceof Mesh) {
       televisionObject.material = videoMaterial
       GlobalScene.context.onRender((context) => {

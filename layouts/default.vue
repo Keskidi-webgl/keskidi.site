@@ -55,7 +55,7 @@
         class="activity-panel overlay-element"
       />
 
-      <PreviewScene class="preview" />
+      <PreviewScene v-if="globalSceneStore.canDisplayGlobalUI" class="preview" />
     </div>
   </div>
 </template>

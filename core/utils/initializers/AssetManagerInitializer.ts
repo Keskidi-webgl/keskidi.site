@@ -9,7 +9,7 @@ import {GLTF_ASSET, VIDEO_ASSET} from "~/core/enums";
 export default class AssetManagerInitializer extends Initializers<null, void> {
   init(): void {
     AssetsManager
-      .enableLocalMode()
+      //.enableLocalMode()
       .registerVideo(
         VIDEO_ASSET.TV_SCREEN,
         'https://keskidi.s3.eu-west-3.amazonaws.com/medias/fortnite.mp4', 'fortnite.mp4'

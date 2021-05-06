@@ -90,6 +90,7 @@ export default class ActivityPanel extends Vue {
   }
 
   public mounted() {
+    GlobalScene.context.pause()
     const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
     if (isWordAchieved) {
       this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2)
@@ -111,7 +112,7 @@ export default class ActivityPanel extends Vue {
     this.$router.push("/")
   }
 
-  public animationEnterOnboarding(el: HTMLCollection, done: Function) {
+  public animationEnterOnboarding(el: Element, done: Function) {
     this.animationElements.onboarding.enter({
       el,
       onStart: () => {},
@@ -119,7 +120,7 @@ export default class ActivityPanel extends Vue {
     })
   }
 
-  public animationLeaveOnBoarding(el: HTMLCollection, done: Function) {
+  public animationLeaveOnBoarding(el: Element, done: Function) {
     this.animationElements.onboarding.leave({
       el,
       onStart: () => {
@@ -132,7 +133,7 @@ export default class ActivityPanel extends Vue {
     })
   }
 
-  public animationEnterActivityOne(el: HTMLCollection, done: Function) {
+  public animationEnterActivityOne(el: Element, done: Function) {
     this.animationElements.activityOne.enter({
       el,
       onStart: () => {
@@ -143,7 +144,7 @@ export default class ActivityPanel extends Vue {
     })
   }
 
-  public animationEnterActivityTwo(el: HTMLCollection, done: Function) {
+  public animationEnterActivityTwo(el: Element, done: Function) {
     this.animationElements.activityTwo.enter({
       el,
       onStart: () => {

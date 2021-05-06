@@ -21,7 +21,7 @@
             />
           </div>
 
-          <div class="aside-container-footer">
+          <div @click="goToNextActivity" class="aside-container-footer">
             <span>Passer à l'activité suivante ></span>
           </div>
         </div>

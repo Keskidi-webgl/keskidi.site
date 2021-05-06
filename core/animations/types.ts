@@ -1,5 +1,5 @@
 export type AnimationElementOptions = {
-  el: HTMLCollection,
+  el: Element,
   onStart: () => void,
   onComplete: () => void
 }

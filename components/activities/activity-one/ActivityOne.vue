@@ -190,7 +190,7 @@ export default class ActivityOne extends Vue {
       }, 2)
   }
 
-  public enterResultAnimation(el: HTMLCollection, done: Function) {
+  public enterResultAnimation(el: Element, done: Function) {
     this.animations.resultEnter.enter({
       el,
       onStart: () => {

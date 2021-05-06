@@ -49,7 +49,7 @@ export default class ActivityOneResult extends Vue {
   }
 
   public beforeLeaveAnimation() {
-    const el = document.querySelector('.activity-one-result')
+    const el = document.querySelector('.activity-one-result')!
     new ActivityOneResultAnimation().leave({
       el,
       onStart: () => {},
@@ -82,7 +82,7 @@ export default class ActivityOneResult extends Vue {
     position: absolute;
     width: 100%;
     overflow: hidden;
-    
+
     .bg-anim {
       display: flex;
       animation: slide-left 10s ease-in-out infinite alternate both;
