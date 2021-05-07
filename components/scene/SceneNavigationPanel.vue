@@ -6,6 +6,8 @@
       class="scene-navigation-panel-button scene-btn previous-scene"
       :to="previousSceneLink()"
       @mouseenter.native="splitAnimation('.room-prev')"
+      @mouseleave.native="leaveSplit('.room-prev')"
+
     >
       <p ref="room" class="room-name room-prev js-split-char main-font" v-html="prevSplitedRoom()"></p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
@@ -24,6 +26,7 @@
       class="scene-navigation-panel-button scene-btn next-scene"
       :to="nextSceneLink()"
       @mouseenter.native="splitAnimation('.room-next')"
+      @mouseleave.native="leaveSplit('.room-next')"
     >
       <p ref="room" class="room-name room-next js-split-char main-font" v-html="nextSplitedRoom()"></p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
@@ -107,27 +110,27 @@ export default class SceneNavigationPanel extends Vue {
     return txtSpan
   }
 
+  leaveSplit(identifier:string){
+    let el = document.querySelector(identifier)
+    gsap.to(el,{opacity:0,duration:0.5})
+  }
+
   splitAnimation(identifier:string){
     let el = document.querySelector(identifier)
     let letters = el.querySelectorAll( 'span')
 
-    // for (let i = letters.length - 1; i>= 0; i--){
-    //   let $el = letters[i]
-    //   let delay = 0.02 * i
-
-    // TODO --> adapt animation & fix typescript errors
-    
+      gsap.to(el,{opacity:1,duration:0.2})
       gsap.to(letters,{
-        duration:0.5,
+        duration:0.2,
         ease: 'power1.in',
         stagger:{
-          each: 0.2
+          each: 0.02
         },
-        translateY:-50,
+        translateY:-20,
         autoAlpha: 1,
         onComplete:function (){
           gsap.set(letters, {
-            translateY: 50
+            translateY: 20
           });
           gsap.to(letters,  {
             duration: 0.3,
@@ -180,7 +183,10 @@ export default class SceneNavigationPanel extends Vue {
         top: -30px;
         color: $dark-blue;
         opacity: 0;
-        //transition: 0.2s ease all;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        height: 20px;
       }
 
       &:hover .room-name {
