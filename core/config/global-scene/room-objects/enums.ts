@@ -4,6 +4,7 @@ export enum ROOM_OBJECT_SLUG {
 
   // Lounge
   VINYL = 'vinyl',
+  NOTEBOOK = 'notebook',
 
   // Bedroom
   PAPER = 'paper',
