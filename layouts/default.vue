@@ -150,9 +150,7 @@ export default class DefaultLayout extends Vue {
       }).init();
 
       this._getMicrophonePermissions()
-      // if(this.permissionStatus.state === 'granted'){
-      //   console.log("WEEEEEEEEE LA ZONE")
-      // }
+
       this.globalStore.setIsAppInit(true);
     }
   }
@@ -169,7 +167,7 @@ export default class DefaultLayout extends Vue {
       that.permissionStatus.onchange = function(){
         console.log("Permission changed to " + this.state);
       }
-      
+
       that.permissionStatus.state === 'granted' ? that.globalStore.setMicrophonePermission(true) : that.globalStore.setMicrophonePermission(false)
 
       console.log(that.globalStore.microphonePermission)
