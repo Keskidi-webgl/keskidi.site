@@ -2,6 +2,7 @@ import {AnimationAction, AnimationClip, Group} from "three";
 import {TomAnimation, TomAnimationName} from "~/core/types";
 import {SceneManager} from "~/core/managers";
 import {GLTF_ASSET} from "~/core/enums";
+import Helpers from "~/core/utils/helpers";
 
 /**
  * This class is a manager for Tom fbx object. We retrieve one instance of fbx object to use it in different scenes
@@ -41,7 +42,7 @@ class TomSceneElement {
 
     this._sceneElement!.scale.set(0.8, 0.8, 0.8)
     this._sceneElement!.position.set(50, 40, 500)
-    this._sceneElement!.rotation.y = -45
+    this._sceneElement!.rotation.y = Helpers.degreeToRadiant(-25)
 
     return this
   }

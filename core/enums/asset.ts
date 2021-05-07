@@ -5,7 +5,8 @@ export enum ASSET_TYPE {
   GLTF,
   IMAGE,
   VIDEO,
-  FBX
+  FBX,
+  AUDIO
 }
 
 /**
@@ -17,6 +18,9 @@ export enum GLTF_ASSET {
   CLOUD_BIG = 'cloudBig',
   OUTSIDE = 'outside',
   PAPER = 'paper',
+  SKATE_STICKER = 'skateSticker',
+  NOTEBOOK = 'notebook',
+  CAT = 'cat',
 
   TOM = 'tom',
   TOM_MUSCLE = 'tomMuscle',
@@ -38,8 +42,11 @@ export enum IMAGE_ASSET {
 }
 
 /**
- * Name given to video asset in order to retrieve it through AssetManager
+ * Name given to audio asset in order to retrieve it through AssetManager
  */
-export enum VIDEO_ASSET {
-
+export enum AUDIO_ASSET {
+  GLOBAL_AMBIANCE = 'globalAmbiance',
+  MOUSE_HOVER = 'mouseHover',
+  SKATE_STICKERS = 'skateSticker',
+  OUTSIDE_AMBIANCE= 'outsideAmbiance'
 }

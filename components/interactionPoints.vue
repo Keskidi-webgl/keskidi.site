@@ -68,6 +68,7 @@ export default class InteractionPoints extends Vue {
   justify-content: center;
   align-items: center;
   background-color: transparent !important;
+  font-family: $main_font;
 
   &:hover {
     .point-name {
@@ -98,11 +99,9 @@ export default class InteractionPoints extends Vue {
   .point-name {
     position: absolute;
     color: white;
-
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
     opacity: 0;
     transition: 0.3s ease all;
   }

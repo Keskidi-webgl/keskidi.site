@@ -14,7 +14,7 @@ const PaperInteractPoint: InteractionPoint = {
   canvasCoords: () => {
     const position = new Vector3();
     GlobalScene.context.scene
-      .getObjectByName("papier_anim")!
+      .getObjectByName("paper")!
       .getWorldPosition(position);
 
     return position;

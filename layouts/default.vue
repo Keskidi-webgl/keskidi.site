@@ -21,24 +21,20 @@
         :loading-data="loadingProgressions"
       ></Loader>
 
-      <audio
-        ref="sound"
-        class="ambient-sound"
-        src="drill.mp3"
-        autoplay
-        style="display: none"
-      ></audio>
+      <!-- Progress level -->
+      <SoundButton v-if="globalSceneStore.canDisplayGlobalUI"></SoundButton>
 
-      <sound @click.native="toggleSound"></sound>
       <!-- Progress level -->
       <SceneProgressLevel
         class="progress-level"
         v-if="authStore.isAuth && globalSceneStore.canDisplayGlobalUI"
       ></SceneProgressLevel>
+
       <!-- Logo -->
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
+
       <!-- About page -->
-      <nuxt-link to="/about" class="about-btn">
+      <nuxt-link v-if="globalSceneStore.canDisplayGlobalUI" to="/about" class="about-btn">
         <div>
           <p class="point-name main-font">A propos</p>
         </div>
@@ -46,8 +42,10 @@
 
       <!-- Global scene -->
       <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
+
       <!-- Page Slot -->
       <Nuxt v-if="this.globalStore.isAppInit" />
+
       <!-- Navigation panel -->
       <SceneNavigationPanel
         v-if="
@@ -67,12 +65,12 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import { AssetsManager, ProgressPercentManager } from "~/core/managers";
-import { AssetManagerInitializer } from "~/core/utils/initializers";
+import {AssetsManager} from "~/core/managers";
+import {AssetManagerInitializer} from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 
 // Scene
@@ -84,23 +82,22 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 import AuthStore from "~/store/auth";
 
 // Progress Level
-import { Level } from "~/core/types";
-import { Room } from "~/core/config/global-scene/rooms/types";
+import {Level} from "~/core/types";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
-import Sound from "~/components/sound/sound.vue";
 import SceneProgressLevel from "~/components/scene/SceneProgressLevel.vue";
+import SoundButton from "~/components/global/SoundButton.vue";
 
 @Component({
   components: {
-    Sound,
     SceneNavigationPanel,
     LogoMedia,
     ActivityOnboarding,
     ActivityPanel,
     SceneProgressLevel,
     PreviewScene,
+    SoundButton,
     CustomButton
   }
 })
@@ -120,9 +117,6 @@ export default class DefaultLayout extends Vue {
   public level: Level | null = null;
   public words: number = 0;
 
-  // Sound
-  public sound: HTMLAudioElement | null = null;
-
   // Warnings
   public isChrome: boolean = navigator.userAgent.indexOf("Chrome") != -1;
   public isMobile: boolean =
@@ -130,47 +124,7 @@ export default class DefaultLayout extends Vue {
 
   public async mounted() {
     if (this.isChrome && !this.isMobile) {
-      if (!this.globalStore.isSoundEnabled) {
-        let bars = document.querySelectorAll(".sound-bar");
-        let audio = this.$refs.sound as HTMLAudioElement;
-        audio.pause();
-        bars.forEach(item => {
-          item.classList.remove("sound-barActive");
-        });
-      }
       await this.initApp();
-    }
-  }
-
-  async initProgressLevel() {
-    const userAchievedWords = this.globalStore.achievedWords.length;
-    const words = this.globalStore.userWordData
-      ? this.globalStore.userWordData!.length
-      : 0;
-    ProgressPercentManager.words = words;
-    ProgressPercentManager.userAchievedWords = userAchievedWords;
-    this.level = ProgressPercentManager.current;
-    this.percent = ProgressPercentManager.percent;
-    this.progress = userAchievedWords;
-    this.words = words;
-  }
-
-  toggleSound() {
-    // TODO --> refacto
-    let audio = this.$refs.sound as HTMLAudioElement;
-    let bars = document.querySelectorAll(".sound-bar");
-    if (audio.paused) {
-      audio.play();
-      this.globalStore.setUserAudioPreferences(true);
-      bars.forEach(item => {
-        item.classList.add("sound-barActive");
-      });
-    } else {
-      audio.pause();
-      this.globalStore.setUserAudioPreferences(false);
-      bars.forEach(item => {
-        item.classList.remove("sound-barActive");
-      });
     }
   }
 

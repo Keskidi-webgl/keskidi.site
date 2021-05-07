@@ -13,6 +13,7 @@ const SkateCameraPosition: CameraPosition = {
 
     const cameraPos = lookAtPosition.clone()
     cameraPos.x = cameraPos.x * 6.5
+    cameraPos.z = cameraPos.z * 1.7
 
     return {cameraPos, lookAtPosition}
   }

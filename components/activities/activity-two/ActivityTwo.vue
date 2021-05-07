@@ -20,8 +20,9 @@
               alt=""
             />
           </div>
-          <div @click="goToNextActivity" class="aside-container-footer">
-            <span>Passer à l'activité suivante ></span>
+          
+          <div class="aside-container-footer">
+            <span v-if="displayNextActivityButton()" @click="goToNextActivity">Passer à l'activité suivante ></span>
           </div>
         </div>
       </template>
@@ -121,6 +122,7 @@
 
           <CustomButton
             @click.native="goToNextActivity"
+            v-if="displayNextActivityButton()"
             class="btn-validate"
             arrow-color="#FFF8EE"
             color="#000648"
@@ -144,6 +146,8 @@ import VideoMedia from "~/components/medias/VideoMedia.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 
 import { ACTIVITY_TYPE } from "~/core/enums";
+import Helpers from "~/core/utils/helpers";
+import GlobalStore from "~/store/global";
 
 @Component({
   components: {
@@ -156,6 +160,7 @@ import { ACTIVITY_TYPE } from "~/core/enums";
 })
 export default class ActivityTwo extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
+  public globalStore = getModule(GlobalStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
   public progressBarStep: Step = { id: 2, text: "Tu gères !" };
 
@@ -171,6 +176,10 @@ export default class ActivityTwo extends Vue {
       top: 0,
       behavior: "smooth"
     });
+  }
+
+  public displayNextActivityButton() {
+    return !Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
   }
 }
 </script>

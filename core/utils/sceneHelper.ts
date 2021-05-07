@@ -67,6 +67,7 @@ export default class SceneHelper {
         const prevMaterial = child.material
         const newMaterial = new MeshBasicMaterial()
         newMaterial.copy((prevMaterial))
+
         if (prevMaterial.map === null && prevMaterial.emissiveMap) {
           newMaterial.map = prevMaterial.emissiveMap
         }

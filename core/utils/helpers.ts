@@ -51,8 +51,24 @@ export default class Helpers {
     return (1 - value) * start + value * end;
   }
 
+  /**
+   * Helper to check if a word is achieved
+   */
   public static isActivityWordAchieved(word: Word, achievedWords: Array<UserWordData>) {
     return achievedWords.find(word => word.id === word!.id)
   }
 
+  /**
+   * Convert degree to radiant
+   */
+  public static degreeToRadiant(degree: number) {
+    return degree * Math.PI / 180
+  }
+
+  /**
+   * Plurialize words
+   */
+  public static pluralize(word: string, quantity: number) {
+    return `${word}${(quantity > 1) ? 's' : ''}`
+  }
 }

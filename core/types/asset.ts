@@ -41,6 +41,11 @@ export interface GltfAsset extends AssetElement<GLTF>{}
 export interface FbxAsset extends AssetElement<Group>{}
 
 /**
+ * Audio asset element
+ */
+export interface AudioAsset extends AssetElement<HTMLAudioElement>{}
+
+/**
  * Progress Callback
  */
 export type ProgressCallback = (done: number, total: number) => void

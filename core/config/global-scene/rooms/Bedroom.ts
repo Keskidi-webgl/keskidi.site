@@ -21,7 +21,7 @@ const Bedroom: Room = {
 
   objects: () => [
     SkateRoomObject,
-    //PaperRoomObject
+    PaperRoomObject
   ]
 };
 
