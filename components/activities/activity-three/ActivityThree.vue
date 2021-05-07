@@ -33,6 +33,7 @@
             </button>
           </div>
 
+<!--          <h3 v-if="this.permissionStatus.state === 'granted' ">EKIPPPPPPPPPP</h3>-->
 
           <div class="content-recordWrapper">
             <button ref="activityRecord" class="content-expressions--record start-record"
@@ -95,12 +96,40 @@ export default class ActivityThree extends Vue {
   public progressBarStep: Step = { id: 3, text: "T'es un ouf !" };
   public activeExpression: WordExpression | null = null
   public countExpressionSuccess: number = 0
+  public permissionStatus: PermissionStatus
 
-  public mounted() {
+
+  // public async beforeMount(){
+  //   this.getLocalStream();
+  // }
+
+  public async mounted() {
     this.activeExpression = this.activityStore.dataWord!.expressions[0]
     this._createCanvas()
     this._initVoiceRecognitionManager()
+    // this.$nextTick(function () {
+    //   console.log(this.permissionStatus,'eeeeeeeaaaa') // => 'updated'
+    // })
+
   }
+
+
+  //  getMicrophonePermissions() {
+  //    navigator.permissions.query(
+  //      { name: 'microphone' }
+  //    ).then(function(permissionStatus){
+  //
+  //      console.log(permissionStatus.state); // granted, denied, prompt
+  //
+  //      permissionStatus.onchange = function(){
+  //        console.log("Permission changed to " + this.state);
+  //      }
+  //
+  //    })
+  // }
+
+
+
 
   /**
    * Start voice recognition for current expression
