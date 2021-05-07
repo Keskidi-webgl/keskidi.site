@@ -12,10 +12,6 @@ import GlobalSceneStore from "~/store/globalScene";
 export default class PreviewScene extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
 
-  mounted() {
-    console.log(this.getScene());
-  }
-
   getScene() {
     if (this.globalSceneStore.activeRoom)
       return require("~/assets/img/house/" +

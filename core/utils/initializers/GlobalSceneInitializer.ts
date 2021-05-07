@@ -295,7 +295,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addPhone() {
     const phone = AssetsManager.getGltf(GLTF_ASSET.PHONE).data
-    phone.scene.position.set(-100, 264, -200)
+    phone.scene.position.set(-210, 264, -155)
     phone.scene.rotation.y = Helpers.degreeToRadiant(45)
     GlobalScene.context.scene.add(phone.scene)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.PHONE, phone.scene)

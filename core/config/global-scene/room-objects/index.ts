@@ -8,3 +8,4 @@ export {default as NotebookRoomObject} from './lounge/NotebookRoomObject'
 
 // Mezzanine
 export {default as TelevisionRoomObject} from './mezzanine/TelevisionRoomObject'
+export {default as PhoneRoomObject} from './mezzanine/PhoneRoomObject'
