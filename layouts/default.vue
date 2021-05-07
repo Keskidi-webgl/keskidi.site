@@ -34,7 +34,7 @@
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
 
       <!-- About page -->
-      <nuxt-link to="/about" class="about-btn">
+      <nuxt-link v-if="globalSceneStore.canDisplayGlobalUI" to="/about" class="about-btn">
         <div>
           <p class="point-name main-font">A propos</p>
         </div>
