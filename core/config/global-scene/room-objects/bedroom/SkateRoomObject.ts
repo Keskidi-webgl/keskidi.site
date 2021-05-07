@@ -1,12 +1,13 @@
-import { ROOM_OBJECT_SLUG } from "~/core/config/global-scene/room-objects/enums";
-import { Bedroom } from "~/core/config/global-scene/rooms";
-import { WORD_ID } from "~/core/enums/word";
-import { RoomObject } from "~/core/config/global-scene/room-objects/types";
-import { ROOM_SLUG } from "~/core/config/global-scene/rooms/enums";
+import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
+import {Bedroom} from "~/core/config/global-scene/rooms";
+import {WORD_ID} from "~/core/enums/word";
+import {RoomObject} from "~/core/config/global-scene/room-objects/types";
+import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 import GlobalScene from "~/core/scene/GlobalScene";
 import {AssetsManager} from "~/core/managers";
 import {AUDIO_ASSET, GLTF_ASSET} from "~/core/enums";
 import {LoopOnce} from "three";
+import gsap from 'gsap'
 
 const SkateRoomObject: RoomObject = {
   name: "skate",
@@ -22,10 +23,14 @@ const SkateRoomObject: RoomObject = {
     animationClip.clampWhenFinished = true
     animationClip.setLoop(LoopOnce, 1)
     animationClip.play()
-    AssetsManager.getAudio(AUDIO_ASSET.SKATE_STICKERS).data.play()
-      .then(() => {
-        return AssetsManager.getAudio(AUDIO_ASSET.SKATE_STICKERS).data.play()
-      })
+    animationClip.reset()
+    gsap.to(AssetsManager.getAudio(AUDIO_ASSET.SKATE_STICKERS).data, {
+      duration: 0.4,
+      onComplete: () => {
+        AssetsManager.getAudio(AUDIO_ASSET.SKATE_STICKERS).data.play()
+      }
+    })
+
   }
 };
 

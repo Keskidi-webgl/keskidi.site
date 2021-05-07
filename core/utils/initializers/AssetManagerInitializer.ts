@@ -17,6 +17,7 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
       .registerAudio(AUDIO_ASSET.GLOBAL_AMBIANCE, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/athmos_song.mp3', 'athmos_song.mp3')
       .registerAudio(AUDIO_ASSET.MOUSE_HOVER, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/mouse_hover_sound.mp3', 'mouse_hover_sound.mp3')
       .registerAudio(AUDIO_ASSET.SKATE_STICKERS, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker_skate_sound.mp3', 'sticker_skate_sound.mp3')
+      .registerAudio(AUDIO_ASSET.OUTSIDE_AMBIANCE, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/outside_abiance_sound.mp3', 'outside_abiance_sound.mp3')
 
       // Gltf
       .registerGltf(GLTF_ASSET.CLOUD_LITTLE, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_1.gltf", "nuage_1.gltf")

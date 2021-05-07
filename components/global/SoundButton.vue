@@ -17,38 +17,58 @@ import gsap from 'gsap'
 
 @Component
 export default class SoundButton extends Vue {
+  public MAX_VOLUME = 0.5
   public globalStore = getModule(GlobalStore, this.$store);
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
-  public audio = AssetsManager.getAudio(AUDIO_ASSET.GLOBAL_AMBIANCE).data!
+  public audios = [
+    AssetsManager.getAudio(AUDIO_ASSET.GLOBAL_AMBIANCE).data!,
+    AssetsManager.getAudio(AUDIO_ASSET.OUTSIDE_AMBIANCE).data!
+  ]
 
   mounted() {
-    this.audio.loop = true
+    this._initSongs()
+
     if (this.globalStore.isSoundEnabled) {
-      this.audio.play()
+      this._playSongs()
     }
   }
 
   public toggleSound() {
-    if (this.audio.paused) {
-      this.audio.play();
-      gsap.to(this.audio, {
-        volume: 1,
+    if (!this.globalStore.isSoundEnabled) {
+      this._playSongs()
+      gsap.to(this.audios, {
+        volume: this.MAX_VOLUME,
         duration: 1,
         onComplete: () => {
           this.globalStore.setUserAudioPreferences(true)
         }
       })
     } else {
-      gsap.to(this.audio, {
+      gsap.to(this.audios, {
         volume: 0,
         duration: 1,
         onComplete: () => {
-          this.audio.pause()
+          this._pauseSong()
           this.globalStore.setUserAudioPreferences(false)
         }
       })
     }
+  }
+
+  private _playSongs() {
+    this.audios.forEach(audio => audio.play())
+  }
+
+  private _pauseSong() {
+    this.audios.forEach(audio => audio.pause())
+  }
+
+  private _initSongs() {
+    this.audios.forEach(audio => {
+      audio.loop = true
+      audio.volume = this.MAX_VOLUME
+    })
   }
 }
 </script>

@@ -111,7 +111,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     }).hideGui()
-      .enableStats()
+      //.enableStats()
       .enableParallax()
 
   }
@@ -236,6 +236,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _addGltfGlobalScene() {
     const globalSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GLOBAL_SCENE).data
+    console.log(globalSceneGltf)
     globalSceneGltf.scene.position.set(0, 0, 0)
 
     GlobalScene.context.scene.add(globalSceneGltf.scene)
