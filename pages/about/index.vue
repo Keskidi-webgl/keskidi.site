@@ -1,5 +1,9 @@
 <template>
   <div class="page-container" data-namespace="about-page">
+    <!-- Rgpd link -->
+    <nuxt-link to="/rgpd" class="activity-panel--rgpd">
+      Mentions légales
+    </nuxt-link>
     <!-- Leave about page -->
     <nuxt-link to="/" class="activity-panel--cross">
       <svg
@@ -178,7 +182,23 @@ export default class TestProgressPage extends Vue {
   }
 
   .activity-panel {
-    //background-color: #FFF8EE;
+    &--rgpd {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      transition: 0.3s ease all;
+      text-align: center;
+
+      &:hover {
+        color: $orange;
+        text-decoration: none;
+      }
+    }
     &--cross {
       position: absolute;
       top: 30px;

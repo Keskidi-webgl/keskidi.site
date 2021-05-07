@@ -32,9 +32,14 @@
           Bienvenue chez mes parents.
         </p>
         <p class="w-100 main-font">
-          Je te propose un jeu pour découvrir un langage que notre génération utilise au quotidien et que tu peines parfois à comprendre !
+          Je te propose un jeu pour découvrir un langage que notre génération
+          utilise au quotidien et que tu peines parfois à comprendre !
         </p>
-        <p class="w-100 main-font">Des mots sont dissimulés dans chaque pièce de ma maison. <strong>Clique</strong> sur l'une d'entre elle pour commencer l'aventure...</p>
+        <p class="w-100 main-font">
+          Des mots sont dissimulés dans chaque pièce de ma maison.
+          <strong>Clique</strong> sur l'une d'entre elle pour commencer
+          l'aventure...
+        </p>
         <div class="w-100 action-container">
           <CustomButton
             @click.native="next()"
@@ -56,12 +61,9 @@
               alt=""/></strong
           >.
           <span>
-            <img
-              class="rgpd"
-              src="~/assets/img/info_RGPD.svg"
-              alt=""
-              @click="rgpd()"
-            />
+            <nuxt-link to="/rgpd" class="rgpd">
+              <img src="~/assets/img/info_RGPD.svg" alt="" />
+            </nuxt-link>
           </span>
           <img
             src="~/assets/img/doodle-line.png"
@@ -128,8 +130,8 @@
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from "nuxt-property-decorator";
-import {AuthCredential, FunFactElement} from "~/core/types";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
+import { AuthCredential, FunFactElement } from "~/core/types";
 import AuthStore from "~/store/auth";
 import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
