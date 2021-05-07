@@ -5,8 +5,9 @@
       v-if="!globalSceneStore.activeObject"
       class="scene-navigation-panel-button scene-btn previous-scene"
       :to="previousSceneLink()"
+      @mouseenter.native="splitAnimation('.room-prev')"
     >
-      <p ref="room" class="room-name js-split-char main-font">{{ formatedRooms[1]  }}</p>
+      <p ref="room" class="room-name room-prev js-split-char main-font" v-html="prevSplitedRoom()"></p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
     <nuxt-link
@@ -22,8 +23,9 @@
       v-if="!globalSceneStore.activeObject"
       class="scene-navigation-panel-button scene-btn next-scene"
       :to="nextSceneLink()"
+      @mouseenter.native="splitAnimation('.room-next')"
     >
-      <p ref="room" class="room-name js-split-char main-font">{{   formatedRooms[0]  }}</p>
+      <p ref="room" class="room-name room-next js-split-char main-font" v-html="nextSplitedRoom()"></p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
 
@@ -64,12 +66,16 @@ export default class SceneNavigationPanel extends Vue {
   }
 
   public nextSceneLink() {
+    console.log(this.nextSplitedRoom())
+    console.log(this.prevSplitedRoom())
     let nextRoom = this.globalSceneStore.activeRoom?.nextRoom();
     this.next = nextRoom?.nameForHuman;
     return nextRoom?.name;
   }
 
   public previousSceneLink() {
+    console.log(this.prevSplitedRoom())
+    console.log(this.nextSplitedRoom())
     let prevRoom = this.globalSceneStore.activeRoom?.previousRoom();
     this.prev = prevRoom?.nameForHuman;
     return prevRoom?.fullUrl;
@@ -79,102 +85,59 @@ export default class SceneNavigationPanel extends Vue {
     return this.globalSceneStore.activeObject?.room().fullUrl;
   }
 
-  updated(){
-    // let obj = document.querySelector('.object-room')
-    // obj?.addEventListener('click',()=>{
-      // this.words = document.querySelectorAll('.js-split-char')
-      // console.log(this.roomsName,'rooooooms UPDATED')
-
-    // onUpdated(())
-
-    // })
-
-    console.log(this.prev,this.next,'rooooooms UPDATED')
-
-    this.roomsName[0] = this.next
-    this.roomsName[1] = this.prev
-
-    console.log(this.roomsName,'UPDATEEEEEEEEEEEEEE')
-    // this.splitText()
-
-    onUpdated(()=>{
-      console.log('🚨🚨🚨🚨🚨🚨🚨🚨🚨')
-    })
-
-
+  public nextSplitedRoom(){
+    return this.splitText(this.next)
   }
 
+  public prevSplitedRoom(){
+    return this.splitText(this.prev)
+  }
 
-  // TODO --> ADD CUSTOM EVENT WHEN we leave current page
   mounted(){
-    this.words = document.querySelectorAll('.js-split-char')
-    
-    // this.roomsName[0] = this.next
-    // this.roomsName[1] = this.prev
-    this.splitText()
-    this.launchSplitText()
-    console.log(this.roomsName,'array list room')
-    console.log(this.formatedRooms,'MOUNTED')
 
   }
 
-  launchSplitText(){
-    let words = document.querySelectorAll('.js-split-char')
-    let sceneBtn = document.querySelectorAll('.scene-btn')
+  splitText(text:string){
 
-    sceneBtn.forEach((el:any,index:number)=>{
-      el.addEventListener('mouseenter',()=>{
-        //@ts-ignore
-        this.splitAnimation(words[index])
-      })
+    let txtSpan = ''
+    text.split('').forEach((content:any) =>{
+      txtSpan += `<span>${content}</span>`
     })
+
+    return txtSpan
   }
 
-  splitText(){
-    console.log("split INIIT",this.words)
-    this.formatedRooms = []
-    this.roomsName.forEach((el:any,index:number)=>{
-        let txtSpan = ''
-        // let txt = el.textContent
-        el.split('').forEach((content:any) =>{
-          txtSpan += `<span>${content}</span>`
-        })
-        // el.innerHTML = txtSpan
-      console.log(txtSpan,el)
-      this.formatedRooms.push(txtSpan)
-      // console.log(el.innerHTML)
-      console.log(this.formatedRooms,'next room on split text method')
-      })
-    }
-
-  splitAnimation(el:HTMLElement){
+  splitAnimation(identifier:string){
+    let el = document.querySelector(identifier)
     let letters = el.querySelectorAll( 'span')
 
-    console.log("lauch animation split")
-    for (let i = letters.length - 1; i>= 0; i--){
-      let $el = letters[i]
-      let delay = 0.02 * i
+    // for (let i = letters.length - 1; i>= 0; i--){
+    //   let $el = letters[i]
+    //   let delay = 0.02 * i
 
-      gsap.to($el,{
-        duration:0.2,
+    // TODO --> adapt animation & fix typescript errors
+    
+      gsap.to(letters,{
+        duration:0.5,
         ease: 'power1.in',
-        delay: delay,
-        yPercent:'-50',
-        opacity: 1,
+        stagger:{
+          each: 0.2
+        },
+        translateY:-50,
+        autoAlpha: 1,
         onComplete:function (){
-          gsap.set($el, {
-            yPercent: '50'
+          gsap.set(letters, {
+            translateY: 50
           });
-          console.log("ekip")
-          gsap.to($el,  {
+          gsap.to(letters,  {
             duration: 0.3,
             ease: 'power1.out',
             opacity: 1,
-            yPercent: '0',
+            translateY: 0,
           });
         }})
 
-    }
+    // }
   }
 
 }
@@ -217,7 +180,7 @@ export default class SceneNavigationPanel extends Vue {
         top: -30px;
         color: $dark-blue;
         opacity: 0;
-        transition: 0.2s ease all;
+        //transition: 0.2s ease all;
       }
 
       &:hover .room-name {
