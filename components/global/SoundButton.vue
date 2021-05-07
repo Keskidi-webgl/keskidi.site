@@ -13,6 +13,7 @@ import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import {AssetsManager} from "~/core/managers";
 import {AUDIO_ASSET} from "~/core/enums";
+import gsap from 'gsap'
 
 @Component
 export default class SoundButton extends Vue {
@@ -31,10 +32,22 @@ export default class SoundButton extends Vue {
   public toggleSound() {
     if (this.audio.paused) {
       this.audio.play();
-      this.globalStore.setUserAudioPreferences(true);
+      gsap.to(this.audio, {
+        volume: 1,
+        duration: 1,
+        onComplete: () => {
+          this.globalStore.setUserAudioPreferences(true)
+        }
+      })
     } else {
-      this.audio.pause();
-      this.globalStore.setUserAudioPreferences(false);
+      gsap.to(this.audio, {
+        volume: 0,
+        duration: 1,
+        onComplete: () => {
+          this.audio.pause()
+          this.globalStore.setUserAudioPreferences(false)
+        }
+      })
     }
   }
 }

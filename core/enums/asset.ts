@@ -46,5 +46,6 @@ export enum IMAGE_ASSET {
  */
 export enum AUDIO_ASSET {
   GLOBAL_AMBIANCE = 'globalAmbiance',
-  MOUSE_HOVER = 'mouseHover'
+  MOUSE_HOVER = 'mouseHover',
+  SKATE_STICKERS = 'skateSticker'
 }

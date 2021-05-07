@@ -5,7 +5,7 @@ import { RoomObject } from "~/core/config/global-scene/room-objects/types";
 import { ROOM_SLUG } from "~/core/config/global-scene/rooms/enums";
 import GlobalScene from "~/core/scene/GlobalScene";
 import {AssetsManager} from "~/core/managers";
-import {GLTF_ASSET} from "~/core/enums";
+import {AUDIO_ASSET, GLTF_ASSET} from "~/core/enums";
 import {LoopOnce} from "three";
 
 const SkateRoomObject: RoomObject = {
@@ -19,10 +19,13 @@ const SkateRoomObject: RoomObject = {
   animation: () => {
     const gltfObject = AssetsManager.getGltf(GLTF_ASSET.SKATE_STICKER).data!
     const animationClip = GlobalScene.context.generateAnimationAction(gltfObject.animations[0], GLTF_ASSET.SKATE_STICKER)
-    animationClip.paused = false
     animationClip.clampWhenFinished = true
     animationClip.setLoop(LoopOnce, 1)
     animationClip.play()
+    AssetsManager.getAudio(AUDIO_ASSET.SKATE_STICKERS).data.play()
+      .then(() => {
+        return AssetsManager.getAudio(AUDIO_ASSET.SKATE_STICKERS).data.play()
+      })
   }
 };
 
