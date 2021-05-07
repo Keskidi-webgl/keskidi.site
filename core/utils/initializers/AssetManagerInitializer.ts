@@ -1,6 +1,6 @@
 import {Initializers} from "~/core/defs";
 import {AssetsManager} from "~/core/managers";
-import {GLTF_ASSET, VIDEO_ASSET} from "~/core/enums";
+import {AUDIO_ASSET, GLTF_ASSET, VIDEO_ASSET} from "~/core/enums";
 
 /**
  * @description
@@ -9,68 +9,29 @@ import {GLTF_ASSET, VIDEO_ASSET} from "~/core/enums";
 export default class AssetManagerInitializer extends Initializers<null, void> {
   init(): void {
     AssetsManager
-      //.enableLocalMode()
-      .registerVideo(
-        VIDEO_ASSET.TV_SCREEN,
-        'https://keskidi.s3.eu-west-3.amazonaws.com/medias/fortnite.mp4', 'fortnite.mp4'
-      )
-      .registerGltf(
-        GLTF_ASSET.CLOUD_LITTLE,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_1.gltf",
-        "nuage_1.gltf"
-      )
-      .registerGltf(
-        GLTF_ASSET.CLOUD_BIG,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_2.gltf",
-        "nuage_2.gltf"
-      )
+      .enableLocalMode()
+      // Videos
+      .registerVideo(VIDEO_ASSET.TV_SCREEN, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/fortnite.mp4', 'fortnite.mp4')
 
-      .registerFbx(
-        GLTF_ASSET.TOM,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_idle.fbx",
-        "perso_idle.fbx"
-      )
-      .registerFbx(
-        GLTF_ASSET.TOM_MUSCLE,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_good_muscle.fbx",
-        "perso_good_muscle.fbx"
-      )
-      .registerFbx(
-        GLTF_ASSET.TOM_DOWN,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_bad_down.fbx",
-        "perso_bad_down.fbx"
-      )
-      .registerFbx(
-        GLTF_ASSET.TOM_PUNCH,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_good_poing.fbx",
-        "perso_good_poing.fbx"
-      )
-      .registerFbx(
-        GLTF_ASSET.TOM_HEAD,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_bad_1.fbx",
-        "perso_bad_1.fbx"
-      )
-      .registerFbx(
-        GLTF_ASSET.TOM_HELLO,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_salut.fbx",
-        "perso_salut.fbx"
-      )
+      // Audio
+      .registerAudio(AUDIO_ASSET.GLOBAL_AMBIANCE, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/athmos_song.mp3', 'athmos_song.mp3')
+      .registerAudio(AUDIO_ASSET.MOUSE_HOVER, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/mouse_hover_sound.mp3', 'mouse_hover_sound.mp3')
+      .registerAudio(AUDIO_ASSET.SKATE_STICKERS, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker_skate_sound.mp3', 'sticker_skate_sound.mp3')
+      .registerAudio(AUDIO_ASSET.OUTSIDE_AMBIANCE, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/outside_abiance_sound.mp3', 'outside_abiance_sound.mp3')
 
-      .registerGltf(
-        GLTF_ASSET.GLOBAL_SCENE,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale_bake.gltf",
-        "scene_globale_bake.gltf"
-      )
+      // Gltf
+      .registerGltf(GLTF_ASSET.GLOBAL_SCENE, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale_bake.gltf", "scene_globale_bake.gltf")
+      .registerGltf(GLTF_ASSET.PAPER, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/bedroom_paper.gltf", "bedroom_paper.gltf")
+      .registerGltf(GLTF_ASSET.SKATE_STICKER, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf", "sticker.gltf")
+      .registerGltf(GLTF_ASSET.NOTEBOOK, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf", "carnet.gltf")
+      .registerGltf(GLTF_ASSET.CAT, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf", "chat.gltf")
 
-      .registerGltf(
-        GLTF_ASSET.OUTSIDE,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/outside.gltf",
-        "outside.gltf"
-      )
-      .registerGltf(
-        GLTF_ASSET.PAPER,
-        "https://keskidi.s3.eu-west-3.amazonaws.com/medias/papier.gltf",
-        "papier.gltf"
-      )
+      // Fbx
+      .registerFbx(GLTF_ASSET.TOM, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_idle.fbx", "perso_idle.fbx")
+      .registerFbx(GLTF_ASSET.TOM_MUSCLE, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_good_muscle.fbx", "perso_good_muscle.fbx")
+      .registerFbx(GLTF_ASSET.TOM_DOWN, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_bad_down.fbx", "perso_bad_down.fbx")
+      .registerFbx(GLTF_ASSET.TOM_PUNCH, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_good_poing.fbx", "perso_good_poing.fbx")
+      .registerFbx(GLTF_ASSET.TOM_HEAD, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_bad_1.fbx", "perso_bad_1.fbx")
+      .registerFbx(GLTF_ASSET.TOM_HELLO, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/perso_salut.fbx", "perso_salut.fbx")
   }
 }

@@ -337,7 +337,7 @@ export default class SceneManager {
   public _bindEvents() {
     this._bindExternEvents(this)
 
-    this._canvas.addEventListener('mousemove', event => {
+    document.addEventListener('mousemove', event => {
       this._mousePositions.x = event.clientX / this._canvas.width / 2
       this._mousePositions.y = event.clientY / this._canvas.height / 2
       this._onMouseMoveCanvasCallback(this, event)
@@ -347,7 +347,7 @@ export default class SceneManager {
         this._globalSceneRotation.y = Helpers.lerp(this._globalSceneRotation.y, this._mousePositions.y, 0.1)
 
         this._scene.rotation.x = - this._globalSceneRotation.y * 0.015
-        this._scene.rotation.y = - this._globalSceneRotation.x * 0.25
+        this._scene.rotation.y = - this._globalSceneRotation.x * 0.3
       }
     })
 

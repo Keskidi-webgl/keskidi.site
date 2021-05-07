@@ -168,7 +168,7 @@ export default class ActivityOne extends Vue {
   }
 
   public beforeEnterResultAnimation() {
-    CustomEase.create("asideExtend", "M0,0 C0.61,0 0.44,1 1,1 ")
+    CustomEase.create("asideExtend", "M0,0 C0.89,0 0.24,1 1,1 ")
     const hiddenElements = [
       document.querySelector('.aside-container'),
       document.querySelector('.word-name'),

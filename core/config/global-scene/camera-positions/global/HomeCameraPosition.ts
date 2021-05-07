@@ -8,9 +8,9 @@ const  HomeCameraPosition: CameraPosition = {
     const lookAtPosition = GlobalScene.context.scene.position
     const cameraPos = lookAtPosition.clone()
 
-    cameraPos.z = 1300
+    cameraPos.z = 1150
     cameraPos.y = 500
-    cameraPos.x = -500
+    cameraPos.x = -400
 
     return {cameraPos, lookAtPosition}
   }
