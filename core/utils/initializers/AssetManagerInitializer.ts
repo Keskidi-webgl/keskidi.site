@@ -20,10 +20,7 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
       .registerAudio(AUDIO_ASSET.OUTSIDE_AMBIANCE, 'https://keskidi.s3.eu-west-3.amazonaws.com/medias/outside_abiance_sound.mp3', 'outside_abiance_sound.mp3')
 
       // Gltf
-      .registerGltf(GLTF_ASSET.CLOUD_LITTLE, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_1.gltf", "nuage_1.gltf")
-      .registerGltf(GLTF_ASSET.CLOUD_BIG, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/nuage_2.gltf", "nuage_2.gltf")
       .registerGltf(GLTF_ASSET.GLOBAL_SCENE, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale_bake.gltf", "scene_globale_bake.gltf")
-      .registerGltf(GLTF_ASSET.OUTSIDE, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/bedroom_paper.gltf", "bedroom_paper.gltf")
       .registerGltf(GLTF_ASSET.PAPER, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/bedroom_paper.gltf", "bedroom_paper.gltf")
       .registerGltf(GLTF_ASSET.SKATE_STICKER, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf", "sticker.gltf")
       .registerGltf(GLTF_ASSET.NOTEBOOK, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf", "carnet.gltf")

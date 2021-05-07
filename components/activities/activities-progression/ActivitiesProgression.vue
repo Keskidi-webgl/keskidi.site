@@ -23,6 +23,7 @@
       arrow-color="#FF6644"
       color="white"
       text="Continuer"
+      hover-text="#FF6644"
     ></CustomButton>
 
   </div>
