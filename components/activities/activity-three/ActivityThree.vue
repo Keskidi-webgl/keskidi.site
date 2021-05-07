@@ -36,7 +36,7 @@
 
           <div class="content-recordWrapper">
             <button ref="activityRecord" class="content-expressions--record start-record"
-                    @click="startRecordVoice(expression)"
+                    @click.prevent="startRecordVoice(expression)"
                     v-for="expression in activityStore.dataWord.expressions"
                     :disabled="expression.id !== activeExpression.id">
               <svg class="content-expressions--recordActive" width="28" height="40" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -106,6 +106,7 @@ export default class ActivityThree extends Vue {
    * Start voice recognition for current expression
    */
   public startRecordVoice(expression: WordExpression) {
+
     (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add('isRecording');
     VoiceRecognitionManager!.setTextToRecognize(expression.content!)
     VoiceRecognitionManager!.start()
@@ -319,6 +320,7 @@ export default class ActivityThree extends Vue {
   }
 }
 .isRecording{
+  pointer-events: none;
   &:after {
     opacity: 1!important;
     border-top: 2px solid $orange!important;
