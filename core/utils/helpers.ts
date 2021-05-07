@@ -71,4 +71,8 @@ export default class Helpers {
   public static pluralize(word: string, quantity: number) {
     return `${word}${(quantity > 1) ? 's' : ''}`
   }
+
+  public static spanify(text: string) {
+    return text.split(/(\s+)/).map(letter => `<span>${letter}</span>`).join('')
+  }
 }
