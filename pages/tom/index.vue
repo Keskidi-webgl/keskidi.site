@@ -112,7 +112,7 @@
             alt=""
           />
         </h1>
-        <p class="w-100">{{ currentFact.content }}</p>
+        <p class="w-100 main-font">{{ currentFact.content }}</p>
         <span class="leave-activity" @click="back()">
           <img src="~/assets/img/cross.svg" alt="" />
         </span>
