@@ -28,9 +28,9 @@ export default class PreviewScene extends Vue {
 
 <style lang="scss" scoped>
 .preview-scene {
-  padding: 25px;
-  height: 90px;
-  width: 90px;
+  padding: 18px;
+  height: 65px;
+  width: 65px;
   background: linear-gradient(
     146.31deg,
     rgba(255, 255, 255, 0.4) 7.41%,
@@ -48,11 +48,5 @@ export default class PreviewScene extends Vue {
   border-right: 1px solid rgba(252, 231, 220, 0.2);
   border-bottom: 1px solid rgba(247, 202, 176, 0.2);
   border-left: 1px solid rgba(243, 173, 133, 0.3);
-
-  transform: rotate(30deg);
-
-  .doodle {
-    transform: rotate(-30deg);
-  }
 }
 </style>
