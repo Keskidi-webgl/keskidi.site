@@ -20,7 +20,7 @@
               alt=""
             />
           </div>
-
+          
           <div class="aside-container-footer">
             <span v-if="displayNextActivityButton()" @click="goToNextActivity">Passer à l'activité suivante ></span>
           </div>
