@@ -70,20 +70,13 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     renderer.shadowMap.autoUpdate = false
     renderer.shadowMap.needsUpdate = true
 
-    /*
-    renderer.outputEncoding = sRGBEncoding
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = PCFSoftShadowMap;
-     */
-
-
     return new SceneManager({
       canvas: this._data.canvas,
       camera: camera,
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: true,
+      activateOrbitControl: false,
       onRender: (ctx) => {
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {

@@ -29,12 +29,16 @@
         class="progress-level"
         v-if="authStore.isAuth && globalSceneStore.canDisplayGlobalUI"
       ></SceneProgressLevel>
+
       <!-- Logo -->
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
+
       <!-- Global scene -->
       <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
+
       <!-- Page Slot -->
       <Nuxt v-if="this.globalStore.isAppInit" />
+
       <!-- Navigation panel -->
       <SceneNavigationPanel
         v-if="
@@ -59,7 +63,7 @@ import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import {AssetsManager, ProgressPercentManager} from "~/core/managers";
+import {AssetsManager} from "~/core/managers";
 import {AssetManagerInitializer} from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 
@@ -75,7 +79,6 @@ import {Level} from "~/core/types";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
-import Sound from "~/components/sound/sound.vue";
 import SceneProgressLevel from "~/components/scene/SceneProgressLevel.vue";
 import SoundButton from "~/components/global/SoundButton.vue";
 
