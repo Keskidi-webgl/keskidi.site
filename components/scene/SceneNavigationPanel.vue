@@ -5,6 +5,8 @@
       v-if="!globalSceneStore.activeObject"
       class="scene-navigation-panel-button previous-scene"
       :to="previousSceneLink()"
+      @mouseenter.native="playSoundEffect"
+      @mouseleave.native="resetSoundEffect"
     >
       <p class="room-name main-font">{{ prev }}</p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
@@ -14,6 +16,8 @@
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
       class="scene-navigation-panel-button back-home"
       :to="backHomeLink()"
+      @mouseenter.native="playSoundEffect"
+      @mouseleave.native="resetSoundEffect"
     >
       <img src="~/assets/img/home.svg" alt="" />
     </nuxt-link>
@@ -22,6 +26,8 @@
       v-if="!globalSceneStore.activeObject"
       class="scene-navigation-panel-button next-scene"
       :to="nextSceneLink()"
+      @mouseenter.native="playSoundEffect"
+      @mouseleave.native="resetSoundEffect"
     >
       <p class="room-name main-font">{{ next }}</p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
@@ -31,6 +37,8 @@
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
       class="scene-navigation-panel-button object-room"
       :to="goBackObjectRoom()"
+      @mouseenter.native="playSoundEffect"
+      @mouseleave.native="resetSoundEffect"
     >
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
@@ -40,6 +48,8 @@
 <script lang="ts">
 import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
+import {AssetsManager} from "~/core/managers";
+import {AUDIO_ASSET} from "~/core/enums";
 
 @Component({})
 export default class SceneNavigationPanel extends Vue {
@@ -69,6 +79,15 @@ export default class SceneNavigationPanel extends Vue {
 
   public goBackObjectRoom() {
     return this.globalSceneStore.activeObject?.room().fullUrl;
+  }
+
+  public playSoundEffect() {
+    AssetsManager.getAudio(AUDIO_ASSET.MOUSE_HOVER).data.play()
+  }
+
+  public resetSoundEffect() {
+    AssetsManager.getAudio(AUDIO_ASSET.MOUSE_HOVER).data.pause()
+    AssetsManager.getAudio(AUDIO_ASSET.MOUSE_HOVER).data.currentTime = 0
   }
 }
 </script>

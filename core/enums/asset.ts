@@ -5,7 +5,8 @@ export enum ASSET_TYPE {
   GLTF,
   IMAGE,
   VIDEO,
-  FBX
+  FBX,
+  AUDIO
 }
 
 /**
@@ -41,8 +42,9 @@ export enum IMAGE_ASSET {
 }
 
 /**
- * Name given to video asset in order to retrieve it through AssetManager
+ * Name given to audio asset in order to retrieve it through AssetManager
  */
-export enum VIDEO_ASSET {
-
+export enum AUDIO_ASSET {
+  GLOBAL_AMBIANCE = 'globalAmbiance',
+  MOUSE_HOVER = 'mouseHover'
 }
