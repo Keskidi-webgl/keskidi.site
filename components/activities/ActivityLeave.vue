@@ -1,13 +1,55 @@
 <template>
-  <!-- TODO -->
   <div ref="leave" class="activity-leave hide">
     <div class="activity-leave--card ">
-      <h2>Wait</h2>
-      <p>est tu sur de vouloir quitter l'activité ?</p>
-      <div>
-        <button @click="resumeActivity">je continue</button>
+      <h2 class="main-font">
+        Waiiiiiit !
+        <img
+          src="~/assets/img/circle-doodle-huge.png"
+          class="doodle circle-doodle"
+          alt=""
+        />
+      </h2>
+      <p class="main-font p1">
+        Es-tu sûr.e de vouloir
+        <strong
+          ><span
+            >quitter
+            <img
+              src="~/assets/img/doodle-line.png"
+              class="doodle line-doodle"
+              alt=""
+            />
+          </span>
+          l'activité
+        </strong>
+        ?
+        <img
+          src="~/assets/img/arrow-draft-two.png"
+          class="doodle arrow-two-doodle"
+          alt=""
+        />
+      </p>
+      <p class="main-font p2">
+        Tu
+        <span
+          >perdras
+          <img
+            src="~/assets/img/doodle-packed.png"
+            class="doodle packed-doodle"
+            alt=""
+          />
+        </span>
+        toute ta progression...
+        <img
+          src="~/assets/img/arrow-draft-one.png"
+          class="doodle arrow-one-doodle"
+          alt=""
+        />
+      </p>
+      <div class="buttons-container">
+        <button @click="resumeActivity">Ah non, je continue</button>
         <button @click="hideActivityPanel" class="bg-transparent darkfont">
-          je quitte
+          Oui, pas grave
         </button>
       </div>
     </div>
@@ -38,8 +80,6 @@ export default class ActivityLeave extends Vue {
     this.activityStore.setCurrentActivity(null);
     this.activityStore.hideActivityPanel();
     this.leaveContainer.classList.add("hide");
-
-    //this.$refs.leave.classList.add('hide')
   }
 
   resumeActivity() {
@@ -65,27 +105,123 @@ export default class ActivityLeave extends Vue {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 100px;
+
   &--card {
-    width: 90%;
-    height: 90%;
-    background: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 40px;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(59.4294px);
+    backdrop-filter: blur(59.4294px);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-  }
-  button {
-    padding: 20px 30px;
-    border-radius: 50px;
-    border: 2px solid $dark-blue;
-    background: $dark-blue;
-    color: white;
-  }
-  .darkfont {
-    color: $dark-blue;
+
+    .doodle {
+      position: absolute;
+      z-index: -1;
+    }
+
+    h2 {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 90px;
+      line-height: 108px;
+      text-align: center;
+      letter-spacing: -0.02em;
+      color: $dark-blue;
+      mix-blend-mode: normal;
+      position: relative;
+      margin-bottom: 60px;
+
+      .circle-doodle {
+        right: 0;
+        top: 50%;
+        transform: translateY(calc(-50% + 10px));
+      }
+    }
+
+    p {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 40px;
+      line-height: 100%;
+      text-align: center;
+      color: $dark-blue;
+      position: relative;
+
+      &.p1 {
+        margin-bottom: 50px;
+
+        .arrow-two-doodle {
+          top: -30px;
+          left: -60px;
+        }
+
+        span {
+          position: relative;
+          font-weight: bold;
+
+          .line-doodle {
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+        }
+      }
+
+      &.p2 {
+        span {
+          position: relative;
+
+          .packed-doodle {
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+        }
+
+        .arrow-one-doodle {
+          right: -60px;
+          bottom: -10px;
+        }
+      }
+    }
+
+    .buttons-container {
+      margin-top: 88px;
+
+      button {
+        padding: 10px 30px;
+        border-radius: 50px;
+        border: 2px solid $dark-blue;
+        background: $dark-blue;
+        color: white;
+        margin: 0 20px;
+        position: relative;
+        overflow: hidden;
+
+        transition: 0.3s ease all;
+
+        &.darkfont {
+          color: $dark-blue;
+          position: relative;
+        }
+
+        &:hover {
+          &.darkfont {
+            background-color: white;
+            color: $orange;
+            border-color: $orange;
+          }
+
+          background-color: $orange;
+          border-color: $orange;
+        }
+      }
+    }
   }
 }
 .hide {
