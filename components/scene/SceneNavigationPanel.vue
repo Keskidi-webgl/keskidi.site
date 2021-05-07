@@ -58,11 +58,8 @@ export default class SceneNavigationPanel extends Vue {
     | string
     | undefined = this.globalSceneStore.activeRoom?.previousRoom().nameForHuman;
 
-  public roomsName:Array[string] = [this.next,this.prev]
-  public formatedRooms:Array[string] = []
+  public roomsName:Array<string> = [this.next as string,this.prev as string]
   public words:any
-
-  public nextRoom:string
 
   public backHomeLink() {
     return "/";
@@ -89,11 +86,11 @@ export default class SceneNavigationPanel extends Vue {
   }
 
   public nextSplitedRoom(){
-    return this.splitText(this.next)
+    return this.splitText(this.next as string)
   }
 
   public prevSplitedRoom(){
-    return this.splitText(this.prev)
+    return this.splitText(this.prev as string)
   }
 
   mounted(){
@@ -117,7 +114,7 @@ export default class SceneNavigationPanel extends Vue {
 
   splitAnimation(identifier:string){
     let el = document.querySelector(identifier)
-    let letters = el.querySelectorAll( 'span')
+    let letters = el!.querySelectorAll( 'span')
 
       gsap.to(el,{opacity:1,duration:0.2})
       gsap.to(letters,{
