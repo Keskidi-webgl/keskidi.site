@@ -97,7 +97,7 @@ import SoundButton from "~/components/global/SoundButton.vue";
     ActivityPanel,
     SceneProgressLevel,
     PreviewScene,
-    SoundButton
+    SoundButton,
     CustomButton
   }
 })
