@@ -11,7 +11,7 @@ const TelevisionCameraPosition: CameraPosition = {
     GlobalScene.context.scene.getObjectByName('tv')!.getWorldPosition(lookAtPosition)
     lookAtPosition.z = lookAtPosition.z * 0.8
     const cameraPos = lookAtPosition.clone()
-    cameraPos.x = cameraPos.x * 27
+    cameraPos.x = -100
     cameraPos.y = cameraPos.y * 1.1
 
     return { cameraPos, lookAtPosition }

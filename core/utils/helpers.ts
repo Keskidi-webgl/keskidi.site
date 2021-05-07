@@ -65,4 +65,10 @@ export default class Helpers {
     return degree * Math.PI / 180
   }
 
+  /**
+   * Plurialize words
+   */
+  public static pluralize(word: string, quantity: number) {
+    return `${word}${(quantity > 1) ? 's' : ''}`
+  }
 }
