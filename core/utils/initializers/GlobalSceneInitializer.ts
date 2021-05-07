@@ -284,7 +284,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addBedroomPaper() {
     const paper = AssetsManager.getGltf(GLTF_ASSET.PAPER).data
-    paper.scene.position.set(200, 60, 180)
+    paper.scene.position.set(200, 57, 180)
+    paper.scene.rotation.y = Helpers.degreeToRadiant(-30)
     GlobalScene.context.scene.add(paper.scene)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.PAPER, paper.scene)
   }

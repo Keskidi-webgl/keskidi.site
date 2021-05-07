@@ -337,7 +337,7 @@ export default class SceneManager {
   public _bindEvents() {
     this._bindExternEvents(this)
 
-    this._canvas.addEventListener('mousemove', event => {
+    document.addEventListener('mousemove', event => {
       this._mousePositions.x = event.clientX / this._canvas.width / 2
       this._mousePositions.y = event.clientY / this._canvas.height / 2
       this._onMouseMoveCanvasCallback(this, event)
