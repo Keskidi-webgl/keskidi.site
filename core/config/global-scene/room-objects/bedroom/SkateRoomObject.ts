@@ -30,7 +30,6 @@ const SkateRoomObject: RoomObject = {
         AssetsManager.getAudio(AUDIO_ASSET.SKATE_STICKERS).data.play()
       }
     })
-
   }
 };
 

@@ -170,6 +170,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addStickersSkate()
     this._addNotebook()
     this._addCat()
+    this._addBedroomPaper()
   }
 
   private _createPlanesBackground(){
@@ -281,6 +282,13 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     animationClip.play()
   }
 
+  private _addBedroomPaper() {
+    const paper = AssetsManager.getGltf(GLTF_ASSET.PAPER).data
+    paper.scene.position.set(200, 60, 180)
+    GlobalScene.context.scene.add(paper.scene)
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.PAPER, paper.scene)
+  }
+
   /**
    * Add lights to the global scene
    */
@@ -312,6 +320,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName('lampe_bureau')!,
       GlobalScene.context.scene.getObjectByName('guirlande')!,
       GlobalScene.context.scene.getObjectByName('cat')!,
+      GlobalScene.context.scene.getObjectByName('paper')!,
     ]
     SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context, true)
   }
