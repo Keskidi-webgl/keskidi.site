@@ -7,6 +7,7 @@ export {default as TomCameraPosition} from './global/TomCameraPosition'
 
 // Lounge
 export {default as VinylCameraPosition} from './lounge/VinylCameraPosition'
+export {default as NotebookCameraPosition} from './lounge/NotebookCameraPosition'
 
 // Mezzanine
 export {default as TelevisionCameraPosition} from './mezzanine/TelevisionCameraPosition'

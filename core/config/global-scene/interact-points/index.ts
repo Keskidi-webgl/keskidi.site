@@ -14,3 +14,4 @@ export {default as SkateInteractPoint} from './bedroom/SkateInteractPoint'
 
 // LOUNGE
 export {default as VinylInteractPoint} from './lounge/VinylInteractPoint'
+export {default as NotebookInteractPoint} from './lounge/NotebookInteractPoint'

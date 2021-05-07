@@ -5,7 +5,7 @@ import {
   BedroomCameraPosition,
   HomeCameraPosition,
   LoungeCameraPosition,
-  MezzanineCameraPosition,
+  MezzanineCameraPosition, NotebookCameraPosition,
   PaperCameraPosition,
   SkateCameraPosition,
   TelevisionCameraPosition,
@@ -15,7 +15,7 @@ import {
 import {
   BedroomInteractPoint,
   LoungeInteractPoint,
-  MezzanineInteractPoint,
+  MezzanineInteractPoint, NotebookInteractPoint,
   PaperInteractPoint,
   SkateInteractPoint,
   TelevisionInteractPoint,
@@ -25,6 +25,7 @@ import {
 import {Bedroom, Lounge, Mezzanine} from "~/core/config/global-scene/rooms";
 import {RoomObject} from "~/core/config/global-scene/room-objects/types";
 import {
+  NotebookRoomObject,
   PaperRoomObject,
   SkateRoomObject,
   TelevisionRoomObject,
@@ -47,6 +48,7 @@ const GlobalSceneConfig = {
     PaperRoomObject,
     /* Lounge */
     VinylRoomObject,
+    NotebookRoomObject,
     /* Mezzanine */
     TelevisionRoomObject
   ] as Array<RoomObject>,
@@ -65,6 +67,7 @@ const GlobalSceneConfig = {
     SkateCameraPosition,
     /* Lounge */
     VinylCameraPosition,
+    NotebookCameraPosition,
     /* Mezzanine */
     TelevisionCameraPosition
   ] as Array<CameraPosition>,
@@ -81,6 +84,7 @@ const GlobalSceneConfig = {
     SkateInteractPoint,
     /* Lounge */
     VinylInteractPoint,
+    NotebookInteractPoint,
     /* Mezzanine */
     TelevisionInteractPoint
   ] as Array<InteractionPoint>,

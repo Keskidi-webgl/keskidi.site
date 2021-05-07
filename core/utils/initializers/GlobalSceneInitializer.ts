@@ -268,8 +268,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addNotebook() {
     const notebook = AssetsManager.getGltf(GLTF_ASSET.NOTEBOOK).data
-    notebook.scene.position.set(0, 500, 200)
-    //GlobalScene.context.scene.add(notebook.scene)
+    notebook.scene.position.set(-175, 90, 175)
+    notebook.scene.rotation.y = Helpers.degreeToRadiant(-40)
+    GlobalScene.context.scene.add(notebook.scene)
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.NOTEBOOK, notebook.scene)
   }
 
   private _addCat() {
@@ -322,6 +324,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName('guirlande')!,
       GlobalScene.context.scene.getObjectByName('cat')!,
       GlobalScene.context.scene.getObjectByName('paper')!,
+      GlobalScene.context.scene.getObjectByName('notebook')!,
     ]
     SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context, true)
   }
