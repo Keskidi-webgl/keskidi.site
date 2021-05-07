@@ -5,10 +5,7 @@
         ><strong class="number">{{ this.getProgress() }}</strong> <br />
         {{ this.getProgress() > 1 ? "MOTS" : "MOT" }}</span
       >
-      <!-- <span>{{this.getTotal() }}</span> -->
     </div>
-
-    <!-- <p class="activities-currentLevel">{{ this.getLevel() }}</p> -->
 
     <h1 class="activities-title">
       Bravo t'as progressé !
@@ -34,10 +31,6 @@
       passer au niveau {{ this.getNext() }}
     </p>
 
-    <!-- <p class="activities-moreInfos" v-if="getProgress() === 0">
-      Tu peux aussi retrouver tes mots sur l'application Keskidico
-    </p> -->
-
     <CustomButton
       @click.native="hideActivityPanel"
       arrow-color="#FF6644"
@@ -45,15 +38,6 @@
       text="Continuer"
       hoverText="#FF6644"
     ></CustomButton>
-
-    <!-- <CustomButton
-      @click.native="keskidikoView"
-      arrow-color="#FF6644"
-      color="white"
-      text="Continuer"
-      hoverText="#FF6644"
-      v-if="getProgress() === 0"
-    ></CustomButton> -->
   </div>
 </template>
 
@@ -65,6 +49,7 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import GlobalStore from "~/store/global";
 import { ProgressPercentManager } from "~/core/managers";
+import { ACTIVITY_TYPE } from "~/core/enums";
 
 @Component({
   components: {
@@ -77,14 +62,14 @@ export default class ActivitiesProgression extends Vue {
   public globalStore = getModule(GlobalStore, this.$store);
 
   hideActivityPanel() {
-    GlobalScene.context.resume();
-    this.activityStore.setCurrentActivity(null);
-    this.activityStore.hideActivityPanel();
-    this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl);
-  }
-
-  keskidikoView() {
-    console.log("keskidico");
+    if (this.globalStore.achievedWords.length > 1) {
+      GlobalScene.context.resume();
+      this.activityStore.setCurrentActivity(null);
+      this.activityStore.hideActivityPanel();
+      this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl);
+    } else {
+      this.activityStore.setCurrentActivity(ACTIVITY_TYPE.KESKIDICO);
+    }
   }
 
   mounted() {

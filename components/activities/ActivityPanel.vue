@@ -19,6 +19,8 @@
     <!-- Activities progression -->
     <ActivitiesProgression v-if="activityDisplay.progression()" />
 
+    <ActivitiesKeskidico v-if="activityDisplay.presentKeskidico()" />
+
     <!-- Activity onboarding -->
     <transition
       v-on:enter="animationEnterOnboarding"
@@ -73,6 +75,7 @@ import GlobalStore from "~/store/global";
 import ActivityThree from "~/components/activities/activity-three/ActivityThree.vue";
 import ActivitiesResult from "~/components/activities/activities-result/ActivitiesResult.vue";
 import ActivitiesProgression from "~/components/activities/activities-progression/ActivitiesProgression.vue";
+import ActivitiesKeskidico from "~/components/activities/activities-progression/ActivitiesKeskidico.vue";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
@@ -93,7 +96,8 @@ import ActivityLeave from "~/components/activities/ActivityLeave.vue";
     ActivitiesResult,
     ActivitiesProgression,
     ActivityOnboarding,
-    ActivityLeave
+    ActivityLeave,
+    ActivitiesKeskidico
   }
 })
 export default class ActivityPanel extends Vue {
@@ -111,7 +115,9 @@ export default class ActivityPanel extends Vue {
       this.activityStore.currentActivity ===
       ACTIVITY_TYPE.ACTIVITIES_PROGRESSION,
     onBoarding: () =>
-      this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_ONBOARDING
+      this.activityStore.currentActivity === ACTIVITY_TYPE.ACTIVITY_ONBOARDING,
+    presentKeskidico: () =>
+      this.activityStore.currentActivity === ACTIVITY_TYPE.KESKIDICO
   };
 
   public animationElements = {
