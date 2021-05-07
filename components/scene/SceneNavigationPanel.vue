@@ -17,8 +17,6 @@
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
       class="scene-navigation-panel-button back-home"
       :to="backHomeLink()"
-      @mouseenter.native="playSoundEffect"
-      @mouseleave.native="resetSoundEffect"
     >
       <img src="~/assets/img/home.svg" alt="" />
     </nuxt-link>
@@ -39,8 +37,6 @@
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
       class="scene-navigation-panel-button object-room"
       :to="goBackObjectRoom()"
-      @mouseenter.native="playSoundEffect"
-      @mouseleave.native="resetSoundEffect"
     >
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
@@ -51,7 +47,6 @@
 import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import gsap from "gsap";
-import { defineComponent, useContext,onUpdated } from '@nuxtjs/composition-api'
 import {AssetsManager} from "~/core/managers";
 import {AUDIO_ASSET} from "~/core/enums";
 
