@@ -55,7 +55,7 @@ export default class Helpers {
    * Helper to check if a word is achieved
    */
   public static isActivityWordAchieved(word: Word, achievedWords: Array<UserWordData>) {
-    return achievedWords.find(word => word.id === word!.id)
+    return !!achievedWords.find(wordLoop => wordLoop.id === word.id)
   }
 
   /**
