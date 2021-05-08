@@ -100,11 +100,11 @@ export default class ObjectPage extends Vue {
       el.querySelector('.scenario-container-text'),
       el.querySelector('.btn-discover')
     ], {
-      duration: 1,
+      duration: 0.7,
       autoAlpha: 0,
       stagger: 0.2,
       ease: 'scenarioText'
-    })
+    }, '-=0.4')
   }
 
   transition() {
