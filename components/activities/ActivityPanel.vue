@@ -6,7 +6,7 @@
     </transition>
 
     <!-- Activity two -->
-    <transition v-on:enter="animationEnterActivityTwo">
+    <transition v-on:enter="animationEnterActivityTwo" v-on:leave="animationLeaveActivityTwo">
       <ActivityTwo v-if="activityDisplay.two()" />
     </transition>
 
@@ -184,6 +184,17 @@ export default class ActivityPanel extends Vue {
 
   public animationEnterActivityTwo(el: Element, done: Function) {
     this.animationElements.activityTwo.enter({
+      el,
+      onStart: () => {},
+      onComplete: () => {
+        done();
+      }
+    });
+  }
+
+  public animationLeaveActivityTwo(el: Element, done: Function) {
+    console.log('leave activity two')
+    this.animationElements.activityTwo.leave({
       el,
       onStart: () => {},
       onComplete: () => {
