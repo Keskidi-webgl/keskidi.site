@@ -13,8 +13,10 @@
         Merci d'utiliser un ordinateur.
       </h1>
     </div>
-
+    <!--
     <div v-if="isChrome && !isMobile">
+    -->
+    <div>
       <!-- Loader -->
       <transition v-on:enter="animEnterLoader">
         <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
