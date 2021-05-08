@@ -11,7 +11,9 @@
     </transition>
 
     <!-- Acitivity three   -->
-    <ActivityThree v-if="activityDisplay.three()" />
+    <transition v-on:enter="animationEnterActivityThree">
+      <ActivityThree v-if="activityDisplay.three()" />
+    </transition>
 
     <!-- Activities result -->
     <ActivitiesResult v-if="activityDisplay.result()" />
@@ -62,11 +64,11 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import ActivityOne from "~/components/activities/activity-one/ActivityOne.vue";
-import { ACTIVITY_TYPE } from "~/core/enums";
+import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
@@ -79,13 +81,11 @@ import ActivitiesKeskidico from "~/components/activities/activities-progression/
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
-import {
-  ActivityOneAnimation,
-  OnboardingActivityAnimation
-} from "~/core/animations/activities";
+import {ActivityOneAnimation, ActivityThreeAnimation, OnboardingActivityAnimation} from "~/core/animations/activities";
 import ActivityTwoAnimation from "~/core/animations/activities/ActivityTwoAnimation";
-gsap.registerPlugin(CustomEase);
 import ActivityLeave from "~/components/activities/ActivityLeave.vue";
+
+gsap.registerPlugin(CustomEase);
 
 @Component({
   components: {
@@ -123,7 +123,8 @@ export default class ActivityPanel extends Vue {
   public animationElements = {
     onboarding: new OnboardingActivityAnimation(),
     activityOne: new ActivityOneAnimation(),
-    activityTwo: new ActivityTwoAnimation()
+    activityTwo: new ActivityTwoAnimation(),
+    activityThree: new ActivityThreeAnimation()
   };
 
   public mounted() {
@@ -182,6 +183,7 @@ export default class ActivityPanel extends Vue {
     });
   }
 
+  // Activity 2
   public animationEnterActivityTwo(el: Element, done: Function) {
     this.animationElements.activityTwo.enter({
       el,
@@ -193,8 +195,19 @@ export default class ActivityPanel extends Vue {
   }
 
   public animationLeaveActivityTwo(el: Element, done: Function) {
-    console.log('leave activity two')
     this.animationElements.activityTwo.leave({
+      el,
+      onStart: () => {},
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_3);
+        done();
+      }
+    });
+  }
+
+  // Activity Three
+  public animationEnterActivityThree(el: Element, done: Function) {
+    this.animationElements.activityThree.enter({
       el,
       onStart: () => {},
       onComplete: () => {

@@ -147,16 +147,16 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import ActivityStore from "~/store/activity";
 import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
-import { Step, WordExpression } from "~/core/types";
-import { ApiManager, VoiceRecognitionManager } from "~/core/managers";
+import {Step, WordExpression} from "~/core/types";
+import {ApiManager, VoiceRecognitionManager} from "~/core/managers";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import { ActivitySceneInitializer } from "~/core/utils/initializers/activities";
+import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
-import { ACTIVITY_TYPE } from "~/core/enums";
+import {ACTIVITY_TYPE} from "~/core/enums";
 import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
 import gsap from "gsap";

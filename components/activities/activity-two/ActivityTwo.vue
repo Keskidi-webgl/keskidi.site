@@ -20,7 +20,7 @@
               alt=""
             />
           </div>
-          
+
           <div class="aside-container-footer">
             <span v-if="displayNextActivityButton()" @click="goToNextActivity">Passer à l'activité suivante ></span>
           </div>
@@ -167,7 +167,7 @@ export default class ActivityTwo extends Vue {
   public async mounted() {}
 
   public goToNextActivity() {
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_3);
+    this.activityStore.setCurrentActivity(null);
   }
 
   private goTop() {
