@@ -41,15 +41,10 @@
 
         <div class="content-expressionsWrapper" v-if="activeExpression">
           <div class="content-expressions">
-            <span class="content-expressions--text"
-              >"{{ activeExpression.content }}"</span
-            >
-            <button
-              v-if="globalStore.microphonePermission"
-              class="content-expressions--play"
-              @click="playExpressionAudio"
-            >
+            <span class="content-expressions--text">"{{ activeExpression.content }}"</span>
+            <button ref="playAudio" v-if="globalStore.microphonePermission" class="content-expressions--play" @click="playExpressionAudio">
               <svg
+                ref="playAudioSvg"
                 width="33"
                 height="24"
                 viewBox="0 0 33 24"
@@ -75,12 +70,8 @@
 
           <!-- <h3 v-if="globalStore.microphonePermission">micro active</h3> -->
 
-          <div
-            class="content-recordWrapper"
-            v-if="globalStore.microphonePermission"
-          >
-            <button
-              ref="activityRecord"
+          <div class="content-recordWrapper" v-if="globalStore.microphonePermission">
+            <button ref="activityRecord"
               class="content-expressions--record start-record"
               @click.prevent="startRecordVoice(expression)"
               v-for="(expression, index) in activityStore.dataWord.expressions"
@@ -222,6 +213,8 @@ import ActivityScene from "~/core/scene/ActivityScene";
 import { ACTIVITY_TYPE } from "~/core/enums";
 import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
+import gsap from "gsap";
+
 
 @Component({
   components: {
@@ -264,6 +257,11 @@ export default class ActivityThree extends Vue {
    * Play audio of the current expression
    */
   public playExpressionAudio() {
+    // (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying');
+
+
+    gsap.to((<HTMLAudioElement>this.$refs.playAudio),{backgroundColor: '#000648'});
+    gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children,{stroke: 'white'});
     (<HTMLAudioElement>this.$refs.audioElement).play();
 
     if (!this.globalStore.microphonePermission) {
@@ -508,6 +506,33 @@ export default class ActivityThree extends Vue {
       color: white;
     }
   }
+  .audioPlaying{
+    background: $dark-blue;
+    svg{
+      path{
+        stroke: white;
+      }
+    }
+    &::after {
+      content: "";
+      width: 104px;
+      height: 104px;
+      background-color: rgba(255, 255, 255, 0.3);
+      // background-color: grey;
+      backdrop-filter: blur(10px);
+      border-top: 2px solid rgba(255, 255, 255, 0.2);
+      border-left: 2px solid rgba(255, 255, 255, 0.2);
+      border-bottom: 2px solid $dark-cream;
+      border-right: 2px solid $dark-cream;
+      opacity: 0.5;
+      position: absolute;
+      border-radius: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, -1px);
+      z-index: -1;
+    }
+  }
 }
 .btn-disabled {
   opacity: 0.4;
@@ -544,6 +569,7 @@ export default class ActivityThree extends Vue {
     transition: 0.3s ease all;
   }
 }
+
 @-webkit-keyframes rotate-center {
   0% {
     -webkit-transform: rotate(0);

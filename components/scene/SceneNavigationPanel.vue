@@ -182,10 +182,10 @@ export default class SceneNavigationPanel extends Vue {
         margin: 0;
         height: 20px;
       }
-
-      &:hover .room-name {
-        opacity: 1;
-      }
+      //
+      //&:hover .room-name {
+      //  opacity: 1;
+      //}
 
       img {
         width: 8px;
