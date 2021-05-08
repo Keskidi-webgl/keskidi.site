@@ -262,10 +262,12 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addStickersSkate() {
     const skateSticker = AssetsManager.getGltf(GLTF_ASSET.SKATE_STICKER).data
-    skateSticker.scene.position.set(26.5, 123, 215)
+    skateSticker.scene.position.set(21, 123, 215)
     skateSticker.scene.rotation.y = Helpers.degreeToRadiant(-90)
     GlobalScene.context.scene.add(skateSticker.scene)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.SKATE_STICKER, skateSticker.scene)
+    const animationClip = GlobalScene.context.generateAnimationAction(skateSticker.animations[0], GLTF_ASSET.SKATE_STICKER)
+    animationClip.play()
   }
 
   private _addNotebook() {
@@ -284,6 +286,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.CAT, cat.scene)
     const animationClip = GlobalScene.context.generateAnimationAction(cat.animations[0], GLTF_ASSET.CAT)
     animationClip.play()
+    animationClip.stop()
   }
 
   private _addBedroomPaper() {
