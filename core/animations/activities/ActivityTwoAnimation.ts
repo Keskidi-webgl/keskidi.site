@@ -65,6 +65,13 @@ export default class ActivityTwoAnimation extends AnimationElement {
       autoAlpha: 0,
       ease: 'progressBar'
     }, '-=0.4')
+    // Aside footer
+    tl.from(document.querySelector('.aside-container-footer'), {
+      duration: 0.3,
+      y: 100,
+      autoAlpha: 0,
+      ease: 'progressBar'
+    }, '-=0.2')
     // Content container
     tl.to('.content-container', {
       duration: 0.1,
