@@ -173,6 +173,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addPhone()
     this._addClouds()
     this._addRecordPlayer()
+    this._addComputer()
   }
 
   private _createPlanesBackground(){
@@ -323,6 +324,14 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     animationAction.play()
   }
 
+  private _addComputer() {
+    const computer = AssetsManager.getGltf(GLTF_ASSET.COMPUTER).data
+    GlobalScene.context.scene.add(computer.scene)
+    computer.scene.position.set(270, 109.9, 75)
+    computer.scene.rotation.y = Helpers.degreeToRadiant(-90)
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.COMPUTER, computer.scene)
+  }
+
   /**
    * Add lights to the global scene
    */
@@ -357,6 +366,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.NOTEBOOK)!,
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.PHONE)!,
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.RECORD_PLAYER)!,
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.COMPUTER)!,
     ]
     SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context, true)
   }
