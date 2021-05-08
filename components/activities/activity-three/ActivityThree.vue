@@ -71,7 +71,6 @@
 
           </div>
 
-          <!-- <h3 v-if="globalStore.microphonePermission">micro active</h3> -->
 
           <div class="content-recordWrapper" v-if="globalStore.microphonePermission">
             <button class="recordContainer" ref="activityRecord" v-for="(expression, index) in activityStore.dataWord.expressions" :key="index"  @click.prevent="startRecordVoice(expression)" :disabled="expression.id !== activeExpression.id">
@@ -124,6 +123,7 @@
           </div>
 
           <!--🔇🔇🔇🔇🔇🔇🔇 MICROPHONE IS NOT ALLOWED 🔇🔇🔇🔇🔇🔇-->
+          <!--      TODO -> adapt microphone not allowed with new structure -->
 
           <div class="content-recordWrapper" v-if="!globalStore.microphonePermission">
             <button ref="activityRecord" class="content-expressions--record start-record" @click="playExpressionAudio"
@@ -199,15 +199,16 @@ export default class ActivityThree extends Vue {
     let tl:GSAPTimeline = gsap.timeline({yoyo:true,repeat:-1})
     tl.fromTo(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{scale: 1},{scale:1.2,duration:1})
 
-    // (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess].classList.add("enablePulse");
     VoiceRecognitionManager!.setTextToRecognize(expression.content!);
     VoiceRecognitionManager!.start();
     VoiceRecognitionManager!.onEnd(() => {
-      // (<Array<HTMLButtonElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.remove("isRecording");
-      gsap.to((<Array<HTMLButtonElement>>this.$refs.recordBorder)[this.countExpressionSuccess],{animationPlayState:'paused',borderBottom:'2px solid #ff9d6f',borderLeft:'2px solid #ff9d6f',duration:1})
+      gsap.to((<Array<HTMLButtonElement>>this.$refs.recordBorder)[this.countExpressionSuccess],{
+        animationPlayState:'paused',
+        borderBottom:'2px solid #ff9d6f',
+        borderLeft:'2px solid #ff9d6f',
+        duration:1})
       tl.kill()
 
-      // (<Array<HTMLButtonElement>>this.$refs.recordBtn)[this.countExpressionSuccess].classList.remove("enablePulse");
     });
   }
 
@@ -262,26 +263,30 @@ export default class ActivityThree extends Vue {
       if (result.distance > 0.5) {
 
         let tl:any = gsap.timeline()
-        tl.to((<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess],{opacity:0,duration:0.5})
-        tl.to((<Array<HTMLElement>>this.$refs.iconRecord)[this.countExpressionSuccess],{opacity:0,scale:0.6,duration:0.5})
+        tl.to((<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess], {
+            opacity:0,
+            duration:0.2
+        })
+        tl.to((<Array<HTMLElement>>this.$refs.iconRecord)[this.countExpressionSuccess],{
+          opacity:0,
+          scale:0.6,
+          duration:0.5
+        })
         tl.fromTo((<Array<HTMLElement>>this.$refs.iconValidate)[this.countExpressionSuccess],{opacity:0,scale:0.6,duration:0.5},{opacity:1,scale:1,duration:0.5})
-        tl.to(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{backgroundColor:'blue',scale:1,duration:1,onComplete:()=>{
 
-
-          this.countExpressionSuccess++;
-          if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
-            this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess];
-          }
-
-
-          }},'-0.5')
-
-        // (<Array<HTMLButtonElement>>this.$refs.recordBtn)[this.countExpressionSuccess].classList.remove("enablePulse");
-        // (<Array<HTMLElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add("validateRecord");
-        // gsap.to(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{backgroundColor:'green'})
+        tl.to(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{
+          backgroundColor:'rgb(0, 6, 72)',
+          scale:1,
+          duration:0.5,
+          onComplete:()=>{
+            this.countExpressionSuccess++;
+            if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
+              this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess];
+            }
+          }},
+          '-0.2')
 
         if (this.countExpressionSuccess >= 2) {
-          (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.remove("isRecording");
           (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].disabled = true;
         }
 
@@ -333,8 +338,6 @@ export default class ActivityThree extends Vue {
       max-width: 600px;
       line-height: 1.3;
       z-index: 5;
-      // margin-bottom: 70px;
-
       .doodle {
         position: absolute;
         z-index: -1;
@@ -454,6 +457,9 @@ export default class ActivityThree extends Vue {
         position: absolute;
         opacity: 0;
         z-index: 7;
+        path {
+          stroke: white !important;
+        }
       }
     }
   }
@@ -495,12 +501,7 @@ export default class ActivityThree extends Vue {
 }
 .validateRecord {
   background: $dark-blue !important;
-  .content-expressions--recordValidated {
-    display: block;
-    path {
-      stroke: white !important;
-    }
-  }
+
   .content-expressions--recordActive {
     display: none;
   }
