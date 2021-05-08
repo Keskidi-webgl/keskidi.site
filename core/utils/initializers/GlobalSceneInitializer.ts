@@ -171,6 +171,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addNotebook()
     this._addCat()
     this._addBedroomPaper()
+    this._addPhone()
   }
 
   private _createPlanesBackground(){
@@ -292,6 +293,14 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.PAPER, paper.scene)
   }
 
+  private _addPhone() {
+    const phone = AssetsManager.getGltf(GLTF_ASSET.PHONE).data
+    phone.scene.position.set(-100, 264, -200)
+    phone.scene.rotation.y = Helpers.degreeToRadiant(45)
+    GlobalScene.context.scene.add(phone.scene)
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.PHONE, phone.scene)
+  }
+
   /**
    * Add lights to the global scene
    */
@@ -316,7 +325,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _optimizeScene() {
     const objects: Array<Object3D> = [
-      // GlobalScene.context.scene.getObjectByName(GLTF_ASSET.OUTSIDE)!,
       GlobalScene.context.scene.getObjectByName('tom')!,
       GlobalScene.context.scene.getObjectByName('enceintes')!,
       GlobalScene.context.scene.getObjectByName('tourne_disque')!,
@@ -325,6 +333,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName('cat')!,
       GlobalScene.context.scene.getObjectByName('paper')!,
       GlobalScene.context.scene.getObjectByName('notebook')!,
+      GlobalScene.context.scene.getObjectByName('phone')!,
     ]
     SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context, true)
   }

@@ -16,10 +16,10 @@
 
     <div v-if="isChrome && !isMobile">
       <!-- Loader -->
-      <Loader
-        class="site-loader overlay-element"
-        :loading-data="loadingProgressions"
-      ></Loader>
+      <transition v-on:enter="animEnterLoader">
+        <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
+      </transition>
+
 
       <!-- Progress level -->
       <SoundButton v-if="globalSceneStore.canDisplayGlobalUI"></SoundButton>
@@ -88,6 +88,7 @@ import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
 import SceneProgressLevel from "~/components/scene/SceneProgressLevel.vue";
 import SoundButton from "~/components/global/SoundButton.vue";
+import {LoaderAnimation} from "~/core/animations/loader";
 
 @Component({
   components: {
@@ -108,6 +109,10 @@ export default class DefaultLayout extends Vue {
   public isLoaderVisible: boolean = true;
   public loadingProgressions: string = "";
 
+  public animationElements = {
+    loader: new LoaderAnimation()
+  }
+
   // Auth
   public authStore: AuthStore = getModule(AuthStore, this.$store);
 
@@ -126,9 +131,7 @@ export default class DefaultLayout extends Vue {
 
 
   public async mounted() {
-    if (this.isChrome && !this.isMobile) {
-      await this.initApp();
-    }
+    // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
   }
 
   /**
@@ -174,6 +177,16 @@ export default class DefaultLayout extends Vue {
     })
   }
 
+
+  public async animEnterLoader(el: Element, done: Function) {
+    this.animationElements.loader.enter({
+      el,
+      onComplete: async () => {
+        await this.initApp();
+      },
+      onStart: () => {}
+    })
+  }
 }
 </script>
 

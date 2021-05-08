@@ -21,6 +21,7 @@ export enum GLTF_ASSET {
   SKATE_STICKER = 'skateSticker',
   NOTEBOOK = 'notebook',
   CAT = 'cat',
+  PHONE = 'phone',
 
   TOM = 'tom',
   TOM_MUSCLE = 'tomMuscle',

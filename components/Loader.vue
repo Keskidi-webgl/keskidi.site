@@ -42,6 +42,7 @@
 
       <CustomButton
         :class="{ disabled: !globalStore.isAppInit }"
+        class="overlay-loader-btn"
         @click.native="hide"
         arrow-color="white"
         color="#000648"
@@ -63,6 +64,7 @@ import GlobalSceneStore from "~/store/globalScene";
 import GlobalScene from "~/core/scene/GlobalScene";
 import {AssetsManager} from "~/core/managers";
 import {VIDEO_ASSET} from "~/core/enums";
+import Helpers from "~/core/utils/helpers";
 
 @Component({
   components: {
@@ -74,10 +76,7 @@ export default class Loader extends Vue {
   @Prop({ type: String, required: true })
   readonly loadingData!: InteractionPoint;
   public globalStore: GlobalStore = getModule(GlobalStore, this.$store);
-  public globalSceneStore: GlobalSceneStore = getModule(
-    GlobalSceneStore,
-    this.$store
-  );
+  public globalSceneStore: GlobalSceneStore = getModule(GlobalSceneStore, this.$store);
   public authStore: AuthStore = getModule(AuthStore, this.$store);
   public isActive: boolean = true;
 
