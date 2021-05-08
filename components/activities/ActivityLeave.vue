@@ -9,43 +9,46 @@
           alt=""
         />
       </h2>
-      <p class="main-font p1">
-        Es-tu sûr.e de vouloir
-        <strong
-          ><span
-            >quitter
+      <div class="text-container">
+        <p class="main-font p1">
+          Es-tu sûr.e de vouloir
+          <strong
+            ><span
+              >quitter
+              <img
+                src="~/assets/img/doodle-line.png"
+                class="doodle line-doodle"
+                alt=""
+              />
+            </span>
+            l'activité
+          </strong>
+          ?
+          <img
+            src="~/assets/img/arrow-draft-two.png"
+            class="doodle arrow-two-doodle"
+            alt=""
+          />
+        </p>
+        <p class="main-font p2">
+          Tu
+          <span
+            >perdras
             <img
-              src="~/assets/img/doodle-line.png"
-              class="doodle line-doodle"
+              src="~/assets/img/doodle-packed.png"
+              class="doodle packed-doodle"
               alt=""
             />
           </span>
-          l'activité
-        </strong>
-        ?
-        <img
-          src="~/assets/img/arrow-draft-two.png"
-          class="doodle arrow-two-doodle"
-          alt=""
-        />
-      </p>
-      <p class="main-font p2">
-        Tu
-        <span
-          >perdras
+          toute ta progression...
           <img
-            src="~/assets/img/doodle-packed.png"
-            class="doodle packed-doodle"
+            src="~/assets/img/arrow-draft-one.png"
+            class="doodle arrow-one-doodle"
             alt=""
           />
-        </span>
-        toute ta progression...
-        <img
-          src="~/assets/img/arrow-draft-one.png"
-          class="doodle arrow-one-doodle"
-          alt=""
-        />
-      </p>
+        </p>
+      </div>
+
       <div class="buttons-container">
         <button @click="resumeActivity">Ah non, je continue</button>
         <button @click="hideActivityPanel" class="bg-transparent darkfont">
@@ -108,16 +111,27 @@ export default class ActivityLeave extends Vue {
   padding: 100px;
 
   &--card {
-    width: 100%;
-    height: 100%;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 40px;
     -webkit-backdrop-filter: blur(59.4294px);
     backdrop-filter: blur(59.4294px);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     flex-direction: column;
+    padding: 50px 100px;
+    min-width: 800px;
+    min-height: 500px;
+    height: 100%;
+    width: 100%;
+
+    .text-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
 
     .doodle {
       position: absolute;
@@ -134,7 +148,7 @@ export default class ActivityLeave extends Vue {
       color: $dark-blue;
       mix-blend-mode: normal;
       position: relative;
-      margin-bottom: 60px;
+      // margin-bottom: 60px;
 
       .circle-doodle {
         right: 0;
@@ -153,7 +167,7 @@ export default class ActivityLeave extends Vue {
       position: relative;
 
       &.p1 {
-        margin-bottom: 50px;
+        // margin-bottom: 50px;
 
         .arrow-two-doodle {
           top: -30px;
@@ -191,7 +205,7 @@ export default class ActivityLeave extends Vue {
     }
 
     .buttons-container {
-      margin-top: 88px;
+      // margin-top: 88px;
 
       button {
         padding: 10px 30px;

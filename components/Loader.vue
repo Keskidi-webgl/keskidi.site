@@ -53,17 +53,17 @@
 </template>
 
 <script lang="ts">
-import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
+import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import gsap from "gsap";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
-import {InteractionPoint} from "~/core/config/global-scene/interact-points/types";
+import { InteractionPoint } from "~/core/config/global-scene/interact-points/types";
 import GlobalSceneStore from "~/store/globalScene";
 import GlobalScene from "~/core/scene/GlobalScene";
-import {AssetsManager} from "~/core/managers";
-import {VIDEO_ASSET} from "~/core/enums";
+import { AssetsManager } from "~/core/managers";
+import { VIDEO_ASSET } from "~/core/enums";
 import Helpers from "~/core/utils/helpers";
 
 @Component({
@@ -76,7 +76,10 @@ export default class Loader extends Vue {
   @Prop({ type: String, required: true })
   readonly loadingData!: InteractionPoint;
   public globalStore: GlobalStore = getModule(GlobalStore, this.$store);
-  public globalSceneStore: GlobalSceneStore = getModule(GlobalSceneStore, this.$store);
+  public globalSceneStore: GlobalSceneStore = getModule(
+    GlobalSceneStore,
+    this.$store
+  );
   public authStore: AuthStore = getModule(AuthStore, this.$store);
   public isActive: boolean = true;
 
@@ -105,7 +108,7 @@ export default class Loader extends Vue {
           this.globalSceneStore.setIsHomePageReady(true);
           this.globalSceneStore.setCanDisplayGlobalUI(true);
         }
-        AssetsManager.getVideo(VIDEO_ASSET.TV_SCREEN).data.play()
+        AssetsManager.getVideo(VIDEO_ASSET.TV_SCREEN).data.play();
       }
     });
   }
@@ -143,7 +146,7 @@ export default class Loader extends Vue {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     max-width: 920px;
     margin: 0 auto;
     height: 100%;
@@ -214,7 +217,6 @@ export default class Loader extends Vue {
     &-description {
       text-align: center;
       font-size: 24px;
-      padding: 100px 0;
       z-index: 90;
     }
   }

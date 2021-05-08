@@ -18,84 +18,208 @@
     </template>
     <template v-slot:activity-element-content>
       <div class="content-container">
-
-        <h2 class="content-title main-font">Comme dirait la prof d'anglais, repeat after me :</h2>
+        <h2 class="content-title main-font">
+          Comme dirait la prof d'
+          <span>
+            anglais
+            <img
+              src="~/assets/img/doodle-packed.png"
+              class="doodle packed-doodle"
+              alt=""
+            /> </span
+          >,
+          <span>
+            repeat
+            <img
+              src="~/assets/img/doodle-line.png"
+              class="doodle line-doodle"
+              alt=""
+            />
+          </span>
+          after me :
+        </h2>
 
         <div class="content-expressionsWrapper" v-if="activeExpression">
-
           <div class="content-expressions">
-            <span class="content-expressions--text">"{{ activeExpression.content }}"</span>
-            <button v-if="globalStore.microphonePermission" class="content-expressions--play" @click="playExpressionAudio">
-              <svg width="33" height="24" viewBox="0 0 33 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14.8985 1.93365L7.68303 7.70604H1.91064V16.3646H7.68303L14.8985 22.137V1.93365Z" stroke="#000648" stroke-width="2.5" stroke-linejoin="round"/>
-                <path d="M26.5448 1.83044C29.2501 4.53665 30.7699 8.20657 30.7699 12.0331C30.7699 15.8597 29.2501 19.5296 26.5448 22.2358M21.4506 6.92458C22.8033 8.27768 23.5632 10.1126 23.5632 12.0259C23.5632 13.9392 22.8033 15.7742 21.4506 17.1273" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <span class="content-expressions--text"
+              >"{{ activeExpression.content }}"</span
+            >
+            <button
+              v-if="globalStore.microphonePermission"
+              class="content-expressions--play"
+              @click="playExpressionAudio"
+            >
+              <svg
+                width="33"
+                height="24"
+                viewBox="0 0 33 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.8985 1.93365L7.68303 7.70604H1.91064V16.3646H7.68303L14.8985 22.137V1.93365Z"
+                  stroke="#000648"
+                  stroke-width="2.5"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M26.5448 1.83044C29.2501 4.53665 30.7699 8.20657 30.7699 12.0331C30.7699 15.8597 29.2501 19.5296 26.5448 22.2358M21.4506 6.92458C22.8033 8.27768 23.5632 10.1126 23.5632 12.0259C23.5632 13.9392 22.8033 15.7742 21.4506 17.1273"
+                  stroke="#000648"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
             </button>
           </div>
 
-          <h3 v-if="globalStore.microphonePermission">micro active</h3>
+          <!-- <h3 v-if="globalStore.microphonePermission">micro active</h3> -->
 
-          <div class="content-recordWrapper">
-            <button v-if="globalStore.microphonePermission" ref="activityRecord" class="content-expressions--record start-record"
-                    @click.prevent="startRecordVoice(expression)"
-                    v-for="expression in activityStore.dataWord.expressions"
-                    :disabled="expression.id !== activeExpression.id">
-              <svg class="content-expressions--recordActive" width="28" height="40" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div
+            class="content-recordWrapper"
+            v-if="globalStore.microphonePermission"
+          >
+            <button
+              ref="activityRecord"
+              class="content-expressions--record start-record"
+              @click.prevent="startRecordVoice(expression)"
+              v-for="(expression, index) in activityStore.dataWord.expressions"
+              :key="index"
+              :disabled="expression.id !== activeExpression.id"
+            >
+              <svg
+                class="content-expressions--recordActive"
+                width="28"
+                height="40"
+                viewBox="0 0 28 40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <g>
-                  <path d="M14.0001 1.59088C12.6051 1.59088 11.2673 2.11984 10.2809 3.06138C9.29447 4.00293 8.74033 5.27993 8.74033 6.61148V19.9997C8.74033 21.3313 9.29447 22.6083 10.2809 23.5498C11.2673 24.4914 12.6051 25.0203 14.0001 25.0203C15.395 25.0203 16.7329 24.4914 17.7193 23.5498C18.7057 22.6083 19.2598 21.3313 19.2598 19.9997V6.61148C19.2598 5.27993 18.7057 4.00293 17.7193 3.06138C16.7329 2.11984 15.395 1.59088 14.0001 1.59088V1.59088Z" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M26.2726 16.6529V20C26.2726 23.1069 24.9796 26.0866 22.678 28.2835C20.3765 30.4805 17.2548 31.7147 13.9999 31.7147C10.745 31.7147 7.62338 30.4805 5.3218 28.2835C3.02022 26.0866 1.7272 23.1069 1.7272 20V16.6529" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M13.9999 31.715V38.4091" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M6.98663 38.4083H21.0126" stroke="#FF9D6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path
+                    d="M14.0001 1.59088C12.6051 1.59088 11.2673 2.11984 10.2809 3.06138C9.29447 4.00293 8.74033 5.27993 8.74033 6.61148V19.9997C8.74033 21.3313 9.29447 22.6083 10.2809 23.5498C11.2673 24.4914 12.6051 25.0203 14.0001 25.0203C15.395 25.0203 16.7329 24.4914 17.7193 23.5498C18.7057 22.6083 19.2598 21.3313 19.2598 19.9997V6.61148C19.2598 5.27993 18.7057 4.00293 17.7193 3.06138C16.7329 2.11984 15.395 1.59088 14.0001 1.59088V1.59088Z"
+                    stroke="#FF9D6F"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M26.2726 16.6529V20C26.2726 23.1069 24.9796 26.0866 22.678 28.2835C20.3765 30.4805 17.2548 31.7147 13.9999 31.7147C10.745 31.7147 7.62338 30.4805 5.3218 28.2835C3.02022 26.0866 1.7272 23.1069 1.7272 20V16.6529"
+                    stroke="#FF9D6F"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M13.9999 31.715V38.4091"
+                    stroke="#FF9D6F"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M6.98663 38.4083H21.0126"
+                    stroke="#FF9D6F"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </g>
               </svg>
-              <svg class="content-expressions--recordValidated" width="36" height="23" viewBox="0 0 36 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.63647 9.466L13.3978 21.2274L34.3637 1.28418" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg
+                class="content-expressions--recordValidated"
+                width="36"
+                height="23"
+                viewBox="0 0 36 23"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1.63647 9.466L13.3978 21.2274L34.3637 1.28418"
+                  stroke="white"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
-
             </button>
           </div>
 
-        <!-- MICROPHONE IS NOT ALLOWED -->
+          <!-- MICROPHONE IS NOT ALLOWED -->
 
-          <div class="content-recordWrapper">
-            <button v-if="!globalStore.microphonePermission" ref="activityRecord" class="content-expressions--record start-record"
-                    @click="playExpressionAudio"
-                    v-for="expression in activityStore.dataWord.expressions"
-                    :disabled="expression.id !== activeExpression.id">
-
-              <svg class="content-expressions--recordActive" width="33" height="24" viewBox="0 0 33 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14.8985 1.93365L7.68303 7.70604H1.91064V16.3646H7.68303L14.8985 22.137V1.93365Z" stroke="#000648" stroke-width="2.5" stroke-linejoin="round"/>
-                <path d="M26.5448 1.83044C29.2501 4.53665 30.7699 8.20657 30.7699 12.0331C30.7699 15.8597 29.2501 19.5296 26.5448 22.2358M21.4506 6.92458C22.8033 8.27768 23.5632 10.1126 23.5632 12.0259C23.5632 13.9392 22.8033 15.7742 21.4506 17.1273" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <div
+            class="content-recordWrapper"
+            v-if="!globalStore.microphonePermission"
+          >
+            <button
+              ref="activityRecord"
+              class="content-expressions--record start-record"
+              @click="playExpressionAudio"
+              v-for="(expression, index) in activityStore.dataWord.expressions"
+              :key="index"
+              :disabled="expression.id !== activeExpression.id"
+            >
+              <svg
+                class="content-expressions--recordActive"
+                width="33"
+                height="24"
+                viewBox="0 0 33 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.8985 1.93365L7.68303 7.70604H1.91064V16.3646H7.68303L14.8985 22.137V1.93365Z"
+                  stroke="#000648"
+                  stroke-width="2.5"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M26.5448 1.83044C29.2501 4.53665 30.7699 8.20657 30.7699 12.0331C30.7699 15.8597 29.2501 19.5296 26.5448 22.2358M21.4506 6.92458C22.8033 8.27768 23.5632 10.1126 23.5632 12.0259C23.5632 13.9392 22.8033 15.7742 21.4506 17.1273"
+                  stroke="#000648"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
-
             </button>
           </div>
 
+          <audio
+            style="display: none"
+            ref="audioElement"
+            :src="activeExpression.audio.url"
+          ></audio>
 
-          <audio style="display: none" ref="audioElement" :src='activeExpression.audio.url'></audio>
-
-
-          <CustomButton @click.native="goToResult" v-bind:class="countExpressionSuccess<=2? 'btn-disabled': '' " class="btn-validate" arrow-color="#FFF8EE" color="#000648"
-                        text="Continuer"></CustomButton>
-          <img class="content-img" :src="activityStore.dataWord.activity_data.good_object" alt="">
+          <CustomButton
+            @click.native="goToResult"
+            v-bind:class="countExpressionSuccess <= 2 ? 'btn-disabled' : ''"
+            class="btn-validate"
+            arrow-color="#FFF8EE"
+            color="#000648"
+            text="Continuer"
+          ></CustomButton>
+          <img
+            class="content-img"
+            :src="activityStore.dataWord.activity_data.good_object"
+            alt=""
+          />
         </div>
-
       </div>
     </template>
   </ActivityElement>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import ActivityStore from "~/store/activity"
+import { Component, getModule, Vue } from "nuxt-property-decorator";
+import ActivityStore from "~/store/activity";
 import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
-import {Step, WordExpression} from "~/core/types";
-import {ApiManager, VoiceRecognitionManager} from "~/core/managers";
+import { Step, WordExpression } from "~/core/types";
+import { ApiManager, VoiceRecognitionManager } from "~/core/managers";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
+import { ActivitySceneInitializer } from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
-import {ACTIVITY_TYPE} from "~/core/enums";
+import { ACTIVITY_TYPE } from "~/core/enums";
 import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
 
@@ -107,54 +231,61 @@ import GlobalStore from "~/store/global";
   }
 })
 export default class ActivityThree extends Vue {
-  public authStore = getModule(AuthStore, this.$store)
-  public globalStore = getModule(GlobalStore, this.$store)
-  public activityStore = getModule(ActivityStore, this.$store)
+  public authStore = getModule(AuthStore, this.$store);
+  public globalStore = getModule(GlobalStore, this.$store);
+  public activityStore = getModule(ActivityStore, this.$store);
   public progressBarStep: Step = { id: 3, text: "T'es un ouf !" };
-  public activeExpression: WordExpression | null = null
-  public countExpressionSuccess: number = 0
-
-
+  public activeExpression: WordExpression | null = null;
+  public countExpressionSuccess: number = 0;
 
   public async mounted() {
-    this.activeExpression = this.activityStore.dataWord!.expressions[0]
-    this._createCanvas()
-    this._initVoiceRecognitionManager()
-
+    this.activeExpression = this.activityStore.dataWord!.expressions[0];
+    this._createCanvas();
+    this._initVoiceRecognitionManager();
   }
-
-
 
   /**
    * Start voice recognition for current expression
    */
   public startRecordVoice(expression: WordExpression) {
-
-    (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add('isRecording');
-    VoiceRecognitionManager!.setTextToRecognize(expression.content!)
-    VoiceRecognitionManager!.start()
+    (<Array<HTMLButtonElement>>this.$refs.activityRecord)[
+      this.countExpressionSuccess
+    ].classList.add("isRecording");
+    VoiceRecognitionManager!.setTextToRecognize(expression.content!);
+    VoiceRecognitionManager!.start();
     VoiceRecognitionManager!.onEnd(() => {
-      (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.remove('isRecording');
-    })
+      (<Array<HTMLButtonElement>>this.$refs.activityRecord)[
+        this.countExpressionSuccess
+      ].classList.remove("isRecording");
+    });
   }
 
   /**
    * Play audio of the current expression
    */
   public playExpressionAudio() {
-    (<HTMLAudioElement>this.$refs.audioElement).play()
+    (<HTMLAudioElement>this.$refs.audioElement).play();
 
-    if(!this.globalStore.microphonePermission){
-      (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add('isRecording');
+    if (!this.globalStore.microphonePermission) {
+      (<Array<HTMLButtonElement>>this.$refs.activityRecord)[
+        this.countExpressionSuccess
+      ].classList.add("isRecording");
 
-      (<HTMLAudioElement>this.$refs.audioElement).onended = ()=>{
-        (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.remove('isRecording');
+      (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
+        (<Array<HTMLButtonElement>>this.$refs.activityRecord)[
+          this.countExpressionSuccess
+        ].classList.remove("isRecording");
 
-        this.countExpressionSuccess++
-        if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
-          this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
+        this.countExpressionSuccess++;
+        if (
+          this.countExpressionSuccess <
+          this.activityStore.dataWord!.expressions.length
+        ) {
+          this.activeExpression = this.activityStore.dataWord!.expressions[
+            this.countExpressionSuccess
+          ];
         }
-      }
+      };
     }
   }
 
@@ -162,27 +293,38 @@ export default class ActivityThree extends Vue {
    * Computed value for activity success condition
    */
   async goToResult() {
-    await this._achievedWord()
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT)
+    await this._achievedWord();
+    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT);
   }
 
   /**
    * Init voice recognition manager callbacks
    */
   private _initVoiceRecognitionManager() {
-    VoiceRecognitionManager!.onResult((result => {
+    VoiceRecognitionManager!.onResult(result => {
       if (result.distance > 0.5) {
-        (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add('validateRecord');
+        (<Array<HTMLButtonElement>>this.$refs.activityRecord)[
+          this.countExpressionSuccess
+        ].classList.add("validateRecord");
         if (this.countExpressionSuccess >= 2) {
-          (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.remove('isRecording');
-          (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].disabled = true
+          (<Array<HTMLButtonElement>>this.$refs.activityRecord)[
+            this.countExpressionSuccess
+          ].classList.remove("isRecording");
+          (<Array<HTMLButtonElement>>this.$refs.activityRecord)[
+            this.countExpressionSuccess
+          ].disabled = true;
         }
-        this.countExpressionSuccess++
-        if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
-          this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
+        this.countExpressionSuccess++;
+        if (
+          this.countExpressionSuccess <
+          this.activityStore.dataWord!.expressions.length
+        ) {
+          this.activeExpression = this.activityStore.dataWord!.expressions[
+            this.countExpressionSuccess
+          ];
         }
       }
-    }))
+    });
   }
   private _createCanvas() {
     (<HTMLCanvasElement>this.$refs.tom).height = 500;
@@ -198,9 +340,11 @@ export default class ActivityThree extends Vue {
 
   private async _achievedWord() {
     await ApiManager.request({
-      url: `/users/${this.authStore.user!.id}/words/${this.activityStore.dataWord!.id}/validate`,
-      method: 'POST'
-    })
+      url: `/users/${this.authStore.user!.id}/words/${
+        this.activityStore.dataWord!.id
+      }/validate`,
+      method: "POST"
+    });
     const { data } = await ApiManager.request({
       url: `/users/${this.authStore.user!.id}/words`
     });
@@ -210,78 +354,110 @@ export default class ActivityThree extends Vue {
 </script>
 
 <style scoped lang="scss">
-
 .activity-three {
-
-  .content{
-    &-container{
+  .content {
+    &-container {
       height: 100%;
       display: flex;
       flex-direction: column;
-      padding: 130px 40px 0px 80px;
+      // padding: 130px 40px 0px 80px;
       color: $dark-blue;
+
+      justify-content: space-around;
+      padding: 100px 80px;
     }
-    &-title{
+    &-title {
       font-size: 40px;
       max-width: 600px;
       line-height: 1.3;
-      margin-bottom: 70px;
+      z-index: 5;
+      // margin-bottom: 70px;
+
+      .doodle {
+        position: absolute;
+        z-index: -1;
+      }
+
+      span {
+        position: relative;
+
+        .packed-doodle {
+          bottom: -15px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        .line-doodle {
+          bottom: -15px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
     }
-    &-expressionsWrapper{
+    &-expressionsWrapper {
       display: flex;
       flex-direction: column;
+      height: 100%;
+      justify-content: space-around;
     }
-    &-recordWrapper{
+    &-recordWrapper {
       display: flex;
-      margin-bottom: 50px;
+      margin: 15px 0;
+      // margin-bottom: 50px;
     }
-    &-img{
+    &-img {
       position: absolute;
-      bottom: 20px;
-      right: 30px;
+      bottom: 50px;
+      right: -50px;
       width: 400px;
     }
-    &-expressions{
+    &-expressions {
       display: flex;
       align-items: center;
       position: relative;
       z-index: 5;
-      margin-bottom: 60px;
-      &--text{
-        font-size: 50px;
+      // margin-bottom: 60px;
+      &--text {
+        font-size: 56px;
         font-family: $secondary_font;
         color: $dark-blue;
         max-width: 600px;
       }
-      &--play{
+      &--play {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 90px;
-        height: 90px;
+        width: 77px;
+        height: 77px;
         background: white;
         border-radius: 100%;
         border: unset;
-        box-shadow: 0 4px 25px -1px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 25px -1px rgba(0, 0, 0, 0.15);
         position: relative;
         margin-left: 30px;
         transform-style: preserve-3d;
         //z-index: 5;
-        &::after{
+        &::after {
           content: "";
-          width: 90px;
-          height: 90px;
-          background: white;
+          width: 104px;
+          height: 104px;
+          background-color: rgba(255, 255, 255, 0.3);
+          // background-color: grey;
+          backdrop-filter: blur(10px);
+          border-top: 2px solid rgba(255, 255, 255, 0.2);
+          border-left: 2px solid rgba(255, 255, 255, 0.2);
+          border-bottom: 2px solid $dark-cream;
+          border-right: 2px solid $dark-cream;
           opacity: 0.5;
           position: absolute;
-          top: 0;
           border-radius: 100%;
-          left: 0;
-          transform: scale(1.2) translateZ(-1px);
+          top: 50%;
+          left: 50%;
+          transform: translate3d(-50%, -50%, -1px);
           z-index: -1;
         }
       }
-      &--record{
+      &--record {
         cursor: pointer;
         width: 90px;
         height: 90px;
@@ -296,73 +472,72 @@ export default class ActivityThree extends Vue {
         margin-right: 80px;
         &:after {
           content: "";
-          height: 108px;
-          width: 108px;
+          height: 135px;
+          width: 135px;
           position: absolute;
           border: 2px solid $orange;
           opacity: 0.4;
           border-radius: 50%;
           transition: 0.3s ease all;
         }
-        &:disabled{
+        &:disabled {
           //opacity: 0.4;
           background: #ffefe1;
           cursor: initial;
-          path{
+          path {
             stroke: #ffdfca;
           }
-          &::after{
+          &::after {
             content: unset;
           }
         }
       }
-      &--recordActive{
-        path{
+      &--recordActive {
+        path {
           stroke: white;
         }
       }
-      &--recordValidated{
-        display:none;
+      &--recordValidated {
+        display: none;
       }
-
     }
   }
 
-  .word-container{
-    h1{
+  .word-container {
+    h1 {
       color: white;
     }
   }
 }
-.btn-disabled{
+.btn-disabled {
   opacity: 0.4;
   pointer-events: none;
 }
-.validateRecord{
-  background: $dark-blue!important;
-  .content-expressions--recordValidated{
+.validateRecord {
+  background: $dark-blue !important;
+  .content-expressions--recordValidated {
     display: block;
-    path{
-      stroke: white!important;
+    path {
+      stroke: white !important;
     }
   }
-  .content-expressions--recordActive{
+  .content-expressions--recordActive {
     display: none;
   }
 }
-.clearButton{
-  &:after{
+.clearButton {
+  &:after {
     content: unset;
   }
 }
-.isRecording{
+.isRecording {
   pointer-events: none;
   &:after {
-    opacity: 1!important;
-    border-top: 2px solid $orange!important;
+    opacity: 1 !important;
+    border-top: 2px solid $orange !important;
     border-right: 2px solid $orange !important;
-    border-bottom: 2px solid rgba(255,157,111,0.4) !important;// rgba(255, 255, 255, 0.2);
-    border-left: 2px solid rgba(255,157,111,0.4)  !important;//rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid rgba(255, 157, 111, 0.4) !important; // rgba(255, 255, 255, 0.2);
+    border-left: 2px solid rgba(255, 157, 111, 0.4) !important; //rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     animation: rotate-center 5s linear infinite both !important;
 
@@ -389,5 +564,4 @@ export default class ActivityThree extends Vue {
     transform: rotate(360deg);
   }
 }
-
 </style>

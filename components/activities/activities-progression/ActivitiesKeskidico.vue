@@ -4,29 +4,31 @@
       <img src="~/assets/img/keskidico-logo.svg" alt="" />
     </div>
 
-    <h1 class="activities-title">
-      Retrouve les mots que tu as appris sur ton mobile
-      <img
-        class="activities-doodle"
-        src="~/assets/img/gribouillis_2_blanc.png"
-        alt=""
-      />
-      <img
-        class="activities-heart"
-        src="~/assets/img/gribouillis_coeur_blanc.png"
-        alt=""
-      />
-      <img
-        class="activities-cross"
-        src="~/assets/img/gribouillis_croix_blanc.png"
-        alt=""
-      />
-    </h1>
+    <div class="activities-text-container">
+      <h1 class="activities-title">
+        Retrouve les mots que tu as appris sur ton mobile
+        <img
+          class="activities-doodle"
+          src="~/assets/img/gribouillis_2_blanc.png"
+          alt=""
+        />
+        <img
+          class="activities-heart"
+          src="~/assets/img/gribouillis_coeur_blanc.png"
+          alt=""
+        />
+        <img
+          class="activities-cross"
+          src="~/assets/img/gribouillis_croix_blanc.png"
+          alt=""
+        />
+      </h1>
 
-    <p class="activities-description main-font">
-      Disponible sur l'<strong>App store</strong> et
-      <strong>Goodle play</strong>
-    </p>
+      <p class="activities-description main-font">
+        Disponible sur l'<strong>App store</strong> et
+        <strong>Goodle play</strong>
+      </p>
+    </div>
 
     <CustomButton
       @click.native="hideActivityPanel"
@@ -79,21 +81,27 @@ export default class ActivitiesKeskidico extends Vue {
   right: 0;
   bottom: 0;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 .activities {
+  &-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   &-title {
     font-size: 40px;
     color: white;
     position: relative;
-    margin: 60px 0 20px;
+    text-align: center;
   }
   &-description {
     position: relative;
     color: white;
-    margin-bottom: 170px;
     font-size: 17px;
+    text-align: center;
   }
   &-cross {
     position: absolute;
