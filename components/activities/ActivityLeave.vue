@@ -50,8 +50,8 @@
       </div>
 
       <div class="buttons-container">
-        <button @click="resumeActivity">Ah non, je continue</button>
-        <button @click="hideActivityPanel" class="bg-transparent darkfont">
+        <button @click="resumeActivity" class="main-font">Ah non, je continue</button>
+        <button @click="hideActivityPanel" class="bg-transparent darkfont main-font">
           Oui, pas grave
         </button>
       </div>
