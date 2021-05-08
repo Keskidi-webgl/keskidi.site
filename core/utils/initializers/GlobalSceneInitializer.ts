@@ -75,7 +75,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: true,
+      activateOrbitControl: false,
       onRender: (ctx) => {
         // Add interactions points tracking
         if (ctx.camera instanceof PerspectiveCamera) {
