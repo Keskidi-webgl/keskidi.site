@@ -61,7 +61,9 @@
 
             <CustomButton
               @click.native="validateActivity"
-              class="btn-validate"
+              v-bind:class="
+                userSelection == null ? 'btn-disabled' : 'btn-validate'
+              "
               arrow-color="#FFF8EE"
               color="#000648"
               text="Valider"
@@ -288,6 +290,7 @@ export default class ActivityOne extends Vue {
         justify-content: space-between;
         align-items: center;
         position: relative;
+        width: 100%;
 
         .interrogation {
           position: absolute;
@@ -301,8 +304,13 @@ export default class ActivityOne extends Vue {
           transition: 0.2s ease filter;
           cursor: pointer;
 
-          &:hover,
           &.isSelected {
+            filter: grayscale(0);
+            border-color: $orange;
+            border-style: dashed;
+          }
+
+          &:hover {
             filter: grayscale(0);
           }
 
@@ -317,7 +325,12 @@ export default class ActivityOne extends Vue {
       }
 
       .btn-validate {
-        // margin: 70px auto 0 auto;
+        opacity: 1;
+      }
+
+      .btn-disabled {
+        opacity: 0.4;
+        pointer-events: none;
       }
     }
   }
