@@ -42,7 +42,9 @@
         <div class="content-expressionsWrapper" v-if="activeExpression">
           <div class="content-expressions">
             <span class="content-expressions--text">"{{ activeExpression.content }}"</span>
-            <button ref="playAudio" v-if="globalStore.microphonePermission" class="content-expressions--play" @click="playExpressionAudio">
+            <div class="playWrapper">
+              <button ref="playAudio" v-if="globalStore.microphonePermission" class="content-expressions--play" @click="playExpressionAudio">
+              </button>
               <svg
                 ref="playAudioSvg"
                 width="33"
@@ -65,7 +67,8 @@
                   stroke-linejoin="round"
                 />
               </svg>
-            </button>
+            </div>
+
           </div>
 
           <!-- <h3 v-if="globalStore.microphonePermission">micro active</h3> -->
@@ -257,11 +260,7 @@ export default class ActivityThree extends Vue {
    * Play audio of the current expression
    */
   public playExpressionAudio() {
-    // (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying');
 
-
-    gsap.to((<HTMLAudioElement>this.$refs.playAudio),{backgroundColor: '#000648'});
-    gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children,{stroke: 'white'});
     (<HTMLAudioElement>this.$refs.audioElement).play();
 
     if (!this.globalStore.microphonePermission) {
@@ -284,7 +283,17 @@ export default class ActivityThree extends Vue {
           ];
         }
       };
+    }else {
+      (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying');
+      gsap.to((<HTMLAudioElement>this.$refs.playAudio),{backgroundColor: '#000648'});
+      gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children,{stroke: 'white'});
+      (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
+        (<HTMLAudioElement>this.$refs.playAudio).classList.remove('audioPlaying');
+        gsap.to((<HTMLAudioElement>this.$refs.playAudio),{backgroundColor: 'white'});
+        gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children,{stroke: '#000648'});
+      }
     }
+
   }
 
   /**
@@ -508,6 +517,8 @@ export default class ActivityThree extends Vue {
   }
   .audioPlaying{
     background: $dark-blue;
+    transform-origin: center center;
+    animation: play 1s alternate infinite ease-in-out;
     svg{
       path{
         stroke: white;
@@ -517,13 +528,9 @@ export default class ActivityThree extends Vue {
       content: "";
       width: 104px;
       height: 104px;
-      background-color: rgba(255, 255, 255, 0.3);
-      // background-color: grey;
+      background-color: rgba(0, 6, 72,0.3);
+      border: none;
       backdrop-filter: blur(10px);
-      border-top: 2px solid rgba(255, 255, 255, 0.2);
-      border-left: 2px solid rgba(255, 255, 255, 0.2);
-      border-bottom: 2px solid $dark-cream;
-      border-right: 2px solid $dark-cream;
       opacity: 0.5;
       position: absolute;
       border-radius: 100%;
@@ -569,7 +576,18 @@ export default class ActivityThree extends Vue {
     transition: 0.3s ease all;
   }
 }
-
+.playWrapper{
+  width: 77px;
+  height: 77px;
+  position: relative;
+  svg{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(40%,-50%);
+    pointer-events: none;
+  }
+}
 @-webkit-keyframes rotate-center {
   0% {
     -webkit-transform: rotate(0);
@@ -588,6 +606,15 @@ export default class ActivityThree extends Vue {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
+  }
+}
+
+@keyframes play {
+  0%   {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.2);
   }
 }
 </style>
