@@ -160,6 +160,7 @@ import { ACTIVITY_TYPE } from "~/core/enums";
 import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
 import gsap from "gsap";
+import TomSceneElement from "~/core/scene/TomSceneElement";
 
 
 @Component({
@@ -262,6 +263,9 @@ export default class ActivityThree extends Vue {
     VoiceRecognitionManager!.onResult(result => {
       if (result.distance > 0.5) {
 
+        //            TomSceneElement.playAnimation("idle", ActivityScene.context)
+
+        TomSceneElement.playAnimation("punch", ActivityScene.context)
         let tl:any = gsap.timeline()
         tl.to((<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess], {
             opacity:0,
@@ -283,6 +287,7 @@ export default class ActivityThree extends Vue {
             if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
               this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess];
             }
+            //TomSceneElement.playAnimation("idle", ActivityScene.context)
           }},
           '-0.2')
 
