@@ -37,7 +37,7 @@
 
       <p class="main-font text-common site-loader-container-description">
         Tu n'as rien compris à cette phrase ? Tu es au bon endroit ! Plonge et
-        part à la découverte du langage des jeunes d'aujourd'hui.
+        pars à la découverte du langage des jeunes d'aujourd'hui.
       </p>
 
       <CustomButton
