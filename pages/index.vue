@@ -1,6 +1,7 @@
 <template>
   <div class="page-container" data-namespace="home">
     <InteractionPoints
+      class="interactive-points"
       :data="point"
       v-for="(point, index) in globalSceneStore.activeInteractionPoints"
       :key="index"
@@ -9,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalScene from "~/core/scene/GlobalScene";
 import GlobalSceneStore from "~/store/globalScene";
 import {
@@ -18,7 +19,7 @@ import {
   MezzanineInteractPoint,
   TomInteractPoint
 } from "~/core/config/global-scene/interact-points";
-import { Context } from "@nuxt/types";
+import {Context} from "@nuxt/types";
 import AuthMiddleware from "~/middleware/auth";
 
 @Component
@@ -29,12 +30,23 @@ export default class HomePage extends Vue {
     AuthMiddleware.handle(context);
   }
 
+  transition() {
+    return {
+      enter: (el: Element, done: Function) => {
+        done()
+      },
+      leave: (el: Element, done: Function) => {
+        done()
+      }
+    }
+  }
+
   mounted() {
     this.globalSceneStore.clearActiveRoom();
     const destination = this.globalSceneStore.isHomePageReady
       ? "home"
       : "cloud";
-    const duration = this.globalSceneStore.isHomePageReady ? 2 : 0;
+    const duration = this.globalSceneStore.isHomePageReady ? 1 : 0;
 
     GlobalScene.context.goToPresetPosition(destination, duration, () => {
       this.globalSceneStore.setIsHomePageReady(true);

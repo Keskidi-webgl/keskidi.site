@@ -31,7 +31,7 @@
     </nuxt-link>
     <!-- Page -->
     <div class="rgpd-card">
-      <h1 class="main-font">
+      <h1 class="main-font rgpd-title">
         Mentions légales
         <img
           src="~/assets/img/gribouillis_coeur_blanc.png"
@@ -44,19 +44,19 @@
           alt=""
         />
       </h1>
-      <p>
+      <p class="rgpd-info">
         Votre adresse mail est en sécurité ! Nous prenons soin de vos données.
         Elles sont stockées chez <strong>Amazon AWS</strong>. Vous pouvez, à
         tout moment, demander à supprimer votre compte en nous contactant :
         <strong>contact@keskidi.fr</strong>
       </p>
-      <p>
+      <p class="rgpd-info">
         <strong>"Pourquoi on me demande mon adresse mail ?"</strong> <br />
         Eh bien cela permet de récupérer un identifiant unique pour que vous
         puissiez retrouver votre progression également sur notre application
         Keskidico.
       </p>
-      <p>
+      <p class="rgpd-info">
         <strong>"Est-ce qu'on m'enregistre ?"</strong> <br />
         L'expérience nécessite d'utiliser le micro de votre appareil. On
         n'enregistre pas votre voix, on ne saurait même pas quoi en faire.
@@ -68,14 +68,60 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "nuxt-property-decorator";
+import {Component, Vue} from "nuxt-property-decorator";
+import gsap from "gsap";
+import CustomEase from "gsap/CustomEase";
 
 @Component
 export default class Rgpd extends Vue {
   // Default
   public onProgress: boolean = false;
 
-  mounted() {}
+  transition() {
+    CustomEase.create("card", "M0,0 C0.89,0 0.24,1 1,1 ");
+    return {
+      enter: (el: Element, done: Function) => {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            done()
+          }
+        })
+        tl.from(el, {
+          autoAlpha: 0,
+          duration: 1
+        })
+          .from(el.querySelector('.rgpd-card'), {
+            y: -500,
+            duration: 1.2,
+            ease: 'card',
+            autoAlpha: 0,
+          })
+          .from(el.querySelector('.rgpd-title'), {
+            duration: 1,
+            ease: 'power3',
+            autoAlpha: 0
+          })
+          .from(el.querySelectorAll('p.rgpd-info'), {
+            y: 100,
+            duration: 0.8,
+            autoAlpha: 0,
+            stagger: 0.2
+          }, '-=0.8')
+      },
+      leave: (el: Element, done: Function) => {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            done()
+          }
+        })
+
+        tl.to(el, {
+          duration: 1,
+          autoAlpha: 0,
+        })
+      }
+    }
+  }
 }
 </script>
 

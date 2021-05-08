@@ -6,8 +6,8 @@ import {AnimationElementOptions} from "~/core/animations/types";
 
 export default class ActivityOneAnimation extends AnimationElement {
   constructor() {
-    super();
-    CustomEase.create("aside", "M0,0 C0.89,0 0.24,1 1,1 ")
+    super();CustomEase.create("aside", "M0,0 C0.89,0 0.24,1 1,1 ")
+
     CustomEase.create("wordName", "M0,0 C0.61,0 0.3,1 1,1 ")
     CustomEase.create("instruction", "M0,0 C0.33,0 0.01,1 1,1 ")
     CustomEase.create("cards", "M0,0 C0.33,0 0,1 1,1 ")
