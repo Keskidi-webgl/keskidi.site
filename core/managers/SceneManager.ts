@@ -236,7 +236,11 @@ export default class SceneManager {
       z: newCameraPosition.z,
       ease: "sine.inOut",
       onComplete: () => {
+        this.enableParallax()
         successCallBack(this)
+      },
+      onStart: () => {
+        this.disableParallax()
       }
     });
     gsap.to(this._camera.rotation, {
