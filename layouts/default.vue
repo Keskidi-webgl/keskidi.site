@@ -44,22 +44,25 @@
       <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
 
       <!-- Page Slot -->
-      <Nuxt v-if="this.globalStore.isAppInit" />
+      <Nuxt v-if="this.globalStore.isAppInit"/>
 
       <!-- Navigation panel -->
-      <SceneNavigationPanel
-        v-if="
+      <transition v-on:enter="animEnterNavigationPanel" v-on:leave="animLeaveNavigationPanel">
+        <SceneNavigationPanel
+          v-if="
           (this.globalSceneStore.activeRoom ||
             this.globalSceneStore.activeObject) &&
             globalSceneStore.canDisplayGlobalUI
         "
-      />
+        />
+      </transition>
+
       <!-- Activity panel -->
       <ActivityPanel
         v-if="activityStore.canDisplayActivityPanel"
         class="activity-panel overlay-element"
       />
-      <PreviewScene v-if="globalSceneStore.canDisplayGlobalUI" class="preview" />
+      <PreviewScene v-if="globalSceneStore.canDisplayGlobalUI" class="preview"/>
     </div>
   </div>
 </template>
@@ -89,6 +92,7 @@ import ActivityStore from "~/store/activity";
 import SceneProgressLevel from "~/components/scene/SceneProgressLevel.vue";
 import SoundButton from "~/components/global/SoundButton.vue";
 import {LoaderAnimation} from "~/core/animations/loader";
+import {NavigationPanelAnimation} from "~/core/animations/activities";
 
 @Component({
   components: {
@@ -108,9 +112,9 @@ export default class DefaultLayout extends Vue {
   public activityStore = getModule(ActivityStore, this.$store);
   public isLoaderVisible: boolean = true;
   public loadingProgressions: string = "0";
-
   public animationElements = {
-    loader: new LoaderAnimation()
+    loader: new LoaderAnimation(),
+    navigationPanel: new NavigationPanelAnimation()
   }
 
   // Auth
@@ -128,7 +132,6 @@ export default class DefaultLayout extends Vue {
     window.innerWidth <= 600 && window.innerHeight <= 800;
 
   public permissionStatus!: PermissionStatus
-
 
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
@@ -177,7 +180,30 @@ export default class DefaultLayout extends Vue {
       onComplete: async () => {
         await this.initApp();
       },
-      onStart: () => {}
+      onStart: () => {
+      }
+    })
+  }
+
+  public animEnterNavigationPanel(el: Element, done: Function) {
+    this.animationElements.navigationPanel.enter({
+      el,
+      onComplete: async () => {
+        done()
+      },
+      onStart: () => {
+      }
+    })
+  }
+
+  public animLeaveNavigationPanel(el: Element, done: Function) {
+    this.animationElements.navigationPanel.leave({
+      el,
+      onComplete: async () => {
+        done()
+      },
+      onStart: () => {
+      }
     })
   }
 }
