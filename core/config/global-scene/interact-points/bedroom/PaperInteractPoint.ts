@@ -4,7 +4,7 @@ import { Vector3 } from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import { InteractionPoint } from "~/core/config/global-scene/interact-points/types";
-import { PaperRoomObject } from "~/core/config/global-scene/room-objects";
+import {NotebookRoomObject, PaperRoomObject} from "~/core/config/global-scene/room-objects";
 
 const PaperInteractPoint: InteractionPoint = {
   name: PaperRoomObject.urlSlug,
@@ -14,14 +14,16 @@ const PaperInteractPoint: InteractionPoint = {
   canvasCoords: () => {
     const position = new Vector3();
     GlobalScene.context.scene
-      .getObjectByName("papier_anim")!
+      .getObjectByName("paper")!
       .getWorldPosition(position);
 
     return position;
   },
 
-  isCompleted: () => {
-    return false;
+  isCompleted: (globalStore: GlobalStore) => {
+    return globalStore.userWordData!.some(
+      word => word.id === PaperRoomObject.wordId && word.is_achieved
+    );
   },
 
   isVisible(globalStore: GlobalStore, authStore: AuthStore): boolean {

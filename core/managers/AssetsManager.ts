@@ -1,4 +1,4 @@
-import {AssetSource, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types";
+import {AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types";
 import {ASSET_TYPE} from "~/core/enums";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
@@ -24,6 +24,7 @@ class AssetsManager {
   private _videoAssets: Array<VideoAsset>
   private _gltfAssets: Array<GltfAsset>
   private _fbxAssets: Array<FbxAsset>
+  private _audioAssets: Array<AudioAsset>
   private _isLocalMode: boolean = false
 
   // -- Loaders
@@ -41,6 +42,7 @@ class AssetsManager {
     this._videoAssets = []
     this._gltfAssets = []
     this._fbxAssets = []
+    this._audioAssets = []
 
     this._gltfLoader = new GLTFLoader()
     this._fbxLoader = new FBXLoader()
@@ -114,6 +116,15 @@ class AssetsManager {
   }
 
   /**
+   * Register new image asset source
+   */
+  public registerAudio(name: string, url: string, localUrl: string | null = null) {
+    this._registerSource(name, ASSET_TYPE.AUDIO, url, localUrl)
+
+    return this
+  }
+
+  /**
    * Retrieve gltf asset loaded
    */
   public getGltf(name: string): GltfAsset {
@@ -154,6 +165,16 @@ class AssetsManager {
   }
 
   /**
+   * Retrieve audio asset loaded
+   */
+  public getAudio(name: string): AudioAsset {
+    const audio = this._audioAssets.find(audio => audio.source.name === name) || null
+    if (!audio) throw new Error(`Audio asset ${name} is not founded`)
+
+    return audio
+  }
+
+  /**
    * Register new asset source
    */
   private _registerSource(name: string, type: ASSET_TYPE, url: string, localUrl: string | null) {
@@ -183,6 +204,9 @@ class AssetsManager {
         case ASSET_TYPE.FBX:
           await this._loadFbx(source)
           break
+        case ASSET_TYPE.AUDIO:
+          await this._loadAudio(source)
+          break;
       }
     } catch (error) {
       this._onErrorCallback()
@@ -236,6 +260,17 @@ class AssetsManager {
         resolve()
       })
     })
+  }
+
+  /**
+   * Audio loader handler
+   */
+  private async _loadAudio(source: AssetSource) {
+    const response = await fetch(source.url)
+    const audio = new Audio()
+    const audioData = await response.blob()
+    audio.src = URL.createObjectURL(audioData)
+    this._audioAssets.push({source, data: audio})
   }
 
 }

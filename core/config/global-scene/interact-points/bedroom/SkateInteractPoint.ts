@@ -4,7 +4,7 @@ import { Vector3 } from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import { InteractionPoint } from "~/core/config/global-scene/interact-points/types";
-import { SkateRoomObject } from "~/core/config/global-scene/room-objects";
+import {NotebookRoomObject, SkateRoomObject} from "~/core/config/global-scene/room-objects";
 
 const SkateInteractPoint: InteractionPoint = {
   name: SkateRoomObject.urlSlug,
@@ -20,8 +20,10 @@ const SkateInteractPoint: InteractionPoint = {
     return position;
   },
 
-  isCompleted: () => {
-    return false;
+  isCompleted: (globalStore: GlobalStore) => {
+    return globalStore.userWordData!.some(
+      word => word.id === SkateRoomObject.wordId && word.is_achieved
+    );
   },
 
   isVisible(globalStore: GlobalStore, authStore: AuthStore): boolean {

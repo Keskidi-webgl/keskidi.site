@@ -61,6 +61,9 @@
 
             <CustomButton
               @click.native="validateActivity"
+              v-bind:class="
+                userSelection == null ? 'btn-disabled' : 'btn-enable'
+              "
               class="btn-validate"
               arrow-color="#FFF8EE"
               color="#000648"
@@ -77,25 +80,24 @@
         :result-data="activityResultData"
       />
     </transition>
-
   </div>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from "nuxt-property-decorator";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
-import {ActivityOneResultData, Step, UserSelection} from "~/core/types";
+import { ActivityOneResultData, Step, UserSelection } from "~/core/types";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
+import { ActivitySceneInitializer } from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
 import ChoiceCard from "~/components/cards/ChoiceCard.vue";
-import {ActivityOneResultAnimation} from "~/core/animations/activities";
+import { ActivityOneResultAnimation } from "~/core/animations/activities";
 import TomSceneElement from "~/core/scene/TomSceneElement";
-import gsap from 'gsap'
+import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
 
 @Component({
@@ -110,7 +112,7 @@ import CustomEase from "gsap/CustomEase";
 export default class ActivityOne extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
-  public progressBarStep: Step = {id: 1, text: "Allez narvalo !"};
+  public progressBarStep: Step = { id: 1, text: "Allez narvalo !" };
   public displayActivityResult: boolean = false;
   public activityResultData: ActivityOneResultData = {
     answerWord: "",
@@ -120,7 +122,7 @@ export default class ActivityOne extends Vue {
 
   public animations = {
     resultEnter: new ActivityOneResultAnimation()
-  }
+  };
 
   public blockChoices: Array<UserSelection> = [
     {
@@ -151,7 +153,9 @@ export default class ActivityOne extends Vue {
   }
 
   public validateActivity() {
-    const goodAnswer = this.userSelection!.url === this.activityStore.dataWord!.activity_data!.good_object;
+    const goodAnswer =
+      this.userSelection!.url ===
+      this.activityStore.dataWord!.activity_data!.good_object;
 
     this.activityResultData = {
       goodObjectUrl: this.activityStore.dataWord!.activity_data!.good_object,
@@ -162,43 +166,49 @@ export default class ActivityOne extends Vue {
     };
 
     goodAnswer
-      ? TomSceneElement.playAnimation('punch', ActivityScene.context)
-      : TomSceneElement.playAnimation('down', ActivityScene.context)
-    this.beforeEnterResultAnimation()
+      ? TomSceneElement.playAnimation("punch", ActivityScene.context)
+      : TomSceneElement.playAnimation("down", ActivityScene.context);
+    this.beforeEnterResultAnimation();
   }
 
   public beforeEnterResultAnimation() {
-    CustomEase.create("asideExtend", "M0,0 C0.61,0 0.44,1 1,1 ")
+    CustomEase.create("asideExtend", "M0,0 C0.89,0 0.24,1 1,1 ");
     const hiddenElements = [
-      document.querySelector('.aside-container'),
-      document.querySelector('.word-name'),
-      document.querySelector('.exercise-block'),
-    ]
+      document.querySelector(".aside-container"),
+      document.querySelector(".word-name"),
+      document.querySelector(".exercise-block")
+    ];
     const tl = gsap.timeline({
       onComplete: () => {
         this.displayActivityResult = true;
       }
-    })
-    tl.to(hiddenElements, {
-      duration: 1,
-      autoAlpha: 0
-    }, 1)
-      .to('.activity-element-aside', {
+    });
+    tl.to(
+      hiddenElements,
+      {
+        duration: 1,
+        autoAlpha: 0
+      },
+      1
+    ).to(
+      ".activity-element-aside",
+      {
         width: window.innerWidth,
         duration: 1,
-        ease: 'asideExtend',
-      }, 2)
+        ease: "asideExtend"
+      },
+      2
+    );
   }
 
   public enterResultAnimation(el: Element, done: Function) {
     this.animations.resultEnter.enter({
       el,
-      onStart: () => {
-      },
+      onStart: () => {},
       onComplete: () => {
-        done()
+        done();
       }
-    })
+    });
   }
 
   private _createCanvas() {
@@ -237,7 +247,10 @@ export default class ActivityOne extends Vue {
 
       .exercise-block {
         margin: 0 auto;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
+        align-items: center;
         max-width: 756px;
         padding: 20px;
 
@@ -278,6 +291,7 @@ export default class ActivityOne extends Vue {
         justify-content: space-between;
         align-items: center;
         position: relative;
+        width: 100%;
 
         .interrogation {
           position: absolute;
@@ -291,8 +305,13 @@ export default class ActivityOne extends Vue {
           transition: 0.2s ease filter;
           cursor: pointer;
 
-          &:hover,
           &.isSelected {
+            filter: grayscale(0);
+            border-color: $orange;
+            border-style: dashed;
+          }
+
+          &:hover {
             filter: grayscale(0);
           }
 
@@ -306,8 +325,13 @@ export default class ActivityOne extends Vue {
         }
       }
 
-      .btn-validate {
-        margin: 70px auto 0 auto;
+      .btn-enable{
+        opacity: 1 !important;
+      }
+
+      .btn-disabled {
+        opacity: 0.4;
+        pointer-events: none;
       }
     }
   }

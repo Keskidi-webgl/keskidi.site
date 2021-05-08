@@ -1,12 +1,12 @@
 <template>
   <div>
+    <!-- Warnings -->
     <div v-if="!isChrome" class="browser-check">
       <h1 class="main-font">
         Cette expérience ne fonctionne pas avec ce navigateur. <br />
         Merci d'utiliser Chrome.
       </h1>
     </div>
-
     <div v-if="isMobile" class="browser-check">
       <h1 class="main-font">
         Cette expérience ne fonctionne pas sur mobile. <br />
@@ -16,84 +16,94 @@
 
     <div v-if="isChrome && !isMobile">
       <!-- Loader -->
-      <Loader
-        class="site-loader overlay-element"
-        :loading-data="loadingProgressions"
-      ></Loader>
+      <transition v-on:enter="animEnterLoader">
+        <Loader class="site-loader overlay-element" :loading-data="loadingProgressions"></Loader>
+      </transition>
 
-      <audio
-        ref="sound"
-        class="ambient-sound"
-        src="drill.mp3"
-        autoplay
-        style="display: none"
-      ></audio>
 
-      <sound @click.native="toggleSound"></sound>
+      <!-- Progress level -->
+      <SoundButton v-if="globalSceneStore.canDisplayGlobalUI"></SoundButton>
+
       <!-- Progress level -->
       <SceneProgressLevel
         class="progress-level"
         v-if="authStore.isAuth && globalSceneStore.canDisplayGlobalUI"
       ></SceneProgressLevel>
+
       <!-- Logo -->
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
+
+      <!-- About page -->
+      <nuxt-link v-if="globalSceneStore.canDisplayGlobalUI" to="/about" class="about-btn">
+        <div>
+          <p class="point-name main-font">A propos</p>
+        </div>
+      </nuxt-link>
+
       <!-- Global scene -->
       <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
+
       <!-- Page Slot -->
-      <Nuxt v-if="this.globalStore.isAppInit" />
+      <Nuxt v-if="this.globalStore.isAppInit"/>
+
       <!-- Navigation panel -->
-      <SceneNavigationPanel
-        v-if="
+      <transition v-on:enter="animEnterNavigationPanel" v-on:leave="animLeaveNavigationPanel">
+        <SceneNavigationPanel
+          v-if="
           (this.globalSceneStore.activeRoom ||
             this.globalSceneStore.activeObject) &&
             globalSceneStore.canDisplayGlobalUI
         "
-      />
+        />
+      </transition>
+
       <!-- Activity panel -->
       <ActivityPanel
         v-if="activityStore.canDisplayActivityPanel"
         class="activity-panel overlay-element"
       />
-
-      <PreviewScene v-if="globalSceneStore.canDisplayGlobalUI" class="preview" />
+      <PreviewScene v-if="globalSceneStore.canDisplayGlobalUI" class="preview"/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import { AssetsManager, ProgressPercentManager } from "~/core/managers";
-import { AssetManagerInitializer } from "~/core/utils/initializers";
+import {AssetsManager} from "~/core/managers";
+import {AssetManagerInitializer} from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 
 // Scene
 import PreviewScene from "~/components/global/PreviewScene.vue";
 import GlobalSceneStore from "~/store/globalScene";
+import CustomButton from "~/components/buttons/CustomButton.vue";
 
 // Auth
 import AuthStore from "~/store/auth";
 
 // Progress Level
-import { Level } from "~/core/types";
-import { Room } from "~/core/config/global-scene/rooms/types";
+import {Level} from "~/core/types";
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
-import Sound from "~/components/sound/sound.vue";
 import SceneProgressLevel from "~/components/scene/SceneProgressLevel.vue";
+import SoundButton from "~/components/global/SoundButton.vue";
+import {LoaderAnimation} from "~/core/animations/loader";
+import {NavigationPanelAnimation} from "~/core/animations/activities";
 
 @Component({
   components: {
-    Sound,
     SceneNavigationPanel,
     LogoMedia,
     ActivityOnboarding,
     ActivityPanel,
     SceneProgressLevel,
-    PreviewScene
+    PreviewScene,
+    SoundButton,
+    CustomButton
   }
 })
 export default class DefaultLayout extends Vue {
@@ -101,7 +111,11 @@ export default class DefaultLayout extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
   public isLoaderVisible: boolean = true;
-  public loadingProgressions: string = "";
+  public loadingProgressions: string = "0";
+  public animationElements = {
+    loader: new LoaderAnimation(),
+    navigationPanel: new NavigationPanelAnimation()
+  }
 
   // Auth
   public authStore: AuthStore = getModule(AuthStore, this.$store);
@@ -112,58 +126,15 @@ export default class DefaultLayout extends Vue {
   public level: Level | null = null;
   public words: number = 0;
 
-  // Sound
-  public sound: HTMLAudioElement | null = null;
-
   // Warnings
   public isChrome: boolean = navigator.userAgent.indexOf("Chrome") != -1;
   public isMobile: boolean =
     window.innerWidth <= 600 && window.innerHeight <= 800;
 
+  public permissionStatus!: PermissionStatus
+
   public async mounted() {
-    if (this.isChrome && !this.isMobile) {
-      if (!this.globalStore.isSoundEnabled) {
-        let bars = document.querySelectorAll(".sound-bar");
-        let audio = this.$refs.sound as HTMLAudioElement;
-        audio.pause();
-        bars.forEach(item => {
-          item.classList.remove("sound-barActive");
-        });
-      }
-      await this.initApp();
-    }
-  }
-
-  async initProgressLevel() {
-    const userAchievedWords = this.globalStore.achievedWords.length;
-    const words = this.globalStore.userWordData
-      ? this.globalStore.userWordData!.length
-      : 0;
-    ProgressPercentManager.words = words;
-    ProgressPercentManager.userAchievedWords = userAchievedWords;
-    this.level = ProgressPercentManager.current;
-    this.percent = ProgressPercentManager.percent;
-    this.progress = userAchievedWords;
-    this.words = words;
-  }
-
-  toggleSound() {
-    // TODO --> refacto
-    let audio = this.$refs.sound as HTMLAudioElement;
-    let bars = document.querySelectorAll(".sound-bar");
-    if (audio.paused) {
-      audio.play();
-      this.globalStore.setUserAudioPreferences(true);
-      bars.forEach(item => {
-        item.classList.add("sound-barActive");
-      });
-    } else {
-      audio.pause();
-      this.globalStore.setUserAudioPreferences(false);
-      bars.forEach(item => {
-        item.classList.remove("sound-barActive");
-      });
-    }
+    // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
   }
 
   /**
@@ -184,8 +155,56 @@ export default class DefaultLayout extends Vue {
         globalStore: this.globalStore
       }).init();
 
+      this._getMicrophonePermissions()
+
       this.globalStore.setIsAppInit(true);
     }
+  }
+
+ private _getMicrophonePermissions() {
+    let that:this = this
+    navigator.permissions.query(
+      { name: 'microphone' }
+    ).then(function(permissionStatus){
+      that.permissionStatus = permissionStatus
+      that.permissionStatus.onchange = function(){
+      }
+      that.permissionStatus.state === 'granted' ? that.globalStore.setMicrophonePermission(true) : that.globalStore.setMicrophonePermission(false)
+    })
+  }
+
+
+  public async animEnterLoader(el: Element, done: Function) {
+    this.animationElements.loader.enter({
+      el,
+      onComplete: async () => {
+        await this.initApp();
+      },
+      onStart: () => {
+      }
+    })
+  }
+
+  public animEnterNavigationPanel(el: Element, done: Function) {
+    this.animationElements.navigationPanel.enter({
+      el,
+      onComplete: async () => {
+        done()
+      },
+      onStart: () => {
+      }
+    })
+  }
+
+  public animLeaveNavigationPanel(el: Element, done: Function) {
+    this.animationElements.navigationPanel.leave({
+      el,
+      onComplete: async () => {
+        done()
+      },
+      onStart: () => {
+      }
+    })
   }
 }
 </script>
@@ -211,7 +230,7 @@ export default class DefaultLayout extends Vue {
 .progress-level {
   margin: 24px;
   position: absolute;
-  z-index: 40;
+  z-index: 35;
 }
 .logo {
   width: 100px;
@@ -220,6 +239,32 @@ export default class DefaultLayout extends Vue {
   z-index: 40;
   left: 50%;
   transform: translate(-50%, 0px);
+}
+.about-btn {
+  margin: 24px;
+  position: absolute;
+  z-index: 35;
+  right: 0;
+  cursor: pointer;
+
+  p {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 132%;
+    text-align: center;
+    font-feature-settings: "liga" off;
+    color: $dark-blue;
+    transition: 0.1s ease all;
+  }
+
+  &:hover {
+    text-decoration: none;
+
+    p {
+      color: $orange;
+    }
+  }
 }
 canvas {
   position: fixed;
@@ -254,7 +299,7 @@ canvas {
 }
 
 .preview {
-  z-index: 40;
+  z-index: 35;
   position: absolute;
   bottom: 0;
   right: 0;

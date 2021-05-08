@@ -48,6 +48,7 @@ export default class ChoiceCard extends Vue {
     position: absolute;
     top: -40%;
     animation: slide-top 3s ease-in-out infinite alternate both;
+    transition: 0.3s ease all;
   }
 
   .choice-title {

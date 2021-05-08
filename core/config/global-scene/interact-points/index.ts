@@ -6,6 +6,7 @@ export {default as TomInteractPoint} from './global/TomInteractPoint'
 
 // MEZZANINE
 export {default as TelevisionInteractPoint} from './mezzanine/TelevisionInteractPoint'
+export {default as PhoneInteractPoint} from './mezzanine/PhoneInteractPoint'
 
 // BEDROOM
 export {default as PaperInteractPoint} from './bedroom/PaperInteractPoint'
@@ -14,3 +15,4 @@ export {default as SkateInteractPoint} from './bedroom/SkateInteractPoint'
 
 // LOUNGE
 export {default as VinylInteractPoint} from './lounge/VinylInteractPoint'
+export {default as NotebookInteractPoint} from './lounge/NotebookInteractPoint'

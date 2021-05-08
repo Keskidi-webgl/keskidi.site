@@ -1,36 +1,71 @@
 <template>
   <div class="preview-scene">
-    <img :src="getScene()" class="doodle" alt="" />
+    <!-- <img :src="getScene()" class="doodle" alt="" /> -->
+
+    <img
+      src="~/assets/img/house/global.png"
+      v-bind:class="{ active: !globalSceneStore.activeRoom }"
+      class="doodle"
+      alt=""
+    />
+    <img
+      src="~/assets/img/house/lounge.png"
+      v-bind:class="{
+        active:
+          globalSceneStore.activeRoom &&
+          globalSceneStore.activeRoom.urlSlug == roomSlug.LOUNGE
+      }"
+      class="doodle"
+      alt=""
+    />
+    <img
+      src="~/assets/img/house/bedroom.png"
+      v-bind:class="{
+        active:
+          globalSceneStore.activeRoom &&
+          globalSceneStore.activeRoom.urlSlug == roomSlug.BEDROOM
+      }"
+      class="doodle"
+      alt=""
+    />
+    <img
+      src="~/assets/img/house/mezzanine.png"
+      v-bind:class="{
+        active:
+          globalSceneStore.activeRoom &&
+          globalSceneStore.activeRoom.urlSlug == roomSlug.MEZZANINE
+      }"
+      class="doodle"
+      alt=""
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
+import { ROOM_SLUG } from "~/core/config/global-scene/rooms/enums";
 
 @Component
 export default class PreviewScene extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
-
-  mounted() {
-    console.log(this.getScene());
-  }
+  public roomSlug = ROOM_SLUG;
 
   getScene() {
     if (this.globalSceneStore.activeRoom)
       return require("~/assets/img/house/" +
         this.globalSceneStore.activeRoom!.name +
-        ".png");
-    else return require("~/assets/img/house/global.png");
+        ".svg");
+    else return require("~/assets/img/house/global.svg");
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .preview-scene {
-  padding: 25px;
-  height: 90px;
-  width: 90px;
+  padding: 18px;
+  height: 65px;
+  width: 65px;
   background: linear-gradient(
     146.31deg,
     rgba(255, 255, 255, 0.4) 7.41%,
@@ -49,10 +84,15 @@ export default class PreviewScene extends Vue {
   border-bottom: 1px solid rgba(247, 202, 176, 0.2);
   border-left: 1px solid rgba(243, 173, 133, 0.3);
 
-  transform: rotate(30deg);
+  img {
+    position: absolute;
+    opacity: 0;
+    transition: 0.3s ease all;
+    height: 30px;
 
-  .doodle {
-    transform: rotate(-30deg);
+    &.active {
+      opacity: 1 !important;
+    }
   }
 }
 </style>

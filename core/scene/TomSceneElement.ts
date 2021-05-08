@@ -2,6 +2,7 @@ import {AnimationAction, AnimationClip, Group} from "three";
 import {TomAnimation, TomAnimationName} from "~/core/types";
 import {SceneManager} from "~/core/managers";
 import {GLTF_ASSET} from "~/core/enums";
+import Helpers from "~/core/utils/helpers";
 
 /**
  * This class is a manager for Tom fbx object. We retrieve one instance of fbx object to use it in different scenes
@@ -9,7 +10,7 @@ import {GLTF_ASSET} from "~/core/enums";
 class TomSceneElement {
   private _sceneElement: Group | null
   private _animations: TomAnimation | null
-  private _activeAnimationAction: AnimationAction | null
+  private _activeAnimationAction: {data: AnimationAction, name: TomAnimationName} | null
 
   constructor() {
     this._sceneElement = null
@@ -41,7 +42,7 @@ class TomSceneElement {
 
     this._sceneElement!.scale.set(0.8, 0.8, 0.8)
     this._sceneElement!.position.set(50, 40, 500)
-    this._sceneElement!.rotation.y = -45
+    this._sceneElement!.rotation.y = Helpers.degreeToRadiant(-25)
 
     return this
   }
@@ -74,9 +75,12 @@ class TomSceneElement {
     animationActionToPlay.reset()
 
     if (this._activeAnimationAction) {
-      this._activeAnimationAction.fadeOut(1)
+      this._activeAnimationAction.data.fadeOut(1)
     }
-    this._activeAnimationAction = animationActionToPlay
+    this._activeAnimationAction = {
+      data: animationActionToPlay,
+      name: animationName
+    }
 
     animationActionToPlay.fadeIn(1)
     animationActionToPlay.play()
@@ -102,6 +106,10 @@ class TomSceneElement {
     this._checkIfInit()
 
     return this._sceneElement!
+  }
+
+  get activeAnimationAction() {
+    return this._activeAnimationAction
   }
 
 }

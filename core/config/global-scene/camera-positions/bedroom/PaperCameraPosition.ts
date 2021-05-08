@@ -8,7 +8,7 @@ const PaperCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GlobalScene.context.scene.getObjectByName('papier_anim')!.getWorldPosition(lookAtPosition)
+    GlobalScene.context.scene.getObjectByName('paper')!.getWorldPosition(lookAtPosition)
     lookAtPosition.x = lookAtPosition.x * 0.95
     lookAtPosition.z = lookAtPosition.z * 1.1
 

@@ -1,12 +1,16 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName.objectName">
-    <CustomCard v-if="this.activityStore.dataWord" class="scenario-container" background-color="white" width="460">
-      <span v-if="this.activityStore.dataWord.home_scenario" class="scenario-container-text text-common">
-        {{ this.activityStore.dataWord.home_scenario.content }}
+    <transition v-on:enter="enterAnimScenarioCard">
+      <CustomCard v-if="activityStore.dataWord && canDisplayScenarioCard" class="scenario-container"
+                  background-color="white" width="460">
+      <span v-if="activityStore.dataWord.home_scenario" class="scenario-container-text text-common">
+        {{ activityStore.dataWord.home_scenario.content }}
       </span>
-      <CustomButton class="btn-discover" @click.native="startActivity" arrow-color="white" color="#000648"
-                    :text="getButtonWord()"></CustomButton>
-    </CustomCard>
+        <CustomButton class="btn-discover" @click.native="startActivity" arrow-color="white" color="#000648"
+                      :text="getButtonWord()"></CustomButton>
+      </CustomCard>
+    </transition>
+
   </div>
 </template>
 
@@ -25,6 +29,9 @@ import {ROOM_OBJECT_SLUG} from "~/core/config/global-scene/room-objects/enums";
 import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 import GlobalScene from "~/core/scene/GlobalScene";
 import Helpers from "~/core/utils/helpers";
+import GlobalSceneHelper from "~/core/config/global-scene/GlobalSceneHelper";
+import gsap from 'gsap'
+import CustomEase from "gsap/CustomEase";
 
 @Component({
   components: {
@@ -38,6 +45,7 @@ export default class ObjectPage extends Vue {
   public activityStore = getModule(ActivityStore, this.$store)
   public globalStore = getModule(GlobalStore, this.$store)
   public canDisplayActivityPanel = false
+  public canDisplayScenarioCard = false
 
   middleware(context: Context) {
     AuthMiddleware.handle(context)
@@ -52,29 +60,67 @@ export default class ObjectPage extends Vue {
 
   async mounted() {
     const roomObjectSlug = <ROOM_OBJECT_SLUG>this.$route.params.objectName
+    const object = GlobalSceneHelper.getRoomObjectBySlug(roomObjectSlug)
     this.globalSceneStore.setActiveObject(roomObjectSlug)
-    console.log(this.globalSceneStore.activeObject)
-
     this.globalSceneStore.setIsCameraMoving(true)
-    GlobalScene.context.goToPresetPosition(roomObjectSlug, 1, () => {
+    if (object.animation) {
+      object.animation()
+    }
+    GlobalScene.context.goToPresetPosition(roomObjectSlug, 2, () => {
       this.globalSceneStore.setIsCameraMoving(false)
+      this.canDisplayScenarioCard = true
     })
     this._setDataWord()
   }
-
 
   public startActivity() {
     this.activityStore.displayActivityPanel()
   }
 
   public beforeDestroy() {
-    this.globalSceneStore.setActiveObject(null)
+
   }
 
   public getButtonWord() {
     const isWordAchieved = Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
     const verb = isWordAchieved ? 'Voir' : 'Découvrir'
     return `${verb} le mot ${this.activityStore.dataWord!.name}`
+  }
+
+  public enterAnimScenarioCard(el: Element, done: Function) {
+    CustomEase.create("container", "M0,0 C0.89,0 0.24,1 1,1 ");
+    CustomEase.create("scenarioText", "M0,0 C0.61,0 0.3,1 1,1 ")
+    const tl = gsap.timeline()
+    tl.from(el, {
+      scale: 0,
+      duration: 0.7,
+      ease: 'container'
+    }, 0)
+    .from([
+      el.querySelector('.scenario-container-text'),
+      el.querySelector('.btn-discover')
+    ], {
+      duration: 0.7,
+      autoAlpha: 0,
+      stagger: 0.2,
+      ease: 'scenarioText'
+    }, '-=0.4')
+  }
+
+  transition() {
+    return {
+      leave:(el: Element, done: Function) => {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            done()
+          }
+        })
+        tl.to(el.querySelector('.scenario-container'), {
+          autoAlpha: 0,
+          duration: 0.7,
+        })
+      }
+    }
   }
 
   /**

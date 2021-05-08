@@ -31,7 +31,8 @@ export default class RoomPage extends Vue {
   mounted() {
     const roomSlug = <ROOM_SLUG>this.$route.params.roomName
     this.globalSceneStore.setIsCameraMoving(true)
-    GlobalScene.context.goToPresetPosition(roomSlug, 2, () => {
+    GlobalScene.context.goToPresetPosition(roomSlug, 1.5, () => {
+      this.globalSceneStore.setActiveObject(null)
       this.globalSceneStore.setActiveRoom(roomSlug)
       this.addInteractionPoints()
       this.globalSceneStore.setIsCameraMoving(false)

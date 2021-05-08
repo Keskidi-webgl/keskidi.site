@@ -1,0 +1,48 @@
+[
+    {
+        "title": "Naël Messaoudene",
+        "description": "Développeur",
+        "contentType": "image",
+        "content": "~/assets/img/team/nael.jpg"
+    },
+    {
+        "title": "Aurélie Mery",
+        "description": "Designer",
+        "contentType": "image",
+        "content": "~/assets/img/team/aurelie.jpg"
+    },
+    {
+        "title": "Amélie Mouillac",
+        "description": "Développeur",
+        "contentType": "image",
+        "content": "~/assets/img/team/amelie.jpg"
+    },
+    {
+        "title": "Camille Farge",
+        "description": "Designer",
+        "contentType": "image",
+        "content": "~/assets/img/team/camille.jpg"
+    },
+    {
+        "title": "Théo Champion",
+        "description": "Développeur",
+        "contentType": "image",
+        "content": "~/assets/img/team/theo.jpg"
+    },
+    {
+        "title": "Oriane De Figueiredo",
+        "description": "Designer",
+        "contentType": "image",
+        "content": "~/assets/img/team/oriane.jpg"
+    },
+    {
+        "title": "Keski se cache derrière",
+        "description": "Fait avec amour",
+        "contentType": "text",
+        "content": [
+            "Ici, expliquer en quelque mot le projet et tout ce qu'on a fait blablabla et hop.",
+            "Ici décrire les origines et le contexte de réalisation de projet.",
+            "Ici pourquoi pas mettre une date ou je sais pas..."
+        ]
+    }
+]

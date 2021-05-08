@@ -10,15 +10,14 @@
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from 'nuxt-property-decorator'
-import GlobalSceneStore from "~/store/globalScene"
-import ActivityStore from "~/store/activity"
+import { Component, getModule, Vue } from "nuxt-property-decorator";
+import GlobalSceneStore from "~/store/globalScene";
+import ActivityStore from "~/store/activity";
 
 @Component({})
-
 export default class ActivityElement extends Vue {
-  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
-  public activityStore = getModule(ActivityStore, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store);
+  public activityStore = getModule(ActivityStore, this.$store);
 }
 </script>
 
@@ -33,7 +32,7 @@ export default class ActivityElement extends Vue {
   &-aside {
     width: 480px;
     //max-width: 30%;
-    background: linear-gradient(107.28deg, #FF6644 29.48%, #FF9D6F 100%);
+    background: linear-gradient(107.28deg, #ff6644 29.48%, #ff9d6f 100%);
     padding: 80px 60px 0 60px;
     box-sizing: border-box;
     position: relative;
@@ -46,7 +45,7 @@ export default class ActivityElement extends Vue {
   }
 
   &-content {
-    background: #FFF8EE;
+    background: $dark-cream;
     flex: 1;
     height: 100%;
     overflow-y: scroll;
