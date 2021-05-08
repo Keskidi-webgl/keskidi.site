@@ -67,16 +67,12 @@ export default class SceneNavigationPanel extends Vue {
   }
 
   public nextSceneLink() {
-    console.log(this.nextSplitedRoom())
-    console.log(this.prevSplitedRoom())
     let nextRoom = this.globalSceneStore.activeRoom?.nextRoom();
     this.next = nextRoom?.nameForHuman;
     return nextRoom?.name;
   }
 
   public previousSceneLink() {
-    console.log(this.prevSplitedRoom())
-    console.log(this.nextSplitedRoom())
     let prevRoom = this.globalSceneStore.activeRoom?.previousRoom();
     this.prev = prevRoom?.nameForHuman;
     return prevRoom?.fullUrl;

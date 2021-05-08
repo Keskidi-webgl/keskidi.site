@@ -6,6 +6,7 @@ export {default as TomInteractPoint} from './global/TomInteractPoint'
 
 // MEZZANINE
 export {default as TelevisionInteractPoint} from './mezzanine/TelevisionInteractPoint'
+export {default as PhoneInteractPoint} from './mezzanine/PhoneInteractPoint'
 
 // BEDROOM
 export {default as PaperInteractPoint} from './bedroom/PaperInteractPoint'

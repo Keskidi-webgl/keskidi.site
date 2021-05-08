@@ -25,7 +25,7 @@
 
           <div class="content-expressions">
             <span class="content-expressions--text">"{{ activeExpression.content }}"</span>
-            <button class="content-expressions--play" @click="playExpressionAudio">
+            <button v-if="globalStore.microphonePermission" class="content-expressions--play" @click="playExpressionAudio">
               <svg width="33" height="24" viewBox="0 0 33 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.8985 1.93365L7.68303 7.70604H1.91064V16.3646H7.68303L14.8985 22.137V1.93365Z" stroke="#000648" stroke-width="2.5" stroke-linejoin="round"/>
                 <path d="M26.5448 1.83044C29.2501 4.53665 30.7699 8.20657 30.7699 12.0331C30.7699 15.8597 29.2501 19.5296 26.5448 22.2358M21.4506 6.92458C22.8033 8.27768 23.5632 10.1126 23.5632 12.0259C23.5632 13.9392 22.8033 15.7742 21.4506 17.1273" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -33,10 +33,11 @@
             </button>
           </div>
 
+          <h3 v-if="globalStore.microphonePermission">micro active</h3>
 
           <div class="content-recordWrapper">
-            <button ref="activityRecord" class="content-expressions--record start-record"
-                    @click="startRecordVoice(expression)"
+            <button v-if="globalStore.microphonePermission" ref="activityRecord" class="content-expressions--record start-record"
+                    @click.prevent="startRecordVoice(expression)"
                     v-for="expression in activityStore.dataWord.expressions"
                     :disabled="expression.id !== activeExpression.id">
               <svg class="content-expressions--recordActive" width="28" height="40" viewBox="0 0 28 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,6 +54,23 @@
 
             </button>
           </div>
+
+        <!-- MICROPHONE IS NOT ALLOWED -->
+
+          <div class="content-recordWrapper">
+            <button v-if="!globalStore.microphonePermission" ref="activityRecord" class="content-expressions--record start-record"
+                    @click="playExpressionAudio"
+                    v-for="expression in activityStore.dataWord.expressions"
+                    :disabled="expression.id !== activeExpression.id">
+
+              <svg class="content-expressions--recordActive" width="33" height="24" viewBox="0 0 33 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.8985 1.93365L7.68303 7.70604H1.91064V16.3646H7.68303L14.8985 22.137V1.93365Z" stroke="#000648" stroke-width="2.5" stroke-linejoin="round"/>
+                <path d="M26.5448 1.83044C29.2501 4.53665 30.7699 8.20657 30.7699 12.0331C30.7699 15.8597 29.2501 19.5296 26.5448 22.2358M21.4506 6.92458C22.8033 8.27768 23.5632 10.1126 23.5632 12.0259C23.5632 13.9392 22.8033 15.7742 21.4506 17.1273" stroke="#000648" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+            </button>
+          </div>
+
 
           <audio style="display: none" ref="audioElement" :src='activeExpression.audio.url'></audio>
 
@@ -96,16 +114,22 @@ export default class ActivityThree extends Vue {
   public activeExpression: WordExpression | null = null
   public countExpressionSuccess: number = 0
 
-  public mounted() {
+
+
+  public async mounted() {
     this.activeExpression = this.activityStore.dataWord!.expressions[0]
     this._createCanvas()
     this._initVoiceRecognitionManager()
+
   }
+
+
 
   /**
    * Start voice recognition for current expression
    */
   public startRecordVoice(expression: WordExpression) {
+
     (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add('isRecording');
     VoiceRecognitionManager!.setTextToRecognize(expression.content!)
     VoiceRecognitionManager!.start()
@@ -119,6 +143,19 @@ export default class ActivityThree extends Vue {
    */
   public playExpressionAudio() {
     (<HTMLAudioElement>this.$refs.audioElement).play()
+
+    if(!this.globalStore.microphonePermission){
+      (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.add('isRecording');
+
+      (<HTMLAudioElement>this.$refs.audioElement).onended = ()=>{
+        (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].classList.remove('isRecording');
+
+        this.countExpressionSuccess++
+        if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
+          this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
+        }
+      }
+    }
   }
 
   /**
@@ -319,6 +356,7 @@ export default class ActivityThree extends Vue {
   }
 }
 .isRecording{
+  pointer-events: none;
   &:after {
     opacity: 1!important;
     border-top: 2px solid $orange!important;

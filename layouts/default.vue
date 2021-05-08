@@ -127,6 +127,8 @@ export default class DefaultLayout extends Vue {
   public isMobile: boolean =
     window.innerWidth <= 600 && window.innerHeight <= 800;
 
+  public permissionStatus!: PermissionStatus
+
 
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
@@ -150,9 +152,31 @@ export default class DefaultLayout extends Vue {
         globalStore: this.globalStore
       }).init();
 
+      this._getMicrophonePermissions()
+
       this.globalStore.setIsAppInit(true);
     }
   }
+
+ private _getMicrophonePermissions() {
+    let that:this = this
+    navigator.permissions.query(
+      { name: 'microphone' }
+    ).then(function(permissionStatus){
+
+      that.permissionStatus = permissionStatus
+      console.log(permissionStatus.state); // granted, denied, prompt
+
+      that.permissionStatus.onchange = function(){
+        console.log("Permission changed to " + this.state);
+      }
+
+      that.permissionStatus.state === 'granted' ? that.globalStore.setMicrophonePermission(true) : that.globalStore.setMicrophonePermission(false)
+
+      console.log(that.globalStore.microphonePermission)
+    })
+  }
+
 
   public async animEnterLoader(el: Element, done: Function) {
     this.animationElements.loader.enter({

@@ -1,6 +1,11 @@
 <template>
   <div class="page-container about-page" data-namespace="about-page">
     <div class="about-page-container">
+      <!-- Rgpd link -->
+      <nuxt-link to="/rgpd" class="activity-panel--rgpd">
+        Mentions légales
+      </nuxt-link>
+
       <!-- Leave about page -->
       <nuxt-link to="/" class="activity-panel--cross">
         <svg
@@ -187,6 +192,13 @@ export default class TestProgressPage extends Vue {
   width: 100vw;
   background-color: $blue-grey;
 
+  .logo {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 24px;
+  }
+  
   &-container {
     position: absolute;
     top: 0;
@@ -194,35 +206,44 @@ export default class TestProgressPage extends Vue {
     height: 100%;
     width: 100vw;
 
-    .logo {
+    .activity-panel--rgpd {
       position: absolute;
-      bottom: 0;
-      right: 0;
-      margin: 24px;
-    }
+      top: 30px;
+      left: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      transition: 0.3s ease all;
+      text-align: center;
 
-    .activity-panel {
-      //background-color: #FFF8EE;
-      &--cross {
-        position: absolute;
-        top: 30px;
-        right: 30px;
-        background: linear-gradient(
-            146.31deg,
-            rgba(255, 255, 255, 0.4) 7.41%,
-            rgba(255, 255, 255, 0.1) 94.07%
-        );
-        box-shadow: 0px 4px 25px -1px rgba(190, 190, 190, 0.15);
-        backdrop-filter: blur(20px);
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 100%;
-        cursor: pointer;
+      &:hover {
+        color: $orange;
+        text-decoration: none;
       }
     }
+
+    .activity-panel--cross {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: linear-gradient(
+          146.31deg,
+          rgba(255, 255, 255, 0.4) 7.41%,
+          rgba(255, 255, 255, 0.1) 94.07%
+      );
+      box-shadow: 0px 4px 25px -1px rgba(190, 190, 190, 0.15);
+      backdrop-filter: blur(20px);
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100%;
+      cursor: pointer;
+    }
+
 
     .slider {
       position: absolute;
@@ -383,4 +404,5 @@ export default class TestProgressPage extends Vue {
     }
   }
 }
+
 </style>
