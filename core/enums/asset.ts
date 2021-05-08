@@ -23,6 +23,7 @@ export enum GLTF_ASSET {
   CAT = 'cat',
   PHONE = 'phone',
   CLOUDS = 'clouds',
+  RECORD_PLAYER = 'recordPlayer',
 
   TOM = 'tom',
   TOM_MUSCLE = 'tomMuscle',
