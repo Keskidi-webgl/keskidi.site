@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "nuxt-property-decorator";
+import { Component, Vue } from "nuxt-property-decorator";
 import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
 
@@ -83,44 +83,48 @@ export default class Rgpd extends Vue {
       enter: (el: Element, done: Function) => {
         const tl = gsap.timeline({
           onComplete: () => {
-            done()
+            done();
           }
-        })
+        });
         tl.from(el, {
           autoAlpha: 0,
           duration: 1
         })
-          .from(el.querySelector('.rgpd-card'), {
+          .from(el.querySelector(".rgpd-card"), {
             y: -500,
             duration: 1.2,
-            ease: 'card',
-            autoAlpha: 0,
-          })
-          .from(el.querySelector('.rgpd-title'), {
-            duration: 1,
-            ease: 'power3',
+            ease: "card",
             autoAlpha: 0
           })
-          .from(el.querySelectorAll('p.rgpd-info'), {
-            y: 100,
-            duration: 0.8,
-            autoAlpha: 0,
-            stagger: 0.2
-          }, '-=0.8')
+          .from(el.querySelector(".rgpd-title"), {
+            duration: 1,
+            ease: "power3",
+            autoAlpha: 0
+          })
+          .from(
+            el.querySelectorAll("p.rgpd-info"),
+            {
+              y: 100,
+              duration: 0.8,
+              autoAlpha: 0,
+              stagger: 0.2
+            },
+            "-=0.8"
+          );
       },
       leave: (el: Element, done: Function) => {
         const tl = gsap.timeline({
           onComplete: () => {
-            done()
+            done();
           }
-        })
+        });
 
         tl.to(el, {
           duration: 1,
-          autoAlpha: 0,
-        })
+          autoAlpha: 0
+        });
       }
-    }
+    };
   }
 }
 </script>
@@ -130,7 +134,7 @@ export default class Rgpd extends Vue {
   z-index: 39;
   height: 100vh;
   width: 100vw;
-  background-color: $dark-orange;
+  background: linear-gradient(107.28deg, #ff6644 29.48%, #ff9d6f 100%);
   display: flex;
   justify-content: center;
   align-items: center;
