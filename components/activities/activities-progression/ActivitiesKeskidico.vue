@@ -26,7 +26,7 @@
 
       <p class="activities-description main-font">
         Disponible sur l'<strong>App store</strong> et
-        <strong>Goodle play</strong>
+        <strong>Google play</strong>
       </p>
     </div>
 
