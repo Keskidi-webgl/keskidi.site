@@ -127,7 +127,7 @@ export default class DefaultLayout extends Vue {
   public isMobile: boolean =
     window.innerWidth <= 600 && window.innerHeight <= 800;
 
-  public permissionStatus: PermissionStatus
+  public permissionStatus!: PermissionStatus
 
 
   public async mounted() {
