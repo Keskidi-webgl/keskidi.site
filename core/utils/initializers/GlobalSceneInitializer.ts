@@ -172,6 +172,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addBedroomPaper()
     this._addPhone()
     this._addClouds()
+    this._addRecordPlayer()
   }
 
   private _createPlanesBackground(){
@@ -261,7 +262,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addStickersSkate() {
     const skateSticker = AssetsManager.getGltf(GLTF_ASSET.SKATE_STICKER).data
-    skateSticker.scene.position.set(26.5, 123, 215)
+    skateSticker.scene.position.set(21, 123, 215)
     skateSticker.scene.rotation.y = Helpers.degreeToRadiant(-90)
     GlobalScene.context.scene.add(skateSticker.scene)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.SKATE_STICKER, skateSticker.scene)
@@ -283,6 +284,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.CAT, cat.scene)
     const animationClip = GlobalScene.context.generateAnimationAction(cat.animations[0], GLTF_ASSET.CAT)
     animationClip.play()
+    animationClip.stop()
   }
 
   private _addBedroomPaper() {
@@ -308,6 +310,16 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     clouds.scene.position.set(0, 400, 0)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.CLOUDS, clouds.scene)
     const animationAction = GlobalScene.context.generateAnimationAction(clouds.animations[0], GLTF_ASSET.CLOUDS)
+    animationAction.play()
+  }
+
+  private _addRecordPlayer() {
+    const recordPlayer = AssetsManager.getGltf(GLTF_ASSET.RECORD_PLAYER).data
+    GlobalScene.context.scene.add(recordPlayer.scene)
+    recordPlayer.scene.position.set(-34, 122.3, 142)
+    recordPlayer.scene.rotation.y = Helpers.degreeToRadiant(180)
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.RECORD_PLAYER, recordPlayer.scene)
+    const animationAction = GlobalScene.context.generateAnimationAction(recordPlayer.animations[0], GLTF_ASSET.RECORD_PLAYER)
     animationAction.play()
   }
 
@@ -340,10 +352,11 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName('tourne_disque')!,
       GlobalScene.context.scene.getObjectByName('lampe_bureau')!,
       GlobalScene.context.scene.getObjectByName('guirlande')!,
-      GlobalScene.context.scene.getObjectByName('cat')!,
-      GlobalScene.context.scene.getObjectByName('paper')!,
-      GlobalScene.context.scene.getObjectByName('notebook')!,
-      GlobalScene.context.scene.getObjectByName('phone')!,
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.CAT)!,
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.PAPER)!,
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.NOTEBOOK)!,
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.PHONE)!,
+      GlobalScene.context.scene.getObjectByName(GLTF_ASSET.RECORD_PLAYER)!,
     ]
     SceneHelper.replaceByBasicMaterial(objects, GlobalScene.context, true)
   }
