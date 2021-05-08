@@ -74,68 +74,64 @@
           <!-- <h3 v-if="globalStore.microphonePermission">micro active</h3> -->
 
           <div class="content-recordWrapper" v-if="globalStore.microphonePermission">
-            <button ref="activityRecord"
-              class="content-expressions--record start-record"
-              @click.prevent="startRecordVoice(expression)"
-              v-for="(expression, index) in activityStore.dataWord.expressions"
-              :key="index"
-              :disabled="expression.id !== activeExpression.id"
-            >
-              <svg
-                class="content-expressions--recordActive"
-                width="28"
-                height="40"
-                viewBox="0 0 28 40"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g>
+            <button class="recordContainer" ref="activityRecord" v-for="(expression, index) in activityStore.dataWord.expressions" :key="index"  @click.prevent="startRecordVoice(expression)" :disabled="expression.id !== activeExpression.id">
+              <div  class="content-expressions--record start-record">
+                <svg
+                  class="content-expressions--recordActive"
+                  width="28"
+                  height="40"
+                  viewBox="0 0 28 40"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g>
+                    <path
+                      d="M14.0001 1.59088C12.6051 1.59088 11.2673 2.11984 10.2809 3.06138C9.29447 4.00293 8.74033 5.27993 8.74033 6.61148V19.9997C8.74033 21.3313 9.29447 22.6083 10.2809 23.5498C11.2673 24.4914 12.6051 25.0203 14.0001 25.0203C15.395 25.0203 16.7329 24.4914 17.7193 23.5498C18.7057 22.6083 19.2598 21.3313 19.2598 19.9997V6.61148C19.2598 5.27993 18.7057 4.00293 17.7193 3.06138C16.7329 2.11984 15.395 1.59088 14.0001 1.59088V1.59088Z"
+                      stroke="#FF9D6F"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M26.2726 16.6529V20C26.2726 23.1069 24.9796 26.0866 22.678 28.2835C20.3765 30.4805 17.2548 31.7147 13.9999 31.7147C10.745 31.7147 7.62338 30.4805 5.3218 28.2835C3.02022 26.0866 1.7272 23.1069 1.7272 20V16.6529"
+                      stroke="#FF9D6F"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M13.9999 31.715V38.4091"
+                      stroke="#FF9D6F"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M6.98663 38.4083H21.0126"
+                      stroke="#FF9D6F"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </g>
+                </svg>
+                <svg
+                  class="content-expressions--recordValidated"
+                  width="36"
+                  height="23"
+                  viewBox="0 0 36 23"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path
-                    d="M14.0001 1.59088C12.6051 1.59088 11.2673 2.11984 10.2809 3.06138C9.29447 4.00293 8.74033 5.27993 8.74033 6.61148V19.9997C8.74033 21.3313 9.29447 22.6083 10.2809 23.5498C11.2673 24.4914 12.6051 25.0203 14.0001 25.0203C15.395 25.0203 16.7329 24.4914 17.7193 23.5498C18.7057 22.6083 19.2598 21.3313 19.2598 19.9997V6.61148C19.2598 5.27993 18.7057 4.00293 17.7193 3.06138C16.7329 2.11984 15.395 1.59088 14.0001 1.59088V1.59088Z"
-                    stroke="#FF9D6F"
+                    d="M1.63647 9.466L13.3978 21.2274L34.3637 1.28418"
+                    stroke="white"
                     stroke-width="2.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   />
-                  <path
-                    d="M26.2726 16.6529V20C26.2726 23.1069 24.9796 26.0866 22.678 28.2835C20.3765 30.4805 17.2548 31.7147 13.9999 31.7147C10.745 31.7147 7.62338 30.4805 5.3218 28.2835C3.02022 26.0866 1.7272 23.1069 1.7272 20V16.6529"
-                    stroke="#FF9D6F"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M13.9999 31.715V38.4091"
-                    stroke="#FF9D6F"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M6.98663 38.4083H21.0126"
-                    stroke="#FF9D6F"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </g>
-              </svg>
-              <svg
-                class="content-expressions--recordValidated"
-                width="36"
-                height="23"
-                viewBox="0 0 36 23"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1.63647 9.466L13.3978 21.2274L34.3637 1.28418"
-                  stroke="white"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+                </svg>
+              </div>
             </button>
           </div>
 
@@ -477,16 +473,16 @@ export default class ActivityThree extends Vue {
         border: unset;
         position: relative;
         margin-right: 80px;
-        &:after {
-          content: "";
-          height: 135px;
-          width: 135px;
-          position: absolute;
-          border: 2px solid $orange;
-          opacity: 0.4;
-          border-radius: 50%;
-          transition: 0.3s ease all;
-        }
+        //&:after {
+        //  content: "";
+        //  height: 135px;
+        //  width: 135px;
+        //  position: absolute;
+        //  border: 2px solid $orange;
+        //  opacity: 0.4;
+        //  border-radius: 50%;
+        //  transition: 0.3s ease all;
+        //}
         &:disabled {
           //opacity: 0.4;
           background: #ffefe1;
@@ -572,7 +568,6 @@ export default class ActivityThree extends Vue {
     border-left: 2px solid rgba(255, 157, 111, 0.4) !important; //rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     animation: rotate-center 5s linear infinite both !important;
-
     transition: 0.3s ease all;
   }
 }
@@ -586,6 +581,30 @@ export default class ActivityThree extends Vue {
     left: 50%;
     transform: translate(40%,-50%);
     pointer-events: none;
+  }
+}
+.recordContainer{
+  position: relative;
+  height: 135px;
+  width: 135px;
+  margin-right: 80px;
+  background: transparent;
+  border: 2px solid $orange;
+  border-radius: 50%;
+  transition: 0.3s ease all;
+  &:disabled {
+    //opacity: 0.4;
+    div{
+      background: #ffefe1;
+      cursor: initial;
+    }
+
+    path {
+      stroke: #ffdfca;
+    }
+    &::after {
+      content: unset;
+    }
   }
 }
 @-webkit-keyframes rotate-center {
