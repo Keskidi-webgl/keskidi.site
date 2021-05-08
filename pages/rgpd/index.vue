@@ -1,7 +1,7 @@
 <template>
   <div class="page-container" data-namespace="rgpd-page">
     <!-- About link -->
-    <nuxt-link to="/about" class="activity-panel--about">
+    <nuxt-link to="/about" class="activity-panel--about main-font">
       A propos
     </nuxt-link>
     <!-- Leave about page -->
