@@ -154,7 +154,7 @@ export default class DefaultLayout extends Vue {
         globalSceneStore: this.globalSceneStore,
         globalStore: this.globalStore
       }).init();
-
+      console.log('asset manager init')
       this._getMicrophonePermissions()
 
       this.globalStore.setIsAppInit(true);

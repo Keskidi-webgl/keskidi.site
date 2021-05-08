@@ -20,6 +20,7 @@ export default class AppInitializer extends Initializers<{ axios: NuxtAxiosInsta
     new TomSceneElementInitializer(null).init()
     new GlobalSceneInitializer({canvas: this._data.canvas, globalSceneStore: this._data.globalSceneStore}).init()
     await new WordDataInitializer({globalStore: this._data.globalStore}).init()
+    console.log('app init')
   }
 
 }
