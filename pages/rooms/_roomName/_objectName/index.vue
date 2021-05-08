@@ -78,7 +78,7 @@ export default class ObjectPage extends Vue {
   }
 
   public beforeDestroy() {
-    this.globalSceneStore.setActiveObject(null)
+
   }
 
   public getButtonWord() {
@@ -105,6 +105,22 @@ export default class ObjectPage extends Vue {
       stagger: 0.2,
       ease: 'scenarioText'
     })
+  }
+
+  transition() {
+    return {
+      leave:(el: Element, done: Function) => {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            done()
+          }
+        })
+        tl.to(el.querySelector('.scenario-container'), {
+          autoAlpha: 0,
+          duration: 0.7,
+        })
+      }
+    }
   }
 
   /**
