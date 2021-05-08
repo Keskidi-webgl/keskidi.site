@@ -1,174 +1,306 @@
 <template>
-  <div class="progress-level">
-    <div class="circle">
-      <span class="main-font"
-        ><strong class="number">{{ progress }}</strong> <br />
-        {{ progress > 1 ? "MOTS" : "MOT" }}</span
-      >
-    </div>
-    <div class="jauge" id="bar">
-      <div class="progress" :style="{ width: `${percent}%` }">
-        <div class="star">
-          <img
-            src="~/assets/img/progress-max-words-star.svg"
-            class="doodle"
-            alt=""
-          />
-          <span class="main-font"> {{ total }} </span>
-        </div>
+  <div class="progress-level" v-bind:class="{ active: canShow }">
+    <div class="container-level">
+      <div class="circle-level" @click="show">
+        <p class="main-font suffix">Mots appris</p>
+        <p class="main-font stats">
+          <span class="number">{{ this.getProgress() }}</span>
+          <span class="total">/ {{ this.getTotal() }} </span>
+        </p>
       </div>
-      <div
-        class="item main-font"
-        v-for="(level, index) in levels"
-        :key="index"
-        :style="{ left: `${level.position}%` }"
-      >
-        <span v-if="level.order != 0">{{ level.name }}</span>
+
+      <div class="jauge-level">
+        <div
+          class="level-item"
+          v-for="(level, index) in this.getLevels()"
+          :key="index"
+          :class="{
+            current: getLevel().name === level.name,
+            validated: level.order < getLevel().order,
+            blocked: level.order > getLevel().order
+          }"
+        >
+          <div class="level-badge">
+            <img :src="getIcon(level)" alt="" />
+          </div>
+          <div class="level-description">
+            <p class="main-font level-name">
+              <strong>{{ level.name }}</strong>
+            </p>
+            <p class="main-font level-words">
+              {{ Math.round((level.position / 100) * getTotal()) }} mots appris
+            </p>
+          </div>
+        </div>
+        <div class="bar-level">
+          <div class="percent-level" :style="{ height: getPercent() }"></div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "nuxt-property-decorator";
+import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
 import { Level } from "~/core/types";
+import { ProgressPercentManager } from "~/core/managers";
+import GlobalStore from "~/store/global";
 
 // Code Example
 // https://css-tricks.com/building-progress-ring-quickly/
 
 @Component
 export default class ProgressLevel extends Vue {
-  @Prop({ type: Number, required: true }) readonly total!: number;
-  @Prop({ type: Number, required: true }) readonly progress!: number;
-  @Prop({ type: String, required: true }) readonly level!: string;
-  @Prop({ type: Array, required: true }) readonly levels!: Array<Level>;
+  public globalStore = getModule(GlobalStore, this.$store);
+  public canShow: boolean = false;
 
-  public circumference: number = 0;
-  public normalizedRadius: number = 0;
-  public isReady: boolean = false;
-  public percent: number =
-    this.total == 0 ? 0 : (this.progress * 100) / this.total;
+  mounted() {
+    ProgressPercentManager.init(this.getProgress(), this.getTotal());
+  }
+
+  show() {
+    this.canShow = !this.canShow;
+  }
+
+  public getProgress() {
+    return this.globalStore.achievedWords.length;
+  }
+
+  public getTotal() {
+    return this.globalStore.dataWord.length;
+  }
+
+  public getPercent() {
+    return this.getTotal() == 0
+      ? "0%"
+      : (this.getProgress() * 100) / this.getTotal() + "%";
+  }
+
+  public getLevels() {
+    return ProgressPercentManager.levels;
+  }
+
+  public getLevel() {
+    return ProgressPercentManager.current!;
+  }
+
+  public getIcon(level: Level) {
+    // Si le niveau a déjà été validé
+    if (level.order < this.getLevel().order) {
+      return require("~/assets/img/progress/validated.svg");
+    }
+    // Si le niveau n'a pas été passé
+    else if (level.order > this.getLevel().order) {
+      return require("~/assets/img/progress/blocked.svg");
+    }
+    // Si le niveau est le niveau courant
+    else if (this.getLevel().name === level.name) {
+      return require("~/assets/img/progress/current.svg");
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+$jauge-level-padding-w: 57px;
+$jauge-level-padding-h: 100px;
+$badge-size: 50px;
+
 .progress-level {
   position: relative;
   padding: 0;
   width: fit-content;
   height: fit-content;
-
-  margin-bottom: 10vh;
   z-index: 40;
 
-  .circle {
-    height: 70px;
-    width: 70px;
-    background: linear-gradient(107.28deg, #ff6644 29.48%, #ff9d6f 100%);
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    span {
-      color: white;
-
-      font-style: normal;
-      font-size: 15px;
-      line-height: 17px;
-      font-weight: lighter;
-
-      text-align: center;
-
-      .number {
-        font-size: 24px;
-        font-weight: bold;
-      }
-    }
-
-    &:before {
-      content: "";
-      height: 90px;
-      width: 90px;
-      background: #ffffff;
-      opacity: 0.2;
-      backdrop-filter: blur(59.4294px);
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      z-index: -1;
-    }
+  p {
+    padding: 0;
+    margin: 0;
   }
 
-  .jauge {
-    height: 45px;
-    border-radius: 0 40px 40px 0;
-    width: 290px;
-    border: 2px solid white;
+  .container-level {
     position: absolute;
-    top: 50%;
-    transform: translate(calc(85px - (85px / 3)), -50%);
-    z-index: -5;
-    padding: 7px;
+    top: 0;
+    background: linear-gradient(
+      120.55deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    backdrop-filter: blur(59.4294px);
+    width: 0;
+    height: 100vh;
+    transition: 0.3s ease all;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    .item {
-      position: absolute;
-      width: fit-content;
+    .circle-level {
+      cursor: pointer;
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(
+        120.55deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.85) 100%
+      );
+      backdrop-filter: blur(59.4294px);
+      border-radius: 245.5px;
+      border-radius: 100%;
       display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      transform: translateX(calc(-50% - 20px));
-      bottom: -24px;
+      padding: 30px;
+      position: relative;
+      color: $dark-blue;
+      transform: translate(30px, -30px);
+      transition: 0.3s ease all;
 
-      span {
-        position: relative;
-        color: white;
-        text-transform: uppercase;
-        font-size: 10px;
+      p {
+        transform: translate(15px, 15px);
+        transition: 0.3s ease all;
+      }
 
-        &:after {
-          content: "";
-          height: 7px;
-          width: 2px;
-          background-color: white;
-          position: absolute;
-          border-radius: 3px;
-          left: 50%;
-          transform: translate(-50%, -7px);
+      .suffix {
+        font-size: 14px;
+      }
+
+      .stats {
+        font-size: 24px;
+
+        .number {
+          font-weight: bold;
+          position: relative;
+        }
+
+        .total {
+          opacity: 0.4;
         }
       }
     }
 
-    .progress {
-      height: 100%;
-      background-color: white;
-      border-radius: 0 40px 40px 0;
+    .jauge-level {
+      width: 100%;
+      height: calc(100% - 150px);
+      overflow: hidden;
+      padding: 0;
       transition: 0.3s ease all;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      opacity: 0;
 
-      .star {
+      .level-item {
+        display: flex;
+        align-items: center;
+        min-width: max-content;
+
+        .level-badge {
+          height: $badge-size;
+          width: $badge-size;
+          // background-color: $dark-blue;
+          border-radius: 50%;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          position: relative;
+        }
+
+        &.current {
+          .level-badge {
+            background-color: $dark-blue;
+
+            &:before {
+              content: "";
+              height: calc(#{$badge-size} + 10px);
+              width: calc(#{$badge-size} + 10px);
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              background-color: rgba(0, 6, 72, 0.4);
+              z-index: -1;
+              border-radius: 50%;
+            }
+          }
+        }
+
+        &.validated {
+          .level-badge {
+            background-color: white;
+            border: 1px solid $dark-blue;
+          }
+        }
+
+        &.blocked {
+          .level-badge {
+            background-color: white;
+            border: 1px solid rgba(0, 6, 72, 0.2);
+
+            img {
+              opacity: 0.2;
+            }
+          }
+
+          .level-description {
+            opacity: 0.2;
+          }
+        }
+
+        .level-description {
+          font-size: 19px;
+          margin-left: 25px;
+
+          p {
+            color: $dark-blue;
+            line-height: 19px;
+          }
+        }
+      }
+
+      .bar-level {
+        height: calc(100% - 2 * #{$jauge-level-padding-h});
+        width: 2px;
         position: absolute;
-        right: 10px;
-        width: fit-content;
-        height: 23px;
-        width: 22px;
-        top: 50%;
-        transform: translateY(-50%);
+        background-color: rgba(0, 6, 72, 0.2);
+        top: $jauge-level-padding-h;
+        left: 0;
+        z-index: -1;
+        transition: 0.3s ease all;
 
-        span {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
+        display: flex;
+        align-items: flex-end;
 
-          font-style: normal;
-          font-weight: normal;
-          font-size: 15px;
-          line-height: 18px;
-          text-align: center;
+        .percent-level {
+          width: 100%;
+          background-color: $dark-blue;
+        }
+      }
+    }
+  }
 
-          color: white;
+  &.active {
+    .container-level {
+      width: 316px;
+
+      .circle-level {
+        margin-top: 34px;
+        transform: translate(0, 0);
+
+        p {
+          transform: translate(0, 0);
+        }
+      }
+
+      .jauge-level {
+        padding: $jauge-level-padding-h $jauge-level-padding-w;
+        opacity: 1;
+
+        .bar-level {
+          left: calc(#{$jauge-level-padding-w} + #{$badge-size} / 2);
         }
       }
     }
