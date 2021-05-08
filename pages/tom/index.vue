@@ -1,131 +1,134 @@
 <template>
   <div class="page-container" data-namespace="auth">
-    <CustomCard
-      v-if="isReady && !displayFunfact"
-      class="auth-container"
-      background-color="white"
-      width="610"
-    >
-      <div v-if="step == 1" class="w-100 step">
-        <h1 class="big-title main-font w-100 tom-title">
-          Wesh alors !
-          <img
-            src="~/assets/img/arrow-draft-one.png"
-            class="doodle bottom-left-arrow"
-            alt=""
-          />
-          <img
-            src="~/assets/img/arrow-draft-two.png"
-            class="doodle top-left-arrow"
-            alt=""
-          />
-          <img
-            src="~/assets/img/doodle-packed.png"
-            class="doodle packed-doodle"
-            alt=""
-          />
-        </h1>
-        <p class="sub-title text-common secondary-font w-100">
-          Moi, c'est Tom, j'ai 18 ans !
-        </p>
-        <p class="w-100 main-font">
-          Bienvenue chez mes parents.
-        </p>
-        <p class="w-100 main-font">
-          Je te propose un jeu pour découvrir un langage que notre génération
-          utilise au quotidien et que tu peines parfois à comprendre !
-        </p>
-        <p class="w-100 main-font">
-          Des mots sont dissimulés dans chaque pièce de ma maison.
-          <strong>Clique</strong> sur l'une d'entre elle pour commencer
-          l'aventure...
-        </p>
-        <div class="w-100 action-container">
-          <CustomButton
-            @click.native="next()"
-            arrow-color="white"
-            color="#000648"
-            text="Suivant"
-          />
-        </div>
-      </div>
-      <div v-if="step == 2" class="w-100 step step-2">
-        <p class="w-100 main-font">
-          Pour continuer, j'ai besoin de ton <strong>adresse mail</strong> afin
-          que tu puisses garder ta
-          <strong class="progression"
-            >progression
+    <transition v-on:enter="enterAnimSCard">
+      <CustomCard
+        v-if="isReady && !displayFunfact"
+        class="auth-container"
+        background-color="white"
+        width="610"
+      >
+        <div v-if="step == 1" class="w-100 step">
+          <h1 class="big-title main-font w-100 tom-title">
+            Wesh alors !
             <img
-              src="~/assets/img/circle-doodle-two.png"
-              class="doodle circle-doodle"
-              alt=""/></strong
-          >.
-          <span>
+              src="~/assets/img/arrow-draft-one.png"
+              class="doodle bottom-left-arrow"
+              alt=""
+            />
+            <img
+              src="~/assets/img/arrow-draft-two.png"
+              class="doodle top-left-arrow"
+              alt=""
+            />
+            <img
+              src="~/assets/img/doodle-packed.png"
+              class="doodle packed-doodle"
+              alt=""
+            />
+          </h1>
+          <p class="sub-title text-common secondary-font w-100">
+            Moi, c'est Tom, j'ai 18 ans !
+          </p>
+          <p class="w-100 main-font">
+            Bienvenue chez mes parents.
+          </p>
+          <p class="w-100 main-font">
+            Je te propose un jeu pour découvrir un langage que notre génération
+            utilise au quotidien et que tu peines parfois à comprendre !
+          </p>
+          <p class="w-100 main-font">
+            Des mots sont dissimulés dans chaque pièce de ma maison.
+            <strong>Clique</strong> sur l'une d'entre elle pour commencer
+            l'aventure...
+          </p>
+          <div class="w-100 action-container">
+            <CustomButton
+              @click.native="next()"
+              arrow-color="white"
+              color="#000648"
+              text="Suivant"
+            />
+          </div>
+        </div>
+        <div v-if="step == 2" class="w-100 step step-2">
+          <p class="w-100 main-font">
+            Pour continuer, j'ai besoin de ton <strong>adresse mail</strong> afin
+            que tu puisses garder ta
+            <strong class="progression"
+            >progression
+              <img
+                src="~/assets/img/circle-doodle-two.png"
+                class="doodle circle-doodle"
+                alt=""/></strong
+            >.
+            <span>
             <nuxt-link to="/rgpd" class="rgpd">
               <img src="~/assets/img/info_RGPD.svg" alt="" />
             </nuxt-link>
           </span>
-          <img
-            src="~/assets/img/doodle-line.png"
-            class="doodle line-doodle"
-            alt=""
+            <img
+              src="~/assets/img/doodle-line.png"
+              class="doodle line-doodle"
+              alt=""
+            />
+          </p>
+          <p class="w-100 main-font">
+            Et puis ... mes darons ne souhaitent pas laisser rentrer n'importe qui
+            chez nous. 😉
+          </p>
+          <input
+            type="text"
+            v-model="dataFormAuth.email"
+            class="form-control"
+            id="email"
+            placeholder="Ton email"
           />
-        </p>
-        <p class="w-100 main-font">
-          Et puis ... mes darons ne souhaitent pas laisser rentrer n'importe qui
-          chez nous. 😉
-        </p>
-        <input
-          type="text"
-          v-model="dataFormAuth.email"
-          class="form-control"
-          id="email"
-          placeholder="Ton email"
-        />
-        <div class="w-100 action-container">
-          <CustomButton
-            @click.native="auth()"
-            arrow-color="white"
-            color="#000648"
-            text="Valider"
-          />
+          <div class="w-100 action-container">
+            <CustomButton
+              @click.native="auth()"
+              arrow-color="white"
+              color="#000648"
+              text="Valider"
+            />
+          </div>
         </div>
-      </div>
 
-      <span class="leave-activity" @click="back()">
+        <span class="leave-activity" @click="back()">
         <img src="~/assets/img/cross.svg" alt="" />
       </span>
-    </CustomCard>
+      </CustomCard>
 
-    <CustomCard
-      v-if="isReady && displayFunfact"
-      class="fun-container"
-      background-color="white"
-      width="610"
-    >
-      <div class="w-100 step">
-        <h1 class="big-title main-font w-100 tom-title">
-          Fun fact !
-          <img
-            src="~/assets/img/doodle-packed-large.png"
-            class="doodle packed-doodle-large"
-            alt=""
-          />
-        </h1>
-        <p class="w-100 main-font">{{ currentFact.content }}</p>
-        <span class="leave-activity" @click="back()">
+      <CustomCard
+        v-if="isReady && displayFunfact"
+        class="fun-container"
+        background-color="white"
+        width="610"
+      >
+        <div class="w-100 step">
+          <h1 class="big-title main-font w-100 tom-title">
+            Fun fact !
+            <img
+              src="~/assets/img/doodle-packed-large.png"
+              class="doodle packed-doodle-large"
+              alt=""
+            />
+          </h1>
+          <p class="w-100 main-font">{{ currentFact.content }}</p>
+          <span class="leave-activity" @click="back()">
           <img src="~/assets/img/cross.svg" alt="" />
         </span>
-        <div class="w-100 action-container">
-          <CustomButton
-            @click.native="random()"
-            arrow-color="white"
-            color="#000648"
-            text="Une autre"
-          />
+          <div class="w-100 action-container">
+            <CustomButton
+              @click.native="random()"
+              arrow-color="white"
+              color="#000648"
+              text="Une autre"
+            />
+          </div>
         </div>
-      </div>
-    </CustomCard>
+      </CustomCard>
+    </transition>
+
   </div>
 </template>
 
@@ -137,6 +140,7 @@ import CustomCard from "~/components/cards/CustomCard.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import TomSceneElement from "~/core/scene/TomSceneElement";
+import gsap from "gsap";
 
 @Component({
   components: {
@@ -162,10 +166,10 @@ export default class AuthPage extends Vue {
   public displayFunfact: boolean = this.authStore.isAuth;
 
   mounted() {
-    GlobalScene.context.disableParallax();
-    TomSceneElement.playAnimation("idle", GlobalScene.context);
+    GlobalScene.context.disableParallax()
+    TomSceneElement.playAnimation("idle", GlobalScene.context)
     GlobalScene.context.goToPresetPosition("tom", 2, () => {
-      this.isReady = true;
+      this.isReady = true
     });
 
     this.random();
@@ -175,7 +179,7 @@ export default class AuthPage extends Vue {
     if (this.dataFormAuth.email) {
       try {
         await this.autModule.auth(this.dataFormAuth);
-        this.back();
+        this.back()
       } catch (e) {
         this.onProgress = false;
       }
@@ -185,7 +189,7 @@ export default class AuthPage extends Vue {
   beforeDestroy() {
     GlobalScene.context.enableParallax();
     if (!this.autModule.isAuth) {
-      TomSceneElement.playAnimation("hello", GlobalScene.context);
+      TomSceneElement.playAnimation("hello", GlobalScene.context)
     }
   }
 
@@ -197,18 +201,21 @@ export default class AuthPage extends Vue {
     let current = this.currentFact;
     let newFunFact = this.funfacts[
       Math.floor(Math.random() * this.funfacts.length)
-    ];
-    if (newFunFact != current) this.currentFact = newFunFact;
-    else this.random();
+    ]
+    if (newFunFact != current) this.currentFact = newFunFact
+    else this.random()
   }
 
   next() {
     this.step++;
   }
 
-  rgpd() {
-    // TODO RGPD
-    alert("Lien vers rgpd");
+  public enterAnimSCard(el: Element, done: Function) {
+    const tl = gsap.timeline()
+    tl.from(el, {
+      opacity: 0,
+      duration: 1
+    })
   }
 }
 </script>
