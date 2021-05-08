@@ -62,8 +62,9 @@
             <CustomButton
               @click.native="validateActivity"
               v-bind:class="
-                userSelection == null ? 'btn-disabled' : 'btn-validate'
+                userSelection == null ? 'btn-disabled' : 'btn-enable'
               "
+              class="btn-validate"
               arrow-color="#FFF8EE"
               color="#000648"
               text="Valider"
@@ -324,8 +325,8 @@ export default class ActivityOne extends Vue {
         }
       }
 
-      .btn-validate {
-        opacity: 1;
+      .btn-enable{
+        opacity: 1 !important;
       }
 
       .btn-disabled {
