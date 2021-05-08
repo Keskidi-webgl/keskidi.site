@@ -266,8 +266,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     skateSticker.scene.rotation.y = Helpers.degreeToRadiant(-90)
     GlobalScene.context.scene.add(skateSticker.scene)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.SKATE_STICKER, skateSticker.scene)
-    const animationClip = GlobalScene.context.generateAnimationAction(skateSticker.animations[0], GLTF_ASSET.SKATE_STICKER)
-    animationClip.play()
   }
 
   private _addNotebook() {
