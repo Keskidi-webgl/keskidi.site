@@ -2,15 +2,25 @@
   <div>
     <!-- Warnings -->
     <div v-if="!isChrome" class="browser-check">
+      <LogoMedia class="logo" />
       <h1 class="main-font">
-        Cette expérience ne fonctionne pas avec ce navigateur. <br />
-        Merci d'utiliser Chrome.
+        Tu utilises un navigateur de <strong>boomer</strong> !<br />
+        Tu peux télécharger
+        <a
+          target="blank"
+          href="https://www.google.fr/chrome/?brand=ONGR&gclid=e047a85627d719f37291c8c13c0ddab5&gclsrc=3p.ds&utm_source=bing&utm_medium=cpc&utm_campaign=1009936%20%7C%20Chrome%20Win10%20%7C%20DR%20%7C%20ESS01%20%7C%20EMEA%20%7C%20FR%20%7C%20fr%20%7C%20Desk%20%7C%20SEM%20%7C%20BKWS%20-%20EXA%20%7C%20Txt%20~%20Top%20KWDS&utm_term=chrome&utm_content=Desk%20%7C%20BKWS%20-%20EXA%20%7C%20Txt%20~%20Chrome%20~%20Top%20KWDS%20-%20NEW"
+          >Google Chrome</a
+        >
+        pour pouvoir participer à notre expérience.
       </h1>
     </div>
-    <div v-if="isMobile" class="browser-check">
+    <div v-if="isMobile" class="browser-check mobile">
+      <LogoMedia class="logo" />
       <h1 class="main-font">
-        Cette expérience ne fonctionne pas sur mobile. <br />
-        Merci d'utiliser un ordinateur.
+        Un vrai <strong>boomer</strong> se doit d'utiliser un ordinateur !
+        <br /><br />
+        Tu peux aller sur un <span>ordinateur</span> pour pouvoir participer à
+        notre expérience.
       </h1>
     </div>
 
@@ -141,11 +151,15 @@ export default class DefaultLayout extends Vue {
   public words: number = 0;
 
   // Warnings
-  public isChrome: boolean = navigator.userAgent.indexOf("Chrome") != -1;
+  public isChrome: boolean =
+    navigator.userAgent.indexOf("Chrome") != -1 &&
+    navigator.userAgent.indexOf("Edg") == -1;
   public isMobile: boolean =
     window.innerWidth <= 600 && window.innerHeight <= 800;
 
   public permissionStatus!: PermissionStatus;
+
+  public agent = navigator.userAgent;
 
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
@@ -232,9 +246,31 @@ export default class DefaultLayout extends Vue {
   justify-content: center;
   align-items: center;
 
+  padding: 100px;
+
   h1 {
     color: $dark-blue;
     text-align: center;
+  }
+
+  a {
+    color: white;
+  }
+
+  .logo {
+    top: 0;
+  }
+
+  &.mobile {
+    padding: 45px;
+
+    h1 {
+      font-size: 25px;
+
+      span {
+        color: white;
+      }
+    }
   }
 }
 
