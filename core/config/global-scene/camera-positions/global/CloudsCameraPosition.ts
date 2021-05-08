@@ -5,13 +5,13 @@ const BedroomCameraPosition: CameraPosition = {
   name: 'cloud',
 
   coords: () => {
-    const lookAtPosition = new Vector3(-100, 900, 10)
+    const lookAtPosition = new Vector3(0, 800, 10)
     //GlobalScene.context.scene.getObjectByName('cloud6')!.getWorldPosition(lookAtPosition)
 
     const cameraPos = lookAtPosition.clone()
     cameraPos.y = cameraPos.y * 0.9
     //cameraPos.x = cameraPos.x * 6
-    cameraPos.z = 400
+    cameraPos.z = 430
 
     return {cameraPos, lookAtPosition}
   }

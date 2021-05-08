@@ -22,6 +22,7 @@ export enum GLTF_ASSET {
   NOTEBOOK = 'notebook',
   CAT = 'cat',
   PHONE = 'phone',
+  CLOUDS = 'clouds',
 
   TOM = 'tom',
   TOM_MUSCLE = 'tomMuscle',

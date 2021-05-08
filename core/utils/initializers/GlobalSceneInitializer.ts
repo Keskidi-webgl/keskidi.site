@@ -45,7 +45,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._registerPresetPositions()
     this._optimizeScene()
     //this._configGUI()
-    console.log(GlobalScene.context)
 
     GlobalScene.context.start()
   }
@@ -172,6 +171,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addCat()
     this._addBedroomPaper()
     this._addPhone()
+    this._addClouds()
   }
 
   private _createPlanesBackground(){
@@ -299,6 +299,16 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     phone.scene.rotation.y = Helpers.degreeToRadiant(45)
     GlobalScene.context.scene.add(phone.scene)
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.PHONE, phone.scene)
+  }
+
+  private _addClouds() {
+    const clouds = AssetsManager.getGltf(GLTF_ASSET.CLOUDS).data
+    GlobalScene.context.scene.add(clouds.scene)
+    clouds.scene.rotation.y = Helpers.degreeToRadiant(-90)
+    clouds.scene.position.set(0, 400, 0)
+    GlobalScene.context.createAnimationMixer(GLTF_ASSET.CLOUDS, clouds.scene)
+    const animationAction = GlobalScene.context.generateAnimationAction(clouds.animations[0], GLTF_ASSET.CLOUDS)
+    animationAction.play()
   }
 
   /**
