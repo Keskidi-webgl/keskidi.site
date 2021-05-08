@@ -10,7 +10,7 @@ import Helpers from "~/core/utils/helpers";
 class TomSceneElement {
   private _sceneElement: Group | null
   private _animations: TomAnimation | null
-  private _activeAnimationAction: AnimationAction | null
+  private _activeAnimationAction: {data: AnimationAction, name: TomAnimationName} | null
 
   constructor() {
     this._sceneElement = null
@@ -75,9 +75,12 @@ class TomSceneElement {
     animationActionToPlay.reset()
 
     if (this._activeAnimationAction) {
-      this._activeAnimationAction.fadeOut(1)
+      this._activeAnimationAction.data.fadeOut(1)
     }
-    this._activeAnimationAction = animationActionToPlay
+    this._activeAnimationAction = {
+      data: animationActionToPlay,
+      name: animationName
+    }
 
     animationActionToPlay.fadeIn(1)
     animationActionToPlay.play()
@@ -103,6 +106,10 @@ class TomSceneElement {
     this._checkIfInit()
 
     return this._sceneElement!
+  }
+
+  get activeAnimationAction() {
+    return this._activeAnimationAction
   }
 
 }
