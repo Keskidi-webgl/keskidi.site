@@ -234,7 +234,7 @@ export default class SceneManager {
       x: newCameraPosition.x,
       y: newCameraPosition.y,
       z: newCameraPosition.z,
-      // ease: "sine.inOut",
+      ease: "sine.inOut",
       onComplete: () => {
         successCallBack(this)
       }
@@ -244,7 +244,7 @@ export default class SceneManager {
       x: destinationRotation.x,
       y: destinationRotation.y,
       z: destinationRotation.z,
-      //ease: "sin.out",
+      ease: "sine.inOut",
     })
   }
 
