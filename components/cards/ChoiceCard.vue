@@ -43,6 +43,7 @@ export default class ChoiceCard extends Vue {
   position: relative;
   justify-content: flex-end;
   transform: translate(0, 20%);
+  transition: 0.3s ease all;
 
   img {
     position: absolute;
