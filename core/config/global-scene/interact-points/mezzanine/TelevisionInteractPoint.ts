@@ -4,7 +4,7 @@ import { Vector3 } from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import { InteractionPoint } from "~/core/config/global-scene/interact-points/types";
-import { TelevisionRoomObject } from "~/core/config/global-scene/room-objects";
+import {PhoneRoomObject, TelevisionRoomObject} from "~/core/config/global-scene/room-objects";
 
 const TelevisionInteractPoint: InteractionPoint = {
   name: TelevisionRoomObject.urlSlug,
@@ -18,8 +18,10 @@ const TelevisionInteractPoint: InteractionPoint = {
     return position;
   },
 
-  isCompleted: () => {
-    return false;
+  isCompleted: (globalStore) => {
+    return globalStore.userWordData!.some(
+      word => word.id === TelevisionRoomObject.wordId && word.is_achieved
+    );
   },
 
   isVisible(globalStore: GlobalStore, authStore: AuthStore): boolean {
