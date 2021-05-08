@@ -79,10 +79,6 @@ import ActivityStore from "~/store/activity";
 export default class ActivityOnboarding extends Vue {
   public activityStore = getModule(ActivityStore, this.$store)
 
-  mounted() {
-    console.log('mounted onboarding')
-  }
-
   goActivityOne() {
     this.activityStore.setCurrentActivity(null)
   }
