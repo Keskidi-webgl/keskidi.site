@@ -55,12 +55,14 @@
                 <font-awesome-icon :icon="['fas', 'eye']" :style="{ color: 'white' , fontSize: '20px'}"/>
               </button>
             </nuxt-link>
+            <!--
             <button :disabled="onProgress"
                     @click="deleteWord(word)"
                     class="btn btn-danger"
             >
               <font-awesome-icon :icon="['fas', 'trash']" :style="{ color: 'white' , fontSize: '20px'}"/>
             </button>
+            -->
           </td>
         </tr>
         </tbody>
