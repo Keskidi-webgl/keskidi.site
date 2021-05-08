@@ -2,7 +2,7 @@
   <div class="page-container about-page" data-namespace="about-page">
     <div class="about-page-container">
       <!-- Rgpd link -->
-      <nuxt-link to="/rgpd" class="activity-panel--rgpd">
+      <nuxt-link to="/rgpd" class="activity-panel--rgpd main-font">
         Mentions légales
       </nuxt-link>
 
@@ -33,12 +33,12 @@
       </nuxt-link>
       <!-- Slider -->
       <div class="slider">
-        <div class="arrow prev" @click="toPrev">
+        <div class="arrow prev slider-btn" @click="toPrev">
           <div class="circle">
             <img src="~/assets/img/next-arrow.svg" alt=""/>
           </div>
         </div>
-        <div class="arrow next" @click="toNext">
+        <div class="arrow next slider-btn" @click="toNext">
           <div class="circle">
             <img src="~/assets/img/next-arrow.svg" alt=""/>
           </div>
@@ -46,8 +46,8 @@
         <div class="container">
           <div v-for="(slide, index) in slides" :key="index" :class="{ item: true, active: index === activeItem }">
             <!-- Photo -->
-            <div class="image" v-if="slide.contentType === 'image' && slide.content !== ''"
-                 :style="{ backgroundImage: 'url(' + slide.content + ')' }"></div>
+            <div class="image photo-person" v-if="slide.contentType === 'image' && slide.content !== ''"
+                 :style="{ backgroundImage: 'url(' + getUrlImageTeam(slide.content) + ')' }"></div>
             <div class="text" v-if="slide.contentType === 'text'">
             <span v-for="(paraf, index) in slide.content" :key="index">
               {{ paraf }}
@@ -56,7 +56,7 @@
 
             <!-- Name -->
             <div>
-              <span :class="{title: true,'main-font': true,'title-text': slide.contentType === 'text'}">
+              <span :class="{title: true,'main-font': true,'title-text': slide.contentType === 'text'}" class="name-person">
               {{ slide.title }}
               <img src="~/assets/img/arrow-draft-two.png" class="doodle arrow-two-doodle" alt=""/>
               <img src="~/assets/img/arrow-draft-one.png" class="doodle arrow-one-doodle" alt=""/>
@@ -66,7 +66,7 @@
 
             <!-- Role -->
             <div>
-              <span class="desc main-font">
+              <span class="desc main-font role-person">
                 {{ slide.description }}
                 <img src="~/assets/img/doodle-packed.png" class="doodle packed-doodle" alt=""/>
               </span>
@@ -90,58 +90,11 @@ import CustomEase from 'gsap/CustomEase'
 export default class TestProgressPage extends Vue {
   // Default
   public onProgress: boolean = false;
-  public slides: Array<Slide> = [
-    {
-      title: "Naël Messaoudene",
-      description: "Développeur",
-      contentType: "image",
-      content: require("~/assets/img/team/nael.jpg")
-    },
-    {
-      title: "Aurélie Mery",
-      description: "Designer",
-      contentType: "image",
-      content: require("~/assets/img/team/aurelie.jpg")
-    },
-    {
-      title: "Amélie Mouillac",
-      description: "Développeuse",
-      contentType: "image",
-      content: require("~/assets/img/team/amelie.jpg")
-    },
-    {
-      title: "Camille Farge",
-      description: "Designer",
-      contentType: "image",
-      content: require("~/assets/img/team/camille.jpg")
-    },
-    {
-      title: "Théo Champion",
-      description: "Développeur",
-      contentType: "image",
-      content: require("~/assets/img/team/theo.jpg")
-    },
-    {
-      title: "Oriane De Figueiredo",
-      description: "Designer",
-      contentType: "image",
-      content: require("~/assets/img/team/oriane.jpg")
-    },
-    {
-      title: "Keski se cache derrière",
-      description: "Fait avec amour",
-      contentType: "text",
-      content: [
-        "Ici, expliquer en quelque mot le projet et tout ce qu'on a fait blablabla et hop.",
-        "Ici décrire les origines et le contexte de réalisation de projet.",
-        "Ici pourquoi pas mettre une date ou je sais pas..."
-      ]
-    }
-  ];
+  public slides: Array<Slide> = require('~/core/datas/teamInfos.json')
   public activeItem: number = 0;
 
   transition() {
-    CustomEase.create("container", "M0,0 C0.89,0 0.24,1 1,1 ")
+    CustomEase.create("container", "M0,0 C0.89,0 0.24,1 1,1 ");
     return {
       enter(el: Element, done: Function) {
         const tl = gsap.timeline({
@@ -154,6 +107,27 @@ export default class TestProgressPage extends Vue {
           width: 0,
           ease: 'container'
         })
+          .from(el.querySelector('.photo-person'), {
+            duration: 0.7,
+            y: -400,
+            autoAlpha: 0,
+            ease: 'container'
+          }, '-=0.4')
+          .from([
+            el.querySelector('.name-person'),
+            el.querySelector('.role-person'),
+          ], {
+            duration: 0.7,
+            y: 100,
+            autoAlpha: 0,
+            stagger: 0.2
+          }, '-=0.3')
+          .from(el.querySelectorAll('.slider-btn'), {
+            duration: 0.8,
+            stagger: 0.2,
+            y: -30,
+            autoAlpha: 0
+          },'-=0.3')
       },
       leave(el: Element, done: Function) {
         const tl = gsap.timeline({
@@ -170,7 +144,8 @@ export default class TestProgressPage extends Vue {
     }
   }
 
-  mounted() {
+  getUrlImageTeam(imgName: string) {
+    return require(`~/assets/img/team/${imgName}`)
   }
 
   toNext() {
@@ -198,7 +173,7 @@ export default class TestProgressPage extends Vue {
     right: 0;
     margin: 24px;
   }
-  
+
   &-container {
     position: absolute;
     top: 0;

@@ -163,17 +163,10 @@ export default class DefaultLayout extends Vue {
     navigator.permissions.query(
       { name: 'microphone' }
     ).then(function(permissionStatus){
-
       that.permissionStatus = permissionStatus
-      console.log(permissionStatus.state); // granted, denied, prompt
-
       that.permissionStatus.onchange = function(){
-        console.log("Permission changed to " + this.state);
       }
-
       that.permissionStatus.state === 'granted' ? that.globalStore.setMicrophonePermission(true) : that.globalStore.setMicrophonePermission(false)
-
-      console.log(that.globalStore.microphonePermission)
     })
   }
 
