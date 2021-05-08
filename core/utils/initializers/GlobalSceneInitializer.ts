@@ -285,7 +285,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.CAT, cat.scene)
     const animationClip = GlobalScene.context.generateAnimationAction(cat.animations[0], GLTF_ASSET.CAT)
     animationClip.play()
-    animationClip.stop()
   }
 
   private _addBedroomPaper() {

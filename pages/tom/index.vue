@@ -170,7 +170,7 @@ export default class AuthPage extends Vue {
     if (!TomSceneElement.activeAnimationAction || TomSceneElement.activeAnimationAction.name !== 'idle') {
       TomSceneElement.playAnimation("idle", GlobalScene.context)
     }
-    
+
     GlobalScene.context.goToPresetPosition("tom", 2, () => {
       this.isReady = true
     });
