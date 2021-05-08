@@ -290,6 +290,21 @@ export default class ActivityThree extends Vue {
           (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].disabled = true;
         }
 
+      }else{
+        gsap.fromTo((<Array<HTMLElement>>this.$refs.activityRecord)[this.countExpressionSuccess],{
+          translateX:-10
+        },
+          {
+            translateX:10,
+            repeat:1,
+            yoyo:true,
+            ease:"sine.inOut",
+            duration: 0.2,
+            onComplete:()=>{
+              gsap.to((<Array<HTMLElement>>this.$refs.activityRecord)[this.countExpressionSuccess],{translateX:0,
+                duration:0.2,
+                ease:"sine.inOut"})
+            }})
       }
     });
   }
