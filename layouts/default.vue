@@ -107,7 +107,7 @@ export default class DefaultLayout extends Vue {
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
   public isLoaderVisible: boolean = true;
-  public loadingProgressions: string = "";
+  public loadingProgressions: string = "0";
 
   public animationElements = {
     loader: new LoaderAnimation()
