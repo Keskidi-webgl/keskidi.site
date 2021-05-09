@@ -1,31 +1,41 @@
 <template>
   <div class="activity-panel">
     <!-- Activity one -->
-    <!-- <transition v-on:enter="animationEnterActivityOne">
+    <transition v-on:enter="animationEnterActivityOne">
       <ActivityOne v-if="activityDisplay.one()" />
-    </transition> -->
+    </transition>
 
     <!-- Activity two -->
-    <!-- <transition v-on:enter="animationEnterActivityTwo" v-on:leave="animationLeaveActivityTwo">
-      <ActivityTwo v-if="activityDisplay.two()"/>
-    </transition> -->
+    <transition
+      v-on:enter="animationEnterActivityTwo"
+      v-on:leave="animationLeaveActivityTwo"
+    >
+      <ActivityTwo v-if="activityDisplay.two()" />
+    </transition>
 
     <!-- Acitivity three   -->
-    <!-- <transition v-on:enter="animationEnterActivityThree" v-on:leave="animationLeaveActivityThree">
-      <ActivityThree v-if="activityDisplay.three()"/>
-    </transition> -->
+    <transition
+      v-on:enter="animationEnterActivityThree"
+      v-on:leave="animationLeaveActivityThree"
+    >
+      <ActivityThree v-if="activityDisplay.three()" />
+    </transition>
 
     <!-- Activities result -->
-    <!-- <transition v-on:enter="animationEnterActivityResult" v-on:leave="animationLeaveActivityResult">
-      <ActivitiesResult v-if="activityDisplay.result()"/>
-    </transition> -->
+    <transition
+      v-on:enter="animationEnterActivityResult"
+      v-on:leave="animationLeaveActivityResult"
+    >
+      <ActivitiesResult v-if="activityDisplay.result()" />
+    </transition>
 
     <!-- Activities progression -->
-    <!-- <transition v-on:enter="animationEnterActivityProgression" v-on:leave="animationLeaveActivityProgression">
-      <ActivitiesProgression v-if="activityDisplay.progression()"/>
-    </transition> -->
-
-    <ActivitiesProgression />
+    <transition
+      v-on:enter="animationEnterActivityProgression"
+      v-on:leave="animationLeaveActivityProgression"
+    >
+      <ActivitiesProgression v-if="activityDisplay.progression()" />
+    </transition>
 
     <transition
       v-on:enter="animationEnterActivityKeskidico"
