@@ -10,16 +10,10 @@
       </div>
 
       <div class="jauge-level">
-        <div
-          class="level-item"
-          v-for="(level, index) in this.getLevels()"
-          :key="index"
-          :class="{
-            current: getLevel().name === level.name,
-            validated: level.order < getLevel().order,
+        <div class="level-item" v-for="(level, index) in this.getLevels()" :key="index" :class="{current: getLevel().name === level.name,
+           validated: level.order < getLevel().order,
             blocked: level.order > getLevel().order
-          }"
-        >
+          }">
           <div class="level-badge">
             <img :src="getIcon(level)" alt="" />
           </div>
@@ -59,7 +53,23 @@ export default class ProgressLevel extends Vue {
   }
 
   show() {
-    this.canShow = !this.canShow;
+    // this.canShow = !this.canShow;
+    if (!this.canShow){
+      this.open()
+    } else {
+      this.close()
+    }
+
+  }
+
+  open(){
+    this.canShow = true
+    console.log('open menu')
+  }
+
+  close(){
+    this.canShow = false
+    console.log('close menu')
   }
 
   public getProgress() {
@@ -120,6 +130,8 @@ $badge-size: 50px;
 
   .container-level {
     position: absolute;
+    width: 316px;
+    //width: 0;
     top: 0;
     background: linear-gradient(
       120.55deg,
@@ -127,7 +139,6 @@ $badge-size: 50px;
       rgba(255, 255, 255, 0) 100%
     );
     backdrop-filter: blur(59.4294px);
-    width: 0;
     height: 100vh;
     transition: 0.3s ease all;
     display: flex;
@@ -144,14 +155,14 @@ $badge-size: 50px;
         rgba(255, 255, 255, 0.85) 100%
       );
       backdrop-filter: blur(59.4294px);
-      border-radius: 245.5px;
       border-radius: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 30px;
-      position: relative;
+      position: absolute;
+      //position: relative;
       color: $dark-blue;
       transform: translate(30px, -30px);
       transition: 0.3s ease all;
@@ -183,13 +194,16 @@ $badge-size: 50px;
       width: 100%;
       height: calc(100% - 150px);
       overflow: hidden;
-      padding: 0;
       transition: 0.3s ease all;
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
       justify-content: space-between;
+      align-items: center;
       position: relative;
-      opacity: 0;
+      opacity: 1;
+      //opacity: 0;
+      margin-top: auto;
+      padding: 75px 0;
 
       .level-item {
         display: flex;
@@ -267,7 +281,8 @@ $badge-size: 50px;
         position: absolute;
         background-color: rgba(0, 6, 72, 0.2);
         top: $jauge-level-padding-h;
-        left: 0;
+        //left: 0;
+        left: 88px;
         z-index: -1;
         transition: 0.3s ease all;
 
@@ -282,28 +297,28 @@ $badge-size: 50px;
     }
   }
 
-  &.active {
-    .container-level {
-      width: 316px;
-
-      .circle-level {
-        margin-top: 34px;
-        transform: translate(0, 0);
-
-        p {
-          transform: translate(0, 0);
-        }
-      }
-
-      .jauge-level {
-        padding: $jauge-level-padding-h $jauge-level-padding-w;
-        opacity: 1;
-
-        .bar-level {
-          left: calc(#{$jauge-level-padding-w} + #{$badge-size} / 2);
-        }
-      }
-    }
-  }
+  //&.active {
+  //  .container-level {
+  //    //width: 316px;
+  //
+  //    .circle-level {
+  //      margin-top: 34px;
+  //      transform: translate(0, 0);
+  //
+  //      p {
+  //        transform: translate(0, 0);
+  //      }
+  //    }
+  //
+  //    .jauge-level {
+  //      padding: $jauge-level-padding-h $jauge-level-padding-w;
+  //      opacity: 1;
+  //
+  //      .bar-level {
+  //        left: calc(#{$jauge-level-padding-w} + #{$badge-size} / 2);
+  //      }
+  //    }
+  //  }
+  //}
 }
 </style>
