@@ -14,8 +14,11 @@ const TomInteractPoint: InteractionPoint = {
     GlobalScene.context.scene
       .getObjectByName("tom")!
       .getWorldPosition(position);
+
     position.z = position.z * 0.95;
-    position.y = (1 + position.y) * 3;
+    position.y = 1 + position.y * 3;
+    position.x = 1 + position.x * 0.5;
+
     return position;
   },
 
