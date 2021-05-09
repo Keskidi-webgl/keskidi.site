@@ -48,6 +48,8 @@
       <ProgressLevel
         class="progress-level"
         v-if="authStore.isAuth && globalSceneStore.canDisplayGlobalUI"
+        @mouseenter.native="soundDesign.progressLevelEnter"
+        @mouseleave.native="soundDesign.progressLevelLeave()"
       />
 
       <!-- Logo -->
@@ -59,7 +61,10 @@
         to="/about"
         class="about-btn"
       >
-        <div>
+        <div
+          @mouseenter="soundDesign.aboutEnter"
+          @mouseleave="soundDesign.aboutLeave"
+        >
           <p class="point-name main-font">A propos</p>
         </div>
       </nuxt-link>
@@ -174,6 +179,12 @@ export default class DefaultLayout extends Vue {
   public soundDesign = {
     audioBtnEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
     audioBtnLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
+
+    progressLevelEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    progressLevelLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
+
+    aboutEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    aboutLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
   }
 
   public async mounted() {

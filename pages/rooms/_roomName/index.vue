@@ -1,6 +1,10 @@
 <template>
   <div class="page-container" data-namespace="rooms.roomName">
-    <InteractionPoints :data="point" v-for="(point, index) in globalSceneStore.activeInteractionPoints" v-bind:key="index"/>
+    <InteractionPoints
+      :data="point"
+      v-for="(point, index) in globalSceneStore.activeInteractionPoints"
+      v-bind:key="index"
+    />
   </div>
 </template>
 
@@ -12,6 +16,8 @@ import GlobalSceneStore from "~/store/globalScene";
 import AuthMiddleware from "~/middleware/auth";
 import {ROOM_SLUG} from "~/core/config/global-scene/rooms/enums";
 import GlobalScene from "~/core/scene/GlobalScene";
+import {SoundDesignManager} from "~/core/managers";
+import {AUDIO_ASSET} from "~/core/enums";
 
 @Component({})
 export default class RoomPage extends Vue {

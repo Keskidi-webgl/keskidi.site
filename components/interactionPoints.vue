@@ -1,18 +1,20 @@
 <template>
   <nuxt-link
-    v-if="isVisible()"
-    :style="style()"
-    class="point point-0"
-    :to="data.url()"
+      v-if="isVisible()"
+      :style="style()"
+      class="point point-0"
+      :to="data.url()"
+      @mouseenter.native="soundDesign.interactPointsEnter"
+      @mouseleave.native="soundDesign.interactPointsLeave"
   >
     <div :class="{ isCompleted: isCompleted() }" class="center">
       <p class="point-name">{{ data.nameForHuman }}</p>
       <svg
-        width="23"
-        height="16"
-        viewBox="0 0 23 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+          width="23"
+          height="16"
+          viewBox="0 0 23 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
       >
         <path
           d="M2 6.92308L8.82812 14L21 2"
@@ -27,19 +29,22 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
-import { InteractionPoint as InteractionPointData } from "~/core/config/global-scene/interact-points/types";
+import {InteractionPoint as InteractionPointData} from "~/core/config/global-scene/interact-points/types";
+import {SoundDesignManager} from "~/core/managers";
+import {AUDIO_ASSET} from "~/core/enums";
 
 @Component
 export default class InteractionPoints extends Vue {
-  @Prop({ type: Object, required: true })
+  @Prop({type: Object, required: true})
   readonly data!: InteractionPointData;
   public globalStore: GlobalStore = getModule(GlobalStore, this.$store);
   public authStore: AuthStore = getModule(AuthStore, this.$store);
 
-  mounted() {}
+  mounted() {
+  }
 
   public style() {
     return `
@@ -53,6 +58,11 @@ export default class InteractionPoints extends Vue {
 
   public isCompleted() {
     return this.data.isCompleted(this.globalStore);
+  }
+
+  public soundDesign = {
+    interactPointsEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    interactPointsLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
   }
 }
 </script>
