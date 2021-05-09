@@ -20,8 +20,7 @@ const PaperInteractPoint: InteractionPoint = {
       .getObjectByName("paper")!
       .getWorldPosition(position);
 
-    position.y = 1 + position.y + 25;
-    position.x = 1 + position.x - 25;
+    position.x = 1 + position.x - 40;
 
     return position;
   },
