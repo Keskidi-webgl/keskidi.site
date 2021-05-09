@@ -36,13 +36,31 @@
     "content": "oriane.jpg"
   },
   {
+    "title": "Lucas Beaugas",
+    "description": "Compositeur",
+    "contentType": "image",
+    "content": "lucas.jpeg"
+  },
+  {
+    "title": "Thomas Peyrounette",
+    "description": "Compositeur",
+    "contentType": "image",
+    "content": "thomas.jpeg"
+  },
+  {
+    "title": "Simeon Chevallay",
+    "description": "Sound Designer",
+    "contentType": "image",
+    "content": "simeon.jpg"
+  },
+  {
     "title": "Keski se cache derrière",
     "description": "Fait avec amour",
     "contentType": "text",
     "content": [
-      "Ici, expliquer en quelque mot le projet et tout ce qu'on a fait blablabla et hop.",
-      "Ici décrire les origines et le contexte de réalisation de projet.",
-      "Ici pourquoi pas mettre une date ou je sais pas..."
+      "Nous cherchons à améliorer la communication entre les parents et leurs adolescents et keskibloc : le langage ! <strong>Keskidi</strong> permet donc d’apprendre de <strong>nouveaux mots</strong> et donc connaître un peu mieux la culture jeune. ❤️ ",
+      "<strong>Keskidi</strong> c’est avant tout une <strong>team de 6 personnes</strong> très talentueuses et motivées plus que jamais ! (et beaux aussi, avoue). C’est un plaisir d’avoir travaillé sur ce projet, et c’est pas fini ! Il a pour objectif d’être évolutif/MAJ.",
+      "Pour mener à bien ce projet, nous avons fait appel à des <strong>étudiants du conservatoire</strong> de musique d’Annecy qui ont fait un boulot de dingue, merci encore à eux, GG ❤️"
     ]
   }
 ]
