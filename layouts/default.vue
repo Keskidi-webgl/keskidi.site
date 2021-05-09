@@ -107,8 +107,8 @@ import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import {AssetsManager, SoundDesignManager} from "~/core/managers";
-import {AssetManagerInitializer} from "~/core/utils/initializers";
+import { AssetsManager, SoundDesignManager } from "~/core/managers";
+import { AssetManagerInitializer } from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 
 // Scene
@@ -128,9 +128,9 @@ import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
 import SoundButton from "~/components/global/SoundButton.vue";
-import {LoaderAnimation} from "~/core/animations/loader";
-import {NavigationPanelAnimation} from "~/core/animations/activities";
-import {AUDIO_ASSET} from "~/core/enums";
+import { LoaderAnimation } from "~/core/animations/loader";
+import { NavigationPanelAnimation } from "~/core/animations/activities";
+import { AUDIO_ASSET } from "~/core/enums";
 
 @Component({
   components: {
@@ -159,12 +159,6 @@ export default class DefaultLayout extends Vue {
   // Auth
   public authStore: AuthStore = getModule(AuthStore, this.$store);
 
-  // Progress Level
-  public progress: number = 0;
-  public percent: number = 0;
-  public level: Level | null = null;
-  public words: number = 0;
-
   // Warnings
   public isChrome: boolean =
     navigator.userAgent.indexOf("Chrome") != -1 &&
@@ -180,12 +174,14 @@ export default class DefaultLayout extends Vue {
     audioBtnEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
     audioBtnLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
 
-    progressLevelEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
-    progressLevelLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
+    progressLevelEnter: () =>
+      SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    progressLevelLeave: () =>
+      SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
 
     aboutEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
-    aboutLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
-  }
+    aboutLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
+  };
 
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation

@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-level">
+  <div class="progress-level" v-if="getLevel() != null">
     <div class="container-level">
       <!-- Leave about page -->
       <div class="close-progress" @click="close">
@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
 import { Level } from "~/core/types";
 import { ProgressPercentManager } from "~/core/managers";
 import GlobalStore from "~/store/global";
@@ -81,10 +81,8 @@ export default class ProgressLevel extends Vue {
   public globalStore = getModule(GlobalStore, this.$store);
   public canShow: boolean = false;
 
-  mounted() {
+  beforeMount() {
     ProgressPercentManager.init(this.getProgress(), this.getTotal());
-    console.log("getLevel", this.getLevel());
-    console.log("ProgressPercentManager", ProgressPercentManager);
   }
 
   show() {
@@ -208,7 +206,11 @@ export default class ProgressLevel extends Vue {
   }
 
   public getLevels() {
-    return ProgressPercentManager.levels;
+    // return ProgressPercentManager.levels;
+
+    return ProgressPercentManager.levels.sort((a, b) =>
+      a.order > b.order ? -1 : b.order > a.order ? 1 : 0
+    );
   }
 
   public getLevel() {

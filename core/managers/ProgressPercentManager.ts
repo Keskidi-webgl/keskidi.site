@@ -21,7 +21,7 @@ class ProgressPercentManager {
   // >> PROPERTIES
 
   // - current
-  private currentLevel: Level | null = this.levelsArray[0];
+  private currentLevel: Level | null = null;
   private percentLevel: number = 0;
 
   // - next
@@ -40,7 +40,7 @@ class ProgressPercentManager {
     this._userAchievedWords = userAchievedWords;
     this._words = words;
 
-    this._initLevels();
+    // this._initLevels();
     this._setProgress();
   }
 
