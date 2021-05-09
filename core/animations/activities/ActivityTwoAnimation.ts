@@ -94,6 +94,19 @@ export default class ActivityTwoAnimation extends AnimationElement {
   }
 
   leave(options: AnimationElementOptions): void {
+    const tl = this._getFreshTimeline(options.onStart, options.onComplete)
+    const hiddenElements = [
+      options.el.querySelector('.progress-bar-container'),
+      options.el.querySelector('.word-name'),
+      options.el.querySelector('.img-word'),
+      options.el.querySelector('.content-container'),
+      options.el.querySelector('.aside-container-footer'),
+    ]
 
+    tl.to(hiddenElements, {
+        duration: 1,
+        autoAlpha: 0
+      }
+    )
   }
 }
