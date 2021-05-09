@@ -56,18 +56,32 @@
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
 
       <!-- About page -->
-      <nuxt-link
-        v-if="globalSceneStore.canDisplayGlobalUI"
-        to="/about"
-        class="about-btn"
-      >
+      <div class="actions-button">
         <div
-          @mouseenter="soundDesign.aboutEnter"
-          @mouseleave="soundDesign.aboutLeave"
+          v-if="globalSceneStore.canDisplayGlobalUI && authStore.isAuth"
+          class="logout-btn"
+          @click="logout"
         >
-          <p class="point-name main-font">A propos</p>
+          <div
+            @mouseenter="soundDesign.aboutEnter"
+            @mouseleave="soundDesign.aboutLeave"
+          >
+            <p class="point-name main-font">Se déconnecter</p>
+          </div>
         </div>
-      </nuxt-link>
+        <nuxt-link
+          v-if="globalSceneStore.canDisplayGlobalUI"
+          to="/about"
+          class="about-btn"
+        >
+          <div
+            @mouseenter="soundDesign.aboutEnter"
+            @mouseleave="soundDesign.aboutLeave"
+          >
+            <p class="point-name main-font">À propos</p>
+          </div>
+        </nuxt-link>
+      </div>
 
       <!-- Global scene -->
       <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
@@ -120,7 +134,6 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 import AuthStore from "~/store/auth";
 
 // Progress Level
-import { Level } from "~/core/types";
 import ProgressLevel from "~/components/global/ProgressLevel.vue";
 
 // Activities
@@ -254,6 +267,10 @@ export default class DefaultLayout extends Vue {
       onStart: () => {}
     });
   }
+
+  public logout() {
+    this.authStore.logout();
+  }
 }
 </script>
 
@@ -310,17 +327,28 @@ export default class DefaultLayout extends Vue {
   left: 50%;
   transform: translate(-50%, 0px);
 }
-.about-btn {
-  margin: 24px;
+
+.actions-button {
   position: absolute;
+  margin: 24px;
   z-index: 35;
   right: 0;
+  display: flex;
+}
+
+.about-btn,
+.logout-btn {
+  // margin: 24px;
+  // position: absolute;
+  // z-index: 35;
+  // right: 0;
   cursor: pointer;
+  margin-left: 20px;
 
   p {
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 132%;
     text-align: center;
     font-feature-settings: "liga" off;
