@@ -66,13 +66,15 @@ export default class ActivitiesProgression extends Vue {
     this.activityStore.setCurrentActivity(null);
   }
 
-  mounted() {
+  beforeMount() {
     this._initProgressManager();
   }
 
   private _initProgressManager() {
-    ProgressPercentManager.words = this.globalStore.dataWord.length;
-    ProgressPercentManager.userAchievedWords = this.globalStore.achievedWords.length;
+    ProgressPercentManager.init(
+      this.globalStore.achievedWords.length,
+      this.globalStore.dataWord.length
+    );
   }
 
   public getLevelpath() {

@@ -170,7 +170,7 @@ export default class ActivityPanel extends Vue {
       this.activityStore.setCurrentActivity(
         this.globalStore.achievedWords.length
           ? ACTIVITY_TYPE.ACTIVITY_1
-          : ACTIVITY_TYPE.ACTIVITY_3 //ACTIVITY_ONBOARDING
+          : ACTIVITY_TYPE.ACTIVITY_ONBOARDING //ACTIVITY_ONBOARDING
       );
     }
   }
