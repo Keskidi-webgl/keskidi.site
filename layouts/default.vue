@@ -143,7 +143,7 @@ export default class DefaultLayout extends Vue {
     loader: new LoaderAnimation(),
     navigationPanel: new NavigationPanelAnimation()
   };
-  public canDisplayLoader = true
+  public canDisplayLoader = false
 
   // Auth
   public authStore: AuthStore = getModule(AuthStore, this.$store);
@@ -167,7 +167,7 @@ export default class DefaultLayout extends Vue {
 
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
-    await this.initApp();
+    this.canDisplayLoader = true
   }
 
   /**
@@ -210,6 +210,7 @@ export default class DefaultLayout extends Vue {
     this.animationElements.loader.enter({
       el,
       onComplete: async () => {
+        await this.initApp();
         done()
       },
       onStart: () => {}
