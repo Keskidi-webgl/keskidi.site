@@ -5,8 +5,8 @@
       v-if="!globalSceneStore.activeObject"
       class="scene-navigation-panel-button scene-btn previous-scene"
       :to="previousSceneLink()"
-      @mouseenter.native="splitAnimation('.room-prev')"
-      @mouseleave.native="leaveSplit('.room-prev')"
+      @mouseenter.native="onMouseEnterPrevLink"
+      @mouseleave.native="onMouseLeavePrevLink"
 
     >
       <p ref="room" class="room-name room-prev js-split-char main-font" v-html="prevSplitedRoom()"></p>
@@ -17,6 +17,8 @@
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
       class="scene-navigation-panel-button back-home"
       :to="backHomeLink()"
+      @mouseenter.native="onMouseEnterBackHome"
+      @mouseleave.native="onMouseLeaveBackHome"
     >
       <img src="~/assets/img/home.svg" alt="" />
     </nuxt-link>
@@ -25,8 +27,8 @@
       v-if="!globalSceneStore.activeObject"
       class="scene-navigation-panel-button scene-btn next-scene"
       :to="nextSceneLink()"
-      @mouseenter.native="splitAnimation('.room-next')"
-      @mouseleave.native="leaveSplit('.room-next')"
+      @mouseenter.native="onMouseEnterNextLink"
+      @mouseleave.native="onMouseLeaveNextLink"
     >
       <p ref="room" class="room-name room-next js-split-char main-font" v-html="nextSplitedRoom()"></p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
@@ -47,7 +49,7 @@
 import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import gsap from "gsap";
-import {AssetsManager} from "~/core/managers";
+import {AssetsManager, SoundDesignManager} from "~/core/managers";
 import {AUDIO_ASSET} from "~/core/enums";
 
 @Component({})
@@ -108,6 +110,36 @@ export default class SceneNavigationPanel extends Vue {
     let el = document.querySelector(identifier)
     gsap.to(el,{opacity:0,duration:0.5})
   }
+
+  onMouseEnterPrevLink() {
+    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER)
+    this.splitAnimation('.room-prev')
+  }
+
+  onMouseLeavePrevLink() {
+    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
+    this.leaveSplit('.room-prev')
+  }
+
+  onMouseEnterNextLink() {
+    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER)
+    this.splitAnimation('.room-next')
+  }
+
+  onMouseLeaveNextLink() {
+    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
+    this.leaveSplit('.room-next')
+  }
+
+  onMouseEnterBackHome() {
+    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER)
+  }
+
+  onMouseLeaveBackHome() {
+    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
+  }
+
+
 
   splitAnimation(identifier:string){
     let el = document.querySelector(identifier)
