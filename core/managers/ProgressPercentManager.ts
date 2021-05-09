@@ -6,7 +6,7 @@ import { Level } from "../types";
  *
  * @example
  * // - Initialization
- * ProgressPercentManager.init(10,2)
+ * ProgressPercentManager.init(6,10)
  * // - Update levels
  * ProgressPercentManager.update(() => {
  *  // New level passed !
@@ -36,7 +36,10 @@ class ProgressPercentManager {
 
   constructor() {}
 
-  init() {
+  init(userAchievedWords: number, words: number) {
+    this._userAchievedWords = userAchievedWords;
+    this._words = words;
+
     this._initLevels();
     this._setProgress();
   }
@@ -72,6 +75,10 @@ class ProgressPercentManager {
    * Get the current percent from the words number given and set it to the property
    */
   private _setPercent() {
+    // console.log(">> setPercent");
+    // console.log("_userAchievedWords", this._userAchievedWords);
+    // console.log("_words", this._words);
+
     this.percentLevel = (this._userAchievedWords * 100) / this._words;
     this.oneWordRule = 100 / this._words;
   }
@@ -88,6 +95,10 @@ class ProgressPercentManager {
     all = all.sort((a, b) =>
       a.order > b.order ? -1 : b.order > a.order ? 1 : 0
     );
+
+    // console.log(">> current level");
+    // console.log("all", all);
+    // console.log("percentLevel", this.percentLevel);
 
     all.forEach(level => {
       if (this.percentLevel < totalPercent) {
@@ -199,11 +210,11 @@ class ProgressPercentManager {
   }
 
   get words() {
-    return this._words
+    return this._words;
   }
 
   get userAchievedWords() {
-    return this._userAchievedWords
+    return this._userAchievedWords;
   }
 
   // - SETTERS

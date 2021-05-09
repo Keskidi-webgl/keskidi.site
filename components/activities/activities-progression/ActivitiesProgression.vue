@@ -79,12 +79,10 @@ export default class ActivitiesProgression extends Vue {
   }
 
   public getProgress() {
-    ProgressPercentManager.init();
     return this.globalStore.achievedWords.length;
   }
 
   public getTotal() {
-    ProgressPercentManager.init();
     return this.globalStore.dataWord.length;
   }
 

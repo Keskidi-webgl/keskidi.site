@@ -23,7 +23,7 @@ export default class AssetManagerInitializer extends Initializers<null, void> {
       .registerGltf(GLTF_ASSET.GLOBAL_SCENE, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/scene_globale_bake.gltf", "scene_globale_bake.gltf")
       .registerGltf(GLTF_ASSET.PAPER, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/bedroom_paper.gltf", "bedroom_paper.gltf")
       .registerGltf(GLTF_ASSET.SKATE_STICKER, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/sticker.gltf", "sticker.gltf")
-      .registerGltf(GLTF_ASSET.NOTEBOOK, "\thttps://keskidi.s3.eu-west-3.amazonaws.com/medias/carnet.gltf", "carnet.gltf")
+      .registerGltf(GLTF_ASSET.NOTEBOOK, "thttps://keskidi.s3.eu-west-3.amazonaws.com/medias/carnet.gltf", "carnet.gltf")
       .registerGltf(GLTF_ASSET.CAT, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/chat.gltf", "chat.gltf")
       .registerGltf(GLTF_ASSET.PHONE, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/phone.gltf", "phone.gltf")
       .registerGltf(GLTF_ASSET.CLOUDS, "https://keskidi.s3.eu-west-3.amazonaws.com/medias/clouds.gltf", "clouds.gltf")
