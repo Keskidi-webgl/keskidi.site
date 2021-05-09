@@ -1,24 +1,28 @@
 [
     {
         "name": "Noob",
+        "slug": "noob",
         "order": 0,
         "rule": 0,
         "position": 0
     },
     {
         "name": "Frais",
+        "slug": "frais",
         "order": 1,
         "rule": 34,
         "position": 34
     },
     {
         "name": "Badass",
+        "slug": "badass",
         "order": 2,
         "rule": 34,
         "position": 67
     },
     {
         "name": "Le crack",
+        "slug": "crack",
         "order": 3,
         "rule": 34,
         "position": 100

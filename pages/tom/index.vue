@@ -52,20 +52,20 @@
         </div>
         <div v-if="step == 2" class="w-100 step step-2">
           <p class="w-100 main-font">
-            Pour continuer, j'ai besoin de ton <strong>adresse mail</strong> afin
-            que tu puisses garder ta
+            Pour continuer, j'ai besoin de ton
+            <strong>adresse mail</strong> afin que tu puisses garder ta
             <strong class="progression"
-            >progression
+              >progression
               <img
                 src="~/assets/img/circle-doodle-two.png"
                 class="doodle circle-doodle"
                 alt=""/></strong
             >.
             <span>
-            <nuxt-link to="/rgpd" class="rgpd">
-              <img src="~/assets/img/info_RGPD.svg" alt="" />
-            </nuxt-link>
-          </span>
+              <nuxt-link to="/rgpd" class="rgpd">
+                <img src="~/assets/img/info_RGPD.svg" alt="" />
+              </nuxt-link>
+            </span>
             <img
               src="~/assets/img/doodle-line.png"
               class="doodle line-doodle"
@@ -73,8 +73,8 @@
             />
           </p>
           <p class="w-100 main-font">
-            Et puis ... mes darons ne souhaitent pas laisser rentrer n'importe qui
-            chez nous. 😉
+            Et puis ... mes darons ne souhaitent pas laisser rentrer n'importe
+            qui chez nous. 😉
           </p>
           <input
             type="text"
@@ -94,8 +94,8 @@
         </div>
 
         <span class="leave-activity" @click="back()">
-        <img src="~/assets/img/cross.svg" alt="" />
-      </span>
+          <img src="~/assets/img/cross.svg" alt="" />
+        </span>
       </CustomCard>
 
       <CustomCard
@@ -113,13 +113,13 @@
               alt=""
             />
           </h1>
-          <p class="w-100 main-font">{{ currentFact.content }}</p>
+          <p class="w-100 main-font" v-html="funfacts[currentFact].content"></p>
           <span class="leave-activity" @click="back()">
-          <img src="~/assets/img/cross.svg" alt="" />
-        </span>
+            <img src="~/assets/img/cross.svg" alt="" />
+          </span>
           <div class="w-100 action-container">
             <CustomButton
-              @click.native="random()"
+              @click.native="getFunFact()"
               arrow-color="white"
               color="#000648"
               text="Une autre"
@@ -128,7 +128,6 @@
         </div>
       </CustomCard>
     </transition>
-
   </div>
 </template>
 
@@ -141,6 +140,7 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import TomSceneElement from "~/core/scene/TomSceneElement";
 import gsap from "gsap";
+import { shuffle } from "gsap/all";
 
 @Component({
   components: {
@@ -156,9 +156,7 @@ export default class AuthPage extends Vue {
   };
   public isReady: boolean = false;
   public authStore: AuthStore = getModule(AuthStore, this.$store);
-  public currentFact: FunFactElement = {
-    content: ""
-  };
+  public currentFact: number = 0;
   public funfacts: Array<
     FunFactElement
   > = require("../../core/datas/funfacts.json");
@@ -166,23 +164,28 @@ export default class AuthPage extends Vue {
   public displayFunfact: boolean = this.authStore.isAuth;
 
   mounted() {
-    GlobalScene.context.disableParallax()
-    if (!TomSceneElement.activeAnimationAction || TomSceneElement.activeAnimationAction.name !== 'idle') {
-      TomSceneElement.playAnimation("idle", GlobalScene.context)
+    GlobalScene.context.disableParallax();
+    if (
+      !TomSceneElement.activeAnimationAction ||
+      TomSceneElement.activeAnimationAction.name !== "idle"
+    ) {
+      TomSceneElement.playAnimation("idle", GlobalScene.context);
     }
 
     GlobalScene.context.goToPresetPosition("tom", 2, () => {
-      this.isReady = true
+      this.isReady = true;
     });
 
-    this.random();
+    this.funfacts = shuffle(this.funfacts);
+
+    this.getFunFact();
   }
 
   async auth() {
     if (this.dataFormAuth.email) {
       try {
         await this.autModule.auth(this.dataFormAuth);
-        this.back()
+        this.back();
       } catch (e) {
         this.onProgress = false;
       }
@@ -192,7 +195,7 @@ export default class AuthPage extends Vue {
   beforeDestroy() {
     GlobalScene.context.enableParallax();
     if (!this.autModule.isAuth) {
-      TomSceneElement.playAnimation("hello", GlobalScene.context)
+      TomSceneElement.playAnimation("hello", GlobalScene.context);
     }
   }
 
@@ -200,13 +203,19 @@ export default class AuthPage extends Vue {
     this.$router.push("/");
   }
 
-  random() {
-    let current = this.currentFact;
-    let newFunFact = this.funfacts[
-      Math.floor(Math.random() * this.funfacts.length)
-    ]
-    if (newFunFact != current) this.currentFact = newFunFact
-    else this.random()
+  getFunFact() {
+    // let current = this.currentFact;
+    // let newFunFact = this.funfacts[
+    //   Math.floor(Math.random() * this.funfacts.length)
+    // ]
+    // if (newFunFact != current) this.currentFact = newFunFact
+    // else this.random()
+
+    if (this.currentFact < this.funfacts.length - 1) {
+      this.currentFact++;
+    } else {
+      this.currentFact = 0;
+    }
   }
 
   next() {
@@ -214,11 +223,11 @@ export default class AuthPage extends Vue {
   }
 
   public enterAnimSCard(el: Element, done: Function) {
-    const tl = gsap.timeline()
+    const tl = gsap.timeline();
     tl.from(el, {
       opacity: 0,
       duration: 1
-    })
+    });
   }
 }
 </script>
