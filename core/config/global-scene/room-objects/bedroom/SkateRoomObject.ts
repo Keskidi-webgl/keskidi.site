@@ -11,7 +11,7 @@ import gsap from "gsap";
 
 const SkateRoomObject: RoomObject = {
   name: "skate",
-  nameForHuman: "Hendeck",
+  nameForHuman: "Hendeks",
   urlSlug: ROOM_OBJECT_SLUG.SKATE,
   room: () => Bedroom,
 

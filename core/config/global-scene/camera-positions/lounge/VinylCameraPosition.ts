@@ -12,7 +12,7 @@ const VinylCameraPosition: CameraPosition = {
     lookAtPosition.z = lookAtPosition.z * 1.05
 
     const cameraPos = lookAtPosition.clone()
-    cameraPos.y = cameraPos.y * 1.1
+    cameraPos.y = cameraPos.y * 1.3
     cameraPos.x = cameraPos.x * 3
 
     return { cameraPos, lookAtPosition }
