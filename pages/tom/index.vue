@@ -79,7 +79,7 @@
           <input
             type="text"
             v-model="dataFormAuth.email"
-            class="form-control"
+            class="form-control main-font"
             id="email"
             placeholder="Ton email"
           />
@@ -334,6 +334,15 @@ export default class AuthPage extends Vue {
 
     .rgpd {
       cursor: pointer;
+    }
+
+    input {
+      border: 2px solid $dark-blue;
+      border-radius: 16px;
+      padding: 12px 22px;
+      font-size: 24px;
+
+      background-color: white;
     }
   }
 }
