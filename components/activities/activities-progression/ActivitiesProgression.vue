@@ -8,7 +8,7 @@
     </div>
 
     <h1 class="activities-title">
-      Bravo t'as progressé !
+      Bravo, tu as progressé !
       <img
         class="activities-doodle"
         src="~/assets/img/gribouillis_2_blanc.png"
@@ -62,14 +62,7 @@ export default class ActivitiesProgression extends Vue {
   public globalStore = getModule(GlobalStore, this.$store);
 
   hideActivityPanel() {
-    if (this.globalStore.achievedWords.length > 1) {
-      GlobalScene.context.resume();
-      this.activityStore.setCurrentActivity(null);
-      this.activityStore.hideActivityPanel();
-      this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl);
-    } else {
-      this.activityStore.setCurrentActivity(ACTIVITY_TYPE.KESKIDICO);
-    }
+    this.activityStore.setCurrentActivity(null);
   }
 
   mounted() {

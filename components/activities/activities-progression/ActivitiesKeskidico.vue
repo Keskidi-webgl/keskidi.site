@@ -54,15 +54,12 @@ import GlobalStore from "~/store/global";
   }
 })
 export default class ActivitiesKeskidico extends Vue {
-  public globalSceneStore = getModule(GlobalSceneStore, this.$store);
-  public activityStore = getModule(ActivityStore, this.$store);
-  public globalStore = getModule(GlobalStore, this.$store);
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
 
   hideActivityPanel() {
-    GlobalScene.context.resume();
-    this.activityStore.setCurrentActivity(null);
-    this.activityStore.hideActivityPanel();
-    this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl);
+    this.activityStore.setCurrentActivity(null)
   }
 
   mounted() {}

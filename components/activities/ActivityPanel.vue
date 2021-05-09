@@ -7,21 +7,28 @@
 
     <!-- Activity two -->
     <transition v-on:enter="animationEnterActivityTwo" v-on:leave="animationLeaveActivityTwo">
-      <ActivityTwo v-if="activityDisplay.two()" />
+      <ActivityTwo v-if="activityDisplay.two()"/>
     </transition>
 
     <!-- Acitivity three   -->
-    <transition v-on:enter="animationEnterActivityThree">
-      <ActivityThree v-if="activityDisplay.three()" />
+    <transition v-on:enter="animationEnterActivityThree" v-on:leave="animationLeaveActivityThree">
+      <ActivityThree v-if="activityDisplay.three()"/>
     </transition>
 
     <!-- Activities result -->
-    <ActivitiesResult v-if="activityDisplay.result()" />
+    <transition v-on:enter="animationEnterActivityResult" v-on:leave="animationLeaveActivityResult">
+      <ActivitiesResult v-if="activityDisplay.result()"/>
+    </transition>
+
 
     <!-- Activities progression -->
-    <ActivitiesProgression v-if="activityDisplay.progression()" />
+    <transition v-on:enter="animationEnterActivityProgression" v-on:leave="animationLeaveActivityProgression">
+      <ActivitiesProgression v-if="activityDisplay.progression()"/>
+    </transition>
 
-    <ActivitiesKeskidico v-if="activityDisplay.presentKeskidico()" />
+    <transition v-on:enter="animationEnterActivityKeskidico" v-on:leave="animationLeaveActivityKeskidico">
+      <ActivitiesKeskidico v-if="activityDisplay.presentKeskidico()"/>
+    </transition>
 
     <!-- Activity onboarding -->
     <transition
@@ -81,7 +88,14 @@ import ActivitiesKeskidico from "~/components/activities/activities-progression/
 import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
-import {ActivityOneAnimation, ActivityThreeAnimation, OnboardingActivityAnimation} from "~/core/animations/activities";
+import {
+  ActivityKeskidiAnimation,
+  ActivityOneAnimation,
+  ActivityProgressionAnimation,
+  ActivityResultAnimation,
+  ActivityThreeAnimation,
+  OnboardingActivityAnimation
+} from "~/core/animations/activities";
 import ActivityTwoAnimation from "~/core/animations/activities/ActivityTwoAnimation";
 import ActivityLeave from "~/components/activities/ActivityLeave.vue";
 
@@ -124,7 +138,11 @@ export default class ActivityPanel extends Vue {
     onboarding: new OnboardingActivityAnimation(),
     activityOne: new ActivityOneAnimation(),
     activityTwo: new ActivityTwoAnimation(),
-    activityThree: new ActivityThreeAnimation()
+    activityThree: new ActivityThreeAnimation(),
+    activityResult: new ActivityResultAnimation(),
+    activityProgression: new ActivityProgressionAnimation(),
+    activityKeskidico: new ActivityKeskidiAnimation()
+
   };
 
   public mounted() {
@@ -209,11 +227,103 @@ export default class ActivityPanel extends Vue {
   public animationEnterActivityThree(el: Element, done: Function) {
     this.animationElements.activityThree.enter({
       el,
-      onStart: () => {},
+      onStart: () => {
+      },
       onComplete: () => {
         done();
       }
     });
+  }
+
+  public animationLeaveActivityThree(el: Element, done: Function) {
+
+    this.animationElements.activityThree.leave({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT)
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityResult(el: Element, done: Function) {
+    this.animationElements.activityResult.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
+
+  public animationLeaveActivityResult(el: Element, done: Function) {
+    this.animationElements.activityResult.leave({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_PROGRESSION)
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityProgression(el: Element, done: Function) {
+    this.animationElements.activityProgression.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_PROGRESSION)
+        done()
+      }
+    })
+  }
+
+  public animationLeaveActivityProgression(el: Element, done: Function) {
+    this.animationElements.activityProgression.leave({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        if (this.globalStore.achievedWords.length > 1) {
+          GlobalScene.context.resume()
+          this.activityStore.hideActivityPanel()
+          this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl)
+        } else {
+          this.activityStore.setCurrentActivity(ACTIVITY_TYPE.KESKIDICO)
+        }
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityKeskidico(el: Element, done: Function) {
+    this.animationElements.activityKeskidico.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
+
+  public animationLeaveActivityKeskidico(el: Element, done: Function) {
+    this.animationElements.activityKeskidico.leave({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        GlobalScene.context.resume()
+        this.activityStore.hideActivityPanel()
+        this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl)
+        done()
+      }
+    })
   }
 }
 </script>
