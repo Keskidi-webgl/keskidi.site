@@ -30,14 +30,14 @@
           >,
           <span v-if=globalStore.microphonePermission>
             <span>
-              repeat
+              "repeat
               <img
                 src="~/assets/img/doodle-line.png"
                 class="doodle line-doodle"
                 alt=""
               />
             </span>
-            after me :
+            after me"
           </span>
           <span v-if=!globalStore.microphonePermission>
             <span>
@@ -163,7 +163,7 @@ import ActivityStore from "~/store/activity";
 import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
 import {Step, WordExpression} from "~/core/types";
-import {ApiManager, VoiceRecognitionManager} from "~/core/managers";
+import {ApiManager, SoundDesignManager, VoiceRecognitionManager} from "~/core/managers";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
@@ -171,6 +171,7 @@ import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
 import gsap from "gsap";
 import TomSceneElement from "~/core/scene/TomSceneElement";
+import {AUDIO_ASSET} from "~/core/enums";
 
 
 @Component({
@@ -245,7 +246,7 @@ export default class ActivityThree extends Vue {
           this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
         }
       }
-    }else {
+    } else {
       (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying')
       gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
         backgroundColor: '#000648'
@@ -280,7 +281,7 @@ export default class ActivityThree extends Vue {
   private _initVoiceRecognitionManager() {
     VoiceRecognitionManager!.onResult(result => {
       if (result.distance > 0.5) {
-
+        SoundDesignManager.playSound(AUDIO_ASSET.GOOD_ANSWER)
          TomSceneElement.playAnimation("punch", ActivityScene.context,1,()=>{
             TomSceneElement.playAnimation("idle", ActivityScene.context)
           })
@@ -314,8 +315,8 @@ export default class ActivityThree extends Vue {
           (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].disabled = true;
         }
 
-      }else{
-
+      } else {
+        SoundDesignManager.playSound(AUDIO_ASSET.BAD_ANSWER)
         TomSceneElement.playAnimation("down", ActivityScene.context,0.95,()=>{
           TomSceneElement.playAnimation("idle", ActivityScene.context)
         })

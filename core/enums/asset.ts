@@ -52,5 +52,7 @@ export enum AUDIO_ASSET {
   GLOBAL_AMBIANCE = 'globalAmbiance',
   MOUSE_HOVER = 'mouseHover',
   SKATE_STICKERS = 'skateSticker',
-  OUTSIDE_AMBIANCE= 'outsideAmbiance'
+  OUTSIDE_AMBIANCE= 'outsideAmbiance',
+  GOOD_ANSWER = 'goodAnswer',
+  BAD_ANSWER = 'badAnswer',
 }
