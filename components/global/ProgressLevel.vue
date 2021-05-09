@@ -1,25 +1,21 @@
 <template>
-  <div class="progress-level" v-bind:class="{ active: canShow }">
+  <div class="progress-level">
     <div class="container-level">
       <div class="circle-level" @click="show">
-        <p class="main-font suffix">Mots appris</p>
-        <p class="main-font stats">
-          <span class="number">{{ this.getProgress() }}</span>
-          <span class="total">/ {{ this.getTotal() }} </span>
-        </p>
+        <div class="circleWrapper">
+          <p class="main-font suffix">Mots appris</p>
+          <p class="main-font stats">
+            <span class="number">{{ this.getProgress() }}</span>
+            <span class="total">/ {{ this.getTotal() }} </span>
+          </p>
+        </div>
       </div>
 
       <div class="jauge-level">
-        <div
-          class="level-item"
-          v-for="(level, index) in this.getLevels()"
-          :key="index"
-          :class="{
-            current: getLevel().name === level.name,
-            validated: level.order < getLevel().order,
+        <div class="level-item" v-for="(level, index) in this.getLevels()" :key="index" :class="{current: getLevel().name === level.name,
+           validated: level.order < getLevel().order,
             blocked: level.order > getLevel().order
-          }"
-        >
+          }">
           <div class="level-badge">
             <img :src="getIcon(level)" alt="" />
           </div>
@@ -45,6 +41,7 @@ import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
 import { Level } from "~/core/types";
 import { ProgressPercentManager } from "~/core/managers";
 import GlobalStore from "~/store/global";
+import gsap from "gsap";
 
 // Code Example
 // https://css-tricks.com/building-progress-ring-quickly/
@@ -59,7 +56,66 @@ export default class ProgressLevel extends Vue {
   }
 
   show() {
-    this.canShow = !this.canShow;
+    // this.canShow = !this.canShow;
+    if (!this.canShow){
+      this.open()
+    } else {
+      this.close()
+    }
+
+  }
+  // right 50% --> transform: translate(50%,30px) -->
+  open(){
+    this.canShow = true
+    let tl:GSAPTimeline = gsap.timeline()
+    tl.to('.container-level',{
+      duration: 1.2,
+      ease: 'expo.inOut',
+      translateX:0})
+    tl.to('.circle-level',{opacity:0,duration:0.5,onComplete:()=>{
+        gsap.set('.circle-level',{right:'50%',delay:0.3,translateX:'50%',translateY:'30px'})
+        gsap.set('.circleWrapper',{left:'-15px',delay:0.3,top:'-10px'})
+      }},'-0.2')
+    tl.to('.circle-level',{opacity:1,duration:0.5})
+    tl.to('.bar-level',{height:'513px',duration:0.8,ease: 'expo.inOut'})
+    tl.fromTo('.level-item',{y:10},{
+      y:0,
+      stagger:{
+        each:0.1,
+        // from:'end'
+      },
+      opacity:1,
+      duration:0.6,
+      ease:"power2.out"
+    })
+
+
+    console.log('open menu')
+  }
+
+  close(){
+    this.canShow = false
+    let tl:GSAPTimeline = gsap.timeline()
+
+    gsap.to('.container-level',{
+      duration: 1.2,
+      delay:0.5,
+      ease: 'expo.inOut',
+      translateX:-316,
+      onComplete:()=>{
+        gsap.set('.bar-level',{height:'0px'})
+      }
+    })
+
+    tl.to('.circle-level',{opacity:0,duration:0.5,onComplete:()=>{
+        gsap.set('.circle-level',{right:'-80px',delay:0.3,translateX:'30px',translateY:'-30px'})
+        gsap.set('.circleWrapper',{left:'unset',delay:0.3,top:'unset'})
+      }},'-0.2')
+    tl.to('.circle-level',{opacity:1,duration:0.5,delay:0.5})
+    tl.to('.level-item',{opacity:0, duration:0.6},'-=0.5')
+
+
+    console.log('close menu')
   }
 
   public getProgress() {
@@ -83,6 +139,7 @@ export default class ProgressLevel extends Vue {
   public getLevel() {
     return ProgressPercentManager.current!;
   }
+
 
   public getIcon(level: Level) {
     // Si le niveau a déjà été validé
@@ -120,6 +177,8 @@ $badge-size: 50px;
 
   .container-level {
     position: absolute;
+    width: 316px;
+    transform: translateX(-316px);
     top: 0;
     background: linear-gradient(
       120.55deg,
@@ -127,9 +186,8 @@ $badge-size: 50px;
       rgba(255, 255, 255, 0) 100%
     );
     backdrop-filter: blur(59.4294px);
-    width: 0;
     height: 100vh;
-    transition: 0.3s ease all;
+    //transition: 0.3s ease all;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -144,14 +202,15 @@ $badge-size: 50px;
         rgba(255, 255, 255, 0.85) 100%
       );
       backdrop-filter: blur(59.4294px);
-      border-radius: 245.5px;
       border-radius: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 30px;
-      position: relative;
+      position: absolute;
+      right: -80px;
+      //position: relative;
       color: $dark-blue;
       transform: translate(30px, -30px);
       transition: 0.3s ease all;
@@ -183,18 +242,21 @@ $badge-size: 50px;
       width: 100%;
       height: calc(100% - 150px);
       overflow: hidden;
-      padding: 0;
       transition: 0.3s ease all;
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
       justify-content: space-between;
+      align-items: center;
       position: relative;
-      opacity: 0;
+      //opacity: 1;
+      margin-top: auto;
+      padding: 75px 0;
 
       .level-item {
         display: flex;
         align-items: center;
         min-width: max-content;
+        opacity: 0;
 
         .level-badge {
           height: $badge-size;
@@ -262,12 +324,13 @@ $badge-size: 50px;
       }
 
       .bar-level {
-        height: calc(100% - 2 * #{$jauge-level-padding-h});
+        height: 0; // calculated height --> calc(100% - 2 * #{$jauge-level-padding-h});
         width: 2px;
         position: absolute;
         background-color: rgba(0, 6, 72, 0.2);
         top: $jauge-level-padding-h;
-        left: 0;
+        //left: 0;
+        left: 88px;
         z-index: -1;
         transition: 0.3s ease all;
 
@@ -280,30 +343,34 @@ $badge-size: 50px;
         }
       }
     }
-  }
-
-  &.active {
-    .container-level {
-      width: 316px;
-
-      .circle-level {
-        margin-top: 34px;
-        transform: translate(0, 0);
-
-        p {
-          transform: translate(0, 0);
-        }
-      }
-
-      .jauge-level {
-        padding: $jauge-level-padding-h $jauge-level-padding-w;
-        opacity: 1;
-
-        .bar-level {
-          left: calc(#{$jauge-level-padding-w} + #{$badge-size} / 2);
-        }
-      }
+    .circleWrapper{
+      position: relative;
+      text-align: center;
     }
   }
+
+  //&.active {
+  //  .container-level {
+  //    //width: 316px;
+  //
+  //    .circle-level {
+  //      margin-top: 34px;
+  //      transform: translate(0, 0);
+  //
+  //      p {
+  //        transform: translate(0, 0);
+  //      }
+  //    }
+  //
+  //    .jauge-level {
+  //      padding: $jauge-level-padding-h $jauge-level-padding-w;
+  //      opacity: 1;
+  //
+  //      .bar-level {
+  //        left: calc(#{$jauge-level-padding-w} + #{$badge-size} / 2);
+  //      }
+  //    }
+  //  }
+  //}
 }
 </style>
