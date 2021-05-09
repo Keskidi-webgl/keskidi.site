@@ -16,6 +16,9 @@ const LoungeInteractPoint: InteractionPoint = {
       .getObjectByName("salon")!
       .getWorldPosition(position);
 
+    position.y = 1 + position.y + 50;
+    position.x = 1 + position.x - 20; // Aligné avec la mezzanine : 50
+
     return position;
   },
 

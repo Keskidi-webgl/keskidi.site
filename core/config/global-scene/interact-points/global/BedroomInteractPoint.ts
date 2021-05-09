@@ -16,6 +16,9 @@ const BedroomInteractPoint: InteractionPoint = {
       .getObjectByName("chambre")!
       .getWorldPosition(position);
 
+    position.y = 1 + position.y + 80;
+    position.x = 1 + position.x - 50;
+
     return position;
   },
 

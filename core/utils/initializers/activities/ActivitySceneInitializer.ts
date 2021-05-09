@@ -4,6 +4,7 @@ import {SceneManager} from "~/core/managers";
 import TomSceneElement from "~/core/scene/TomSceneElement";
 import ActivityScene from "~/core/scene/ActivityScene";
 import {GLTF_ASSET} from "~/core/enums";
+import {PointLight} from "three";
 
 export default class ActivitySceneInitializer extends Initializers<{ canvas: HTMLCanvasElement }, void> {
   init(): void {
@@ -24,7 +25,7 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
       activateOrbitControl: false,
     })
 
-    camera.position.set(0, 10, 25)
+    camera.position.set(0, 14, 25)
 
     return sceneContext
   }
@@ -37,6 +38,10 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
   }
 
   private _addLights() {
+    const pointLight = new PointLight(0xffffff, 0.5)
+    pointLight.shadow.bias = -0.005;
+    pointLight.position.set(100, 250, 0)
+    ActivityScene.context.scene.add(pointLight)
     const light = SceneHelper.createFreshHemisphereLight()
     light.position.z = 10
     ActivityScene.context.scene.add(light)

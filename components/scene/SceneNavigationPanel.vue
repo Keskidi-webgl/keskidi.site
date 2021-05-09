@@ -7,9 +7,12 @@
       :to="previousSceneLink()"
       @mouseenter.native="onMouseEnterPrevLink"
       @mouseleave.native="onMouseLeavePrevLink"
-
     >
-      <p ref="room" class="room-name room-prev js-split-char main-font" v-html="prevSplitedRoom()"></p>
+      <p
+        ref="room"
+        class="room-name room-prev js-split-char main-font"
+        v-html="prevSplitedRoom()"
+      ></p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
     <nuxt-link
@@ -30,7 +33,11 @@
       @mouseenter.native="onMouseEnterNextLink"
       @mouseleave.native="onMouseLeaveNextLink"
     >
-      <p ref="room" class="room-name room-next js-split-char main-font" v-html="nextSplitedRoom()"></p>
+      <p
+        ref="room"
+        class="room-name room-next js-split-char main-font"
+        v-html="nextSplitedRoom()"
+      ></p>
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
 
@@ -49,8 +56,8 @@
 import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import gsap from "gsap";
-import {AssetsManager, SoundDesignManager} from "~/core/managers";
-import {AUDIO_ASSET} from "~/core/enums";
+import { AssetsManager, SoundDesignManager } from "~/core/managers";
+import { AUDIO_ASSET } from "~/core/enums";
 
 @Component({})
 export default class SceneNavigationPanel extends Vue {
@@ -61,8 +68,8 @@ export default class SceneNavigationPanel extends Vue {
     | string
     | undefined = this.globalSceneStore.activeRoom?.previousRoom().nameForHuman;
 
-  public roomsName:Array<string> = [this.next as string,this.prev as string]
-  public words:any
+  public roomsName: Array<string> = [this.next as string, this.prev as string];
+  public words: any;
 
   public backHomeLink() {
     return "/";
@@ -84,91 +91,86 @@ export default class SceneNavigationPanel extends Vue {
     return this.globalSceneStore.activeObject?.room().fullUrl;
   }
 
-  public nextSplitedRoom(){
-    return this.splitText(this.next as string)
+  public nextSplitedRoom() {
+    return this.splitText(this.next as string);
   }
 
-  public prevSplitedRoom(){
-    return this.splitText(this.prev as string)
+  public prevSplitedRoom() {
+    return this.splitText(this.prev as string);
   }
 
-  mounted(){
+  mounted() {}
 
+  splitText(text: string) {
+    let txtSpan = "";
+    text.split("").forEach((content: any) => {
+      txtSpan += `<span>${content}</span>`;
+    });
+
+    return txtSpan;
   }
 
-  splitText(text:string){
-
-    let txtSpan = ''
-    text.split('').forEach((content:any) =>{
-      txtSpan += `<span>${content}</span>`
-    })
-
-    return txtSpan
-  }
-
-  leaveSplit(identifier:string){
-    let el = document.querySelector(identifier)
-    gsap.to(el,{opacity:0,duration:0.5})
+  leaveSplit(identifier: string) {
+    let el = document.querySelector(identifier);
+    gsap.to(el, { opacity: 0, duration: 0.5 });
   }
 
   onMouseEnterPrevLink() {
-    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER)
-    this.splitAnimation('.room-prev')
+    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER);
+    this.splitAnimation(".room-prev");
   }
 
   onMouseLeavePrevLink() {
-    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
-    this.leaveSplit('.room-prev')
+    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER);
+    this.leaveSplit(".room-prev");
   }
 
   onMouseEnterNextLink() {
-    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER)
-    this.splitAnimation('.room-next')
+    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER);
+    this.splitAnimation(".room-next");
   }
 
   onMouseLeaveNextLink() {
-    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
-    this.leaveSplit('.room-next')
+    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER);
+    this.leaveSplit(".room-next");
   }
 
   onMouseEnterBackHome() {
-    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER)
+    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER);
   }
 
   onMouseLeaveBackHome() {
-    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
+    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER);
   }
 
+  splitAnimation(identifier: string) {
+    let el = document.querySelector(identifier);
+    let letters = el!.querySelectorAll("span");
 
-
-  splitAnimation(identifier:string){
-    let el = document.querySelector(identifier)
-    let letters = el!.querySelectorAll( 'span')
-
-      gsap.to(el,{opacity:1,duration:0.2})
-      gsap.to(letters,{
-        duration:0.2,
-        ease: 'power1.in',
-        stagger:{
-          each: 0.02
-        },
-        translateY:-20,
-        autoAlpha: 1,
-        onComplete:function (){
-          gsap.set(letters, {
-            translateY: 20
-          });
-          gsap.to(letters,  {
-            duration: 0.3,
-            ease: 'power1.out',
-            opacity: 1,
-            translateY: 0,
-          });
-        }})
+    gsap.to(el, { opacity: 1, duration: 0.2 });
+    gsap.to(letters, {
+      duration: 0.2,
+      ease: "power1.in",
+      stagger: {
+        each: 0.02
+      },
+      translateY: -20,
+      autoAlpha: 1,
+      onComplete: function() {
+        gsap.set(letters, {
+          translateY: 20
+        });
+        gsap.to(letters, {
+          duration: 0.3,
+          ease: "power1.out",
+          opacity: 1,
+          translateY: 0
+        });
+      }
+    });
 
     // }
   }
-
 }
 </script>
 
@@ -213,11 +215,12 @@ export default class SceneNavigationPanel extends Vue {
         justify-content: center;
         margin: 0;
         height: 20px;
+        pointer-events: none;
+
+        span {
+          font-weight: bold;
+        }
       }
-      //
-      //&:hover .room-name {
-      //  opacity: 1;
-      //}
 
       img {
         width: 8px;
@@ -268,11 +271,12 @@ export default class SceneNavigationPanel extends Vue {
     display: block;
     overflow: hidden;
     width: 130px;
-    span , path {
+    span,
+    path {
       display: inline-block;
       vertical-align: middle;
       min-width: 0.25em;
-      line-height:1;
+      line-height: 1;
     }
   }
 }

@@ -188,6 +188,7 @@ export default class ActivityOne extends Vue {
     const tl = gsap.timeline({
       onComplete: () => {
         this.displayActivityResult = true;
+        ActivityScene.context.pause();
       }
     });
     tl.to(
