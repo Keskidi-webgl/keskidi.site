@@ -1,20 +1,14 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
-  BackSide,
-  CanvasTexture,
   DoubleSide,
   HemisphereLight,
   LinearFilter,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
-  PlaneBufferGeometry,
   PointLight,
   Scene,
-  ShadowMaterial,
-  SpotLight,
-  SpotLightHelper,
   sRGBEncoding,
   Texture,
   Vector3,
@@ -40,8 +34,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     this._addLights(true)
-    //this._createCanvasBackground()
-    //this._createPlanesBackground()
     this._registerPresetPositions()
     this._optimizeScene()
     //this._configGUI()
@@ -66,8 +58,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // Create renderer
     const renderer = this._createRender()
     renderer.outputEncoding = sRGBEncoding
-    renderer.shadowMap.autoUpdate = false
-    renderer.shadowMap.needsUpdate = true
 
     return new SceneManager({
       canvas: this._data.canvas,
@@ -110,7 +100,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     }).hideGui()
-      //.enableStats()
+      .enableStats()
       .enableParallax()
 
   }
@@ -175,65 +165,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addRecordPlayer()
     this._addComputer()
   }
-
-  private _createPlanesBackground(){
-    let globalScene = GlobalScene.context.scene
-
-    const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
-    var material = new ShadowMaterial({
-      // depthWrite: false,
-      side: BackSide,
-      opacity: 0.1,
-    });
-
-    this.floor = new Mesh(planeGeometry,material)
-    this.floor.name = 'floor'
-    this.floor.position.y = -1
-    this.floor.receiveShadow = true
-
-    // this.floor.layers.mask = 2
-    globalScene.add(this.floor)
-
-    const light = new SpotLight( 0xD3D3D3);
-    const helper = new SpotLightHelper( light );
-    light.position.set(332,1664,332)
-
-
-    light.angle = 0.4;
-    light.penumbra = 0.05;
-    light.decay = 1;
-    light.distance = 2000;
-    light.shadow.radius = 8
-
-    light.shadow.mapSize.height = 2048;
-    light.shadow.mapSize.width = 2048;
-    light.castShadow = true
-
-    globalScene.add( light );
-
-    let floorFolder = GlobalScene.context.gui.addFolder("Floor")
-    floorFolder.add(this.floor.position,'x',-1000,1000,0.01).listen()
-    floorFolder.add(this.floor.position,'y',-1000,1000,0.01).listen()
-    floorFolder.add(this.floor.position,'z',-1000,1000,0.01).listen()
-
-    let sceneFolder = GlobalScene.context.gui.addFolder("Light")
-    sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
-    sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
-    sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
-  }
-
-  private _createCanvasBackground(){
-    const canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-    const my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
-    my_gradient.addColorStop(0, "#FCE9E1");
-    my_gradient.addColorStop(0.5, "#FDF0E9");
-    ctx!.fillStyle = my_gradient;
-    ctx!.fillRect(0, 0, GlobalScene.context.width, GlobalScene.context.height);
-    const texture = new CanvasTexture(canvas);
-    GlobalScene.context.scene.background = texture
-  }
-
 
   /**
    * Retrieve gltf global scene and inject it into Global scene instance

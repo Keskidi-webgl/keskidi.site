@@ -170,11 +170,9 @@ export default class ActivityOne extends Vue {
     if (goodAnswer) {
       TomSceneElement.playAnimation("punch", ActivityScene.context)
       SoundDesignManager.playSound(AUDIO_ASSET.GOOD_ANSWER)
-      //SoundDesignManager.stopSound(AUDIO_ASSET.GOOD_ANSWER)
     } else {
       TomSceneElement.playAnimation("down", ActivityScene.context);
       SoundDesignManager.playSound(AUDIO_ASSET.BAD_ANSWER)
-      //SoundDesignManager.stopSound(AUDIO_ASSET.BAD_ANSWER)
     }
 
     this.beforeEnterResultAnimation();
