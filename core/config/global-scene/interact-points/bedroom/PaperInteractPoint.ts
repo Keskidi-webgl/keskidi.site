@@ -4,7 +4,10 @@ import { Vector3 } from "three";
 import GlobalStore from "~/store/global";
 import AuthStore from "~/store/auth";
 import { InteractionPoint } from "~/core/config/global-scene/interact-points/types";
-import {NotebookRoomObject, PaperRoomObject} from "~/core/config/global-scene/room-objects";
+import {
+  NotebookRoomObject,
+  PaperRoomObject
+} from "~/core/config/global-scene/room-objects";
 
 const PaperInteractPoint: InteractionPoint = {
   name: PaperRoomObject.urlSlug,
@@ -16,6 +19,9 @@ const PaperInteractPoint: InteractionPoint = {
     GlobalScene.context.scene
       .getObjectByName("paper")!
       .getWorldPosition(position);
+
+    position.y = 1 + position.y + 25;
+    position.x = 1 + position.x - 25;
 
     return position;
   },
