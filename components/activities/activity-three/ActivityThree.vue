@@ -28,15 +28,28 @@
               alt=""
             /> </span
           >,
-          <span>
-            repeat
-            <img
-              src="~/assets/img/doodle-line.png"
-              class="doodle line-doodle"
-              alt=""
-            />
+          <span v-if=globalStore.microphonePermission>
+            <span>
+              repeat
+              <img
+                src="~/assets/img/doodle-line.png"
+                class="doodle line-doodle"
+                alt=""
+              />
+            </span>
+            after me :
           </span>
-          after me :
+          <span v-if=!globalStore.microphonePermission>
+            <span>
+              listen
+              <img
+                src="~/assets/img/doodle-line.png"
+                class="doodle line-doodle"
+                alt=""
+              />
+            </span>
+            to me :
+          </span>
         </h2>
 
         <div class="content-expressionsWrapper" v-if="activeExpression">
@@ -222,9 +235,9 @@ export default class ActivityThree extends Vue {
 
     if (!this.globalStore.microphonePermission) {
       (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.add("isRecording");
-      // pulse effect
+
       let tl:any = gsap.timeline({yoyo:true,repeat:-1})
-     tl.fromTo(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{scale: 1},{scale:1.2,duration:1})
+      tl.fromTo(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{scale: 1},{scale:1.2,duration:1})
 
       (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
         (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.remove("isRecording");
@@ -263,9 +276,10 @@ export default class ActivityThree extends Vue {
     VoiceRecognitionManager!.onResult(result => {
       if (result.distance > 0.5) {
 
-        //            TomSceneElement.playAnimation("idle", ActivityScene.context)
+         TomSceneElement.playAnimation("punch", ActivityScene.context,1,()=>{
+            TomSceneElement.playAnimation("idle", ActivityScene.context)
+          })
 
-        TomSceneElement.playAnimation("punch", ActivityScene.context)
         let tl:any = gsap.timeline()
         tl.to((<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess], {
             opacity:0,
@@ -287,15 +301,21 @@ export default class ActivityThree extends Vue {
             if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
               this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess];
             }
-            //TomSceneElement.playAnimation("idle", ActivityScene.context)
           }},
           '-0.2')
+
 
         if (this.countExpressionSuccess >= 2) {
           (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].disabled = true;
         }
 
       }else{
+
+        TomSceneElement.playAnimation("down", ActivityScene.context,0.95,()=>{
+          TomSceneElement.playAnimation("idle", ActivityScene.context)
+        })
+
+
         gsap.fromTo((<Array<HTMLElement>>this.$refs.activityRecord)[this.countExpressionSuccess],{
           translateX:-10
         },
