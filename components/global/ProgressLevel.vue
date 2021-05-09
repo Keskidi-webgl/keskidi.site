@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-level" v-bind:class="{ active: canShow }">
+  <div class="progress-level">
     <div class="container-level">
       <div class="circle-level" @click="show">
         <p class="main-font suffix">Mots appris</p>
@@ -39,6 +39,7 @@ import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
 import { Level } from "~/core/types";
 import { ProgressPercentManager } from "~/core/managers";
 import GlobalStore from "~/store/global";
+import gsap from "gsap";
 
 // Code Example
 // https://css-tricks.com/building-progress-ring-quickly/
@@ -64,11 +65,19 @@ export default class ProgressLevel extends Vue {
 
   open(){
     this.canShow = true
+    gsap.to('.container-level',{
+      duration: 1.2,
+      ease: 'expo.inOut',
+      translateX:0})
     console.log('open menu')
   }
 
   close(){
     this.canShow = false
+    gsap.to('.container-level',{
+      duration: 1.2,
+      ease: 'expo.inOut',
+      translateX:-316})
     console.log('close menu')
   }
 
@@ -131,7 +140,7 @@ $badge-size: 50px;
   .container-level {
     position: absolute;
     width: 316px;
-    //width: 0;
+    transform: translateX(-316px);
     top: 0;
     background: linear-gradient(
       120.55deg,
@@ -140,7 +149,7 @@ $badge-size: 50px;
     );
     backdrop-filter: blur(59.4294px);
     height: 100vh;
-    transition: 0.3s ease all;
+    //transition: 0.3s ease all;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -162,6 +171,7 @@ $badge-size: 50px;
       justify-content: center;
       padding: 30px;
       position: absolute;
+      right: -80px;
       //position: relative;
       color: $dark-blue;
       transform: translate(30px, -30px);
