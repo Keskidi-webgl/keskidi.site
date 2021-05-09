@@ -77,6 +77,17 @@ export default class ProgressLevel extends Vue {
         gsap.set('.circleWrapper',{left:'-15px',delay:0.3,top:'-10px'})
       }},'-0.2')
     tl.to('.circle-level',{opacity:1,duration:0.5})
+    tl.to('.bar-level',{height:'513px',duration:0.8,ease: 'expo.inOut'})
+    tl.fromTo('.level-item',{y:10},{
+      y:0,
+      stagger:{
+        each:0.1,
+        // from:'end'
+      },
+      opacity:1,
+      duration:0.6,
+      ease:"power2.out"
+    })
 
 
     console.log('open menu')
@@ -85,15 +96,24 @@ export default class ProgressLevel extends Vue {
   close(){
     this.canShow = false
     let tl:GSAPTimeline = gsap.timeline()
+
     gsap.to('.container-level',{
       duration: 1.2,
+      delay:0.5,
       ease: 'expo.inOut',
-      translateX:-316})
+      translateX:-316,
+      onComplete:()=>{
+        gsap.set('.bar-level',{height:'0px'})
+      }
+    })
+
     tl.to('.circle-level',{opacity:0,duration:0.5,onComplete:()=>{
         gsap.set('.circle-level',{right:'-80px',delay:0.3,translateX:'30px',translateY:'-30px'})
         gsap.set('.circleWrapper',{left:'unset',delay:0.3,top:'unset'})
       }},'-0.2')
     tl.to('.circle-level',{opacity:1,duration:0.5,delay:0.5})
+    tl.to('.level-item',{opacity:0, duration:0.6},'-=0.5')
+
 
     console.log('close menu')
   }
@@ -229,7 +249,6 @@ $badge-size: 50px;
       align-items: center;
       position: relative;
       //opacity: 1;
-      opacity: 0;
       margin-top: auto;
       padding: 75px 0;
 
@@ -237,6 +256,7 @@ $badge-size: 50px;
         display: flex;
         align-items: center;
         min-width: max-content;
+        opacity: 0;
 
         .level-badge {
           height: $badge-size;
@@ -304,7 +324,7 @@ $badge-size: 50px;
       }
 
       .bar-level {
-        height: calc(100% - 2 * #{$jauge-level-padding-h});
+        height: 0; // calculated height --> calc(100% - 2 * #{$jauge-level-padding-h});
         width: 2px;
         position: absolute;
         background-color: rgba(0, 6, 72, 0.2);
