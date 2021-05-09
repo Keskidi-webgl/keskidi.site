@@ -270,6 +270,9 @@ export default class DefaultLayout extends Vue {
 
   public logout() {
     this.authStore.logout();
+    if (this.$route.path !== '/') {
+      this.$router.push('/')
+    }
   }
 }
 </script>
