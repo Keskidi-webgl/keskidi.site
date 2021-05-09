@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from "nuxt-property-decorator";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
@@ -120,7 +120,7 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 import AuthStore from "~/store/auth";
 
 // Progress Level
-import {Level} from "~/core/types";
+import { Level } from "~/core/types";
 import ProgressLevel from "~/components/global/ProgressLevel.vue";
 
 // Activities
@@ -154,7 +154,7 @@ export default class DefaultLayout extends Vue {
     loader: new LoaderAnimation(),
     navigationPanel: new NavigationPanelAnimation()
   };
-  public canDisplayLoader = false
+  public canDisplayLoader = false;
 
   // Auth
   public authStore: AuthStore = getModule(AuthStore, this.$store);
@@ -189,7 +189,7 @@ export default class DefaultLayout extends Vue {
 
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
-    this.canDisplayLoader = true
+    this.canDisplayLoader = true;
   }
 
   /**
@@ -209,7 +209,7 @@ export default class DefaultLayout extends Vue {
         globalSceneStore: this.globalSceneStore,
         globalStore: this.globalStore
       }).init();
-      this._getMicrophonePermissions()
+      this._getMicrophonePermissions();
 
       this.globalStore.setIsAppInit(true);
     }
@@ -233,7 +233,7 @@ export default class DefaultLayout extends Vue {
       el,
       onComplete: async () => {
         await this.initApp();
-        done()
+        done();
       },
       onStart: () => {}
     });
