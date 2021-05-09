@@ -247,12 +247,21 @@ export default class ActivityThree extends Vue {
       }
     }else {
       (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying')
-      gsap.to((<HTMLAudioElement>this.$refs.playAudio),{backgroundColor: '#000648'})
-      gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children,{stroke: 'white'})
+      gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
+        backgroundColor: '#000648'
+      });
+      //@ts-ignore
+      gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
+        stroke: 'white'
+      })
       (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
-        (<HTMLAudioElement>this.$refs.playAudio).classList.remove('audioPlaying')
-        gsap.to((<HTMLAudioElement>this.$refs.playAudio),{backgroundColor: 'white'})
-        gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children,{stroke: '#000648'})
+        (<HTMLAudioElement>this.$refs.playAudio).classList.remove('audioPlaying');
+        gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
+          backgroundColor: 'white'
+        })
+        gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
+          stroke: '#000648'
+        })
       }
     }
   }

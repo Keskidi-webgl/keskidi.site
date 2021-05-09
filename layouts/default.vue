@@ -28,6 +28,7 @@
       <!-- Loader -->
       <transition v-on:enter="animEnterLoader">
         <Loader
+          v-if="canDisplayLoader"
           class="site-loader overlay-element"
           :loading-data="loadingProgressions"
         ></Loader>
@@ -90,12 +91,12 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import { AssetsManager } from "~/core/managers";
-import { AssetManagerInitializer } from "~/core/utils/initializers";
+import {AssetsManager} from "~/core/managers";
+import {AssetManagerInitializer} from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 
 // Scene
@@ -107,7 +108,7 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 import AuthStore from "~/store/auth";
 
 // Progress Level
-import { Level } from "~/core/types";
+import {Level} from "~/core/types";
 import ProgressLevel from "~/components/global/ProgressLevel.vue";
 
 // Activities
@@ -115,8 +116,8 @@ import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
 import SoundButton from "~/components/global/SoundButton.vue";
-import { LoaderAnimation } from "~/core/animations/loader";
-import { NavigationPanelAnimation } from "~/core/animations/activities";
+import {LoaderAnimation} from "~/core/animations/loader";
+import {NavigationPanelAnimation} from "~/core/animations/activities";
 
 @Component({
   components: {
@@ -140,6 +141,7 @@ export default class DefaultLayout extends Vue {
     loader: new LoaderAnimation(),
     navigationPanel: new NavigationPanelAnimation()
   };
+  public canDisplayLoader = true
 
   // Auth
   public authStore: AuthStore = getModule(AuthStore, this.$store);
