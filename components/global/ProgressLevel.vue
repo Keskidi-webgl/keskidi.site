@@ -1,6 +1,31 @@
 <template>
   <div class="progress-level">
     <div class="container-level">
+      <!-- Leave about page -->
+      <div class="close-progress" @click="close">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2 2L22 21.9997"
+            stroke="#000648"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M2 22L22 2.00027"
+            stroke="#000648"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
       <div class="circle-level" @click="show">
         <div class="circleWrapper">
           <p class="main-font suffix">Mots appris</p>
@@ -10,7 +35,6 @@
           </p>
         </div>
       </div>
-
       <div class="jauge-level">
         <div
           class="level-item"
@@ -122,6 +146,7 @@ export default class ProgressLevel extends Vue {
         ease: "power2.out"
       }
     );
+    tl.to(".close-progress", { opacity: 1 });
 
     console.log("open menu");
   }
@@ -162,6 +187,7 @@ export default class ProgressLevel extends Vue {
       "-0.2"
     );
     tl.to(".circle-level", { opacity: 1, duration: 0.5, delay: 0.5 });
+    tl.to(".close-progress", { opacity: 0 });
     tl.to(".level-item", { opacity: 0, duration: 0.6 }, "-=0.5");
 
     console.log("close menu");
@@ -394,6 +420,28 @@ $badge-size: 50px;
     .circleWrapper {
       position: relative;
       text-align: center;
+    }
+
+    .close-progress {
+      position: absolute;
+      top: 6px;
+      right: 3px;
+      background: linear-gradient(
+        146.31deg,
+        rgba(255, 255, 255, 0.4) 7.41%,
+        rgba(255, 255, 255, 0.1) 94.07%
+      );
+      box-shadow: 0px 4px 25px -1px rgba(190, 190, 190, 0.15);
+      backdrop-filter: blur(20px);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100%;
+      cursor: pointer;
+
+      opacity: 0;
     }
   }
 
