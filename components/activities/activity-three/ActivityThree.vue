@@ -257,7 +257,7 @@ export default class ActivityThree extends Vue {
       gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
         stroke: 'white'
       });
-      
+
       (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
         (<HTMLAudioElement>this.$refs.playAudio).classList.remove('audioPlaying');
 
