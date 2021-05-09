@@ -23,8 +23,10 @@
         notre expérience.
       </h1>
     </div>
-
+    <!--
     <div v-if="isChrome && !isMobile">
+    -->
+    <div>
       <!-- Loader -->
       <transition v-on:enter="animEnterLoader">
         <Loader
@@ -184,8 +186,7 @@ export default class DefaultLayout extends Vue {
         globalSceneStore: this.globalSceneStore,
         globalStore: this.globalStore
       }).init();
-
-      this._getMicrophonePermissions();
+      this._getMicrophonePermissions()
 
       this.globalStore.setIsAppInit(true);
     }
