@@ -3,6 +3,8 @@ import {TomAnimation, TomAnimationName} from "~/core/types";
 import {SceneManager} from "~/core/managers";
 import {GLTF_ASSET} from "~/core/enums";
 import Helpers from "~/core/utils/helpers";
+import gsap from "gsap";
+
 
 /**
  * This class is a manager for Tom fbx object. We retrieve one instance of fbx object to use it in different scenes
@@ -47,8 +49,9 @@ class TomSceneElement {
     return this
   }
 
-  public playAnimation(animationName: TomAnimationName, sceneContext: SceneManager) {
+  public playAnimation(animationName: TomAnimationName, sceneContext: SceneManager,duration?:number,callback?:()=>void) {
     let animationClip: AnimationClip | null = null
+
 
     switch (animationName) {
       case "idle":
@@ -71,6 +74,8 @@ class TomSceneElement {
         break;
     }
 
+
+
     const animationActionToPlay = sceneContext.generateAnimationAction(animationClip, GLTF_ASSET.TOM)
     animationActionToPlay.reset()
 
@@ -84,6 +89,12 @@ class TomSceneElement {
 
     animationActionToPlay.fadeIn(1)
     animationActionToPlay.play()
+    if (duration && callback){
+      gsap.to(null,{duration:duration,onComplete:()=>{
+          callback()
+        }})
+    }
+
   }
 
   private _checkIfInit() {

@@ -6,20 +6,29 @@
     </transition>
 
     <!-- Activity two -->
-    <transition v-on:enter="animationEnterActivityTwo">
-      <ActivityTwo v-if="activityDisplay.two()" />
+    <transition v-on:enter="animationEnterActivityTwo" v-on:leave="animationLeaveActivityTwo">
+      <ActivityTwo v-if="activityDisplay.two()"/>
     </transition>
 
     <!-- Acitivity three   -->
-    <ActivityThree v-if="activityDisplay.three()" />
+    <transition v-on:enter="animationEnterActivityThree" v-on:leave="animationLeaveActivityThree">
+      <ActivityThree v-if="activityDisplay.three()"/>
+    </transition>
 
     <!-- Activities result -->
-    <ActivitiesResult v-if="activityDisplay.result()" />
+    <transition v-on:enter="animationEnterActivityResult" v-on:leave="animationLeaveActivityResult">
+      <ActivitiesResult v-if="activityDisplay.result()"/>
+    </transition>
+
 
     <!-- Activities progression -->
-    <ActivitiesProgression v-if="activityDisplay.progression()" />
+    <transition v-on:enter="animationEnterActivityProgression" v-on:leave="animationLeaveActivityProgression">
+      <ActivitiesProgression v-if="activityDisplay.progression()"/>
+    </transition>
 
-    <ActivitiesKeskidico v-if="activityDisplay.presentKeskidico()" />
+    <transition v-on:enter="animationEnterActivityKeskidico" v-on:leave="animationLeaveActivityKeskidico">
+      <ActivitiesKeskidico v-if="activityDisplay.presentKeskidico()"/>
+    </transition>
 
     <!-- Activity onboarding -->
     <transition
@@ -62,11 +71,11 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import ActivityOne from "~/components/activities/activity-one/ActivityOne.vue";
-import { ACTIVITY_TYPE } from "~/core/enums";
+import {ACTIVITY_TYPE} from "~/core/enums";
 import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
@@ -80,12 +89,17 @@ import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
 import {
+  ActivityKeskidiAnimation,
   ActivityOneAnimation,
+  ActivityProgressionAnimation,
+  ActivityResultAnimation,
+  ActivityThreeAnimation,
   OnboardingActivityAnimation
 } from "~/core/animations/activities";
 import ActivityTwoAnimation from "~/core/animations/activities/ActivityTwoAnimation";
-gsap.registerPlugin(CustomEase);
 import ActivityLeave from "~/components/activities/ActivityLeave.vue";
+
+gsap.registerPlugin(CustomEase);
 
 @Component({
   components: {
@@ -123,7 +137,12 @@ export default class ActivityPanel extends Vue {
   public animationElements = {
     onboarding: new OnboardingActivityAnimation(),
     activityOne: new ActivityOneAnimation(),
-    activityTwo: new ActivityTwoAnimation()
+    activityTwo: new ActivityTwoAnimation(),
+    activityThree: new ActivityThreeAnimation(),
+    activityResult: new ActivityResultAnimation(),
+    activityProgression: new ActivityProgressionAnimation(),
+    activityKeskidico: new ActivityKeskidiAnimation()
+
   };
 
   public mounted() {
@@ -138,7 +157,7 @@ export default class ActivityPanel extends Vue {
       this.activityStore.setCurrentActivity(
         this.globalStore.achievedWords.length
           ? ACTIVITY_TYPE.ACTIVITY_1
-          : ACTIVITY_TYPE.ACTIVITY_ONBOARDING
+          : ACTIVITY_TYPE.ACTIVITY_3//ACTIVITY_ONBOARDING
       );
     }
   }
@@ -182,6 +201,7 @@ export default class ActivityPanel extends Vue {
     });
   }
 
+  // Activity 2
   public animationEnterActivityTwo(el: Element, done: Function) {
     this.animationElements.activityTwo.enter({
       el,
@@ -190,6 +210,120 @@ export default class ActivityPanel extends Vue {
         done();
       }
     });
+  }
+
+  public animationLeaveActivityTwo(el: Element, done: Function) {
+    this.animationElements.activityTwo.leave({
+      el,
+      onStart: () => {},
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_3);
+        done();
+      }
+    });
+  }
+
+  // Activity Three
+  public animationEnterActivityThree(el: Element, done: Function) {
+    this.animationElements.activityThree.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done();
+      }
+    });
+  }
+
+  public animationLeaveActivityThree(el: Element, done: Function) {
+
+    this.animationElements.activityThree.leave({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT)
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityResult(el: Element, done: Function) {
+    this.animationElements.activityResult.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
+
+  public animationLeaveActivityResult(el: Element, done: Function) {
+    this.animationElements.activityResult.leave({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_PROGRESSION)
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityProgression(el: Element, done: Function) {
+    this.animationElements.activityProgression.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_PROGRESSION)
+        done()
+      }
+    })
+  }
+
+  public animationLeaveActivityProgression(el: Element, done: Function) {
+    this.animationElements.activityProgression.leave({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        if (this.globalStore.achievedWords.length > 1) {
+          GlobalScene.context.resume()
+          this.activityStore.hideActivityPanel()
+          this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl)
+        } else {
+          this.activityStore.setCurrentActivity(ACTIVITY_TYPE.KESKIDICO)
+        }
+        done()
+      }
+    })
+  }
+
+  public animationEnterActivityKeskidico(el: Element, done: Function) {
+    this.animationElements.activityKeskidico.enter({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        done()
+      }
+    })
+  }
+
+  public animationLeaveActivityKeskidico(el: Element, done: Function) {
+    this.animationElements.activityKeskidico.leave({
+      el,
+      onStart: () => {
+      },
+      onComplete: () => {
+        GlobalScene.context.resume()
+        this.activityStore.hideActivityPanel()
+        this.$router.push(this.globalSceneStore.activeObject!.room().fullUrl)
+        done()
+      }
+    })
   }
 }
 </script>

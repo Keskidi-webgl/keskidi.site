@@ -8,7 +8,7 @@
           text-color="#FF9D6F"
         ></ProgressBar>
         <div class="word-container">
-          <h1 class="main-font bold big-title">
+          <h1 class="main-font bold big-title word-name-activity-three">
             {{ activityStore.dataWord.name }}
           </h1>
         </div>
@@ -18,7 +18,7 @@
     </template>
     <template v-slot:activity-element-content>
       <div class="content-container">
-        <h2 class="content-title main-font">
+        <h2 class="content-title main-font instruction-activity-three">
           Comme dirait la prof d'
           <span>
             anglais
@@ -28,22 +28,36 @@
               alt=""
             /> </span
           >,
-          <span>
-            repeat
-            <img
-              src="~/assets/img/doodle-line.png"
-              class="doodle line-doodle"
-              alt=""
-            />
+          <span v-if=globalStore.microphonePermission>
+            <span>
+              repeat
+              <img
+                src="~/assets/img/doodle-line.png"
+                class="doodle line-doodle"
+                alt=""
+              />
+            </span>
+            after me :
           </span>
-          after me :
+          <span v-if=!globalStore.microphonePermission>
+            <span>
+              listen
+              <img
+                src="~/assets/img/doodle-line.png"
+                class="doodle line-doodle"
+                alt=""
+              />
+            </span>
+            to me :
+          </span>
         </h2>
 
         <div class="content-expressionsWrapper" v-if="activeExpression">
           <div class="content-expressions">
             <span class="content-expressions--text">"{{ activeExpression.content }}"</span>
-            <div class="playWrapper">
-              <button ref="playAudio" v-if="globalStore.microphonePermission" class="content-expressions--play" @click="playExpressionAudio">
+            <div class="playWrapper play-btn-activity-three">
+              <button ref="playAudio" v-if="globalStore.microphonePermission" class="content-expressions--play"
+                      @click="playExpressionAudio">
               </button>
               <svg
                 ref="playAudioSvg"
@@ -122,9 +136,6 @@
             </button>
           </div>
 
-          <!--🔇🔇🔇🔇🔇🔇🔇 MICROPHONE IS NOT ALLOWED 🔇🔇🔇🔇🔇🔇-->
-          <!--      TODO -> adapt microphone not allowed with new structure -->
-
           <div class="content-recordWrapper" v-if="!globalStore.microphonePermission">
             <button ref="activityRecord" class="content-expressions--record start-record" @click="playExpressionAudio"
               v-for="(expression, index) in activityStore.dataWord.expressions" :key="index" :disabled="expression.id !== activeExpression.id">
@@ -147,19 +158,19 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import ActivityStore from "~/store/activity";
 import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
-import { Step, WordExpression } from "~/core/types";
-import { ApiManager, VoiceRecognitionManager } from "~/core/managers";
+import {Step, WordExpression} from "~/core/types";
+import {ApiManager, VoiceRecognitionManager} from "~/core/managers";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import { ActivitySceneInitializer } from "~/core/utils/initializers/activities";
+import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
-import { ACTIVITY_TYPE } from "~/core/enums";
 import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
 import gsap from "gsap";
+import TomSceneElement from "~/core/scene/TomSceneElement";
 
 
 @Component({
@@ -170,17 +181,17 @@ import gsap from "gsap";
   }
 })
 export default class ActivityThree extends Vue {
-  public authStore = getModule(AuthStore, this.$store);
-  public globalStore = getModule(GlobalStore, this.$store);
-  public activityStore = getModule(ActivityStore, this.$store);
-  public progressBarStep: Step = { id: 3, text: "T'es un ouf !" };
-  public activeExpression: WordExpression | null = null;
-  public countExpressionSuccess: number = 0;
+  public authStore = getModule(AuthStore, this.$store)
+  public globalStore = getModule(GlobalStore, this.$store)
+  public activityStore = getModule(ActivityStore, this.$store)
+  public progressBarStep: Step = { id: 3, text: "T'es un ouf !" }
+  public activeExpression: WordExpression | null = null
+  public countExpressionSuccess: number = 0
 
   public async mounted() {
-    this.activeExpression = this.activityStore.dataWord!.expressions[0];
-    this._createCanvas();
-    this._initVoiceRecognitionManager();
+    this.activeExpression = this.activityStore.dataWord!.expressions[0]
+    this._createCanvas()
+    this._initVoiceRecognitionManager()
   }
 
   /**
@@ -188,7 +199,7 @@ export default class ActivityThree extends Vue {
    */
 
   public startRecordVoice(expression: WordExpression) {
-    (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.add("isRecording");
+    (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.add("isRecording")
     gsap.to((<Array<HTMLButtonElement>>this.$refs.recordBorder)[this.countExpressionSuccess],{
       animationPlayState:'running',
       borderBottom:'2px solid rgba(255, 157, 111, 0.4)',
@@ -199,8 +210,8 @@ export default class ActivityThree extends Vue {
     let tl:GSAPTimeline = gsap.timeline({yoyo:true,repeat:-1})
     tl.fromTo(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{scale: 1},{scale:1.2,duration:1})
 
-    VoiceRecognitionManager!.setTextToRecognize(expression.content!);
-    VoiceRecognitionManager!.start();
+    VoiceRecognitionManager!.setTextToRecognize(expression.content!)
+    VoiceRecognitionManager!.start()
     VoiceRecognitionManager!.onEnd(() => {
       gsap.to((<Array<HTMLButtonElement>>this.$refs.recordBorder)[this.countExpressionSuccess],{
         animationPlayState:'paused',
@@ -209,7 +220,7 @@ export default class ActivityThree extends Vue {
         duration:1})
       tl.kill()
 
-    });
+    })
   }
 
   /**
@@ -217,34 +228,42 @@ export default class ActivityThree extends Vue {
    */
   public playExpressionAudio() {
 
-    (<HTMLAudioElement>this.$refs.audioElement).play();
+    (<HTMLAudioElement>this.$refs.audioElement).play()
 
     if (!this.globalStore.microphonePermission) {
-      (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.add("isRecording");
+      (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.add("isRecording")
       // pulse effect
       let tl:any = gsap.timeline({yoyo:true,repeat:-1})
-     tl.fromTo(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{scale: 1},{scale:1.2,duration:1})
+      tl.fromTo(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{scale: 1},{scale:1.2,duration:1})
 
       (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
-        (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.remove("isRecording");
+        (<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess].classList.remove("isRecording")
         tl.kill()
 
-        this.countExpressionSuccess++;
+        this.countExpressionSuccess++
         if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
-          this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess];
+          this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
         }
-      };
+      }
     }else {
-      (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying');
-      gsap.to((<HTMLAudioElement>this.$refs.playAudio),{backgroundColor: '#000648'});
-      gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children,{stroke: 'white'});
+      (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying')
+      gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
+        backgroundColor: '#000648'
+      });
+      //@ts-ignore
+      gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
+        stroke: 'white'
+      })
       (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
         (<HTMLAudioElement>this.$refs.playAudio).classList.remove('audioPlaying');
-        gsap.to((<HTMLAudioElement>this.$refs.playAudio),{backgroundColor: 'white'});
-        gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children,{stroke: '#000648'});
+        gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
+          backgroundColor: 'white'
+        })
+        gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
+          stroke: '#000648'
+        })
       }
     }
-
   }
 
   /**
@@ -252,7 +271,7 @@ export default class ActivityThree extends Vue {
    */
   async goToResult() {
     await this._achievedWord();
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_RESULT);
+    this.activityStore.setCurrentActivity(null)
   }
 
   /**
@@ -261,6 +280,10 @@ export default class ActivityThree extends Vue {
   private _initVoiceRecognitionManager() {
     VoiceRecognitionManager!.onResult(result => {
       if (result.distance > 0.5) {
+
+         TomSceneElement.playAnimation("punch", ActivityScene.context,1,()=>{
+            TomSceneElement.playAnimation("idle", ActivityScene.context)
+          })
 
         let tl:any = gsap.timeline()
         tl.to((<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess], {
@@ -286,10 +309,32 @@ export default class ActivityThree extends Vue {
           }},
           '-0.2')
 
+
         if (this.countExpressionSuccess >= 2) {
           (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].disabled = true;
         }
 
+      }else{
+
+        TomSceneElement.playAnimation("down", ActivityScene.context,0.95,()=>{
+          TomSceneElement.playAnimation("idle", ActivityScene.context)
+        })
+
+
+        gsap.fromTo((<Array<HTMLElement>>this.$refs.activityRecord)[this.countExpressionSuccess],{
+          translateX:-10
+        },
+          {
+            translateX:10,
+            repeat:1,
+            yoyo:true,
+            ease:"sine.inOut",
+            duration: 0.2,
+            onComplete:()=>{
+              gsap.to((<Array<HTMLElement>>this.$refs.activityRecord)[this.countExpressionSuccess],{translateX:0,
+                duration:0.2,
+                ease:"sine.inOut"})
+            }})
       }
     });
   }

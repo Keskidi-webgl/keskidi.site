@@ -9,6 +9,7 @@
       </div>
 
     <CustomButton
+      class="next-activity-btn"
       @click.native="nextActivity"
       arrow-color="#FF6644"
       color="white"
@@ -39,9 +40,8 @@ export default class ActivitiesResult extends Vue {
   public pause:boolean = false
 
   nextActivity(){
-    this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITIES_PROGRESSION)
-    this.instance.destroyConfettis()
-
+    this.activityStore.setCurrentActivity(null)
+    //this.instance.destroyConfettis()
   }
 
   mounted(){
