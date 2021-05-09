@@ -4,7 +4,8 @@ import {AUDIO_ASSET} from "~/core/enums";
 class SoundDesignManager {
 
   playSound(soundName: string) {
-    AssetsManager.getAudio(soundName).data.play()
+    AssetsManager.getAudio(soundName).data.currentTime = 0
+    return AssetsManager.getAudio(soundName).data.play()
   }
 
   stopSound(soundName: string) {

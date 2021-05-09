@@ -2,7 +2,8 @@
   <div
     :style="buttonContainerStyle()"
     @mouseover="hover = true"
-    @mouseleave="hover = false"
+    @mouseleave="onLeaveBtn"
+    @mouseenter="onEnterBtn"
     class="custom-button"
   >
     <span class="btn-text text-infos main-font" :style="textStyle()">{{
@@ -59,18 +60,26 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "nuxt-property-decorator";
+import {Component, Prop, Vue} from "nuxt-property-decorator";
+import {SoundDesignManager} from "~/core/managers";
+import {AUDIO_ASSET} from "~/core/enums";
 
 @Component
 export default class CustomButton extends Vue {
-  @Prop({ type: String, required: true }) readonly text!: string;
-  @Prop({ type: String, required: true }) readonly color!: string;
-  @Prop({ type: String, required: true }) readonly arrowColor!: string;
-  @Prop({ type: String, default: "white" }) readonly hoverText!: string;
+  @Prop({type: String, required: true}) readonly text!: string;
+  @Prop({type: String, required: true}) readonly color!: string;
+  @Prop({type: String, required: true}) readonly arrowColor!: string;
+  @Prop({type: String, default: "white"}) readonly hoverText!: string;
 
   public hover: boolean = false;
 
-  public mounted() {}
+  public soundDesign = {
+    btnEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    btnLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
+  }
+
+  public mounted() {
+  }
 
   public buttonContainerStyle() {
     return {
@@ -99,6 +108,15 @@ export default class CustomButton extends Vue {
     return {
       backgroundColor: this.color
     };
+  }
+
+  public onEnterBtn() {
+    this.soundDesign.btnEnter()
+  }
+
+  public onLeaveBtn() {
+    this.soundDesign.btnLeave()
+    this.hover = false
   }
 }
 </script>
