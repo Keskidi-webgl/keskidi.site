@@ -272,7 +272,9 @@ export default class ActivityThree extends Vue {
    */
   async goToResult() {
     await this._achievedWord();
+    ActivityScene.context.pause();
     this.activityStore.setCurrentActivity(null)
+
   }
 
   /**
