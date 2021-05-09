@@ -82,7 +82,10 @@ export default class ProgressLevel extends Vue {
   public canShow: boolean = false;
 
   beforeMount() {
-    ProgressPercentManager.init(this.getProgress(), this.getTotal());
+    ProgressPercentManager.init(
+      this.globalStore.achievedWords.length,
+      this.globalStore.dataWord.length
+    );
   }
 
   show() {
@@ -214,7 +217,11 @@ export default class ProgressLevel extends Vue {
   }
 
   public getLevel() {
-    return ProgressPercentManager.current!;
+    ProgressPercentManager.init(
+      this.globalStore.achievedWords.length,
+      this.globalStore.dataWord.length
+    );
+    return ProgressPercentManager.setCurrentLevel().current!;
   }
 
   public getIcon(level: Level) {

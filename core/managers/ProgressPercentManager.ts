@@ -66,7 +66,7 @@ class ProgressPercentManager {
    */
   private _setProgress() {
     this._setPercent();
-    this._setCurrentLevel();
+    this.setCurrentLevel();
     this._setNextLevel();
     this._setPrevLevel();
   }
@@ -86,7 +86,7 @@ class ProgressPercentManager {
   /**
    * Get the current level and set it to the property
    */
-  private _setCurrentLevel() {
+  public setCurrentLevel() {
     let totalPercent = 100;
     let final: Level | null = null;
     let all = this.levelsArray;
@@ -95,10 +95,6 @@ class ProgressPercentManager {
     all = all.sort((a, b) =>
       a.order > b.order ? -1 : b.order > a.order ? 1 : 0
     );
-
-    // console.log(">> current level");
-    // console.log("all", all);
-    // console.log("percentLevel", this.percentLevel);
 
     all.forEach(level => {
       if (this.percentLevel < totalPercent) {
@@ -109,6 +105,8 @@ class ProgressPercentManager {
     });
 
     if (final) this.currentLevel = final;
+
+    return this;
   }
 
   /**
