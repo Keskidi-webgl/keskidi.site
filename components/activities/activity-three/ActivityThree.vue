@@ -172,9 +172,6 @@ import GlobalStore from "~/store/global";
 import TomSceneElement from "~/core/scene/TomSceneElement";
 import {AUDIO_ASSET} from "~/core/enums";
 import gsap from "gsap";
-// import { ScrollTrigger } from "gsap/ScrollTrigger";
-//
-// gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   components: {

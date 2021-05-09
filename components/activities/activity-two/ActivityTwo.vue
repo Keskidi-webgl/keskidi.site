@@ -30,7 +30,7 @@
       </template>
       <!-- Content -->
       <template class="content" v-slot:activity-element-content>
-        <div class="content-container">
+        <div class="content-container skewElem">
           <h2 class="content-title">
             {{ activityStore.dataWord.name }}
             <img
@@ -146,6 +146,10 @@ import ImageMedia from "~/components/medias/ImageMedia.vue";
 import VideoMedia from "~/components/medias/VideoMedia.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+gsap.registerPlugin(ScrollTrigger);
+
 import { ACTIVITY_TYPE } from "~/core/enums";
 import Helpers from "~/core/utils/helpers";
 import GlobalStore from "~/store/global";
@@ -164,11 +168,41 @@ export default class ActivityTwo extends Vue {
   public globalStore = getModule(GlobalStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
   public progressBarStep: Step = { id: 2, text: "Tu gères !" };
+  public pause:boolean = false
 
-  public async mounted() {}
+  public  mounted() {
+    this.skewOnScroll()
+  }
 
   public goToNextActivity() {
+    this.pause = true
     this.activityStore.setCurrentActivity(null);
+  }
+
+  public skewOnScroll(){
+
+    let app = document.querySelector('.skewElem')
+    let pageYOffset = app!.getBoundingClientRect().y
+
+    const render = () => {
+      const newPageOffset = app!.getBoundingClientRect().y
+      const diff = newPageOffset - pageYOffset
+
+      gsap.to(app,  {
+        duration:.3,
+        // skewX: -diff * 0.03,
+        skewY: diff * 0.05,
+        ease:'power3.out'
+      })
+
+      pageYOffset = newPageOffset
+      if (this.pause){
+        return
+      }
+      requestAnimationFrame(render)
+    }
+
+    render()
   }
 
   private goTop() {
