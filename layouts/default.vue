@@ -37,7 +37,12 @@
       </transition>
 
       <!-- Progress level -->
-      <SoundButton v-if="globalSceneStore.canDisplayGlobalUI"></SoundButton>
+      <SoundButton
+        v-if="globalSceneStore.canDisplayGlobalUI"
+        @mouseenter.native="soundDesign.audioBtnEnter"
+        @mouseleave.native="soundDesign.audioBtnLeave"
+      >
+      </SoundButton>
 
       <!-- Progress level -->
       <ProgressLevel
@@ -97,7 +102,7 @@ import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import {AssetsManager} from "~/core/managers";
+import {AssetsManager, SoundDesignManager} from "~/core/managers";
 import {AssetManagerInitializer} from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 
@@ -120,6 +125,7 @@ import ActivityStore from "~/store/activity";
 import SoundButton from "~/components/global/SoundButton.vue";
 import {LoaderAnimation} from "~/core/animations/loader";
 import {NavigationPanelAnimation} from "~/core/animations/activities";
+import {AUDIO_ASSET} from "~/core/enums";
 
 @Component({
   components: {
@@ -164,6 +170,11 @@ export default class DefaultLayout extends Vue {
   public permissionStatus!: PermissionStatus;
 
   public agent = navigator.userAgent;
+
+  public soundDesign = {
+    audioBtnEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    audioBtnLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
+  }
 
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
