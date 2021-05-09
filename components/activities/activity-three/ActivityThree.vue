@@ -169,10 +169,12 @@ import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
 import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
-import gsap from "gsap";
 import TomSceneElement from "~/core/scene/TomSceneElement";
 import {AUDIO_ASSET} from "~/core/enums";
-
+import gsap from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+//
+// gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   components: {
@@ -247,22 +249,25 @@ export default class ActivityThree extends Vue {
         }
       }
     } else {
-      (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying')
-      gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
+      (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying');
+
+      gsap.to('.content-expressions--play', {
         backgroundColor: '#000648'
       });
-      //@ts-ignore
       gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
         stroke: 'white'
-      })
+      });
+      
       (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
         (<HTMLAudioElement>this.$refs.playAudio).classList.remove('audioPlaying');
-        gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
+
+        gsap.to('.content-expressions--play', {
           backgroundColor: 'white'
-        })
+        });
         gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
           stroke: '#000648'
-        })
+        });
+
       }
     }
   }
@@ -518,14 +523,14 @@ export default class ActivityThree extends Vue {
     }
   }
   .audioPlaying{
-    background: $dark-blue;
+    //background: $dark-blue;
     transform-origin: center center;
     animation: play 1s alternate infinite ease-in-out;
-    svg{
-      path{
-        stroke: white;
-      }
-    }
+    //svg{
+    //  path{
+    //    stroke: white;
+    //  }
+    //}
     &::after {
       content: "";
       width: 104px;
