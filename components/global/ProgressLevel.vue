@@ -88,9 +88,6 @@ export default class ProgressLevel extends Vue {
       duration:0.6,
       ease:"power2.out"
     })
-
-
-    console.log('open menu')
   }
 
   close(){

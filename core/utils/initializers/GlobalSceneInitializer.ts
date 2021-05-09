@@ -58,6 +58,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // Create renderer
     const renderer = this._createRender()
     renderer.outputEncoding = sRGBEncoding
+    renderer.shadowMap.enabled = true
 
     return new SceneManager({
       canvas: this._data.canvas,
@@ -123,7 +124,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       50,
       this._data.canvas.width / this._data.canvas.height,
       1,
-      2000
+      1900
     )
     camera.position.set(0, 1200, 1300)
     camera.lookAt(new Vector3())
@@ -147,6 +148,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       canvas: this._data.canvas,
       antialias: true,
       alpha: true,
+      powerPreference: 'high-performance'
     })
   }
 
@@ -216,6 +218,14 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.CAT, cat.scene)
     const animationClip = GlobalScene.context.generateAnimationAction(cat.animations[0], GLTF_ASSET.CAT)
     animationClip.play()
+
+    const light = new PointLight(0xffffff, 2, 100)
+    GlobalScene.context.scene.add(cat.scene)
+    const {x, y, z} = cat.scene.position
+    light.position.set(x, y + 40, z + 40)
+    light.shadow.bias = -0.005
+    GlobalScene.context.scene.add(light)
+    GlobalScene.context.scene.add(cat.scene)
   }
 
   private _addBedroomPaper() {
@@ -270,9 +280,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     pointLight.shadow.bias = -0.005;
     pointLight.position.set(100, 150, 550)
     GlobalScene.context.scene.add(pointLight)
-
-    const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.7);
-    GlobalScene.context.scene.add(hemiLight);
+    const hemisphereLights = new HemisphereLight(0xdff9fb, 0x080820, 1);
+    GlobalScene.context.scene.add(hemisphereLights);
   }
 
   /**
@@ -291,6 +300,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName('tourne_disque')!,
       GlobalScene.context.scene.getObjectByName('lampe_bureau')!,
       GlobalScene.context.scene.getObjectByName('guirlande')!,
+      GlobalScene.context.scene.getObjectByName('t_shirt')!,
+      GlobalScene.context.scene.getObjectByName('chaussure_droite')!,
+      GlobalScene.context.scene.getObjectByName('chaussure_gauche')!,
+      GlobalScene.context.scene.getObjectByName('papiers')!,
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.CAT)!,
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.PAPER)!,
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.NOTEBOOK)!,

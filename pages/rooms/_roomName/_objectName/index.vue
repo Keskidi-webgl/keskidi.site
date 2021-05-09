@@ -62,6 +62,7 @@ export default class ObjectPage extends Vue {
     const roomObjectSlug = <ROOM_OBJECT_SLUG>this.$route.params.objectName
     const object = GlobalSceneHelper.getRoomObjectBySlug(roomObjectSlug)
     this.globalSceneStore.setActiveObject(roomObjectSlug)
+    this.globalSceneStore.setActiveRoom(object.room().urlSlug)
     this.globalSceneStore.setIsCameraMoving(true)
     if (object.animation) {
       object.animation()
