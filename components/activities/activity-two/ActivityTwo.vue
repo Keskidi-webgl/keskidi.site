@@ -15,14 +15,16 @@
               {{ activityStore.dataWord.name }}
             </h1>
             <img
-               class="img-word"
+              class="img-word"
               :src="activityStore.dataWord.activity_data.good_object"
               alt=""
             />
           </div>
 
           <div class="aside-container-footer">
-            <span v-if="displayNextActivityButton()" @click="goToNextActivity">Passer à l'activité suivante ></span>
+            <span v-if="displayNextActivityButton()" @click="goToNextActivity"
+              >Passer à l'activité suivante ></span
+            >
           </div>
         </div>
       </template>
@@ -37,7 +39,6 @@
               alt=""
             />
           </h2>
-
 
           <div class="content-wordInfo">
             <span class="content-phonetic">{{
@@ -179,7 +180,10 @@ export default class ActivityTwo extends Vue {
   }
 
   public displayNextActivityButton() {
-    return !Helpers.isActivityWordAchieved(this.activityStore.dataWord!, this.globalStore.achievedWords)
+    return !Helpers.isActivityWordAchieved(
+      this.activityStore.dataWord!,
+      this.globalStore.achievedWords
+    );
   }
 }
 </script>
@@ -255,6 +259,7 @@ export default class ActivityTwo extends Vue {
           &.packed-doodle {
             bottom: -20px;
             right: -150px;
+            max-width: none;
           }
         }
       }
