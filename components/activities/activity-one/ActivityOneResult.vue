@@ -1,34 +1,53 @@
 <template>
   <div class="activity-one-result">
-    <img class="result-img-good-word" :src="resultData.goodObjectUrl" alt="" />
-    <div class="bg-anim-container">
-      <div class="bg-anim">
-      <span v-for="index in 40" :key="index" class="big-title">{{
-          resultData.answerWord.toUpperCase()
-        }}</span>
+    <div class="container">
+      <p class="main-font right-word">
+        Le bon mot était <span>{{ resultData.goodObjectName }}</span> !
+        <img
+          src="~/assets/img/gribouillis_2_blanc.png"
+          class="doodle line-doodle"
+          alt=""
+        />
+        <img
+          src="~/assets/img/gribouillis_croix_blanc.png"
+          class="doodle croix-doodle"
+          alt=""
+        />
+      </p>
+
+      <img
+        class="result-img-good-word"
+        :src="resultData.goodObjectUrl"
+        alt=""
+      />
+      <div class="bg-anim-container">
+        <div class="bg-anim">
+          <span v-for="index in 40" :key="index" class="big-title">{{
+            resultData.answerWord.toUpperCase()
+          }}</span>
+        </div>
       </div>
+
+      <CustomButton
+        class="btn-activity-two"
+        @click.native="nextActivity"
+        arrow-color="#FF6644"
+        color="white"
+        text="Passer à l'activité suivante"
+        hoverText="#FF6644"
+      ></CustomButton>
     </div>
-
-
-    <CustomButton
-      class="btn-activity-two"
-      @click.native="nextActivity"
-      arrow-color="#FF6644"
-      color="white"
-      text="Passer à l'activité suivante"
-      hoverText="#FF6644"
-    ></CustomButton>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
+import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import {ActivityOneResultData} from "~/core/types";
-import {ACTIVITY_TYPE} from "~/core/enums";
-import {ActivityOneResultAnimation} from "~/core/animations/activities";
+import { ActivityOneResultData } from "~/core/types";
+import { ACTIVITY_TYPE } from "~/core/enums";
+import { ActivityOneResultAnimation } from "~/core/animations/activities";
 
 @Component({
   components: {
@@ -43,18 +62,18 @@ export default class ActivityOneResult extends Vue {
   public activityStore = getModule(ActivityStore, this.$store);
 
   public nextActivity() {
-    this.beforeLeaveAnimation()
+    this.beforeLeaveAnimation();
   }
 
   public beforeLeaveAnimation() {
-    const el = document.querySelector('.activity-one-result')!
+    const el = document.querySelector(".activity-one-result")!;
     new ActivityOneResultAnimation().leave({
       el,
       onStart: () => {},
       onComplete: () => {
         this.activityStore.setCurrentActivity(ACTIVITY_TYPE.ACTIVITY_2);
       }
-    })
+    });
   }
 }
 </script>
@@ -70,16 +89,31 @@ export default class ActivityOneResult extends Vue {
   left: 0;
   right: 0;
   bottom: 0;
-  flex-direction: column;
+  // flex-direction: column;
   overflow: hidden;
   justify-content: center;
   align-items: center;
   z-index: 30;
 
+  .container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 100%;
+    max-height: 600px;
+  }
+
   .bg-anim-container {
     position: absolute;
     width: 100%;
     overflow: hidden;
+    top: 50%;
+    transform: translate(0, -50%);
+    // opacity: 0.5;
+    filter: blur(2.5px);
 
     .bg-anim {
       display: flex;
@@ -87,17 +121,46 @@ export default class ActivityOneResult extends Vue {
 
       span {
         color: white;
-        margin: 0 50px;
+        margin: 0 20px;
+        font-size: 120px;
       }
     }
   }
 
+  .right-word {
+    font-size: 35px;
+    color: white;
+    padding: 0;
+    margin: 0;
+    // margin-bottom: 30px;
+    position: relative;
 
-  img {
+    span {
+      text-transform: lowercase;
+      font-weight: 800;
+    }
+
+    .doodle {
+      position: absolute;
+      z-index: -1;
+
+      &.line-doodle {
+        right: 0;
+        bottom: -10px;
+      }
+
+      &.croix-doodle {
+        left: -50px;
+        bottom: -30px;
+      }
+    }
+  }
+
+  .result-img-good-word {
     width: 500px;
-    margin-bottom: 60px;
+    // margin-bottom: 100px;
     z-index: 10;
-    //animation: slide-top 3s ease-in-out infinite alternate both;
+    animation: slide-top 3s ease-in-out infinite alternate both;
   }
 }
 
