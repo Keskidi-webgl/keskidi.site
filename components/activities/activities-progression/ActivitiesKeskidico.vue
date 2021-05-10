@@ -1,5 +1,8 @@
 <template>
   <div class="activities-keskidico main-font">
+
+  <div class="container">
+
     <div class="keskidico-logo">
       <img src="~/assets/img/keskidico-logo.svg" alt="" />
     </div>
@@ -36,7 +39,11 @@
       color="white"
       text="Continuer"
       hoverText="#FF6644"
+      class="button"
     ></CustomButton>
+
+    </div>
+
   </div>
 </template>
 
@@ -77,9 +84,17 @@ export default class ActivitiesKeskidico extends Vue {
   left: 0;
   right: 0;
   bottom: 0;
-  flex-direction: column;
-  justify-content: space-around;
   align-items: center;
+
+  .container {
+    height: 100%;
+    max-height: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
 }
 .activities {
   &-text-container {

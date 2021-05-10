@@ -130,6 +130,8 @@ export default class Loader extends Vue {
   pointer-events: none;
 }
 .site-loader {
+  display: flex;
+  align-items: center;
   z-index: 200;
   .background-overlay {
     position: absolute;
@@ -152,9 +154,10 @@ export default class Loader extends Vue {
     height: 100%;
     z-index: 90;
     color: $dark-blue;
+    max-height: 600px;
 
     &-logo {
-      margin-bottom: 130px;
+      // margin-bottom: 130px;
       width: 390px;
       z-index: 90;
     }
