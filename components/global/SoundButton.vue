@@ -17,7 +17,7 @@ import gsap from 'gsap'
 
 @Component
 export default class SoundButton extends Vue {
-  public MAX_VOLUME = 0.5
+  public MAX_VOLUME = 0.3
   public globalStore = getModule(GlobalStore, this.$store);
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);

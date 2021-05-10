@@ -55,4 +55,5 @@ export enum AUDIO_ASSET {
   OUTSIDE_AMBIANCE= 'outsideAmbiance',
   GOOD_ANSWER = 'goodAnswer',
   BAD_ANSWER = 'badAnswer',
+  SWOOSH = 'swoosh',
 }
