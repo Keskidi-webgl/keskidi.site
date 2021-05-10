@@ -186,7 +186,6 @@ export default class ActivityOne extends Vue {
       document.querySelector(".word-name"),
       document.querySelector(".exercise-block")
     ];
-    console.log(window.innerWidth)
     const tl = gsap.timeline({
       onComplete: () => {
         this.displayActivityResult = true;

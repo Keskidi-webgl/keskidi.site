@@ -210,7 +210,6 @@ export default class ProgressLevel extends Vue {
 
     tl.to(".level-item", { opacity: 0, duration: 0.6 }, "-=1");
 
-    console.log("close menu");
   }
 
   public getProgress() {

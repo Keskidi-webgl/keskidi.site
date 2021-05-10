@@ -295,6 +295,7 @@ export default class DefaultLayout extends Vue {
 
   public logout() {
     this.authStore.logout();
+    this.globalSceneStore.setActiveObject(null)
     if (this.$route.path !== "/") {
       this.$router.push("/");
     }
