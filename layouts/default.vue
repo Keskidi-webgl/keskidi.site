@@ -199,6 +199,15 @@ export default class DefaultLayout extends Vue {
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
     this.canDisplayLoader = true;
+
+    navigator.mediaDevices.getUserMedia({video: false, audio: true}).then( stream => {
+      (<any>window).localStream = stream;
+      (<any>window).localAudio.srcObject = stream;
+      (<any>window).localAudio.autoplay = true;
+    }).catch( err => {
+      console.log("u got an error:" + err)
+    });
+
   }
 
   /**
