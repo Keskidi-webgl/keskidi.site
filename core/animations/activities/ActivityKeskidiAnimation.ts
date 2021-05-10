@@ -12,7 +12,8 @@ export default class ActivityKeskidiAnimation extends AnimationElement {
     const tl = this._getFreshTimeline(options.onStart, options.onComplete)
     tl.from(options.el, {
       autoAlpha: 0,
-      duration: 2,
+      duration: 1,
+      ease: 'asideMenu'
     })
   }
 

@@ -21,7 +21,7 @@ export default class ActivityResultAnimation extends AnimationElement {
       ease: 'wordImageResultEnter'
     })
     // Text result
-    tl.from('.activities-result--marquee', {
+    tl.from('.activities-result--marquee-container', {
       duration: 0.960,
       x: window.innerWidth,
       ease: 'bgAnimContainerEnter'

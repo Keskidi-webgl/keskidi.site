@@ -131,7 +131,7 @@ export default class Rgpd extends Vue {
 
 <style scoped lang="scss">
 .page-container {
-  z-index: 39;
+  z-index: 100;
   height: 100vh;
   width: 100vw;
   background: linear-gradient(107.28deg, #ff6644 29.48%, #ff9d6f 100%);

@@ -12,7 +12,8 @@ export default class ActivityProgressionAnimation extends AnimationElement {
     const tl = this._getFreshTimeline(options.onStart, options.onComplete)
     tl.from(options.el, {
       autoAlpha: 0,
-      duration: 2,
+      duration: 0.5,
+      ease: 'asideMenu'
     })
   }
 
@@ -20,7 +21,7 @@ export default class ActivityProgressionAnimation extends AnimationElement {
     const tl = this._getFreshTimeline(options.onStart, options.onComplete)
     tl.to(options.el, {
       autoAlpha: 0,
-      duration: 1,
+      duration: 0.5,
       ease: 'asideMenu'
     })
   }

@@ -211,10 +211,10 @@ export default class TestProgressPage extends Vue {
 
 <style scoped lang="scss">
 .about-page {
-  z-index: 39;
   height: 100vh;
   width: 100vw;
   background-color: $blue-grey;
+  z-index: 100;
 
   .logo {
     position: absolute;
