@@ -104,10 +104,13 @@
       </transition>
 
       <!-- Activity panel -->
-      <ActivityPanel
-        v-if="activityStore.canDisplayActivityPanel"
-        class="activity-panel overlay-element"
-      />
+      <transition v-on:leave="onLeaveAnimationActivityPanel">
+        <ActivityPanel
+          v-if="activityStore.canDisplayActivityPanel"
+          class="activity-panel overlay-element"
+        />
+      </transition>
+
       <PreviewScene
         v-if="globalSceneStore.canDisplayGlobalUI"
         class="preview"
@@ -124,6 +127,7 @@ import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
 import { AssetsManager, SoundDesignManager } from "~/core/managers";
 import { AssetManagerInitializer } from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
+import gsap from 'gsap'
 
 // Scene
 import PreviewScene from "~/components/global/PreviewScene.vue";
@@ -275,6 +279,16 @@ export default class DefaultLayout extends Vue {
       },
       onStart: () => {}
     });
+  }
+
+  public onLeaveAnimationActivityPanel(el: Element, done: Function) {
+    gsap.to(el, {
+      opacity: 0,
+      duration: 0.5,
+      onComplete: () => {
+        done()
+      }
+    })
   }
 
   public logout() {

@@ -14,12 +14,14 @@
           alt=""
         />
       </p>
+      <div class="result-img-good-word-container">
+        <img
+          class="result-img-good-word"
+          :src="resultData.goodObjectUrl"
+          alt=""
+        />
+      </div>
 
-      <img
-        class="result-img-good-word"
-        :src="resultData.goodObjectUrl"
-        alt=""
-      />
       <div class="bg-anim-container">
         <div class="bg-anim">
           <span v-for="index in 40" :key="index" class="big-title">{{
@@ -155,13 +157,15 @@ export default class ActivityOneResult extends Vue {
       }
     }
   }
-
-  .result-img-good-word {
-    width: 500px;
-    // margin-bottom: 100px;
+  .result-img-good-word-container {
     z-index: 10;
-    animation: slide-top 3s ease-in-out infinite alternate both;
+    .result-img-good-word {
+      width: 500px;
+      // margin-bottom: 100px;
+      animation: slide-top 3s ease-in-out infinite alternate both;
+    }
   }
+
 }
 
 /* ----------------------------------------------

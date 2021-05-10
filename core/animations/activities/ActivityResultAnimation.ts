@@ -61,6 +61,9 @@ export default class ActivityResultAnimation extends AnimationElement {
       autoAlpha: 0,
       ease: 'bgAnimContainerLeave'
     }, 0.5)
+    tl.set('.activities-result--marquee', {
+      zIndex: -1,
+    })
     // Image good word
     tl.to('.activities-result--img', {
       duration: 1.1,
