@@ -4,9 +4,11 @@
     <canvas id="confetti"></canvas>
     <img class="activities-result--img" :src="activityStore.dataWord.activity_data.good_object" alt="">
 
-      <div class="activities-result--marquee" >
+    <div class="activities-result--marquee-container">
+      <div class="bg-anim activities-result--marquee">
         <span v-for="index in 20" :key="index">BRAVO&nbsp;</span>
       </div>
+    </div>
 
     <CustomButton
       class="next-activity-btn"
@@ -25,7 +27,6 @@ import {Component, getModule, Vue} from 'nuxt-property-decorator'
 import GlobalSceneStore from "~/store/globalScene"
 import ActivityStore from "~/store/activity"
 import CustomButton from "~/components/buttons/CustomButton.vue";
-import {ACTIVITY_TYPE} from "~/core/enums";
 
 @Component({
   components:{
@@ -175,31 +176,30 @@ export default class ActivitiesResult extends Vue {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  &--img{
+
+  &--img {
     width: 540px;
     z-index: 4;
   }
-  &--marquee{
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
 
-    span{
-      text-transform: uppercase;
-      will-change: transform;
-      transform: translateX(0);
-      white-space: nowrap;
+  .activities-result--marquee-container {
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+    top: 50%;
+    transform: translate(0, -50%);
+
+    .activities-result--marquee {
+      display: flex;
       animation: marquee 24s linear infinite;
 
-      // Extra Styling
-      font-size: 120px;
-      font-family:$main_font;
-      font-weight: 900;
-      color: white;
+      span {
+        text-transform: uppercase;
+        font-size: 120px;
+        font-family: $main_font;
+        font-weight: 900;
+        color: white;
+      }
     }
   }
 }
