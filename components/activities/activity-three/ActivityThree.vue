@@ -247,6 +247,7 @@ import GlobalStore from "~/store/global";
 import TomSceneElement from "~/core/scene/TomSceneElement";
 import { AUDIO_ASSET } from "~/core/enums";
 import gsap from "gsap";
+import domHelper from "~/core/utils/domHelper";
 
 @Component({
   components: {
@@ -458,7 +459,7 @@ export default class ActivityThree extends Vue {
     });
   }
   private _createCanvas() {
-    (<HTMLCanvasElement>this.$refs.tom).height = 500;
+    (<HTMLCanvasElement>this.$refs.tom).height = domHelper.CANVAS_HEIGHT;
     (<HTMLCanvasElement>this.$refs.tom).width = (<HTMLElement>(
       document.querySelector("aside.activity-element-aside")
     ))!.clientWidth;

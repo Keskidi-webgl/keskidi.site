@@ -46,6 +46,8 @@
       :class="{ isDisabled: globalSceneStore.isCameraMoving }"
       class="scene-navigation-panel-button object-room"
       :to="goBackObjectRoom()"
+      @mouseenter.native="onMouseEnterObjectButton"
+      @mouseleave.native="onMouseLeaveObjectButton"
     >
       <img src="~/assets/img/next-arrow.svg" alt="" />
     </nuxt-link>
@@ -140,6 +142,14 @@ export default class SceneNavigationPanel extends Vue {
   }
 
   onMouseLeaveBackHome() {
+    SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER);
+  }
+
+  onMouseEnterObjectButton() {
+    SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER);
+  }
+
+  onMouseLeaveObjectButton() {
     SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER);
   }
 
