@@ -113,7 +113,7 @@ export default class ActivityOneResult extends Vue {
     top: 50%;
     transform: translate(0, -50%);
     // opacity: 0.5;
-    filter: blur(2.5px);
+    // filter: blur(2.5px);
 
     .bg-anim {
       display: flex;
