@@ -50,8 +50,13 @@
       </div>
 
       <div class="buttons-container">
-        <button @click="resumeActivity" class="main-font">Ah non, je continue</button>
-        <button @click="hideActivityPanel" class="bg-transparent darkfont main-font">
+        <button @click="resumeActivity" class="main-font">
+          Ah non, je continue
+        </button>
+        <button
+          @click="hideActivityPanel"
+          class="bg-transparent darkfont main-font"
+        >
           Oui, pas grave
         </button>
       </div>
@@ -83,6 +88,11 @@ export default class ActivityLeave extends Vue {
     this.activityStore.setCurrentActivity(null);
     this.activityStore.hideActivityPanel();
     this.leaveContainer.classList.add("hide");
+
+    let progress: HTMLElement | null = document.querySelector(
+      ".progress-level"
+    );
+    progress ? (progress!.style.zIndex = "100") : false;
   }
 
   resumeActivity() {
