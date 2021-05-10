@@ -102,8 +102,6 @@ export default class ProgressLevel extends Vue {
   }
 
   plurialize(name: string, quantity: number) {
-    console.log('quantity', quantity)
-    console.log('name', name)
     return Helpers.pluralize(name, quantity)
   }
 
@@ -150,7 +148,6 @@ export default class ProgressLevel extends Vue {
     );
     tl.to(".close-progress", { opacity: 1 });
 
-    console.log("open menu");
   }
 
   close() {

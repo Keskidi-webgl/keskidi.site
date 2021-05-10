@@ -10,7 +10,7 @@
       <LogoMedia class="site-loader-container-logo" theme="#000648"></LogoMedia>
       <p class="site-loader-container-expression secondary-font">
         <img src="~/assets/img/quote.svg" class="quote quote-top" alt="" />
-        Tu peux me filer de la moula stp ?
+        Tu peux me filer de la moulaga stp ?
         <img src="~/assets/img/quote.svg" class="quote quote-bot" alt="" />
         <img
           src="~/assets/img/arrow-draft-one.png"
