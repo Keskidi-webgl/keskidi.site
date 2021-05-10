@@ -415,57 +415,6 @@ export default class ActivityThree extends Vue {
           }},
           '-0.2')
 
-        let tl: any = gsap.timeline();
-        tl.to(
-          (<Array<HTMLElement>>this.$refs.recordBorder)[
-            this.countExpressionSuccess
-          ],
-          {
-            opacity: 0,
-            duration: 0.2
-          }
-        );
-        tl.to(
-          (<Array<HTMLElement>>this.$refs.iconRecord)[
-            this.countExpressionSuccess
-          ],
-          {
-            opacity: 0,
-            scale: 0.6,
-            duration: 0.5
-          }
-        );
-        tl.fromTo(
-          (<Array<HTMLElement>>this.$refs.iconValidate)[
-            this.countExpressionSuccess
-          ],
-          { opacity: 0, scale: 0.6, duration: 0.5 },
-          { opacity: 1, scale: 1, duration: 0.5 }
-        );
-
-        tl.to(
-          (<Array<HTMLElement>>this.$refs.recordBtn)[
-            this.countExpressionSuccess
-          ],
-          {
-            backgroundColor: "rgb(0, 6, 72)",
-            scale: 1,
-            duration: 0.5,
-            onComplete: () => {
-              this.countExpressionSuccess++;
-              if (
-                this.countExpressionSuccess <
-                this.activityStore.dataWord!.expressions.length
-              ) {
-                this.activeExpression = this.activityStore.dataWord!.expressions[
-                  this.countExpressionSuccess
-                ];
-              }
-            }
-          },
-          "-0.2"
-        );
-
         if (this.countExpressionSuccess >= 2) {
           (<Array<HTMLButtonElement>>this.$refs.activityRecord)[
             this.countExpressionSuccess
