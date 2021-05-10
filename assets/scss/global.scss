@@ -7,7 +7,14 @@
 
 body {
   min-height: 100vh;
-  background: linear-gradient(180deg, #FCEEE6 0%, #EFDEDD 100%);
+  // background: linear-gradient(180deg, #FCEEE6 0%, #EFDEDD 100%);
+  background: linear-gradient(
+    180deg,
+    #fefef3 0%,
+    #fdf7db 23.96%,
+    #fdd4ba 51.56%,
+    #fecebd 100%
+  );
 }
 
 .page-container {
@@ -17,6 +24,6 @@ body {
 }
 
 // GUI
-.dg{
-  z-index: 99999!important;
+.dg {
+  z-index: 99999 !important;
 }
