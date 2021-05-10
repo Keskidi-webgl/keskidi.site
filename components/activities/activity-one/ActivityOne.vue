@@ -101,6 +101,7 @@ import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
 import {SoundDesignManager} from "~/core/managers";
 import {AUDIO_ASSET} from "~/core/enums";
+import domHelper from "~/core/utils/domHelper";
 
 @Component({
   components: {
@@ -224,7 +225,7 @@ export default class ActivityOne extends Vue {
   }
 
   private _createCanvas() {
-    (<HTMLCanvasElement>this.$refs.tom).height = 500;
+    (<HTMLCanvasElement>this.$refs.tom).height = domHelper.CANVAS_HEIGHT;
     (<HTMLCanvasElement>this.$refs.tom).width = (<HTMLElement>(
       document.querySelector("aside.activity-element-aside")
     ))!.clientWidth;

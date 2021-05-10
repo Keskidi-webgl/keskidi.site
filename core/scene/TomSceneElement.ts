@@ -35,7 +35,7 @@ class TomSceneElement {
   public setupForActivityScene() {
     this._checkIfInit()
     this._sceneElement!.scale.set(0.2, 0.2, 0.2)
-    this._sceneElement!.position.set(-3, -15, 0)
+    this._sceneElement!.position.set(-3, -13, 0)
     this._sceneElement!.rotation.y = 0
   }
 
