@@ -277,6 +277,12 @@ export default class ActivityTwo extends Vue {
         flex-direction: column;
         color: $dark-blue;
         position: relative;
+
+
+        .content-origin {
+          font-size: 21px;
+          padding: 30px 0 60px 0;
+        }
       }
       &-title {
         font-size: $title-activity;

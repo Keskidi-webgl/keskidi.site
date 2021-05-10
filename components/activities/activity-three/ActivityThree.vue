@@ -385,11 +385,35 @@ export default class ActivityThree extends Vue {
    */
   private _initVoiceRecognitionManager() {
     VoiceRecognitionManager!.onResult(result => {
-      if (result.distance > 0.8) {
-        SoundDesignManager.playSound(AUDIO_ASSET.GOOD_ANSWER);
-        TomSceneElement.playAnimation("punch", ActivityScene.context, 1, () => {
-          TomSceneElement.playAnimation("idle", ActivityScene.context);
-        });
+      if (result.distance > 0.5) {
+        SoundDesignManager.playSound(AUDIO_ASSET.GOOD_ANSWER)
+         TomSceneElement.playAnimation("punch", ActivityScene.context,1,()=>{
+            TomSceneElement.playAnimation("idle", ActivityScene.context)
+          })
+
+        let tl:any = gsap.timeline()
+        tl.to((<Array<HTMLElement>>this.$refs.recordBorder)[this.countExpressionSuccess], {
+            opacity:0,
+            duration:0.2
+        })
+        tl.to((<Array<HTMLElement>>this.$refs.iconRecord)[this.countExpressionSuccess],{
+          opacity:0,
+          scale:0.6,
+          duration:0.5
+        })
+        tl.fromTo((<Array<HTMLElement>>this.$refs.iconValidate)[this.countExpressionSuccess],{opacity:0,scale:0.6,duration:0.5},{opacity:1,scale:1,duration:0.5})
+
+        tl.to(  (<Array<HTMLElement>>this.$refs.recordBtn)[this.countExpressionSuccess],{
+          backgroundColor:'rgb(0, 6, 72)',
+          scale:1,
+          duration:0.5,
+          onComplete:()=>{
+            this.countExpressionSuccess++;
+            if (this.countExpressionSuccess < this.activityStore.dataWord!.expressions.length) {
+              this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess];
+            }
+          }},
+          '-0.2')
 
         let tl: any = gsap.timeline();
         tl.to(
@@ -520,8 +544,6 @@ export default class ActivityThree extends Vue {
       flex-direction: column;
       // padding: 130px 40px 0px 80px;
       color: $dark-blue;
-
-      justify-content: space-around;
       //padding: 100px 80px;
     }
     &-title {
@@ -554,7 +576,9 @@ export default class ActivityThree extends Vue {
       display: flex;
       flex-direction: column;
       height: 100%;
-      justify-content: space-around;
+      justify-content: space-between;
+      max-height: 550px;
+      padding-top: 70px;
     }
     &-recordWrapper {
       display: flex;

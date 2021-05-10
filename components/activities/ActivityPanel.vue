@@ -183,7 +183,6 @@ export default class ActivityPanel extends Vue {
   }
 
   public beforeDestroy() {
-    console.log('destroy')
     this.manageSong('up')
   }
 
