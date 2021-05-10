@@ -1,9 +1,9 @@
 <template>
   <div class="activity-panel">
     <!-- Activity one -->
-    <transition v-on:enter="animationEnterActivityOne">
+<!--    <transition v-on:enter="animationEnterActivityOne">-->
       <ActivityOne v-if="activityDisplay.one()" />
-    </transition>
+<!--    </transition>-->
 
     <!-- Activity two -->
     <transition
@@ -170,7 +170,7 @@ export default class ActivityPanel extends Vue {
       this.activityStore.setCurrentActivity(
         this.globalStore.achievedWords.length
           ? ACTIVITY_TYPE.ACTIVITY_1
-          : ACTIVITY_TYPE.ACTIVITY_ONBOARDING
+          : ACTIVITY_TYPE.ACTIVITY_1//ACTIVITY_ONBOARDING
       );
     }
   }
