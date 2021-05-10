@@ -238,6 +238,7 @@ export default class ActivityTwo extends Vue {
         h1 {
           color: white;
           margin-top: 20px;
+          text-align: center;
         }
 
         img {
@@ -270,9 +271,9 @@ export default class ActivityTwo extends Vue {
     .content {
       &-container {
         display: flex;
-        max-width: 800px;
-        margin: auto;
-        padding-top: 130px;
+        //max-width: 800px;
+        margin: 0 auto;
+        //padding-top: 130px;
         padding-bottom: 30px;
         flex-direction: column;
         color: $dark-blue;

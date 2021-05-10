@@ -244,6 +244,7 @@ export default class ActivityOne extends Vue {
       h1 {
         color: white;
         padding-top: 80px;
+        text-align: center;
       }
     }
 

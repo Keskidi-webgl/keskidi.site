@@ -54,7 +54,7 @@
               <strong>{{ level.name }}</strong>
             </p>
             <p class="main-font level-words">
-              {{ Math.round((level.position / 100) * getTotal()) }} mots appris
+              {{ Math.round((level.position / 100) * getTotal()) }} {{ plurialize('mot', Math.round((level.position / 100) * getTotal())) }} appris
             </p>
           </div>
         </div>
@@ -67,11 +67,12 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
-import { Level } from "~/core/types";
-import { ProgressPercentManager } from "~/core/managers";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
+import {Level} from "~/core/types";
+import {ProgressPercentManager} from "~/core/managers";
 import GlobalStore from "~/store/global";
 import gsap from "gsap";
+import Helpers from "~/core/utils/helpers";
 
 // Code Example
 // https://css-tricks.com/building-progress-ring-quickly/
@@ -96,10 +97,20 @@ export default class ProgressLevel extends Vue {
     }
   }
 
+  headerText() {
+    return `${Helpers.pluralize('Mot', this.getTotal())} appris`
+  }
+
+  plurialize(name: string, quantity: number) {
+    console.log('quantity', quantity)
+    console.log('name', name)
+    return Helpers.pluralize(name, quantity)
+  }
+
   open() {
     this.canShow = true;
     let tl: GSAPTimeline = gsap.timeline();
-    gsap.set(".bar-level", { opacity: 1});
+    gsap.set(".bar-level", {opacity: 1});
     tl.to(".container-level", {
       duration: 1.2,
       ease: "expo.inOut",

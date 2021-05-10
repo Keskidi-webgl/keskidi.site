@@ -284,7 +284,7 @@ export default class ActivityThree extends Vue {
    */
   private _initVoiceRecognitionManager() {
     VoiceRecognitionManager!.onResult(result => {
-      if (result.distance > 0.5) {
+      if (result.distance > 0.8) {
         SoundDesignManager.playSound(AUDIO_ASSET.GOOD_ANSWER)
          TomSceneElement.playAnimation("punch", ActivityScene.context,1,()=>{
             TomSceneElement.playAnimation("idle", ActivityScene.context)
@@ -381,11 +381,11 @@ export default class ActivityThree extends Vue {
       color: $dark-blue;
 
       justify-content: space-around;
-      padding: 100px 80px;
+      //padding: 100px 80px;
     }
     &-title {
       font-size: 40px;
-      max-width: 600px;
+      //max-width: 600px;
       line-height: 1.3;
       z-index: 5;
       .doodle {
@@ -436,7 +436,7 @@ export default class ActivityThree extends Vue {
         font-size: 56px;
         font-family: $secondary_font;
         color: $dark-blue;
-        max-width: 600px;
+        //max-width: 600px;
       }
       &--play {
         display: flex;
@@ -516,7 +516,9 @@ export default class ActivityThree extends Vue {
 
   .word-container {
     h1 {
+      text-align: center;
       color: white;
+      padding-top: 120px;
     }
   }
   .audioPlaying{

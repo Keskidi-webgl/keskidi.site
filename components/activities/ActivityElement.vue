@@ -51,6 +51,7 @@ export default class ActivityElement extends Vue {
     overflow-y: scroll;
     position: relative;
     overflow-x: hidden;
+    padding: 160px 120px 0 120px;
   }
 }
 </style>
