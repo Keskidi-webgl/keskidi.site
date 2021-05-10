@@ -30,14 +30,14 @@
           >,
           <span v-if=globalStore.microphonePermission>
             <span>
-              repeat
+              "repeat
               <img
                 src="~/assets/img/doodle-line.png"
                 class="doodle line-doodle"
                 alt=""
               />
             </span>
-            after me :
+            after me"
           </span>
           <span v-if=!globalStore.microphonePermission>
             <span>
@@ -163,15 +163,15 @@ import ActivityStore from "~/store/activity";
 import ActivityElement from "~/components/activities/ActivityElement.vue";
 import ProgressBar from "~/components/activities/ProgressBar.vue";
 import {Step, WordExpression} from "~/core/types";
-import {ApiManager, VoiceRecognitionManager} from "~/core/managers";
+import {ApiManager, SoundDesignManager, VoiceRecognitionManager} from "~/core/managers";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import {ActivitySceneInitializer} from "~/core/utils/initializers/activities";
 import ActivityScene from "~/core/scene/ActivityScene";
 import AuthStore from "~/store/auth";
 import GlobalStore from "~/store/global";
-import gsap from "gsap";
 import TomSceneElement from "~/core/scene/TomSceneElement";
-
+import {AUDIO_ASSET} from "~/core/enums";
+import gsap from "gsap";
 
 @Component({
   components: {
@@ -245,23 +245,26 @@ export default class ActivityThree extends Vue {
           this.activeExpression = this.activityStore.dataWord!.expressions[this.countExpressionSuccess]
         }
       }
-    }else {
-      (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying')
-      gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
+    } else {
+      (<HTMLAudioElement>this.$refs.playAudio).classList.add('audioPlaying');
+
+      gsap.to('.content-expressions--play', {
         backgroundColor: '#000648'
       });
-      //@ts-ignore
       gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
         stroke: 'white'
-      })
+      });
+
       (<HTMLAudioElement>this.$refs.audioElement).onended = () => {
         (<HTMLAudioElement>this.$refs.playAudio).classList.remove('audioPlaying');
-        gsap.to((<HTMLAudioElement>this.$refs.playAudio), {
+
+        gsap.to('.content-expressions--play', {
           backgroundColor: 'white'
-        })
+        });
         gsap.to((<HTMLAudioElement>this.$refs.playAudioSvg).children, {
           stroke: '#000648'
-        })
+        });
+
       }
     }
   }
@@ -271,7 +274,9 @@ export default class ActivityThree extends Vue {
    */
   async goToResult() {
     await this._achievedWord();
+    ActivityScene.context.pause();
     this.activityStore.setCurrentActivity(null)
+
   }
 
   /**
@@ -280,7 +285,7 @@ export default class ActivityThree extends Vue {
   private _initVoiceRecognitionManager() {
     VoiceRecognitionManager!.onResult(result => {
       if (result.distance > 0.5) {
-
+        SoundDesignManager.playSound(AUDIO_ASSET.GOOD_ANSWER)
          TomSceneElement.playAnimation("punch", ActivityScene.context,1,()=>{
             TomSceneElement.playAnimation("idle", ActivityScene.context)
           })
@@ -314,8 +319,8 @@ export default class ActivityThree extends Vue {
           (<Array<HTMLButtonElement>>this.$refs.activityRecord)[this.countExpressionSuccess].disabled = true;
         }
 
-      }else{
-
+      } else {
+        SoundDesignManager.playSound(AUDIO_ASSET.BAD_ANSWER)
         TomSceneElement.playAnimation("down", ActivityScene.context,0.95,()=>{
           TomSceneElement.playAnimation("idle", ActivityScene.context)
         })
@@ -515,14 +520,14 @@ export default class ActivityThree extends Vue {
     }
   }
   .audioPlaying{
-    background: $dark-blue;
+    //background: $dark-blue;
     transform-origin: center center;
     animation: play 1s alternate infinite ease-in-out;
-    svg{
-      path{
-        stroke: white;
-      }
-    }
+    //svg{
+    //  path{
+    //    stroke: white;
+    //  }
+    //}
     &::after {
       content: "";
       width: 104px;

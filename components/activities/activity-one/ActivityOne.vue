@@ -99,6 +99,8 @@ import { ActivityOneResultAnimation } from "~/core/animations/activities";
 import TomSceneElement from "~/core/scene/TomSceneElement";
 import gsap from "gsap";
 import CustomEase from "gsap/CustomEase";
+import {SoundDesignManager} from "~/core/managers";
+import {AUDIO_ASSET} from "~/core/enums";
 
 @Component({
   components: {
@@ -152,7 +154,7 @@ export default class ActivityOne extends Vue {
     });
   }
 
-  public validateActivity() {
+  public async validateActivity() {
     const goodAnswer =
       this.userSelection!.url ===
       this.activityStore.dataWord!.activity_data!.good_object;
@@ -165,9 +167,14 @@ export default class ActivityOne extends Vue {
         : this.blockChoices.find(choice => !choice.isSelected)!.description
     };
 
-    goodAnswer
-      ? TomSceneElement.playAnimation("punch", ActivityScene.context)
-      : TomSceneElement.playAnimation("down", ActivityScene.context);
+    if (goodAnswer) {
+      TomSceneElement.playAnimation("punch", ActivityScene.context)
+      SoundDesignManager.playSound(AUDIO_ASSET.GOOD_ANSWER)
+    } else {
+      TomSceneElement.playAnimation("down", ActivityScene.context);
+      SoundDesignManager.playSound(AUDIO_ASSET.BAD_ANSWER)
+    }
+
     this.beforeEnterResultAnimation();
   }
 
@@ -181,6 +188,7 @@ export default class ActivityOne extends Vue {
     const tl = gsap.timeline({
       onComplete: () => {
         this.displayActivityResult = true;
+        ActivityScene.context.pause();
       }
     });
     tl.to(

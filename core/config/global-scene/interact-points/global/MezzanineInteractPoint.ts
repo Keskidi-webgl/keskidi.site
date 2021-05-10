@@ -16,6 +16,9 @@ const MezzanineInteractPoint: InteractionPoint = {
       .getObjectByName("mezzanine")!
       .getWorldPosition(position);
 
+    position.y = 1 + position.y + 80;
+    position.x = 1 + position.x - 30;
+
     return position;
   },
 

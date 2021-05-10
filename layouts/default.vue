@@ -37,27 +37,51 @@
       </transition>
 
       <!-- Progress level -->
-      <SoundButton v-if="globalSceneStore.canDisplayGlobalUI"></SoundButton>
+      <SoundButton
+        v-if="globalSceneStore.canDisplayGlobalUI"
+        @mouseenter.native="soundDesign.audioBtnEnter"
+        @mouseleave.native="soundDesign.audioBtnLeave"
+      >
+      </SoundButton>
 
       <!-- Progress level -->
       <ProgressLevel
         class="progress-level"
         v-if="authStore.isAuth && globalSceneStore.canDisplayGlobalUI"
+        @mouseenter.native="soundDesign.progressLevelEnter"
+        @mouseleave.native="soundDesign.progressLevelLeave()"
       />
 
       <!-- Logo -->
       <LogoMedia v-if="globalSceneStore.canDisplayGlobalUI" class="logo" />
 
       <!-- About page -->
-      <nuxt-link
-        v-if="globalSceneStore.canDisplayGlobalUI"
-        to="/about"
-        class="about-btn"
-      >
-        <div>
-          <p class="point-name main-font">A propos</p>
+      <div class="actions-button">
+        <div
+          v-if="globalSceneStore.canDisplayGlobalUI && authStore.isAuth"
+          class="logout-btn"
+          @click="logout"
+        >
+          <div
+            @mouseenter="soundDesign.aboutEnter"
+            @mouseleave="soundDesign.aboutLeave"
+          >
+            <p class="point-name main-font">Se déconnecter</p>
+          </div>
         </div>
-      </nuxt-link>
+        <nuxt-link
+          v-if="globalSceneStore.canDisplayGlobalUI"
+          to="/about"
+          class="about-btn"
+        >
+          <div
+            @mouseenter="soundDesign.aboutEnter"
+            @mouseleave="soundDesign.aboutLeave"
+          >
+            <p class="point-name main-font">À propos</p>
+          </div>
+        </nuxt-link>
+      </div>
 
       <!-- Global scene -->
       <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
@@ -93,12 +117,12 @@
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from "nuxt-property-decorator";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import {AssetsManager} from "~/core/managers";
-import {AssetManagerInitializer} from "~/core/utils/initializers";
+import { AssetsManager, SoundDesignManager } from "~/core/managers";
+import { AssetManagerInitializer } from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 
 // Scene
@@ -110,7 +134,6 @@ import CustomButton from "~/components/buttons/CustomButton.vue";
 import AuthStore from "~/store/auth";
 
 // Progress Level
-import {Level} from "~/core/types";
 import ProgressLevel from "~/components/global/ProgressLevel.vue";
 
 // Activities
@@ -118,8 +141,9 @@ import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
 import SoundButton from "~/components/global/SoundButton.vue";
-import {LoaderAnimation} from "~/core/animations/loader";
-import {NavigationPanelAnimation} from "~/core/animations/activities";
+import { LoaderAnimation } from "~/core/animations/loader";
+import { NavigationPanelAnimation } from "~/core/animations/activities";
+import { AUDIO_ASSET } from "~/core/enums";
 
 @Component({
   components: {
@@ -143,16 +167,10 @@ export default class DefaultLayout extends Vue {
     loader: new LoaderAnimation(),
     navigationPanel: new NavigationPanelAnimation()
   };
-  public canDisplayLoader = false
+  public canDisplayLoader = false;
 
   // Auth
   public authStore: AuthStore = getModule(AuthStore, this.$store);
-
-  // Progress Level
-  public progress: number = 0;
-  public percent: number = 0;
-  public level: Level | null = null;
-  public words: number = 0;
 
   // Warnings
   public isChrome: boolean =
@@ -165,9 +183,22 @@ export default class DefaultLayout extends Vue {
 
   public agent = navigator.userAgent;
 
+  public soundDesign = {
+    audioBtnEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    audioBtnLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
+
+    progressLevelEnter: () =>
+      SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    progressLevelLeave: () =>
+      SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER),
+
+    aboutEnter: () => SoundDesignManager.playSound(AUDIO_ASSET.MOUSE_HOVER),
+    aboutLeave: () => SoundDesignManager.stopSound(AUDIO_ASSET.MOUSE_HOVER)
+  };
+
   public async mounted() {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
-    this.canDisplayLoader = true
+    this.canDisplayLoader = true;
   }
 
   /**
@@ -187,7 +218,7 @@ export default class DefaultLayout extends Vue {
         globalSceneStore: this.globalSceneStore,
         globalStore: this.globalStore
       }).init();
-      this._getMicrophonePermissions()
+      this._getMicrophonePermissions();
 
       this.globalStore.setIsAppInit(true);
     }
@@ -211,7 +242,7 @@ export default class DefaultLayout extends Vue {
       el,
       onComplete: async () => {
         await this.initApp();
-        done()
+        done();
       },
       onStart: () => {}
     });
@@ -235,6 +266,13 @@ export default class DefaultLayout extends Vue {
       },
       onStart: () => {}
     });
+  }
+
+  public logout() {
+    this.authStore.logout();
+    if (this.$route.path !== '/') {
+      this.$router.push('/')
+    }
   }
 }
 </script>
@@ -292,17 +330,28 @@ export default class DefaultLayout extends Vue {
   left: 50%;
   transform: translate(-50%, 0px);
 }
-.about-btn {
-  margin: 24px;
+
+.actions-button {
   position: absolute;
+  margin: 24px;
   z-index: 35;
   right: 0;
+  display: flex;
+}
+
+.about-btn,
+.logout-btn {
+  // margin: 24px;
+  // position: absolute;
+  // z-index: 35;
+  // right: 0;
   cursor: pointer;
+  margin-left: 20px;
 
   p {
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 132%;
     text-align: center;
     font-feature-settings: "liga" off;

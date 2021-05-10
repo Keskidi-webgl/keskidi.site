@@ -31,67 +31,112 @@
           />
         </svg>
       </nuxt-link>
+
       <!-- Slider -->
       <div class="slider">
         <div class="arrow prev slider-btn" @click="toPrev">
           <div class="circle">
-            <img src="~/assets/img/next-arrow.svg" alt=""/>
+            <img src="~/assets/img/next-arrow.svg" alt="" />
           </div>
         </div>
         <div class="arrow next slider-btn" @click="toNext">
           <div class="circle">
-            <img src="~/assets/img/next-arrow.svg" alt=""/>
+            <img src="~/assets/img/next-arrow.svg" alt="" />
           </div>
         </div>
         <div class="container">
-          <div v-for="(slide, index) in slides" :key="index" :class="{ item: true, active: index === activeItem }">
+          <div
+            v-for="(slide, index) in slides"
+            :key="index"
+            :class="{ item: true, active: index === activeItem }"
+          >
             <!-- Photo -->
-            <div class="image photo-person" v-if="slide.contentType === 'image' && slide.content !== ''"
-                 :style="{ backgroundImage: 'url(' + getUrlImageTeam(slide.content) + ')' }"></div>
-            <div class="text" v-if="slide.contentType === 'text'">
-            <span v-for="(paraf, index) in slide.content" :key="index">
-              {{ paraf }}
-            </span>
+            <div
+              class="image photo-person"
+              v-if="slide.contentType === 'image' && slide.content !== ''"
+              :style="{
+                backgroundImage: 'url(' + getUrlImageTeam(slide.content) + ')'
+              }"
+            ></div>
+            <div class="text main-font" v-if="slide.contentType === 'text'">
+              <span
+                v-for="(paraf, index) in slide.content"
+                :key="index"
+                v-html="paraf"
+              ></span>
             </div>
 
             <!-- Name -->
             <div>
-              <span :class="{title: true,'main-font': true,'title-text': slide.contentType === 'text'}" class="name-person">
-              {{ slide.title }}
-              <img src="~/assets/img/arrow-draft-two.png" class="doodle arrow-two-doodle" alt=""/>
-              <img src="~/assets/img/arrow-draft-one.png" class="doodle arrow-one-doodle" alt=""/>
-              <img src="~/assets/img/heart-draft.png" class="doodle heart-doodle" alt=""/>
-              </span>
+              <p
+                :class="{
+                  title: true,
+                  'main-font': true,
+                  'title-text': slide.contentType === 'text'
+                }"
+                class="name-person"
+              >
+                {{ slide.title }}
+                <img
+                  src="~/assets/img/arrow-draft-two.png"
+                  class="doodle arrow-two-doodle"
+                  alt=""
+                />
+                <img
+                  src="~/assets/img/arrow-draft-one.png"
+                  class="doodle arrow-one-doodle"
+                  alt=""
+                />
+                <img
+                  src="~/assets/img/heart-draft.png"
+                  class="doodle heart-doodle"
+                  alt=""
+                />
+              </p>
             </div>
 
             <!-- Role -->
             <div>
               <span class="desc main-font role-person">
                 {{ slide.description }}
-                <img src="~/assets/img/doodle-packed.png" class="doodle packed-doodle" alt=""/>
+                <img
+                  src="~/assets/img/doodle-packed.png"
+                  class="doodle packed-doodle"
+                  alt=""
+                />
               </span>
             </div>
           </div>
         </div>
       </div>
       <!-- Footer -->
-      <img src="~/assets/img/logo-gobelins.png" class="logo" alt=""/>
+      <img src="~/assets/img/logo-gobelins.png" class="logo" alt="" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "nuxt-property-decorator";
-import {Slide} from "~/core/types";
-import gsap from 'gsap'
-import CustomEase from 'gsap/CustomEase'
+import { Component, Vue } from "nuxt-property-decorator";
+import { Slide } from "~/core/types";
+import gsap from "gsap";
+import CustomEase from "gsap/CustomEase";
 
 @Component
 export default class TestProgressPage extends Vue {
   // Default
   public onProgress: boolean = false;
-  public slides: Array<Slide> = require('~/core/datas/teamInfos.json')
+  public slides: Array<Slide> = require("~/core/datas/teamInfos.json");
   public activeItem: number = 0;
+
+  mounted() {}
+
+  setStyle() {
+    let hops = document.getElementsByClassName("hop");
+    for (let index = 0; index < hops.length; index++) {
+      const element = hops[index];
+      element;
+    }
+  }
 
   transition() {
     CustomEase.create("container", "M0,0 C0.89,0 0.24,1 1,1 ");
@@ -99,53 +144,65 @@ export default class TestProgressPage extends Vue {
       enter(el: Element, done: Function) {
         const tl = gsap.timeline({
           onComplete: () => {
-            done()
+            done();
           }
-        })
+        });
         tl.from(el, {
           duration: 1.5,
           width: 0,
-          ease: 'container'
+          ease: "container"
         })
-          .from(el.querySelector('.photo-person'), {
-            duration: 0.7,
-            y: -400,
-            autoAlpha: 0,
-            ease: 'container'
-          }, '-=0.4')
-          .from([
-            el.querySelector('.name-person'),
-            el.querySelector('.role-person'),
-          ], {
-            duration: 0.7,
-            y: 100,
-            autoAlpha: 0,
-            stagger: 0.2
-          }, '-=0.3')
-          .from(el.querySelectorAll('.slider-btn'), {
-            duration: 0.8,
-            stagger: 0.2,
-            y: -30,
-            autoAlpha: 0
-          },'-=0.3')
+          .from(
+            el.querySelector(".photo-person"),
+            {
+              duration: 0.7,
+              y: -400,
+              autoAlpha: 0,
+              ease: "container"
+            },
+            "-=0.4"
+          )
+          .from(
+            [
+              el.querySelector(".name-person"),
+              el.querySelector(".role-person")
+            ],
+            {
+              duration: 0.7,
+              y: 100,
+              autoAlpha: 0,
+              stagger: 0.2
+            },
+            "-=0.3"
+          )
+          .from(
+            el.querySelectorAll(".slider-btn"),
+            {
+              duration: 0.8,
+              stagger: 0.2,
+              y: -30,
+              autoAlpha: 0
+            },
+            "-=0.3"
+          );
       },
       leave(el: Element, done: Function) {
         const tl = gsap.timeline({
           onComplete: () => {
-            done()
+            done();
           }
-        })
+        });
         tl.to(el, {
           duration: 1.5,
           width: 0,
-          ease: 'container'
-        })
+          ease: "container"
+        });
       }
-    }
+    };
   }
 
   getUrlImageTeam(imgName: string) {
-    return require(`~/assets/img/team/${imgName}`)
+    return require(`~/assets/img/team/${imgName}`);
   }
 
   toNext() {
@@ -204,9 +261,9 @@ export default class TestProgressPage extends Vue {
       top: 30px;
       right: 30px;
       background: linear-gradient(
-          146.31deg,
-          rgba(255, 255, 255, 0.4) 7.41%,
-          rgba(255, 255, 255, 0.1) 94.07%
+        146.31deg,
+        rgba(255, 255, 255, 0.4) 7.41%,
+        rgba(255, 255, 255, 0.1) 94.07%
       );
       box-shadow: 0px 4px 25px -1px rgba(190, 190, 190, 0.15);
       backdrop-filter: blur(20px);
@@ -218,7 +275,6 @@ export default class TestProgressPage extends Vue {
       border-radius: 100%;
       cursor: pointer;
     }
-
 
     .slider {
       position: absolute;
@@ -338,7 +394,7 @@ export default class TestProgressPage extends Vue {
             font-size: 90px;
 
             &.title-text {
-              top: 0 !important;
+              top: -70px !important;
               bottom: auto;
             }
 
@@ -379,5 +435,4 @@ export default class TestProgressPage extends Vue {
     }
   }
 }
-
 </style>

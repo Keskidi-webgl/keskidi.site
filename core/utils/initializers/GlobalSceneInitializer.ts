@@ -1,20 +1,14 @@
 import {AssetsManager, SceneManager} from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 import {
-  BackSide,
-  CanvasTexture,
   DoubleSide,
   HemisphereLight,
   LinearFilter,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
-  PlaneBufferGeometry,
   PointLight,
   Scene,
-  ShadowMaterial,
-  SpotLight,
-  SpotLightHelper,
   sRGBEncoding,
   Texture,
   Vector3,
@@ -40,8 +34,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     this._addLights(true)
-    //this._createCanvasBackground()
-    //this._createPlanesBackground()
     this._registerPresetPositions()
     this._optimizeScene()
     //this._configGUI()
@@ -66,8 +58,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     // Create renderer
     const renderer = this._createRender()
     renderer.outputEncoding = sRGBEncoding
-    renderer.shadowMap.autoUpdate = false
-    renderer.shadowMap.needsUpdate = true
+    renderer.shadowMap.enabled = true
 
     return new SceneManager({
       canvas: this._data.canvas,
@@ -133,7 +124,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       50,
       this._data.canvas.width / this._data.canvas.height,
       1,
-      2000
+      1900
     )
     camera.position.set(0, 1200, 1300)
     camera.lookAt(new Vector3())
@@ -157,6 +148,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       canvas: this._data.canvas,
       antialias: true,
       alpha: true,
+      powerPreference: 'high-performance'
     })
   }
 
@@ -175,65 +167,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     this._addRecordPlayer()
     this._addComputer()
   }
-
-  private _createPlanesBackground(){
-    let globalScene = GlobalScene.context.scene
-
-    const planeGeometry = new PlaneBufferGeometry( 2000, 2000 ).rotateX( Math.PI / 2 );
-    var material = new ShadowMaterial({
-      // depthWrite: false,
-      side: BackSide,
-      opacity: 0.1,
-    });
-
-    this.floor = new Mesh(planeGeometry,material)
-    this.floor.name = 'floor'
-    this.floor.position.y = -1
-    this.floor.receiveShadow = true
-
-    // this.floor.layers.mask = 2
-    globalScene.add(this.floor)
-
-    const light = new SpotLight( 0xD3D3D3);
-    const helper = new SpotLightHelper( light );
-    light.position.set(332,1664,332)
-
-
-    light.angle = 0.4;
-    light.penumbra = 0.05;
-    light.decay = 1;
-    light.distance = 2000;
-    light.shadow.radius = 8
-
-    light.shadow.mapSize.height = 2048;
-    light.shadow.mapSize.width = 2048;
-    light.castShadow = true
-
-    globalScene.add( light );
-
-    let floorFolder = GlobalScene.context.gui.addFolder("Floor")
-    floorFolder.add(this.floor.position,'x',-1000,1000,0.01).listen()
-    floorFolder.add(this.floor.position,'y',-1000,1000,0.01).listen()
-    floorFolder.add(this.floor.position,'z',-1000,1000,0.01).listen()
-
-    let sceneFolder = GlobalScene.context.gui.addFolder("Light")
-    sceneFolder.add(light.position,'x',-1000,1000,0.01).listen()
-    sceneFolder.add(light.position,'y',-1000,3000,0.01).listen()
-    sceneFolder.add(light.position,'z',-1000,1000,0.01).listen()
-  }
-
-  private _createCanvasBackground(){
-    const canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-    const my_gradient = ctx!.createLinearGradient(0, 0, 0, 170);
-    my_gradient.addColorStop(0, "#FCE9E1");
-    my_gradient.addColorStop(0.5, "#FDF0E9");
-    ctx!.fillStyle = my_gradient;
-    ctx!.fillRect(0, 0, GlobalScene.context.width, GlobalScene.context.height);
-    const texture = new CanvasTexture(canvas);
-    GlobalScene.context.scene.background = texture
-  }
-
 
   /**
    * Retrieve gltf global scene and inject it into Global scene instance
@@ -285,6 +218,14 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     GlobalScene.context.createAnimationMixer(GLTF_ASSET.CAT, cat.scene)
     const animationClip = GlobalScene.context.generateAnimationAction(cat.animations[0], GLTF_ASSET.CAT)
     animationClip.play()
+
+    const light = new PointLight(0xffffff, 2, 100)
+    GlobalScene.context.scene.add(cat.scene)
+    const {x, y, z} = cat.scene.position
+    light.position.set(x, y + 40, z + 40)
+    light.shadow.bias = -0.005
+    GlobalScene.context.scene.add(light)
+    GlobalScene.context.scene.add(cat.scene)
   }
 
   private _addBedroomPaper() {
@@ -339,9 +280,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     pointLight.shadow.bias = -0.005;
     pointLight.position.set(100, 150, 550)
     GlobalScene.context.scene.add(pointLight)
-
-    const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.7);
-    GlobalScene.context.scene.add(hemiLight);
+    const hemisphereLights = new HemisphereLight(0xdff9fb, 0x080820, 1);
+    GlobalScene.context.scene.add(hemisphereLights);
   }
 
   /**
@@ -360,6 +300,10 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
       GlobalScene.context.scene.getObjectByName('tourne_disque')!,
       GlobalScene.context.scene.getObjectByName('lampe_bureau')!,
       GlobalScene.context.scene.getObjectByName('guirlande')!,
+      GlobalScene.context.scene.getObjectByName('t_shirt')!,
+      GlobalScene.context.scene.getObjectByName('chaussure_droite')!,
+      GlobalScene.context.scene.getObjectByName('chaussure_gauche')!,
+      GlobalScene.context.scene.getObjectByName('papiers')!,
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.CAT)!,
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.PAPER)!,
       GlobalScene.context.scene.getObjectByName(GLTF_ASSET.NOTEBOOK)!,
