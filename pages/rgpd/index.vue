@@ -44,19 +44,19 @@
           alt=""
         />
       </h1>
-      <p class="rgpd-info">
+      <p class="rgpd-info main-font">
         Votre adresse mail est en sécurité ! Nous prenons soin de vos données.
         Elles sont stockées chez <strong>Amazon AWS</strong>. Vous pouvez, à
         tout moment, demander à supprimer votre compte en nous contactant :
         <strong>contact@keskidi.fr</strong>
       </p>
-      <p class="rgpd-info">
+      <p class="rgpd-info main-font">
         <strong>"Pourquoi on me demande mon adresse mail ?"</strong> <br />
         Eh bien cela permet de récupérer un identifiant unique pour que vous
         puissiez retrouver votre progression également sur notre application
         Keskidico.
       </p>
-      <p class="rgpd-info">
+      <p class="rgpd-info main-font">
         <strong>"Est-ce qu'on m'enregistre ?"</strong> <br />
         L'expérience nécessite d'utiliser le micro de votre appareil. On
         n'enregistre pas votre voix, on ne saurait même pas quoi en faire.
