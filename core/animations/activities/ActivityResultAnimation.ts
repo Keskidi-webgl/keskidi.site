@@ -21,7 +21,7 @@ export default class ActivityResultAnimation extends AnimationElement {
       ease: 'wordImageResultEnter'
     })
     // Text result
-    tl.from('.activities-result--marquee', {
+    tl.from('.activities-result--marquee-container', {
       duration: 0.960,
       x: window.innerWidth,
       ease: 'bgAnimContainerEnter'
@@ -55,15 +55,12 @@ export default class ActivityResultAnimation extends AnimationElement {
       ease: 'btnActivityTwo'
     }, 0)
     // Text result
-    tl.to('.activities-result--marquee', {
+    tl.to('.activities-result--marquee-container', {
       duration: 1.1,
       x: -window.innerWidth * 2,
       autoAlpha: 0,
       ease: 'bgAnimContainerLeave'
     }, 0.5)
-    tl.set('.activities-result--marquee', {
-      zIndex: -1,
-    })
     // Image good word
     tl.to('.activities-result--img', {
       duration: 1.1,

@@ -127,7 +127,7 @@ import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
 import { AssetsManager, SoundDesignManager } from "~/core/managers";
 import { AssetManagerInitializer } from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
-import gsap from 'gsap'
+import gsap from "gsap";
 
 // Scene
 import PreviewScene from "~/components/global/PreviewScene.vue";
@@ -204,14 +204,16 @@ export default class DefaultLayout extends Vue {
     // We don't init application on mounted. We wait animation loader is finished otherwise, it cause jerky animation
     this.canDisplayLoader = true;
 
-    navigator.mediaDevices.getUserMedia({video: false, audio: true}).then( stream => {
-      (<any>window).localStream = stream;
-      (<any>window).localAudio.srcObject = stream;
-      (<any>window).localAudio.autoplay = true;
-    }).catch( err => {
-      console.log("u got an error:" + err)
-    });
-
+    navigator.mediaDevices
+      .getUserMedia({ video: false, audio: true })
+      .then(stream => {
+        (<any>window).localStream = stream;
+        (<any>window).localAudio.srcObject = stream;
+        (<any>window).localAudio.autoplay = true;
+      })
+      .catch(err => {
+        console.log("u got an error:" + err);
+      });
   }
 
   /**
@@ -286,15 +288,16 @@ export default class DefaultLayout extends Vue {
       opacity: 0,
       duration: 0.5,
       onComplete: () => {
-        done()
+        done();
       }
-    })
+    });
   }
 
   public logout() {
     this.authStore.logout();
-    if (this.$route.path !== '/') {
-      this.$router.push('/')
+    this.globalSceneStore.setActiveObject(null)
+    if (this.$route.path !== "/") {
+      this.$router.push("/");
     }
   }
 }
@@ -343,7 +346,7 @@ export default class DefaultLayout extends Vue {
 .progress-level {
   // margin: 24px;
   position: absolute;
-  z-index: 35;
+  z-index: 100;
 }
 .logo {
   width: 100px;

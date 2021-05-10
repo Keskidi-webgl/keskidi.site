@@ -23,7 +23,7 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
       renderer,
       defaultRation: 2,
       activateOrbitControl: false,
-    })
+    }).hideGui()
 
     camera.position.set(0, 27, 22)
     camera.rotation.x = -0.4

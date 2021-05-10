@@ -52,9 +52,15 @@
             </p>
           </div>
 
-          <p class="content-origin">
-            <strong>Origine : </strong
-            >{{ activityStore.dataWord.definition.origin }}
+          <p
+            class="content-origin"
+            v-html="
+              '<strong>Origine : </strong>' +
+                activityStore.dataWord.definition.origin
+            "
+          >
+            <!-- <strong>Origine : </strong> -->
+            <!-- {{ activityStore.dataWord.definition.origin }} -->
           </p>
 
           <div class="content-mediaContainer">
@@ -277,7 +283,6 @@ export default class ActivityTwo extends Vue {
         flex-direction: column;
         color: $dark-blue;
         position: relative;
-
 
         .content-origin {
           font-size: 21px;

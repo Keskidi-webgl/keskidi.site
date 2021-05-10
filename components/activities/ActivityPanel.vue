@@ -113,6 +113,7 @@ import {
 import ActivityTwoAnimation from "~/core/animations/activities/ActivityTwoAnimation";
 import ActivityLeave from "~/components/activities/ActivityLeave.vue";
 import {AssetsManager} from "~/core/managers";
+import SoundButton from "~/components/global/SoundButton.vue";
 
 gsap.registerPlugin(CustomEase);
 
@@ -198,7 +199,7 @@ export default class ActivityPanel extends Vue {
 
   public manageSong(name: 'low'|'up') {
     gsap.to(this.audios, {
-      volume: name === 'low' ? 0.2 : 1,
+      volume: name === 'low' ? 0.2 : SoundButton.MAX_VOLUME,
       duration: 1
     })
   }

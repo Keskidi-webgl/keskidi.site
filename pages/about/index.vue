@@ -130,14 +130,6 @@ export default class TestProgressPage extends Vue {
 
   mounted() {}
 
-  setStyle() {
-    let hops = document.getElementsByClassName("hop");
-    for (let index = 0; index < hops.length; index++) {
-      const element = hops[index];
-      element;
-    }
-  }
-
   transition() {
     CustomEase.create("container", "M0,0 C0.89,0 0.24,1 1,1 ");
     return {
@@ -219,10 +211,10 @@ export default class TestProgressPage extends Vue {
 
 <style scoped lang="scss">
 .about-page {
-  z-index: 39;
   height: 100vh;
   width: 100vw;
   background-color: $blue-grey;
+  z-index: 100;
 
   .logo {
     position: absolute;

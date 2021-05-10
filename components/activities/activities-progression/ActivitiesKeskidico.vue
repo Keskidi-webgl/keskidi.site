@@ -1,49 +1,45 @@
 <template>
   <div class="activities-keskidico main-font">
+    <div class="container">
+      <div class="keskidico-logo">
+        <img src="~/assets/img/keskidico-logo.svg" alt="" />
+      </div>
 
-  <div class="container">
+      <div class="activities-text-container">
+        <h1 class="activities-title">
+          Retrouve les mots que tu as appris sur ton mobile
+          <img
+            class="activities-doodle"
+            src="~/assets/img/gribouillis_2_blanc.png"
+            alt=""
+          />
+          <img
+            class="activities-heart"
+            src="~/assets/img/gribouillis_coeur_blanc.png"
+            alt=""
+          />
+          <img
+            class="activities-cross"
+            src="~/assets/img/gribouillis_croix_blanc.png"
+            alt=""
+          />
+        </h1>
 
-    <div class="keskidico-logo">
-      <img src="~/assets/img/keskidico-logo.svg" alt="" />
+        <p class="activities-description main-font">
+          Disponible sur l'<strong>App store</strong> et
+          <strong>Google play</strong>
+        </p>
+      </div>
+
+      <CustomButton
+        @click.native="hideActivityPanel"
+        arrow-color="#FF6644"
+        color="white"
+        text="Continuer"
+        hoverText="#FF6644"
+        class="button"
+      ></CustomButton>
     </div>
-
-    <div class="activities-text-container">
-      <h1 class="activities-title">
-        Retrouve les mots que tu as appris sur ton mobile
-        <img
-          class="activities-doodle"
-          src="~/assets/img/gribouillis_2_blanc.png"
-          alt=""
-        />
-        <img
-          class="activities-heart"
-          src="~/assets/img/gribouillis_coeur_blanc.png"
-          alt=""
-        />
-        <img
-          class="activities-cross"
-          src="~/assets/img/gribouillis_croix_blanc.png"
-          alt=""
-        />
-      </h1>
-
-      <p class="activities-description main-font">
-        Disponible sur l'<strong>App store</strong> et
-        <strong>Google play</strong>
-      </p>
-    </div>
-
-    <CustomButton
-      @click.native="hideActivityPanel"
-      arrow-color="#FF6644"
-      color="white"
-      text="Continuer"
-      hoverText="#FF6644"
-      class="button"
-    ></CustomButton>
-
-    </div>
-
   </div>
 </template>
 
@@ -61,12 +57,16 @@ import GlobalStore from "~/store/global";
   }
 })
 export default class ActivitiesKeskidico extends Vue {
-  public globalSceneStore = getModule(GlobalSceneStore, this.$store)
-  public activityStore = getModule(ActivityStore, this.$store)
-  public globalStore = getModule(GlobalStore, this.$store)
+  public globalSceneStore = getModule(GlobalSceneStore, this.$store);
+  public activityStore = getModule(ActivityStore, this.$store);
+  public globalStore = getModule(GlobalStore, this.$store);
 
   hideActivityPanel() {
-    this.activityStore.setCurrentActivity(null)
+    this.activityStore.setCurrentActivity(null);
+    let progress: HTMLElement | null = document.querySelector(
+      ".progress-level"
+    );
+    progress ? (progress!.style.zIndex = "100") : false;
   }
 
   mounted() {}
