@@ -236,7 +236,7 @@ $badge-size: 50px;
   padding: 0;
   width: fit-content;
   height: fit-content;
-  z-index: 40;
+  z-index: 100;
 
   p {
     padding: 0;
@@ -361,17 +361,19 @@ $badge-size: 50px;
         &.validated {
           .level-badge {
             background-color: white;
-            border: 1px solid $dark-blue;
+            // border: 1px solid $dark-blue;
           }
         }
 
         &.blocked {
           .level-badge {
             background-color: white;
-            border: 1px solid rgba(0, 6, 72, 0.2);
+            // border: 1px solid rgba(0, 6, 72, 0.2);
 
             img {
               opacity: 0.2;
+              height: 20px;
+              width: 23px;
             }
           }
 
