@@ -89,17 +89,17 @@ export default class ProgressLevel extends Vue {
   }
 
   show() {
-    // this.canShow = !this.canShow;
     if (!this.canShow) {
       this.open();
     } else {
       this.close();
     }
   }
-  // right 50% --> transform: translate(50%,30px) -->
+
   open() {
     this.canShow = true;
     let tl: GSAPTimeline = gsap.timeline();
+    gsap.set(".bar-level", { opacity: 1});
     tl.to(".container-level", {
       duration: 1.2,
       ease: "expo.inOut",
@@ -111,17 +111,8 @@ export default class ProgressLevel extends Vue {
         opacity: 0,
         duration: 0.5,
         onComplete: () => {
-          gsap.set(".circle-level", {
-            right: "50%",
-            delay: 0.3,
-            translateX: "50%",
-            translateY: "30px"
-          });
-          gsap.set(".circleWrapper", {
-            left: "-15px",
-            delay: 0.3,
-            top: "-10px"
-          });
+          gsap.set(".circle-level", { right: "50%", delay: 0.3, translateX: "50%", translateY: "30px"});
+          gsap.set(".circleWrapper", {left: "-15px", delay: 0.3, top: "-10px"});
         }
       },
       "-0.2"
@@ -132,7 +123,7 @@ export default class ProgressLevel extends Vue {
       height: "calc(100% - 2 * 100px)",
       duration: 0.8,
       ease: "expo.inOut"
-    });
+    },'-=0.8');
     tl.fromTo(
       ".level-item",
       { y: 10 },
@@ -140,7 +131,6 @@ export default class ProgressLevel extends Vue {
         y: 0,
         stagger: {
           each: 0.1
-          // from:'end'
         },
         opacity: 1,
         duration: 0.6,
@@ -158,11 +148,11 @@ export default class ProgressLevel extends Vue {
 
     gsap.to(".container-level", {
       duration: 1.2,
-      delay: 0.5,
+      delay: 0.3,
       ease: "expo.inOut",
       translateX: -316,
       onComplete: () => {
-        gsap.set(".bar-level", { height: "0px" });
+        gsap.set(".bar-level", { height: "0px"});
       }
     });
 
@@ -172,24 +162,19 @@ export default class ProgressLevel extends Vue {
         opacity: 0,
         duration: 0.5,
         onComplete: () => {
-          gsap.set(".circle-level", {
-            right: "-80px",
-            delay: 0.3,
-            translateX: "30px",
-            translateY: "-30px"
+          gsap.set(".circle-level", {right: "-80px", delay: 0.3, translateX: "30px", translateY: "-30px"
           });
-          gsap.set(".circleWrapper", {
-            left: "unset",
-            delay: 0.3,
-            top: "unset"
-          });
+          gsap.set(".circleWrapper", {left: "unset", delay: 0.3, top: "unset"});
         }
       },
       "-0.2"
     );
-    tl.to(".circle-level", { opacity: 1, duration: 0.5, delay: 0.5 });
     tl.to(".close-progress", { opacity: 0 });
-    tl.to(".level-item", { opacity: 0, duration: 0.6 }, "-=0.5");
+    tl.to(".circle-level", { opacity: 1, duration: 0.5});
+    tl.to(".bar-level", { opacity: 0 ,duration:0.5});
+
+    tl.to(".level-item", { opacity: 0, duration: 0.6 }, "-=1");
+
 
     console.log("close menu");
   }
