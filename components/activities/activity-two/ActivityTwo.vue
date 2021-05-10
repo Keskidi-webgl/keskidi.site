@@ -147,7 +147,7 @@ import VideoMedia from "~/components/medias/VideoMedia.vue";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 import { ACTIVITY_TYPE } from "~/core/enums";
@@ -168,41 +168,40 @@ export default class ActivityTwo extends Vue {
   public globalStore = getModule(GlobalStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
   public progressBarStep: Step = { id: 2, text: "Tu gères !" };
-  public pause:boolean = false
+  public pause: boolean = false;
 
-  public  mounted() {
-    this.skewOnScroll()
+  public mounted() {
+    this.skewOnScroll();
   }
 
   public goToNextActivity() {
-    this.pause = true
+    this.pause = true;
     this.activityStore.setCurrentActivity(null);
   }
 
-  public skewOnScroll(){
-
-    let app = document.querySelector('.skewElem')
-    let pageYOffset = app!.getBoundingClientRect().y
+  public skewOnScroll() {
+    let app = document.querySelector(".skewElem");
+    let pageYOffset = app!.getBoundingClientRect().y;
 
     const render = () => {
-      const newPageOffset = app!.getBoundingClientRect().y
-      const diff = newPageOffset - pageYOffset
+      const newPageOffset = app!.getBoundingClientRect().y;
+      const diff = newPageOffset - pageYOffset;
 
-      gsap.to(app,  {
-        duration:.3,
+      gsap.to(app, {
+        duration: 0.3,
         // skewX: -diff * 0.03,
         skewY: diff * 0.05,
-        ease:'power3.out'
-      })
+        ease: "power3.out"
+      });
 
-      pageYOffset = newPageOffset
-      if (this.pause){
-        return
+      pageYOffset = newPageOffset;
+      if (this.pause) {
+        return;
       }
-      requestAnimationFrame(render)
-    }
+      requestAnimationFrame(render);
+    };
 
-    render()
+    render();
   }
 
   private goTop() {
@@ -247,7 +246,7 @@ export default class ActivityTwo extends Vue {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -100%);
-          // animation: slide-top 3s ease-in-out infinite alternate both;
+          animation: slide-top 3s ease-in-out infinite alternate both;
         }
       }
 
