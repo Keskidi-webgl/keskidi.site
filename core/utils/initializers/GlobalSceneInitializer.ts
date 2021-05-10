@@ -224,8 +224,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     const {x, y, z} = cat.scene.position
     light.position.set(x, y + 40, z + 40)
     light.shadow.bias = -0.005
-    GlobalScene.context.scene.add(light)
-    GlobalScene.context.scene.add(cat.scene)
+    //GlobalScene.context.scene.add(light)
+    //GlobalScene.context.scene.add(cat.scene)
   }
 
   private _addBedroomPaper() {

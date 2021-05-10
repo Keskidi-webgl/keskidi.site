@@ -30,7 +30,7 @@ export default class ActivityElement extends Vue {
   font-family: $main_font;
 
   &-aside {
-    width: 480px;
+    width: 570px;
     //max-width: 30%;
     background: linear-gradient(107.28deg, #ff6644 29.48%, #ff9d6f 100%);
     padding: 80px 60px 0 60px;
@@ -51,6 +51,7 @@ export default class ActivityElement extends Vue {
     overflow-y: scroll;
     position: relative;
     overflow-x: hidden;
+    padding: 160px 120px 0 120px;
   }
 }
 </style>

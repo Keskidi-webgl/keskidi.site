@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import CustomEase from 'gsap/CustomEase'
 import TomSceneElement from "~/core/scene/TomSceneElement";
 import {AnimationElementOptions} from "~/core/animations/types";
+import DomHelper from "~/core/utils/domHelper";
 
 export default class ActivityOneAnimation extends AnimationElement {
   constructor() {
@@ -26,9 +27,9 @@ export default class ActivityOneAnimation extends AnimationElement {
       // Aside
       .from('.activity-element-aside', {
         duration: 1.3,
-        x: -480,
+        x: -DomHelper.ASIDE_WIDTH,
         ease: 'aside'
-      }, 0.5)
+      }, 0.6)
       // Word name
       .from('.word-name', {
         autoAlpha: 0,

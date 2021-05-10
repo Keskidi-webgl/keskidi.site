@@ -1,6 +1,7 @@
 import AnimationElement from "~/core/animations/AnimationElement";
 import CustomEase from 'gsap/CustomEase'
 import {AnimationElementOptions} from "~/core/animations/types";
+import DomHelper from "~/core/utils/domHelper";
 
 export default class ActivityTwoAnimation extends AnimationElement {
   constructor() {
@@ -20,14 +21,20 @@ export default class ActivityTwoAnimation extends AnimationElement {
     tl.set(hiddenElements, {
       autoAlpha: 0
     })
+    tl.set('.activity-element-content', {
+      padding: 0
+    })
     // Aside menu
     tl.set('.activity-element-aside', {
       width: window.innerWidth
     })
     tl.to('.activity-element-aside', {
       duration: 1.5,
-      width: 480,
+      width: DomHelper.ASIDE_WIDTH,
       ease: 'asideMenu'
+    })
+    tl.set('.activity-element-content', {
+      padding: DomHelper.PADDING_ACTIVITY_CONTAINER
     })
     // Word name aside
     tl.from('.word-name', {

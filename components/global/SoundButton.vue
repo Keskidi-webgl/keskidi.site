@@ -17,7 +17,7 @@ import gsap from 'gsap'
 
 @Component
 export default class SoundButton extends Vue {
-  public MAX_VOLUME = 0.5
+  public MAX_VOLUME = 0.3
   public globalStore = getModule(GlobalStore, this.$store);
   public globalSceneStore = getModule(GlobalSceneStore, this.$store);
   public activityStore = getModule(ActivityStore, this.$store);
@@ -28,7 +28,6 @@ export default class SoundButton extends Vue {
 
   mounted() {
     this._initSongs()
-
     if (this.globalStore.isSoundEnabled) {
       this._playSongs()
     }
@@ -39,7 +38,7 @@ export default class SoundButton extends Vue {
       this._playSongs()
       gsap.to(this.audios, {
         volume: this.MAX_VOLUME,
-        duration: 1,
+        duration: 2,
         onComplete: () => {
           this.globalStore.setUserAudioPreferences(true)
         }
@@ -47,7 +46,7 @@ export default class SoundButton extends Vue {
     } else {
       gsap.to(this.audios, {
         volume: 0,
-        duration: 1,
+        duration: 2,
         onComplete: () => {
           this._pauseSong()
           this.globalStore.setUserAudioPreferences(false)

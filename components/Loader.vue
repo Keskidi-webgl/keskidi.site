@@ -10,7 +10,7 @@
       <LogoMedia class="site-loader-container-logo" theme="#000648"></LogoMedia>
       <p class="site-loader-container-expression secondary-font">
         <img src="~/assets/img/quote.svg" class="quote quote-top" alt="" />
-        Tu peux me filer de la moula stp ?
+        Tu peux me filer de la moulaga stp ?
         <img src="~/assets/img/quote.svg" class="quote quote-bot" alt="" />
         <img
           src="~/assets/img/arrow-draft-one.png"
@@ -84,7 +84,7 @@ export default class Loader extends Vue {
   public isActive: boolean = true;
 
   text() {
-    let text = "Et c'est parti !";
+    let text = "Et zéééé parti !";
 
     if (!this.globalStore.isAppInit) {
       text = `Chargement ${this.loadingData} %`;
@@ -130,6 +130,8 @@ export default class Loader extends Vue {
   pointer-events: none;
 }
 .site-loader {
+  display: flex;
+  align-items: center;
   z-index: 200;
   .background-overlay {
     position: absolute;
@@ -139,7 +141,14 @@ export default class Loader extends Vue {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, #fceee6 0%, #efdedd 100%);
+    // background: linear-gradient(180deg, #fceee6 0%, #efdedd 100%);
+    background: linear-gradient(
+      180deg,
+      #fefef3 0%,
+      #fdf7db 23.96%,
+      #fdd4ba 51.56%,
+      #fecebd 100%
+    );
     z-index: 0;
   }
   &-container {
@@ -152,9 +161,10 @@ export default class Loader extends Vue {
     height: 100%;
     z-index: 90;
     color: $dark-blue;
+    max-height: 600px;
 
     &-logo {
-      margin-bottom: 130px;
+      // margin-bottom: 130px;
       width: 390px;
       z-index: 90;
     }

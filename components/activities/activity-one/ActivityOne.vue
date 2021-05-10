@@ -185,6 +185,7 @@ export default class ActivityOne extends Vue {
       document.querySelector(".word-name"),
       document.querySelector(".exercise-block")
     ];
+    console.log(window.innerWidth)
     const tl = gsap.timeline({
       onComplete: () => {
         this.displayActivityResult = true;
@@ -198,7 +199,10 @@ export default class ActivityOne extends Vue {
         autoAlpha: 0
       },
       1
-    ).to(
+    ).set('.activity-element-content', {
+      padding: 0
+    })
+      .to(
       ".activity-element-aside",
       {
         width: window.innerWidth,
@@ -244,6 +248,7 @@ export default class ActivityOne extends Vue {
       h1 {
         color: white;
         padding-top: 80px;
+        text-align: center;
       }
     }
 

@@ -54,7 +54,7 @@
               <strong>{{ level.name }}</strong>
             </p>
             <p class="main-font level-words">
-              {{ Math.round((level.position / 100) * getTotal()) }} mots appris
+              {{ Math.round((level.position / 100) * getTotal()) }} {{ plurialize('mot', Math.round((level.position / 100) * getTotal())) }} appris
             </p>
           </div>
         </div>
@@ -67,11 +67,12 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
-import { Level } from "~/core/types";
-import { ProgressPercentManager } from "~/core/managers";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
+import {Level} from "~/core/types";
+import {ProgressPercentManager} from "~/core/managers";
 import GlobalStore from "~/store/global";
 import gsap from "gsap";
+import Helpers from "~/core/utils/helpers";
 
 // Code Example
 // https://css-tricks.com/building-progress-ring-quickly/
@@ -89,17 +90,25 @@ export default class ProgressLevel extends Vue {
   }
 
   show() {
-    // this.canShow = !this.canShow;
     if (!this.canShow) {
       this.open();
     } else {
       this.close();
     }
   }
-  // right 50% --> transform: translate(50%,30px) -->
+
+  headerText() {
+    return `${Helpers.pluralize('Mot', this.getTotal())} appris`
+  }
+
+  plurialize(name: string, quantity: number) {
+    return Helpers.pluralize(name, quantity)
+  }
+
   open() {
     this.canShow = true;
     let tl: GSAPTimeline = gsap.timeline();
+    gsap.set(".bar-level", {opacity: 1});
     tl.to(".container-level", {
       duration: 1.2,
       ease: "expo.inOut",
@@ -111,17 +120,8 @@ export default class ProgressLevel extends Vue {
         opacity: 0,
         duration: 0.5,
         onComplete: () => {
-          gsap.set(".circle-level", {
-            right: "50%",
-            delay: 0.3,
-            translateX: "50%",
-            translateY: "30px"
-          });
-          gsap.set(".circleWrapper", {
-            left: "-15px",
-            delay: 0.3,
-            top: "-10px"
-          });
+          gsap.set(".circle-level", { right: "50%", delay: 0.3, translateX: "50%", translateY: "30px"});
+          gsap.set(".circleWrapper", {left: "-15px", delay: 0.3, top: "-10px"});
         }
       },
       "-0.2"
@@ -132,7 +132,7 @@ export default class ProgressLevel extends Vue {
       height: "calc(100% - 2 * 100px)",
       duration: 0.8,
       ease: "expo.inOut"
-    });
+    },'-=0.8');
     tl.fromTo(
       ".level-item",
       { y: 10 },
@@ -140,7 +140,6 @@ export default class ProgressLevel extends Vue {
         y: 0,
         stagger: {
           each: 0.1
-          // from:'end'
         },
         opacity: 1,
         duration: 0.6,
@@ -149,7 +148,6 @@ export default class ProgressLevel extends Vue {
     );
     tl.to(".close-progress", { opacity: 1 });
 
-    console.log("open menu");
   }
 
   close() {
@@ -158,11 +156,11 @@ export default class ProgressLevel extends Vue {
 
     gsap.to(".container-level", {
       duration: 1.2,
-      delay: 0.5,
+      delay: 0.3,
       ease: "expo.inOut",
       translateX: -316,
       onComplete: () => {
-        gsap.set(".bar-level", { height: "0px" });
+        gsap.set(".bar-level", { height: "0px"});
       }
     });
 
@@ -172,24 +170,19 @@ export default class ProgressLevel extends Vue {
         opacity: 0,
         duration: 0.5,
         onComplete: () => {
-          gsap.set(".circle-level", {
-            right: "-80px",
-            delay: 0.3,
-            translateX: "30px",
-            translateY: "-30px"
+          gsap.set(".circle-level", {right: "-80px", delay: 0.3, translateX: "30px", translateY: "-30px"
           });
-          gsap.set(".circleWrapper", {
-            left: "unset",
-            delay: 0.3,
-            top: "unset"
-          });
+          gsap.set(".circleWrapper", {left: "unset", delay: 0.3, top: "unset"});
         }
       },
       "-0.2"
     );
-    tl.to(".circle-level", { opacity: 1, duration: 0.5, delay: 0.5 });
     tl.to(".close-progress", { opacity: 0 });
-    tl.to(".level-item", { opacity: 0, duration: 0.6 }, "-=0.5");
+    tl.to(".circle-level", { opacity: 1, duration: 0.5});
+    tl.to(".bar-level", { opacity: 0 ,duration:0.5});
+
+    tl.to(".level-item", { opacity: 0, duration: 0.6 }, "-=1");
+
 
     console.log("close menu");
   }
@@ -251,7 +244,7 @@ $badge-size: 50px;
   padding: 0;
   width: fit-content;
   height: fit-content;
-  z-index: 40;
+  z-index: 100;
 
   p {
     padding: 0;
@@ -376,17 +369,19 @@ $badge-size: 50px;
         &.validated {
           .level-badge {
             background-color: white;
-            border: 1px solid $dark-blue;
+            // border: 1px solid $dark-blue;
           }
         }
 
         &.blocked {
           .level-badge {
             background-color: white;
-            border: 1px solid rgba(0, 6, 72, 0.2);
+            // border: 1px solid rgba(0, 6, 72, 0.2);
 
             img {
               opacity: 0.2;
+              height: 20px;
+              width: 23px;
             }
           }
 

@@ -7,11 +7,10 @@ import {
   Euler,
   PerspectiveCamera,
   Raycaster,
-  Scene, sRGBEncoding,
+  Scene,
   Vector2,
   Vector3,
-  WebGLRenderer,
-  PCFSoftShadowMap
+  WebGLRenderer
 } from "three";
 import {
   AnimationMixerElement,
@@ -30,6 +29,8 @@ import {AnimationObjectGroup} from "three/src/animation/AnimationObjectGroup";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 import Helpers from "~/core/utils/helpers";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
+import {SoundDesignManager} from "~/core/managers/index";
+import {AUDIO_ASSET} from "~/core/enums";
 
 /**
  * @description
@@ -240,6 +241,7 @@ export default class SceneManager {
         successCallBack(this)
       },
       onStart: () => {
+        SoundDesignManager.playSound(AUDIO_ASSET.SWOOSH);
         this.disableParallax()
       }
     });

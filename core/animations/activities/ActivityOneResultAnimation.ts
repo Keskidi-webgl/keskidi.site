@@ -15,11 +15,16 @@ export default class ActivityOneResultAnimation extends AnimationElement {
   enter(options: AnimationElementOptions): void {
     const tl = this._getFreshTimeline(options.onStart, options.onComplete)
     // Image good word
-    tl.from('.result-img-good-word', {
+    tl.from('.result-img-good-word-container', {
       duration: 0.930,
       y: -window.innerHeight / 2,
       ease: 'wordImageResultEnter'
     })
+    tl.from('.right-word', {
+      duration: 0.930,
+      y: -window.innerHeight / 2,
+      ease: 'wordImageResultEnter'
+    }, '-=0.7')
     // Text result
     tl.from('.bg-anim-container', {
       duration: 0.960,
@@ -62,10 +67,15 @@ export default class ActivityOneResultAnimation extends AnimationElement {
       ease: 'bgAnimContainerLeave'
     }, 0.5)
     // Image good word
-    tl.to('.result-img-good-word', {
+    tl.to('.result-img-good-word-container', {
       duration: 1.1,
       y: -window.innerHeight,
       ease: 'wordImageResultLeave'
     }, 0.8)
+    tl.to('.right-word', {
+      duration: 0.930,
+      y: -window.innerHeight / 2,
+      ease: 'wordImageResultEnter'
+    }, '-=0.85')
   }
 }

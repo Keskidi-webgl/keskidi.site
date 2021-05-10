@@ -61,6 +61,9 @@ export default class ActivityThreeAnimation extends AnimationElement {
       duration: 1,
       autoAlpha: 0
     })
+    tl.set('.activity-element-content', {
+      padding: 0
+    })
       .to(".activity-element-aside", {
         width: window.innerWidth,
         duration: 1,

@@ -29,6 +29,10 @@ class SoundDesignManager {
       {
         name: AUDIO_ASSET.MOUSE_HOVER,
         isPlaying: false
+      },
+      {
+        name: AUDIO_ASSET.SWOOSH,
+        isPlaying: false
       }
     ]
   }

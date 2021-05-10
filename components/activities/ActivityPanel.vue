@@ -89,7 +89,7 @@ import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import ActivityOne from "~/components/activities/activity-one/ActivityOne.vue";
-import { ACTIVITY_TYPE } from "~/core/enums";
+import {ACTIVITY_TYPE, AUDIO_ASSET} from "~/core/enums";
 import ActivityTwo from "~/components/activities/activity-two/ActivityTwo.vue";
 import GlobalScene from "~/core/scene/GlobalScene";
 import ActivityOneResult from "~/components/activities/activity-one/ActivityOneResult.vue";
@@ -112,6 +112,7 @@ import {
 } from "~/core/animations/activities";
 import ActivityTwoAnimation from "~/core/animations/activities/ActivityTwoAnimation";
 import ActivityLeave from "~/components/activities/ActivityLeave.vue";
+import {AssetsManager} from "~/core/managers";
 
 gsap.registerPlugin(CustomEase);
 
@@ -148,6 +149,11 @@ export default class ActivityPanel extends Vue {
       this.activityStore.currentActivity === ACTIVITY_TYPE.KESKIDICO
   };
 
+  public audios = [
+    AssetsManager.getAudio(AUDIO_ASSET.GLOBAL_AMBIANCE)!.data,
+    AssetsManager.getAudio(AUDIO_ASSET.OUTSIDE_AMBIANCE)!.data,
+  ]
+
   public animationElements = {
     onboarding: new OnboardingActivityAnimation(),
     activityOne: new ActivityOneAnimation(),
@@ -159,6 +165,7 @@ export default class ActivityPanel extends Vue {
   };
 
   public mounted() {
+    this.manageSong('low')
     GlobalScene.context.pause();
     const isWordAchieved = Helpers.isActivityWordAchieved(
       this.activityStore.dataWord!,
@@ -175,7 +182,11 @@ export default class ActivityPanel extends Vue {
     }
   }
 
-  leaveActivity() {
+  public beforeDestroy() {
+    this.manageSong('up')
+  }
+
+  public leaveActivity() {
     //@ts-ignore
     this.$refs.leaveActivity.$el.classList.remove("hide");
   }
@@ -183,6 +194,13 @@ export default class ActivityPanel extends Vue {
   public goToHome() {
     GlobalScene.context.resume();
     this.$router.push("/");
+  }
+
+  public manageSong(name: 'low'|'up') {
+    gsap.to(this.audios, {
+      volume: name === 'low' ? 0.2 : 1,
+      duration: 1
+    })
   }
 
   public animationEnterOnboarding(el: Element, done: Function) {
