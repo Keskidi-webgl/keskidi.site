@@ -25,7 +25,8 @@ export default class ActivitySceneInitializer extends Initializers<{ canvas: HTM
       activateOrbitControl: false,
     })
 
-    camera.position.set(0, 14, 25)
+    camera.position.set(0, 27, 22)
+    camera.rotation.x = -0.4
 
     return sceneContext
   }
