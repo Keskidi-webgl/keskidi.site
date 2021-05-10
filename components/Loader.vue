@@ -84,7 +84,7 @@ export default class Loader extends Vue {
   public isActive: boolean = true;
 
   text() {
-    let text = "Et c'est parti !";
+    let text = "Et zéééé parti !";
 
     if (!this.globalStore.isAppInit) {
       text = `Chargement ${this.loadingData} %`;
