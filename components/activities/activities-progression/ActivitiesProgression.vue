@@ -27,9 +27,7 @@
       />
     </h1>
 
-    <p class="activities-description" v-html="activityDescription()">
-
-    </p>
+    <p class="activities-description" v-html="activityDescription()"></p>
 
     <CustomButton
       @click.native="hideActivityPanel"
@@ -42,12 +40,12 @@
 </template>
 
 <script lang="ts">
-import {Component, getModule, Vue} from "nuxt-property-decorator";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
 import GlobalSceneStore from "~/store/globalScene";
 import ActivityStore from "~/store/activity";
 import CustomButton from "~/components/buttons/CustomButton.vue";
 import GlobalStore from "~/store/global";
-import {ProgressPercentManager} from "~/core/managers";
+import { ProgressPercentManager } from "~/core/managers";
 import Helpers from "~/core/utils/helpers";
 
 @Component({
@@ -62,6 +60,10 @@ export default class ActivitiesProgression extends Vue {
 
   hideActivityPanel() {
     this.activityStore.setCurrentActivity(null);
+    let progress: HTMLElement | null = document.querySelector(
+      ".progress-level"
+    );
+    progress ? (progress!.style.zIndex = "100") : false;
   }
 
   beforeMount() {
@@ -82,9 +84,12 @@ export default class ActivitiesProgression extends Vue {
   }
 
   public activityDescription() {
-    const steps = this.getSteps()
-    return `Il te reste ${steps} ${Helpers.pluralize('mot', steps)}</strong> à découvrir pour
-      passer au niveau ${this.getNext()}`
+    const steps = this.getSteps();
+    return `Il te reste ${steps} ${Helpers.pluralize(
+      "mot",
+      steps
+    )}</strong> à découvrir pour
+      passer au niveau ${this.getNext()}`;
   }
 
   public getLevel() {

@@ -130,14 +130,6 @@ export default class TestProgressPage extends Vue {
 
   mounted() {}
 
-  setStyle() {
-    let hops = document.getElementsByClassName("hop");
-    for (let index = 0; index < hops.length; index++) {
-      const element = hops[index];
-      element;
-    }
-  }
-
   transition() {
     CustomEase.create("container", "M0,0 C0.89,0 0.24,1 1,1 ");
     return {
