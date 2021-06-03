@@ -23,10 +23,10 @@
         notre expérience.
       </h1>
     </div>
-    <!--
     <div v-if="isChrome && !isMobile">
-    -->
+      <!--
     <div>
+    -->
       <!-- Loader -->
       <transition v-on:enter="animEnterLoader">
         <Loader
@@ -120,12 +120,12 @@
 </template>
 
 <script lang="ts">
-import { Component, getModule, Vue } from "nuxt-property-decorator";
+import {Component, getModule, Vue} from "nuxt-property-decorator";
 import GlobalStore from "~/store/global";
 import AppInitializer from "~/core/utils/initializers/AppInitializer";
 import SceneNavigationPanel from "~/components/scene/SceneNavigationPanel.vue";
-import { AssetsManager, SoundDesignManager } from "~/core/managers";
-import { AssetManagerInitializer } from "~/core/utils/initializers";
+import {AssetsManager, SoundDesignManager} from "~/core/managers";
+import {AssetManagerInitializer} from "~/core/utils/initializers";
 import LogoMedia from "~/components/medias/LogoMedia.vue";
 import gsap from "gsap";
 
@@ -145,9 +145,9 @@ import ActivityOnboarding from "~/components/activities/ActivityOnboarding.vue";
 import ActivityPanel from "~/components/activities/ActivityPanel.vue";
 import ActivityStore from "~/store/activity";
 import SoundButton from "~/components/global/SoundButton.vue";
-import { LoaderAnimation } from "~/core/animations/loader";
-import { NavigationPanelAnimation } from "~/core/animations/activities";
-import { AUDIO_ASSET } from "~/core/enums";
+import {LoaderAnimation} from "~/core/animations/loader";
+import {NavigationPanelAnimation} from "~/core/animations/activities";
+import {AUDIO_ASSET} from "~/core/enums";
 
 @Component({
   components: {
